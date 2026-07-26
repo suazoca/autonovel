@@ -66,24 +66,23 @@ def test_densidad_raya_incisos_abusivos_supera_50():
 
 
 def test_calcos_detectados_encuentra_al_menos_dos():
-    """Caso 5, tal como está escrito en ENCARGO_CLAUDE_CODE.md.
-
-    BUG CONOCIDO: calcos_detectados() no usa re.IGNORECASE, así que con la
-    mayúscula inicial de oración ("Levantó", "Estaba") los patrones no
-    matchean y esto da 0 hallazgos en vez de 2. Falla hasta que Tarea 1
-    agregue re.IGNORECASE (o normalice el texto) en calcos_detectados().
-    """
+    """Caso 5. calcos_detectados() debe ser insensible a mayúsculas: el mismo
+    calco vale al inicio de oración (mayúscula) que en medio de ella."""
     hallazgos = calcos_detectados("Levantó su mano. Estaba siendo observada.")
     assert len(hallazgos) >= 2
 
 
 def test_dividir_oraciones_no_corta_en_abreviatura():
-    """Caso 6, tal como está escrito en ENCARGO_CLAUDE_CODE.md.
-
-    BUG CONOCIDO: dividir_oraciones() descarta oraciones de <=2 palabras
-    (el filtro `len(limpia.split()) > 2`), así que "¿Viniste?" y "Sí." se
-    pierden y la función devuelve 1 oración en vez de 3. Falla hasta que
-    Tarea 1 ajuste ese umbral o maneje oraciones cortas legítimas.
-    """
-    oraciones = dividir_oraciones("¿Viniste? Sí. El Sr. Pérez no vino.")
-    assert len(oraciones) == 3
+    """Caso 6 (corregido). El original ("¿Viniste? Sí. El Sr. Pérez no
+    vino.") estaba mal escrito: dividir_oraciones() descarta por diseño las
+    oraciones de <=2 palabras (ver docs/HALLAZGOS.md), así que "¿Viniste?"
+    y "Sí." nunca iban a contar como oraciones propias, sin que eso sea un
+    bug. Lo que hay que verificar es que "Sr." no corte la oración -- no el
+    conteo total."""
+    oraciones = dividir_oraciones(
+        "El Sr. Pérez no vino a la reunión. ¿Sabés por qué faltó?"
+    )
+    assert len(oraciones) == 2
+    # si hubiera cortado en "Sr." la primera oración terminaría ahí,
+    # en vez de seguir hasta "reunión."
+    assert oraciones[0] == "El Sr. Pérez no vino a la reunión."

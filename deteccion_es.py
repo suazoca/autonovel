@@ -312,7 +312,7 @@ def calcos_detectados(texto: str) -> list[tuple[str, int]]:
     """Devuelve [(descripción, ocurrencias)] de calcos del inglés."""
     hallazgos = []
     for patron, descripcion in CALCOS_DEL_INGLES:
-        n = len(re.findall(patron, texto))
+        n = len(re.findall(patron, texto, re.IGNORECASE))
         if n:
             hallazgos.append((descripcion, n))
     return hallazgos
