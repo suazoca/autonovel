@@ -97,6 +97,36 @@ El texto está en español. Antes de juzgar, tené en cuenta:
   contenido. No penalices por extensión comparándolo con prosa inglesa.
 ```
 
+### 1c. Flag `--solo-mecanico` en `evaluate.py`
+
+Agregado por fuera del texto original del encargo, porque los tests 1 y 2
+de abajo no se podían correr sin gastar API ni quedar sujetos a la
+variabilidad del juez LLM. `evaluate.py --archivo <path> --solo-mecanico`
+corre únicamente `slop_score()` (determinista, sin red) y no depende de
+`.env`. La integración de las constantes en español descrita en 1a queda
+adentro de esta parte mecánica; los prompts en español (1b) siguen
+dependiendo del juez y por lo tanto de la API key.
+
+### 1d. Fixtures mínimos de voz y mundo para tests
+
+`evaluate_chapter()` lee `voice.md`/`world.md`/`characters.md`/`canon.md`
+del directorio raíz -- que hoy siguen siendo los de *Bells*, en inglés.
+Evaluar un capítulo de prueba en español contra una biblia de voz en
+inglés no mide nada real. Se crean, en `tests/fixtures/`:
+
+- `voz_minima_es.md` -- perfil de voz mínimo en español, desacoplado de
+  cualquier novela real, con Parte 1 (guardarraíles) y Parte 2 (identidad
+  de voz, pasajes ejemplares y anti-ejemplares).
+- `mundo_minimo_es.md` -- biblia de mundo mínima, misma forma que
+  `world.md` (cosmología, sistema de "magia" -- aquí, reglas documentales
+  --, geografía, facciones, bestiario, detalles culturales, consistencia
+  interna), con contenido deliberadamente escueto.
+
+Quedan creados como fixtures de prueba; conectarlos a una corrida real de
+`evaluate_chapter()` (que hoy tiene las rutas de voice.md/world.md
+hardcodeadas al directorio raíz, no parametrizables) es trabajo aparte,
+pendiente de `.env` y de decidir cómo parametrizar esas rutas.
+
 ### Test de aceptación de la Tarea 1
 
 ```bash
@@ -108,6 +138,8 @@ Creá ese archivo con estos casos, que deben pasar:
 1. `cap_dialogado_es.md` puntúa **más alto** que en BASELINE.
    Este es el test que importa: el texto no cambió, solo dejamos de
    castigarlo por usar bien la puntuación española.
+   (Verificado vía `--solo-mecanico`, no contra el `overall_score` del
+   juez LLM todavía -- ver docs/BASELINE.md.)
 2. `cap_con_slop_es.md` puntúa **más bajo** que `cap_dialogado_es.md`.
 3. `densidad_raya_parentetica()` sobre 40 líneas de diálogo con raya
    devuelve 0.0.
@@ -117,6 +149,12 @@ Creá ese archivo con estos casos, que deben pasar:
    devuelve al menos dos hallazgos.
 6. `dividir_oraciones("¿Viniste? Sí. El Sr. Pérez no vino.")` devuelve
    3 oraciones, no 4 (no debe cortar en «Sr.»).
+   **Corregido:** este caso estaba mal escrito -- `dividir_oraciones()`
+   descarta por diseño las oraciones de ≤2 palabras ("¿Viniste?", "Sí."
+   nunca iban a contar), así que nunca iba a dar 3. El caso real en
+   `tests/test_deteccion_es.py` usa
+   `"El Sr. Pérez no vino a la reunión. ¿Sabés por qué faltó?"` → 2
+   oraciones, verificando que no corta en "Sr.".
 
 ---
 
