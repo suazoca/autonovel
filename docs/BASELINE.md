@@ -115,8 +115,15 @@ literalmente, al revés de lo que debería premiar.
 
 | Métrica | `cap_dialogado_es.md` (limpio) | `cap_con_slop_es.md` (sembrado) |
 |---|---|---|
-| `em_dash_density` (raya parentética) | PENDIENTE | PENDIENTE |
-| `sentence_length_cv` | PENDIENTE | PENDIENTE |
-| `slop_penalty` | PENDIENTE | PENDIENTE |
+| `em_dash_density` (raya parentética) | 1.6 | 1.7 |
+| `sentence_length_cv` | 0.686 | 0.591 |
+| `calco_hits` | 0 | 2 |
+| `fiction_ai_tells` | 0 | 3 |
+| `slop_penalty` | **0.0** | **2.9** |
 
-(se completa en el commit de integración de constantes)
+El delta que importa: `cap_dialogado_es.md` pasa de penalización **1.0 → 0.0**
+(dejó de pagar por usar la raya de diálogo correctamente: `em_dash_density`
+72.12 → 1.6, muy por debajo del umbral 6.0). `cap_con_slop_es.md` pasa de
+**0.0 → 2.9** (ahora sí detecta los 3 clichés, los 2 calcos y el
+"no solo…sino que" sembrados). El capítulo limpio quedó mejor que el
+sembrado, que es justamente lo que la Tarea 1 pedía arreglar.
