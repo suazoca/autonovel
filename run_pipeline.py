@@ -61,6 +61,7 @@ def load_state() -> dict:
 
 def default_state() -> dict:
     return {
+        "titulo": None,
         "phase": "foundation",
         "current_focus": "planning",
         "iteration": 0,

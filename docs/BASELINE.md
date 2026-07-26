@@ -47,10 +47,19 @@ para lo que pide la Tarea 1, pero **no son el puntaje del evaluador**:
 todos sus modos (`--phase`, `--chapter`, `--full`) — no hay forma de correr
 solo la parte mecánica desde el CLI. Además, `evaluate_chapter()` lee
 `voice.md`, `world.md`, `characters.md`, `outline.md`, `canon.md` del
-directorio raíz, que hoy siguen siendo los de *Bells* (en inglés) porque
-todavía no se hizo la fundación en español — evaluar los fixtures tal cual
-compararía prosa española contra una biblia de voz en inglés, lo cual
-sesgaría el resultado.
+directorio raíz.
+
+**Corrección sobre lo que decía acá antes:** esta sección afirmaba que esos
+archivos "siguen siendo los de Bells (en inglés)". Es falso -- se verificó
+al trabajar la Tarea 2 y son **plantillas vacías** (Parte 2 de `voice.md`
+son puros comentarios HTML sin llenar, `world.md`/`characters.md`/
+`canon.md` son solo encabezados con ejemplos genéricos entre comentarios,
+sin una sola referencia a Bells). El problema real no es contaminación de
+*Bells*, es que están **vacíos**: evaluar un capítulo contra un `voice.md`
+sin Parte 2 rellenada no mide nada (no hay tono, registro ni ejemplares
+contra qué comparar). Por eso la Tarea 1d creó fixtures mínimos
+(`tests/fixtures/voz_minima_es.md`, `mundo_minimo_es.md`) en vez de asumir
+que hacía falta "limpiar" contenido en inglés que en realidad no existe.
 
 Para completar esta sección hace falta, en este orden:
 1. Cargar `ANTHROPIC_API_KEY` en `.env`.

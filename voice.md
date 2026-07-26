@@ -146,6 +146,12 @@ passages, and calibrates against them throughout drafting.
      How do characters sound different from each other?
      Subtext rules: do characters say what they mean? -->
 
+### Reglas específicas de capítulo
+<!-- Opcional. Reglas discrecionales para los capítulos de ESTA novela,
+     más allá de Tono/Ritmo/Registro/Diálogo de arriba -- una por línea,
+     texto plano. Las leen draft_chapter.py y gen_brief.py. Dejar vacío si
+     no aplica ninguna; nada más abajo exige que esta sección esté llena. -->
+
 ### Exemplar Passages
 <!-- 3-5 paragraphs that ARE the voice. Written during foundation.
      The agent calibrates every chapter against these.

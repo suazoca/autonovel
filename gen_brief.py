@@ -20,7 +20,17 @@ CHAPTERS_DIR = BASE_DIR / "chapters"
 EDIT_LOGS_DIR = BASE_DIR / "edit_logs"
 EVAL_LOGS_DIR = BASE_DIR / "eval_logs"
 BRIEFS_DIR = BASE_DIR / "briefs"
-VOICE_PATH = BASE_DIR / "voice.md"
+
+
+def _ruta_bilingue(base_dir: Path, nombre_es: str, nombre_en: str) -> Path:
+    """Nomenclatura de AUDITORIA_Y_PLAN.md: preferí el nombre en español si
+    existe; si no, caé al nombre en inglés (compatibilidad con ramas/
+    plantillas viejas)."""
+    ruta_es = base_dir / nombre_es
+    return ruta_es if ruta_es.exists() else base_dir / nombre_en
+
+
+VOICE_PATH = _ruta_bilingue(BASE_DIR, "voz.md", "voice.md")
 
 
 # ---------------------------------------------------------------------------
@@ -61,28 +71,73 @@ def word_count(text: str) -> int:
     return len(text.split())
 
 
+def _seccion(md: str, patron_nombre: str, nivel: str = "##") -> str:
+    """Contenido de un encabezado de nivel dado hasta el próximo del mismo
+    nivel (o superior), sin incluir el encabezado. Vacío si no existe."""
+    marca = re.escape(nivel)
+    m = re.search(rf'^{marca}\s*(?:{patron_nombre}).*$', md, re.IGNORECASE | re.MULTILINE)
+    if not m:
+        return ""
+    start = m.end()
+    nxt = re.search(rf'^{marca}\s', md[start:], re.MULTILINE)
+    end = start + nxt.start() if nxt else len(md)
+    return md[start:end].strip()
+
+
+def _primera_linea_util(texto: str) -> str:
+    """Primera línea no vacía que no sea un comentario HTML <!-- -->."""
+    sin_comentarios = re.sub(r'<!--.*?-->', '', texto, flags=re.DOTALL)
+    for line in sin_comentarios.splitlines():
+        line = line.strip().lstrip('-*').strip()
+        if line:
+            return line
+    return ""
+
+
+def _bullets(texto: str) -> list[str]:
+    """Cada línea no vacía de un bloque, sin comentarios HTML ni viñetas."""
+    sin_comentarios = re.sub(r'<!--.*?-->', '', texto, flags=re.DOTALL)
+    items = []
+    for line in sin_comentarios.splitlines():
+        line = line.strip().lstrip('-*').strip()
+        if line:
+            items.append(line)
+    return items
+
+
 def extract_voice_rules() -> list[str]:
-    """Pull the key guardrail / voice rules from voice.md Part 1 + Part 2."""
+    """Deriva las reglas de voz de voice.md Parte 1 + Parte 2 -- no
+    hardcodea nada de una novela en particular. Si una sección no existe
+    o está vacía (todavía no se descubrió la voz), simplemente se omite;
+    no rompe."""
     if not VOICE_PATH.exists():
         return ["(voice.md not found)"]
     voice = VOICE_PATH.read_text(encoding="utf-8")
 
     rules: list[str] = []
 
-    # Part 2 identity rules we always want
-    rules.append("Body-first emotion (jaw, ribs, tongue before naming the feeling)")
-    rules.append("No telling after showing")
-    rules.append("No triadic sensory lists")
-    rules.append("70%+ in-scene (dialogue and action, not summary)")
-    rules.append("Dialogue: clipped, subtext-heavy, 'said' default, no adverb tags")
-    rules.append("Sentence rhythm: mixed meter, fragments for pain, long for perception")
-    rules.append("Vocabulary from craft/trade/body wells — no generic fantasy diction")
+    # Parte 2: una regla por subsección con contenido real (no comentarios)
+    parte2 = _seccion(voice, r'Part(?:e)?\s*2|Voice Identity|Identidad de voz')
+    for m in re.finditer(r'^###\s*(.+)$', parte2, re.MULTILINE):
+        nombre = m.group(1).strip()
+        cuerpo = _seccion(parte2, re.escape(nombre), nivel="###")
+        linea = _primera_linea_util(cuerpo)
+        if linea:
+            rules.append(f"{nombre}: {linea}")
 
-    # Part 1 structural slop
-    rules.append("No paragraph-template-machine (vary structure)")
-    rules.append("Max 1-2 em dashes per page")
+    # Parte 1: patrones estructurales -- lo que exista en el archivo, no
+    # una lista fija. Toma la primera línea útil de cada bloque en negrita
+    # bajo "Structural slop patterns" (o su equivalente en español).
+    parte1 = _seccion(voice, r'Part(?:e)?\s*1|Guardrails|Guardarra[íi]les')
+    estructural = _seccion(
+        parte1, r'Structural slop patterns|Patrones estructurales', nivel="###"
+    )
+    for m in re.finditer(r'\*\*(.+?)\*\*:?\s*(.*)', estructural):
+        etiqueta, resto = m.group(1).strip(), m.group(2).strip()
+        if etiqueta:
+            rules.append(etiqueta if not resto else f"{etiqueta}: {resto.split('.')[0]}.")
 
-    return rules
+    return rules or ["(voice.md Part 2 not filled in yet -- no rules to extract)"]
 
 
 def latest_full_eval() -> Path | None:
