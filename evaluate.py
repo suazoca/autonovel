@@ -791,14 +791,53 @@ def evaluate_full():
 
 def main():
     parser = argparse.ArgumentParser(description="Evaluate the novel")
-    group = parser.add_mutually_exclusive_group(required=True)
+    group = parser.add_mutually_exclusive_group(required=False)
     group.add_argument("--phase", choices=["foundation"],
                        help="Evaluate planning documents")
     group.add_argument("--chapter", type=int,
                        help="Evaluate a specific chapter number")
     group.add_argument("--full", action="store_true",
                        help="Evaluate the entire novel")
+    parser.add_argument("--archivo", type=str,
+                       help="Ruta a un archivo de texto a evaluar "
+                            "(solo válido junto con --solo-mecanico)")
+    parser.add_argument("--solo-mecanico", action="store_true",
+                       dest="solo_mecanico",
+                       help="Corre solo slop_score() (sin LLM, sin API, "
+                            "determinista). Usar con --chapter o --archivo.")
     args = parser.parse_args()
+
+    if args.archivo and not args.solo_mecanico:
+        parser.error("--archivo solo es válido junto con --solo-mecanico")
+
+    if args.solo_mecanico:
+        if args.archivo:
+            chapter_text = Path(args.archivo).read_text()
+            mode = Path(args.archivo).stem
+        elif args.chapter is not None:
+            chapter_text = load_chapter(args.chapter)
+            mode = f"ch{args.chapter:02d}"
+        else:
+            parser.error("--solo-mecanico requiere --chapter o --archivo")
+
+        result = slop_score(chapter_text)
+        score_key = "slop_penalty"
+
+        print("---")
+        print(f"[solo-mecanico] {mode}")
+        for key, val in result.items():
+            print(f"{key}: {val}")
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        log_path = EVAL_LOG_DIR / f"{timestamp}_mecanico_{mode}.json"
+        with open(log_path, "w") as f:
+            json.dump(result, f, indent=2)
+        print(f"\neval_log: {log_path}")
+        return
+
+    if not (args.phase or args.chapter is not None or args.full):
+        parser.error("Debe indicar --phase, --chapter, --full, o --archivo "
+                     "con --solo-mecanico")
 
     if args.phase == "foundation":
         result = evaluate_foundation()

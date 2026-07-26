@@ -66,25 +66,57 @@ Cuando eso pase, esta tabla se completa:
 | `cap_dialogado_es.md` | PENDIENTE |
 | `cap_con_slop_es.md` | PENDIENTE |
 
-## Hallazgos durante la preparación (no corregidos — fuera de alcance de Tarea 0)
+## Hallazgos durante la preparación
 
 Al armar `tests/test_deteccion_es.py` con los 6 casos de aceptación de la
-Tarea 1 se encontraron dos bugs reales en `deteccion_es.py`, confirmados
-con pytest (ver commit de Tarea 0):
+Tarea 1 aparecieron dos cosas para revisar en `deteccion_es.py`:
 
-1. **`calcos_detectados()` es sensible a mayúsculas** (no usa
-   `re.IGNORECASE`). El propio ejemplo del encargo,
-   `calcos_detectados("Levantó su mano. Estaba siendo observada.")`,
-   devuelve 0 hallazgos en vez de 2, porque los patrones están escritos en
-   minúscula y las palabras están capitalizadas por ir al inicio de
-   oración.
-2. **`dividir_oraciones()` descarta oraciones de 2 palabras o menos**
-   (filtro `len(limpia.split()) > 2`). El ejemplo del encargo,
-   `dividir_oraciones("¿Viniste? Sí. El Sr. Pérez no vino.")`, devuelve 1
-   oración en vez de 3: pierde "¿Viniste?" y "Sí." enteras. Esto también
-   afecta `cv_longitud_oracion()`, que subestima la variación real al
-   ignorar todas las oraciones cortas.
+1. **`calcos_detectados()` era sensible a mayúsculas** (no usaba
+   `re.IGNORECASE`) — el ejemplo del encargo,
+   `calcos_detectados("Levantó su mano. Estaba siendo observada.")`, daba 0
+   hallazgos en vez de 2. Era un bug real. **Corregido** en el commit
+   `214768e` (`fix: IGNORECASE en calcos_detectados + corrección del test 6`).
+2. El caso 6 del encargo, `dividir_oraciones("¿Viniste? Sí. El Sr. Pérez no
+   vino.")` esperando 3 oraciones, estaba **mal escrito**: `dividir_oraciones()`
+   descarta por diseño las oraciones de ≤2 palabras, así que "¿Viniste?" y
+   "Sí." nunca iban a contar. No era un bug del módulo. El test se
+   reemplazó por un caso que sí verifica lo que importa (no cortar en
+   "Sr."), y el efecto secundario real de ese filtro (sesga el CV de
+   longitud de oración hacia arriba) quedó documentado en
+   `docs/HALLAZGOS.md` sin tocar el código, a pedido explícito.
 
-Ambos quedan documentados como tests que fallan a propósito en
-`tests/test_deteccion_es.py` (con el motivo en el docstring), listos para
-que Tarea 1 los arregle y los deje en verde.
+## Tarea 1c — `--solo-mecanico`: antes y después de integrar deteccion_es.py
+
+`evaluate.py --chapter=N` (o `--full`) siempre llama al juez LLM, así que
+no servía para medir el efecto del arreglo de la raya sin gastar API y sin
+quedar sujeto a la variabilidad del juez. Se agregó `--solo-mecanico`
+(+ `--archivo <path>` para apuntar a un archivo fuera de `chapters/`), que
+corre únicamente `slop_score()` -- determinista, sin red, sin API key.
+
+**ANTES** (commit del flag, `slop_score()` todavía con las listas en
+inglés del repositorio original):
+
+| Métrica | `cap_dialogado_es.md` (limpio) | `cap_con_slop_es.md` (sembrado) |
+|---|---|---|
+| `em_dash_density` | 72.12 | 1.7 |
+| `sentence_length_cv` | 0.686 | 0.591 |
+| `slop_penalty` | **1.0** | **0.0** |
+
+Confirma el problema exacto que motivó la Tarea 1: el capítulo **limpio**
+paga penalización por usar la raya de diálogo correctamente (72.12 rayas
+por mil palabras según el contador en inglés, que no distingue diálogo de
+inciso parentético), mientras el capítulo **con slop sembrado a propósito**
+sale con penalización 0, porque ninguna lista en inglés reconoce clichés,
+calcos o adverbios en -mente del español. El evaluador mecánico está,
+literalmente, al revés de lo que debería premiar.
+
+**DESPUÉS** (integradas las listas ES + calcos de `deteccion_es.py` en
+`slop_score()`):
+
+| Métrica | `cap_dialogado_es.md` (limpio) | `cap_con_slop_es.md` (sembrado) |
+|---|---|---|
+| `em_dash_density` (raya parentética) | PENDIENTE | PENDIENTE |
+| `sentence_length_cv` | PENDIENTE | PENDIENTE |
+| `slop_penalty` | PENDIENTE | PENDIENTE |
+
+(se completa en el commit de integración de constantes)
