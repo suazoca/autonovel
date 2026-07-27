@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Generate remaining chapters + foreshadowing ledger."""
+"""Complete the outline (remaining chapters + foreshadowing ledger)."""
 import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
+
+from deteccion_es import CALIBRACION
 
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
@@ -26,8 +28,8 @@ def call_writer(prompt, max_tokens=16000):
         "system": (
             "You are a novel architect continuing an outline. Write in the same format "
             "as the preceding chapters. Every chapter needs: POV, Location, Save the Cat beat, "
-            "% mark, Emotional arc, Try-fail cycle, Beats, Plants, Payoffs, Character movement, "
-            "The lie, Word count target."
+            "% mark, Ambición (pico/sosten/valle), Emotional arc, Try-fail cycle, Beats, "
+            "Plants, Payoffs, Character movement, The lie, Word count target."
         ),
         "messages": [{"role": "user", "content": prompt}],
     }
@@ -35,28 +37,62 @@ def call_writer(prompt, max_tokens=16000):
     resp.raise_for_status()
     return resp.json()["content"][0]["text"]
 
-part1 = open('/tmp/outline_output.md').read()
-mystery = (BASE_DIR / "MYSTERY.md").read_text()
 
-prompt = f"""Here are the first 17 chapters of a 24-chapter outline for "The Second Son of the House of Bells."
-The outline was cut off mid-chapter-17. Continue from where it left off, then complete chapters 18-24,
-then write the Foreshadowing Ledger.
+def load_file(path):
+    try:
+        return Path(path).read_text()
+    except FileNotFoundError:
+        return ""
+
+
+def ruta_bilingue(nombre_es, nombre_en):
+    """Nomenclatura de AUDITORIA_Y_PLAN.md: preferí el nombre en español si
+    existe; si no, caé al nombre en inglés (compatibilidad con ramas/
+    plantillas viejas)."""
+    ruta_es = BASE_DIR / nombre_es
+    if ruta_es.exists():
+        return ruta_es
+    return BASE_DIR / nombre_en
+
+
+def load_file_bilingue(nombre_es, nombre_en):
+    return load_file(ruta_bilingue(nombre_es, nombre_en))
+
+
+def build_prompt(outline_so_far, mystery):
+    palabras_capitulo = CALIBRACION["palabras_objetivo_capitulo"]
+    palabras_novela = CALIBRACION["palabras_objetivo_novela"]
+    capitulos_totales = round(palabras_novela / palabras_capitulo)
+
+    return f"""Here is a chapter outline in progress, targeting ~{capitulos_totales}
+chapters total (~{palabras_capitulo} words per chapter, ~{palabras_novela} words total).
+It may be incomplete or cut off mid-chapter.
 
 THE OUTLINE SO FAR:
-{part1}
+{outline_so_far}
 
 THE CENTRAL MYSTERY (for reference):
 {mystery}
 
-REMAINING STRUCTURE NEEDED:
+Continue from wherever it left off. Complete the remaining chapters up to
+the target chapter count above, then write the Foreshadowing Ledger.
 
-Ch 17 (complete it): Maret confrontation -- she reveals the truth about the void
-Ch 18: Dark Night of the Soul -- Cass processes what he's learned
-Ch 19: Break Into Three -- new information or perspective changes everything  
-Ch 20-21: Gathering forces, making a plan
-Ch 22: The climax at the Bell Tower -- Cass answers the question
-Ch 23: Aftermath and resolution
-Ch 24: Final Image (mirror of Opening Image)
+REMAINING STRUCTURE NEEDED (fill with THIS story's specifics, derived from
+the outline so far and the central mystery -- do not invent new characters,
+locations, or mechanics not already established):
+
+- Complete Act II Part 2 if it isn't finished: pressure mounts, the
+  protagonist's lie becomes unsustainable, All Is Lost.
+- Dark Night of the Soul: the protagonist processes what they've learned.
+- Break Into Three: new information or perspective changes everything.
+- Gathering forces, making a plan.
+- The climax: the protagonist answers the central question, resolved using
+  rules already established in the world bible -- no new powers or
+  last-minute exceptions.
+- Aftermath and resolution. The Stability Trap: not everything resolves
+  cleanly.
+- Final Image: mirror the outline's Opening Image (Ch 1), but show
+  transformation.
 
 Then write:
 
@@ -73,16 +109,26 @@ branch has a siembras_serie.md -- if it doesn't, treat every thread as
 Include at LEAST 15 threads. Types: object, dialogue, action, symbolic, structural.
 Plant-to-payoff distance must be at least 3 chapters (within the same book;
 cross-book "serie" threads are exempt from this distance rule).
-
-REMEMBER:
-- The climax uses the fourth option: Cass amplifies the question into audible range
-  so the city can hear and answer for themselves
-- This doesn't free Perin directly (Stability Trap -- not everything resolves cleanly)
-- Cass's lie must be fully shattered by the climax
-- Final Image should mirror Ch 1's Opening Image but show transformation
-- At least one quiet chapter in the back half
+At least one chapter in the back half should be "quiet" -- character-focused,
+low-action, emotionally rich.
 """
 
-print("Calling writer model...", file=sys.stderr)
-result = call_writer(prompt)
-print(result)
+
+def main():
+    outline_path = ruta_bilingue("esquema.md", "outline.md")
+    outline_so_far = load_file(outline_path)
+    mystery = load_file_bilingue("MISTERIO.md", "MYSTERY.md")
+
+    prompt = build_prompt(outline_so_far, mystery)
+
+    print("Calling writer model...", file=sys.stderr)
+    result = call_writer(prompt)
+
+    combined = (outline_so_far.rstrip() + "\n\n" + result) if outline_so_far.strip() else result
+    outline_path.write_text(combined)
+    print(f"Saved to {outline_path}", file=sys.stderr)
+    print(result)
+
+
+if __name__ == "__main__":
+    main()

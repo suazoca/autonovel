@@ -363,6 +363,55 @@ como antes del cambio.
 
 ---
 
+## TAREA 6 — Persistencia de la fase de fundación (prioridad alta)
+
+Encontrado al arreglar el `/tmp/outline_output.md` de la Tarea 2b: **todos**
+los scripts de fundación tienen el mismo patrón roto. `gen_world.py`,
+`gen_characters.py` y `gen_canon.py` terminan con `print(result)` y nunca
+escriben en su archivo destino (`world.md`/`mundo.md`,
+`characters.md`/`personajes.md`, `canon.md`). `gen_outline.py` y
+`gen_outline_part2.py` tenían el mismo problema y ya se corrigieron en la
+Tarea 2b (ahora guardan en `esquema.md`/`outline.md` ellos mismos).
+
+Y `run_pipeline.py::run_foundation()` no lo compensa: llama
+`uv_run("gen_world.py")` etc., que corre el script y captura su stdout en
+un `subprocess.CompletedProcess`, pero nunca vuelca ese stdout a ningún
+archivo.
+
+**Por qué es prioridad alta:** tal como está, correr `run_pipeline.py
+--phase foundation` de punta a punta -- con `.env` configurado y todo --
+**no dejaría nada escrito** en `world.md`, `characters.md` ni `canon.md`.
+El pipeline automatizado que describe `PIPELINE.md` no puede funcionar
+sin intervención manual (correr cada script y redirigir el stdout a mano).
+Esto bloquea completar la fundación de cualquier novela nueva, incluida
+esta rama.
+
+### Cambios
+
+Mismo patrón que se usó para `gen_outline.py`/`gen_outline_part2.py` en la
+Tarea 2b: cada script se guarda a sí mismo, con resolución bilingüe
+(`ruta_bilingue()`).
+
+- `gen_world.py` → escribe en `mundo.md`/`world.md`.
+- `gen_characters.py` → escribe en `personajes.md`/`characters.md`.
+- `gen_canon.py` → lee `canon.md` existente y agrega las entradas nuevas
+  (no lo reescribe entero -- a diferencia de outline, canon es
+  acumulativo entre iteraciones).
+
+`run_pipeline.py` no necesita cambios si cada script se guarda solo (que
+es la razón para hacerlo así y no al revés): sigue llamando
+`uv_run("gen_world.py")` etc. sin tocar el stdout.
+
+### Test de aceptación de la Tarea 6
+
+Para cada script: correr `build_prompt()` (o la función equivalente) con
+inputs de prueba, invocar la función de guardado con una respuesta
+simulada del modelo, y verificar que el archivo destino (en un `tmp_path`)
+contiene esa respuesta. Un test de regresión para `gen_canon.py`: si
+`canon.md` ya tiene contenido, guardar debe agregarlo, no reemplazarlo.
+
+---
+
 ## ENTREGA
 
 Un commit por tarea, con el test pasando. Al terminar:

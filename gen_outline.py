@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Generate outline.md from seed + world + characters + mystery + craft."""
+"""Generate outline.md/esquema.md from seed + world + characters + mystery + craft."""
 import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
+
+from deteccion_es import CALIBRACION
 
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
@@ -37,20 +39,44 @@ def call_writer(prompt, max_tokens=16000):
     resp.raise_for_status()
     return resp.json()["content"][0]["text"]
 
-seed = (BASE_DIR / "seed.txt").read_text()
-world = (BASE_DIR / "world.md").read_text()
-characters = (BASE_DIR / "characters.md").read_text()
-mystery = (BASE_DIR / "MYSTERY.md").read_text()
-craft = (BASE_DIR / "CRAFT.md").read_text()
 
-# Voice Part 2 only
-voice = (BASE_DIR / "voice.md").read_text()
-voice_lines = voice.split('\n')
-part2_start = next(i for i, l in enumerate(voice_lines) if 'Part 2' in l)
-voice_part2 = '\n'.join(voice_lines[part2_start:])
+def load_file(path):
+    try:
+        return Path(path).read_text()
+    except FileNotFoundError:
+        return ""
 
-prompt = f"""Build a complete chapter outline for this fantasy novel. Target: 22-26 chapters,
-~80,000 words total (~3,000-4,000 words per chapter).
+
+def ruta_bilingue(nombre_es, nombre_en):
+    """Nomenclatura de AUDITORIA_Y_PLAN.md: preferí el nombre en español si
+    existe; si no, caé al nombre en inglés (compatibilidad con ramas/
+    plantillas viejas)."""
+    ruta_es = BASE_DIR / nombre_es
+    if ruta_es.exists():
+        return ruta_es
+    return BASE_DIR / nombre_en
+
+
+def load_file_bilingue(nombre_es, nombre_en):
+    return load_file(ruta_bilingue(nombre_es, nombre_en))
+
+
+def extraer_voz_parte2(voice_text):
+    """Solo la Parte 2 (identidad de voz) de voz.md/voice.md."""
+    lines = voice_text.split('\n')
+    for i, line in enumerate(lines):
+        if 'Part 2' in line or 'Parte 2' in line:
+            return '\n'.join(lines[i:])
+    return voice_text
+
+
+def build_prompt(seed, world, characters, mystery, craft, voice_part2):
+    palabras_capitulo = CALIBRACION["palabras_objetivo_capitulo"]
+    palabras_novela = CALIBRACION["palabras_objetivo_novela"]
+    capitulos_totales = round(palabras_novela / palabras_capitulo)
+
+    return f"""Build a complete chapter outline for this novel. Target: ~{capitulos_totales}
+chapters, ~{palabras_novela} words total (~{palabras_capitulo} words per chapter).
 
 SEED CONCEPT:
 {seed}
@@ -80,8 +106,10 @@ State the percentage marks for the key novel.
 
 For EACH chapter, provide:
 ### Ch N: [Title]
-- **POV:** (always Cass, third-person limited)
-- **Location:** Which districts/locations
+- **POV:** the POV character(s) for this chapter -- pick from CHARACTER
+  REGISTRY above (whoever is marked as a POV character there). If the
+  novel rotates POV, say whose turn it is.
+- **Location:** Which locations, from WORLD BIBLE
 - **Save the Cat beat:** Which beat this chapter serves (Opening Image, Setup, Catalyst, etc.)
 - **% mark:** Where this falls in the novel
 - **Ambición:** pico | sosten | valle -- declare ONE per chapter.
@@ -94,46 +122,77 @@ For EACH chapter, provide:
 - **Beats:** 3-5 specific scene beats that must happen
 - **Plants:** Foreshadowing elements planted in this chapter
 - **Payoffs:** Foreshadowing elements that pay off here
-- **Character movement:** What changes for Cass (or other characters) by chapter's end
-- **The lie:** How Cass's lie ("if I master the system, I can fix things from inside") is
-  reinforced or challenged in this chapter
-- **~Word count target:** for pacing
+- **Character movement:** What changes for the POV character (or others) by chapter's end
+- **The lie:** How the POV character's lie -- see their wound/want/need/lie
+  chain in CHARACTER REGISTRY -- is reinforced or challenged in this chapter
+- **~Word count target:** for pacing, around {palabras_capitulo} words
 
 ## Foreshadowing Ledger
 
 A table tracking every planted thread:
-| Thread | Planted (Ch) | Reinforced (Ch) | Payoff (Ch) | Type |
+| # | Thread | Planted (Ch) | Reinforced (Ch) | Payoff (Ch) | Alcance | Type |
+
+Alcance is "libro" (default -- must pay off within THIS book) or "serie"
+(allowed to pay off in a later book of the series; only meaningful if this
+branch has a siembras_serie.md -- if it doesn't, treat every thread as
+"libro" regardless).
 
 Include at LEAST 15 threads. Types: object, dialogue, action, symbolic, structural.
+Plant-to-payoff distance must be at least 3 chapters (within the same book;
+cross-book "serie" threads are exempt from this distance rule).
 
 KEY PLOT ARCHITECTURE:
 
-Act I (Ch 1-6ish): Establish Cass's world, his pain, his gift, the Academy, his family.
-Plant the mystery early (the locked room, the forbidden bells, father's tremor).
-Catalyst: something forces Cass to investigate Perin's contract.
+Derive the Act I / Act II Part 1 / Act II Part 2 / Act III beats from the
+SEED CONCEPT, WORLD BIBLE, CHARACTER REGISTRY, and CENTRAL MYSTERY above.
+Do not invent plot elements, character names, locations, or mechanics that
+aren't grounded in those documents -- if something is missing that the
+plot needs, that's a gap to flag, not something to make up silently.
 
-Act II Part 1 (Ch 7-12ish): Investigation. Cass digs into the Corda contract, encounters
-Maret, allies with Torvald and Lenne, begins hearing the harmonic more clearly.
-Midpoint: Cass learns a partial truth that changes his approach (false victory or defeat).
-
-Act II Part 2 (Ch 13-18ish): Pressure mounts. Maret moves against the Bellwrights.
-Father's secrets begin to surface. Cass's lie is increasingly unsustainable.
-All Is Lost: Cass confronts his father and learns the full truth.
-
-Act III (Ch 19-24ish): Cass understands the question. Must choose how to answer.
-The climax plays out using the established intervals of Tonal Law.
-The resolution shows the aftermath of his choice.
+As a shape to follow (fill it with THIS story's specifics, not placeholders):
+- Act I: establish the protagonist's world and wound. Plant the central
+  mystery early. A catalyst forces the protagonist to act.
+- Act II Part 1: investigation/escalation using the rules established in
+  the world bible. Midpoint: a partial truth changes the approach (false
+  victory or false defeat).
+- Act II Part 2: pressure mounts, the protagonist's lie becomes
+  unsustainable. All Is Lost: a confrontation reveals the full truth.
+- Act III: the protagonist must choose how to answer the central question.
+  The climax resolves using rules already established -- not new powers or
+  information invented at the last minute. Show the aftermath of the choice.
 
 CONSTRAINTS:
-- The climax must be mechanically resolvable using established Tonal Law intervals
-- Cass's investigation should feel like a mystery plot overlaid on a coming-of-age arc
+- The climax must be mechanically resolvable using rules already
+  established in the world bible -- no new powers or last-minute exceptions
 - The Stability Trap: bad things must stay bad. Not everything resolves cleanly.
-- Perin must appear in person at some point (not just in memory/letters)
+- Every character in CHARACTER REGISTRY with a wound/want/need/lie chain
+  should appear in person at least once, not only through memory or other
+  characters' accounts
 - At least 3 chapters should be "quiet" -- character-focused, low-action, emotionally rich
 - Vary the try-fail types: 60%+ should be "yes-but" or "no-and"
 - The foreshadowing ledger must have plant-to-payoff distances of at least 3 chapters
 """
 
-print("Calling writer model...", file=sys.stderr)
-result = call_writer(prompt)
-print(result)
+
+def main():
+    seed = load_file_bilingue("semilla.txt", "seed.txt")
+    world = load_file_bilingue("mundo.md", "world.md")
+    characters = load_file_bilingue("personajes.md", "characters.md")
+    mystery = load_file_bilingue("MISTERIO.md", "MYSTERY.md")
+    craft = load_file(BASE_DIR / "CRAFT.md")
+    voice = load_file_bilingue("voz.md", "voice.md")
+    voice_part2 = extraer_voz_parte2(voice)
+
+    prompt = build_prompt(seed, world, characters, mystery, craft, voice_part2)
+
+    print("Calling writer model...", file=sys.stderr)
+    result = call_writer(prompt)
+
+    out_path = ruta_bilingue("esquema.md", "outline.md")
+    out_path.write_text(result)
+    print(f"Saved to {out_path}", file=sys.stderr)
+    print(result)
+
+
+if __name__ == "__main__":
+    main()

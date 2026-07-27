@@ -172,3 +172,41 @@ exista). Cuando se implemente `estado_serie.json`, el único cambio
 necesario es que quien llame a `validar_libro_de_siembras()` le pase
 `set(estado_serie["libros_completos"])` -- la función ya está lista para
 recibirlo, no hace falta tocar la lógica de validación.
+
+---
+
+## Bug sistémico: los `gen_*.py` de fundación no guardaban su propio resultado
+
+**Dónde:** encontrado al arreglar el `/tmp/outline_output.md` de
+`gen_outline_part2.py` en la Tarea 2b. Resulta que **todos** los scripts
+de la fase de fundación tenían el mismo patrón: `gen_world.py`,
+`gen_characters.py`, `gen_canon.py` (y `gen_outline.py`/
+`gen_outline_part2.py`, ya corregidos) terminan con `print(result)` y
+nunca escriben en su archivo destino (`world.md`, `characters.md`,
+`canon.md`). Y `run_pipeline.py::run_foundation()` tampoco lo hace por
+ellos -- llama `uv_run("gen_world.py")` etc., que captura el stdout en un
+`CompletedProcess`, pero nunca lo vuelca a ningún archivo.
+
+**Por qué importa:** tal como está, correr `run_pipeline.py --phase
+foundation` de punta a punta **no dejaría nada escrito** en `world.md`,
+`characters.md` ni `canon.md` -- el pipeline automatizado que describe
+`PIPELINE.md` no puede funcionar hoy sin intervención manual (correr cada
+script y redirigir su stdout a mano, que es exactamente el flujo que
+`/tmp/outline_output.md` delataba).
+
+**Qué se corrigió:** solo `gen_outline.py` y `gen_outline_part2.py`
+(Tarea 2b) -- ahora escriben en `esquema.md`/`outline.md` ellos mismos.
+`gen_world.py`, `gen_characters.py` y `gen_canon.py` **siguen sin
+guardar**.
+
+**Estado:** confirmado por el usuario como **prioridad alta** -- formalizado
+como **Tarea 6** en `ENCARGO_CLAUDE_CODE.md` (`gen_world.py` →
+`mundo.md`/`world.md`, `gen_characters.py` → `personajes.md`/`characters.md`,
+`gen_canon.py` agrega a `canon.md` en vez de reemplazarlo). Esta entrada
+queda como puntero; ver ese archivo para el detalle. Pendiente de ejecutar.
+
+Nota aparte: en `docs/BASELINE.md` y `docs/ESTADO.md` había quedado
+registrado que `world.md`/`characters.md` estaban vacíos "porque son
+plantillas" -- cierto pero incompleto. Están vacíos porque **el pipeline
+nunca pudo escribirlos**, ni siquiera con `.env` configurado. Corregido en
+los dos archivos.
