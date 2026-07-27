@@ -1,6 +1,6 @@
 # ESTADO — rama `framework/es-multilibro`
 
-Última actualización: 2026-07-27 (tras cerrar la Tarea 3). Escrito para
+Última actualización: 2026-07-27 (tras cerrar la Tarea 4). Escrito para
 retomar en otra sesión sin releer todo el historial de commits.
 
 ## Punto de partida que sigue vigente
@@ -31,6 +31,9 @@ retomar en otra sesión sin releer todo el historial de commits.
 04b6439 Tarea 2: descontamina draft_chapter.py y gen_brief.py
 4ad802c docs: ESTADO.md al día con el cierre de la Tarea 2
 5af3cb9 Tarea 3: campo de ambición por capítulo (pico | sosten | valle)
+d3c4c72 fix: palabras_objetivo_capitulo=2000 (era 3800, error de mi sesión anterior)
+506f435 Tarea 4: alcance de siembra para series (libro | serie)
+df7b06c docs: suma gen_outline_part2.py a la Tarea 2b, documenta dependencia de libros_completos
 ```
 
 `1c` y `1d` no estaban en el `ENCARGO_CLAUDE_CODE.md` original -- se
@@ -183,6 +186,47 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
   `deteccion_es.py` con nota explicando el porqué. `draft_chapter.py` no
   necesitó cambios, ya leía el valor dinámicamente.
 
+### Tarea 4 — Alcance de siembra para series (COMPLETA, commit `506f435`)
+
+- **`evaluate.py`**, sección nueva "Alcance de siembra": `validar_siembra(
+  entrada, alcance_serie_disponible_, libros_completos=None)` implementa
+  las 4 reglas exactas de la tabla del encargo sobre el esquema JSON del
+  encargo (`id`/`siembra`/`pago`/`alcance`/`estado`). `alcance_serie_disponible()`
+  chequea si existe `siembras_serie.md`. `validar_libro_de_siembras()` es
+  la versión batch.
+- **Regla de regresión**: sin `siembras_serie.md`, una entrada `alcance:
+  serie` se valida como si fuera `alcance: libro` -- comportamiento
+  idéntico al de antes de la tarea. Probado explícitamente.
+- **`outline.md`** / **`gen_outline_part2.py`**: columna "Alcance"
+  agregada a la tabla del Foreshadowing Ledger (edición mínima, mismo
+  criterio que la ambición en la Tarea 3).
+- **Decisión de diseño explícita, confirmada por el usuario**: los
+  validadores operan sobre dicts ya estructurados, no parsean la tabla
+  markdown real de `outline.md` (sigue siendo texto libre de LLM). La
+  validación es la parte difícil y ya está probada; el parser depende de
+  fijar el formato definitivo del ledger primero, y construir un parser
+  confiable de una tabla generada por LLM es un problema aparte con
+  riesgo real de bugs silenciosos. Documentado como gap en
+  `docs/HALLAZGOS.md`.
+- **`libros_completos` (regla 4) sin fuente de datos todavía**: hoy nadie
+  llena ese parámetro. Según `AUDITORIA_Y_PLAN.md` B2/B7 vive en
+  `estado_serie.json` (`{"libros_completos": [1], ...}`), que es parte de
+  la Clase B (capa de serie completa) y **todavía no existe** en este
+  repo -- ninguna tarea del encargo actual (0-4) lo crea. `validar_siembra()`
+  ya está lista para recibirlo (`libros_completos=None` es un default
+  razonable mientras tanto); cuando se construya `estado_serie.json`, el
+  único cambio necesario es que el llamador le pase
+  `set(estado_serie["libros_completos"])`. Documentado en HALLAZGOS.md.
+- **Aceptación verificada, los 4 casos + regresión, cada uno con test
+  dedicado**: 50 tests en verde (`uv run python -m pytest tests/ -v`).
+- **`gen_outline_part2.py` también contaminado con Bells → sumado a la
+  Tarea 2b** (confirmado por el usuario, junto con `gen_outline.py`).
+  Además de la contaminación (capítulos 17-24 escritos a mano para la
+  trama de Bells), tiene un **bug real independiente**: `part1 =
+  open('/tmp/outline_output.md').read()` es una ruta absoluta hardcodeada
+  fuera del repo -- con contenedores efímeros eso es una bomba de tiempo.
+  La Tarea 2b en `ENCARGO_CLAUDE_CODE.md` ya incluye arreglarlo.
+
 ## Qué falta de la Tarea 1
 
 - **1a** (parte no cubierta por 1c): flag `--idioma es|en` para que
@@ -205,35 +249,23 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
 - El **`overall_score`** completo de `evaluate.py` (juez LLM + mecánico)
   sobre los dos fixtures sigue **PENDIENTE** en `docs/BASELINE.md`.
 
-## Qué sigue (Tarea 4, después Tarea 2b -- ninguna depende de `.env`)
+## Qué sigue (Tarea 2b -- la última que no depende de `.env`)
 
-Ver `ENCARGO_CLAUDE_CODE.md` para el detalle completo. Las Tareas 2 y 3 ya
-están completas (ver arriba).
+Ver `ENCARGO_CLAUDE_CODE.md` para el detalle completo. Las Tareas 2, 3 y 4
+ya están completas (ver arriba).
 
-- **Tarea 4 — Alcance de siembra (serie).** El libro de siembras hoy
-  exige que todo se pague dentro del mismo volumen; para una serie hace
-  falta `alcance: "libro" | "serie"` con las 4 reglas de validación de la
-  tabla del encargo:
-  | Caso | Resultado |
-  |---|---|
-  | `alcance: libro`, sin pago en el volumen | ERROR (como hoy) |
-  | `alcance: serie`, sin pago en el volumen, con libro de pago asignado | OK |
-  | `alcance: serie`, sin libro de pago asignado | ERROR |
-  | `alcance: serie`, pago asignado a un libro ya publicado | ERROR |
-  Más `siembras_serie.md` en la rama de serie (si no existe, todo es
-  alcance de libro -- comportamiento actual sin cambios, necesita test de
-  regresión explícito). Toca `gen_outline_part2.py` y su validador.
+- **Tarea 2b — Descontaminar `gen_outline.py` y `gen_outline_part2.py`.**
+  Tarea 2 incompleta, no un hallazgo aparte: se le pasó al usuario en la
+  auditoría original y en la Tarea 2 (solo nombraba
+  `draft_chapter.py`/`gen_brief.py`). Mismo tratamiento que A1: armazón
+  invariante + reglas leídas de `mundo.md`/`personajes.md`/`MISTERIO.md`.
+  Incluye arreglar el bug real de `gen_outline_part2.py` (ruta absoluta
+  `/tmp/outline_output.md` hardcodeada). Grep de aceptación sobre los dos
+  archivos: `cass|bell|bronze|under-note|perin|maret|torvald|lenne|tonal`
+  → cero, más `grep -n "/tmp/" gen_outline_part2.py` → cero.
   **En curso ahora mismo, siguiente después de este ESTADO.md.**
-- **Tarea 2b — Descontaminar `gen_outline.py`.** Tarea 2 incompleta, no un
-  hallazgo aparte: se le pasó al usuario en la auditoría original y en la
-  Tarea 2 (solo nombraba `draft_chapter.py`/`gen_brief.py`). Mismo
-  tratamiento que A1: armazón invariante + reglas leídas de `mundo.md`/
-  `personajes.md`/`MISTERIO.md`, grep de aceptación en cero (`cass|bell|
-  bronze|under-note|perin|maret|torvald|lenne|tonal`). **Programada para
-  después de la Tarea 4** -- terminar el trabajo de serie antes de volver
-  a tocar redacción.
 
-Después de la Tarea 2b, todo lo que queda (1b, y completar el
+Después de la Tarea 2b, todo lo que queda (1a completo, 1b, y completar el
 `overall_score` en `docs/BASELINE.md`) necesita `.env`.
 
 ## Cómo retomar
@@ -245,6 +277,6 @@ Después de la Tarea 2b, todo lo que queda (1b, y completar el
 2. Push pendiente: `git push origin framework/es-multilibro` (o a la URL
    con token, nunca pegado en el chat -- solo como variable de entorno ya
    exportada).
-3. Si se retoma sin `.env` todavía: Tarea 4 (en curso) y después Tarea 2b
-   son las que quedan sin depender de la API key. Después de la 2b, todo
-   lo restante necesita `.env`.
+3. Si se retoma sin `.env` todavía: Tarea 2b (en curso) es la única que
+   queda sin depender de la API key. Después de ella, todo lo restante
+   necesita `.env`.
