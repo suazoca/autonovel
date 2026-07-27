@@ -1,7 +1,8 @@
 # ESTADO — rama `framework/es-multilibro`
 
-Última actualización: 2026-07-27 (tras cerrar la Tarea 2c). Escrito para
-retomar en otra sesión sin releer todo el historial de commits.
+Última actualización: 2026-07-27 (tras cerrar la Tarea 7 -- generador de
+voz). Escrito para retomar en otra sesión sin releer todo el historial de
+commits.
 
 **Nota:** `AUDITORIA_Y_PLAN.md` se movió a `docs/AUDITORIA_Y_PLAN.md` en un
 commit hecho directamente por el usuario (`48395a8`, fuera de esta
@@ -70,7 +71,9 @@ c513adf docs: ESTADO.md al día con el cierre de la Tarea 4
 b18ca4a docs: corrige el conteo de tokens expuestos (cuatro, no dos) y el estado del push
 48395a8 docs: mueve AUDITORIA_Y_PLAN.md a docs/                          <- del usuario, no de esta conversación
 bb4c7ce Tarea 6: persistencia en la fase de fundación
-4ad70b7 Tarea 2c: descontamina gen_world.py, gen_characters.py, gen_canon.py  <- pusheado hasta acá
+4ad70b7 Tarea 2c: descontamina gen_world.py, gen_characters.py, gen_canon.py
+40cfbd5 docs: incidente de tokens pasa a RESUELTO, anota vencimiento del token vigente  <- pusheado hasta acá
+                                                                          <- Tarea 7 sigue, sin pushear al escribir esto
 ```
 
 `1c` y `1d` no estaban en el `ENCARGO_CLAUDE_CODE.md` original -- se
@@ -455,6 +458,56 @@ mismos y que `run_pipeline.py` no ignore sus fallos.
   alcance de la Tarea 2c (arreglarlo bien es una decisión de diseño:
   resumen manual vs. interpolar el archivo completo).
 
+### Tarea 7 — Generador de voz que faltaba (COMPLETA)
+
+- **`gen_voice.py` (script nuevo)**: mismo patrón que los otros seis --
+  `main()`, guardia, `fundacion_comun.py`, `exigir_semilla()`. Insumos:
+  **solo** la semilla y `CRAFT.md` -- nada de `mundo.md`/`personajes.md`
+  (leerlos crearía dependencia circular con `gen_world.py`/
+  `gen_characters.py`, que a su vez leen la voz).
+- **Decisión de diseño clave: la voz se genera UNA VEZ.** Si la Parte 2
+  ya tiene contenido real, `gen_voice.py` no llama a la API -- informa
+  que ya existe y sale (`fundacion_comun.voz_parte2_tiene_contenido()`).
+  Motivo: la semilla no cambia entre iteraciones, así que regenerar la
+  voz sería ruido, no exploración. Coherente con la regla de serie
+  (`AUDITORIA_Y_PLAN.md` B4: la voz no se redescubre entre libros).
+- **Llena 7 de las 8 subsecciones de la Parte 2** (Tono, Ritmo de
+  oración, Registro léxico, POV y tiempo, Convenciones de diálogo,
+  Pasajes ejemplares, Anti-ejemplares) sin tocar la Parte 1 ni la
+  subsección opcional "Reglas específicas de capítulo" (se llena más
+  tarde, por capítulo). El modelo responde con marcadores propios
+  (`###TONO###`, etc., no los encabezados reales del archivo) que
+  `parsear_secciones()` interpreta, y `llenar_parte2()` inyecta cada uno
+  en el rango exacto de su subsección -- si una subsección ya tiene
+  contenido real (no solo el comentario placeholder), no se toca.
+- **`run_pipeline.py::run_foundation()`**: `gen_voice.py` corre
+  **primero** en el loop, antes de `gen_world.py`, envuelto en
+  `run_generator()`.
+- **`verificar_archivos_fundacion()` necesitó un criterio distinto para
+  `voz.md`**: los otros cuatro archivos (Tarea 6) se verifican por
+  `mtime` -- deben haberse modificado en esta iteración. `voz.md` NO
+  puede verificarse así: como se congela después de la primera
+  iteración que la generó, su `mtime` va a ser viejo a propósito desde
+  la iteración 2 en adelante. Verificarla por `mtime` habría abortado
+  todas las iteraciones después de la primera sin motivo real. Para
+  `voz.md` alcanza con "existe y tiene contenido real", sin importar
+  cuándo se escribió.
+- **Simplificación consciente respecto a `PIPELINE.md`**: el paso
+  documentado ahí ("write 5 trial passages ... select best...") es un
+  proceso de explorar-evaluar-elegir en varios pasos. `gen_voice.py` hace
+  una sola llamada (mismo patrón de un solo `call_writer()` que los otros
+  seis generadores), pidiéndole al modelo en el prompt que considere
+  varias direcciones internamente antes de comprometerse a una sola voz
+  -- no literalmente 5 pasajes generados y comparados por separado.
+- **Aceptación verificada**: 113 tests en verde
+  (`uv run python -m pytest tests/ -v`), incluyendo
+  `tests/test_gen_voice.py` (idempotencia -- `call_writer` parcheado
+  para lanzar si se lo llama, Parte 1 intacta, resolución bilingüe,
+  parseo y llenado de secciones) y los 4 tests nuevos de
+  `verificar_archivos_fundacion()` sobre el caso de `voz.md` con `mtime`
+  viejo (no debe contar como faltante) vs. vacía (sí debe contar, sin
+  importar el `mtime`).
+
 ## Qué falta de la Tarea 1
 
 - **1a** (parte no cubierta por 1c): flag `--idioma es|en` para que
@@ -479,20 +532,14 @@ mismos y que `run_pipeline.py` no ignore sus fallos.
 
 ## Qué sigue
 
-Las Tareas 0, 1c, 1d, 2, 2b, 2c, 3, 4 y 6 están completas.
+Las Tareas 0, 1c, 1d, 2, 2b, 2c, 3, 4, 6 y 7 están completas.
 
 **Se puede seguir escribiendo y testeando código sin `.env`** -- todo lo
-de esta sesión (Tareas 2, 2b, 2c, 3, 4, 6) se construyó y probó así, con
-`call_writer()`/`uv_run()` parcheados. Lo que sin `.env` **no** se puede
-hacer es correr una generación real ni ver si el resultado tiene calidad.
+de esta sesión se construyó y probó así, con `call_writer()`/`uv_run()`
+parcheados. Lo que sin `.env` **no** se puede hacer es correr una
+generación real ni ver si el resultado tiene calidad.
 
 - **Sin `.env`, se puede avanzar en escribir código para:**
-  - **El generador de voz que falta** (hallazgo, prioridad alta) --
-    escribir el script (`gen_voice.py` o similar) que llene
-    `voice.md`/`voz.md` Parte 2, con el mismo patrón `main()` +
-    `fundacion_comun.py` + tests con `call_writer` parcheado. Tiene una
-    restricción de orden: debe correr antes que `gen_world.py`, y solo
-    puede depender de la semilla (ver hallazgo arriba).
   - El script que acumule al canon los hechos de redacción, y el parser
     del Foreshadowing Ledger (Tarea 4) -- ambos esperan primero fijar el
     formato estructurado de esos documentos, que es una decisión de
@@ -500,17 +547,22 @@ hacer es correr una generación real ni ver si el resultado tiene calidad.
   - El hallazgo del `craft` no usado en `gen_world.py`/`gen_characters.py`
     (Tarea 2c) -- decisión de diseño (resumen manual vs. interpolar
     `CRAFT.md` completo), no bloqueado por `.env`.
+  - Si se quiere el proceso de "5 pasajes, elegir el mejor" que describe
+    `PIPELINE.md` para el descubrimiento de voz (en vez de la llamada
+    única que implementa `gen_voice.py` hoy), es un cambio de
+    arquitectura, no algo bloqueado por `.env` -- ver Tarea 7.
 - **Bloqueado por `.env` -- no hay código nuevo que escribir, hace falta
   correr contra el modelo real:**
-  - Validar que el generador de voz (una vez escrito) produce pasajes de
-    calidad real -- eso es juicio, no algo mockeable con sentido.
+  - Validar que `gen_voice.py` produce una voz de calidad real -- eso es
+    juicio, no algo mockeable con sentido.
   - **1a** (flag `--idioma es|en`), **1b** (prompts del juez en español,
     validados contra el juez real), **1d parte final** (conectar los
     fixtures de voz/mundo a una corrida real de `evaluate_chapter()`).
   - Completar el `overall_score` de los fixtures de la Tarea 0 en
     `docs/BASELINE.md`.
   - Intentar `run_pipeline.py --phase foundation` de punta a punta por
-    primera vez.
+    primera vez -- ahora sí con los 7 pasos de fundación completos
+    (voz, mundo, personajes, esquema x2, canon, fingerprint).
 
 ## Cómo retomar
 
@@ -520,15 +572,14 @@ hacer es correr una generación real ni ver si el resultado tiene calidad.
    "could not read Username": salir con Ctrl+D, `git push` en la terminal
    interactiva, volver a entrar con `claude` (ver "Punto de partida"
    arriba -- no hace falta otra máquina ni otra sesión SSH).
-2. Si no hay `.env` todavía, hay dos frentes para escribir código (ver
-   "Qué sigue"): el **generador de voz que falta** (hallazgo, prioridad
-   alta), o avanzar el diseño de formato de `canon.md`/Foreshadowing
-   Ledger.
+2. Si no hay `.env` todavía: avanzar el diseño de formato de
+   `canon.md`/Foreshadowing Ledger es lo único que queda sin bloquear
+   (ver "Qué sigue").
 3. Cuando haya `.env` con `ANTHROPIC_API_KEY`:
    a. Correr `evaluate.py --chapter` (sin `--solo-mecanico`) sobre los
       fixtures para completar el `overall_score` pendiente en
       `docs/BASELINE.md`.
    b. Arrancar la Tarea 1b.
-   c. Con la Tarea 6 ya resuelta, se puede intentar
+   c. Con la Tarea 6 y la 7 ya resueltas, se puede intentar
       `run_pipeline.py --phase foundation` de punta a punta por primera
       vez (con un `seed.txt`/`semilla.txt` real).

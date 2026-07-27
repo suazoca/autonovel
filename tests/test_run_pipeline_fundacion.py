@@ -64,12 +64,29 @@ def test_run_generator_devuelve_result_si_ok(monkeypatch):
     assert resultado is ok
 
 
+VOZ_CON_CONTENIDO = """## Part 2: Voice Identity (generated per novel)
+
+### Tone
+Seco, casi notarial.
+
+### Exemplar Passages
+—No vino nadie —dijo ella.
+"""
+
+VOZ_VACIA = """## Part 2: Voice Identity (generated per novel)
+
+### Tone
+<!-- Generated during foundation. -->
+"""
+
+
 def test_verificar_archivos_fundacion_todo_falta(tmp_path, monkeypatch):
     monkeypatch.setattr(rp, "BASE_DIR", tmp_path)
     desde = time.time()
 
     faltantes = rp.verificar_archivos_fundacion(desde)
 
+    assert "voz.md/voice.md" in faltantes
     assert "mundo.md/world.md" in faltantes
     assert "personajes.md/characters.md" in faltantes
     assert "esquema.md/outline.md" in faltantes
@@ -79,6 +96,7 @@ def test_verificar_archivos_fundacion_todo_falta(tmp_path, monkeypatch):
 def test_verificar_archivos_fundacion_vacios_cuentan_como_faltantes(tmp_path, monkeypatch):
     monkeypatch.setattr(rp, "BASE_DIR", tmp_path)
     desde = time.time()
+    (tmp_path / "voice.md").write_text(VOZ_CON_CONTENIDO, encoding="utf-8")
     (tmp_path / "world.md").write_text("   \n", encoding="utf-8")  # solo espacios
     (tmp_path / "characters.md").write_text("", encoding="utf-8")
     (tmp_path / "outline.md").write_text("", encoding="utf-8")
@@ -86,12 +104,13 @@ def test_verificar_archivos_fundacion_vacios_cuentan_como_faltantes(tmp_path, mo
 
     faltantes = rp.verificar_archivos_fundacion(desde)
 
-    assert len(faltantes) == 4
+    assert len(faltantes) == 4  # voice.md no cuenta, tiene contenido real
 
 
 def test_verificar_archivos_fundacion_todo_presente_lista_vacia(tmp_path, monkeypatch):
     monkeypatch.setattr(rp, "BASE_DIR", tmp_path)
     desde = time.time() - 1  # margen: precisión de mtime del filesystem
+    (tmp_path / "voice.md").write_text(VOZ_CON_CONTENIDO, encoding="utf-8")
     (tmp_path / "world.md").write_text("mundo real", encoding="utf-8")
     (tmp_path / "characters.md").write_text("personajes reales", encoding="utf-8")
     (tmp_path / "outline.md").write_text("esquema real", encoding="utf-8")
@@ -103,6 +122,7 @@ def test_verificar_archivos_fundacion_todo_presente_lista_vacia(tmp_path, monkey
 def test_verificar_archivos_fundacion_prefiere_nombre_en_espanol(tmp_path, monkeypatch):
     monkeypatch.setattr(rp, "BASE_DIR", tmp_path)
     desde = time.time() - 1  # margen: precisión de mtime del filesystem
+    (tmp_path / "voz.md").write_text(VOZ_CON_CONTENIDO, encoding="utf-8")
     (tmp_path / "mundo.md").write_text("mundo real", encoding="utf-8")
     (tmp_path / "personajes.md").write_text("personajes reales", encoding="utf-8")
     (tmp_path / "esquema.md").write_text("esquema real", encoding="utf-8")
@@ -116,24 +136,62 @@ def test_verificar_archivos_fundacion_mtime_anterior_aborta(tmp_path, monkeypatc
     mtime ANTERIOR al inicio de la iteración -- debe abortar igual.
     world.md/characters.md/outline.md son plantillas trackeadas en git
     con contenido real pero viejo; 'existe y no está vacío' no prueba que
-    el generador haya escrito algo esta vuelta."""
+    el generador haya escrito algo esta vuelta. voice.md también está
+    presente y viejo acá, a propósito -- para confirmar que a ÉL no le
+    aplica esta regla (ver test dedicado más abajo)."""
     monkeypatch.setattr(rp, "BASE_DIR", tmp_path)
+    voice = tmp_path / "voice.md"
     world = tmp_path / "world.md"
     characters = tmp_path / "characters.md"
     outline = tmp_path / "outline.md"
     canon = tmp_path / "canon.md"
+    voice.write_text(VOZ_CON_CONTENIDO, encoding="utf-8")
     world.write_text("plantilla vieja de mundo", encoding="utf-8")
     characters.write_text("plantilla vieja de personajes", encoding="utf-8")
     outline.write_text("plantilla vieja de esquema", encoding="utf-8")
     canon.write_text("plantilla vieja de canon", encoding="utf-8")
 
     # La iteración "empieza" después de que estos archivos viejos ya
-    # existían -- ninguno se tocó en la corrida actual.
+    # existían -- ninguno se tocó en la corrida actual (voice.md incluido,
+    # a propósito: la voz se congela, mtime viejo es esperado).
     desde = max(
-        world.stat().st_mtime, characters.stat().st_mtime,
-        outline.stat().st_mtime, canon.stat().st_mtime,
+        voice.stat().st_mtime, world.stat().st_mtime,
+        characters.stat().st_mtime, outline.stat().st_mtime,
+        canon.stat().st_mtime,
     ) + 1
 
     faltantes = rp.verificar_archivos_fundacion(desde)
 
-    assert len(faltantes) == 4
+    assert len(faltantes) == 4  # mundo/personajes/esquema/canon -- no voz
+    assert "voz.md/voice.md" not in faltantes
+
+
+def test_verificar_archivos_fundacion_voz_vieja_con_contenido_no_es_faltante(tmp_path, monkeypatch):
+    """El caso central de este cambio: voice.md con mtime MUY anterior al
+    inicio de la iteración (la voz se generó en la iteración 1 y se
+    congeló) pero con contenido real -- no debe contar como faltante,
+    a diferencia de mundo/personajes/esquema/canon."""
+    monkeypatch.setattr(rp, "BASE_DIR", tmp_path)
+    voice = tmp_path / "voice.md"
+    voice.write_text(VOZ_CON_CONTENIDO, encoding="utf-8")
+
+    desde = voice.stat().st_mtime + 3600  # "la iteración empieza" una hora después
+
+    faltantes = rp.verificar_archivos_fundacion(desde)
+
+    assert "voz.md/voice.md" not in faltantes
+
+
+def test_verificar_archivos_fundacion_voz_vacia_si_cuenta_como_faltante(tmp_path, monkeypatch):
+    """voice.md sin contenido real en la Parte 2 (solo la plantilla) sí
+    debe contar como faltante, sin importar cuán reciente sea su mtime --
+    la excepción es solo para el criterio de mtime, no para el de
+    contenido."""
+    monkeypatch.setattr(rp, "BASE_DIR", tmp_path)
+    (tmp_path / "voice.md").write_text(VOZ_VACIA, encoding="utf-8")
+
+    desde = time.time() - 1
+
+    faltantes = rp.verificar_archivos_fundacion(desde)
+
+    assert "voz.md/voice.md" in faltantes

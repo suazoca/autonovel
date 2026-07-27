@@ -10,8 +10,12 @@ exigir_semilla() la usan los cuatro generadores que consumen la semilla
 gen_outline_part2.py no carga seed.txt/semilla.txt en absoluto -- no le
 aplica.
 
+gen_voice.py (Tarea "generador de voz") también importa de acá:
+extraer_voz_parte2(), voz_parte2_tiene_contenido() y exigir_semilla().
+
 Nada de lo que hay acá llama a la API ni tiene efectos de red.
 """
+import re
 import sys
 from pathlib import Path
 
@@ -48,6 +52,20 @@ def extraer_voz_parte2(voice_text):
         if 'Part 2' in line or 'Parte 2' in line:
             return '\n'.join(lines[i:])
     return voice_text
+
+
+def voz_parte2_tiene_contenido(voice_text):
+    """True si la Parte 2 de voz.md/voice.md ya tiene contenido real --
+    no solo los comentarios HTML placeholder y los encabezados de la
+    plantilla. Usado para la idempotencia de gen_voice.py (no regenerar
+    una voz que ya se decidió) y por run_pipeline.py::verificar_archivos_fundacion()
+    (voz.md se congela después de la primera iteración que la generó, así
+    que no se puede verificar por mtime como los demás archivos de
+    fundación -- ver Tarea "generador de voz")."""
+    parte2 = extraer_voz_parte2(voice_text)
+    sin_comentarios = re.sub(r'<!--.*?-->', '', parte2, flags=re.DOTALL)
+    sin_encabezados = re.sub(r'^#{1,6}\s.*$', '', sin_comentarios, flags=re.MULTILINE)
+    return bool(sin_encabezados.strip())
 
 
 def exigir_semilla(seed, accion):

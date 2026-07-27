@@ -497,8 +497,88 @@ incompleta no debe producir un puntaje que entre a `results.tsv`.
 Para cada script: correr `build_prompt()` (o la función equivalente) con
 inputs de prueba, invocar la función de guardado con una respuesta
 simulada del modelo, y verificar que el archivo destino (en un `tmp_path`)
-contiene esa respuesta. Un test de regresión para `gen_canon.py`: si
-`canon.md` ya tiene contenido, guardar debe agregarlo, no reemplazarlo.
+contiene esa respuesta.
+
+**Corrección sobre una versión anterior de este párrafo:** decía que
+`gen_canon.py` debía agregar a `canon.md` si ya tenía contenido, en vez
+de reemplazarlo. Es al revés -- ver la nota en "Cambios" arriba:
+`gen_canon.py` reescribe `canon.md` entero, porque en fundación es
+derivado de semilla+mundo+personajes sin hechos propios. El test de
+`gen_canon.py` es el mismo que los demás: `call_writer` parcheado,
+verificar que el archivo queda con la respuesta simulada completa.
+
+---
+
+## TAREA 7 — Generador de voz que faltaba
+
+Encontrado durante la Tarea 6 (hallazgo, no arreglado ahí a propósito).
+No existía ningún script que llenara la Parte 2 de `voice.md`/`voz.md`
+-- ni `gen_voice.py`, ni un paso equivalente en
+`run_pipeline.py::run_foundation()`, ni ningún `write_text` a ese
+archivo en todo el repo. `draft_chapter.py`, `gen_brief.py` y
+`gen_outline.py` la leen esperando contenido real; hasta esta tarea, era
+plantilla vacía.
+
+### Decisión de diseño: la voz se genera una sola vez
+
+La voz se genera en la primera iteración de fundación que la encuentre
+vacía, y **no se regenera** en las siguientes. Si la Parte 2 ya tiene
+contenido real, `gen_voice.py` sale sin llamar a la API e informa que ya
+existe.
+
+Motivo: la voz solo puede depender de la semilla -- no puede leer
+`mundo.md` ni `personajes.md` sin crear una dependencia circular con
+`gen_world.py`/`gen_characters.py`, que a su vez leen la voz como
+insumo. Y la semilla no cambia entre iteraciones de fundación, así que
+regenerar la voz en cada vuelta sería ruido, no exploración. Es
+coherente con la regla de serie (`AUDITORIA_Y_PLAN.md` B4): la voz no se
+redescubre entre libros, se congela y se copia idéntica.
+
+### Cambios
+
+- `gen_voice.py` (script nuevo): mismo patrón que los otros seis --
+  `main()`, guardia `if __name__ == "__main__":`, importa de
+  `fundacion_comun.py`, usa `exigir_semilla()`.
+- Insumos: solo la semilla y `CRAFT.md`. Nada de `mundo.md` ni
+  `personajes.md` (ver la restricción de orden arriba).
+- Llena 7 de las 8 subsecciones de la Parte 2 -- Tono, Ritmo de oración,
+  Registro léxico, POV y tiempo verbal, Convenciones de diálogo, Pasajes
+  ejemplares, Anti-ejemplares -- sin tocar la Parte 1 (los
+  guardarraíles invariantes) ni la subsección opcional "Reglas
+  específicas de capítulo" (esa se llena más tarde, por capítulo, no en
+  el descubrimiento de voz). Detecta el encabezado de la Parte 2 con la
+  misma lógica bilingüe que `extraer_voz_parte2()`.
+- Prompt en español, sin nombres propios de ninguna novela existente --
+  los pasajes de ejemplo se derivan de la semilla o se inventan de cero.
+- `fundacion_comun.py` suma `voz_parte2_tiene_contenido()`: True si la
+  Parte 2 tiene contenido real (no solo comentarios HTML y encabezados
+  de plantilla). La usan tanto `gen_voice.py` (idempotencia) como
+  `run_pipeline.py` (ver abajo).
+- `run_pipeline.py::run_foundation()`: `gen_voice.py` corre **primero**
+  en el loop, antes de `gen_world.py`, envuelto en `run_generator()`
+  (mismo abort-on-fail + `save_state()` que el resto de la Tarea 6).
+- `verificar_archivos_fundacion()`: `voz.md`/`voice.md` se suma a la
+  verificación, pero **con un criterio distinto** al de
+  mundo/personajes/esquema/canon. Esos cuatro se verifican por `mtime`
+  (Tarea 6: deben haberse modificado en esta iteración). `voz.md` NO --
+  como se congela después de la primera iteración que la generó, su
+  `mtime` va a ser viejo a propósito desde la iteración 2 en adelante;
+  verificarla por `mtime` abortaría todas las iteraciones después de la
+  primera sin motivo real. Para `voz.md` alcanza con "existe y la Parte
+  2 tiene contenido real" (`voz_parte2_tiene_contenido()`), sin importar
+  cuándo se escribió.
+
+### Test de aceptación de la Tarea 7
+
+Sin API:
+- Idempotencia: `call_writer` parcheado para lanzar si se lo llama;
+  correr `main()` con una voz ya decidida no debe lanzar.
+- La Parte 1 sobrevive intacta después de llenar la Parte 2.
+- Resolución bilingüe (`voz.md` antes que `voice.md`).
+- `verificar_archivos_fundacion()`: `voz.md` con `mtime` viejo pero
+  contenido real -- NO debe contar como faltante. `voz.md` con contenido
+  vacío (aunque el `mtime` sea reciente) -- SÍ debe contar como
+  faltante.
 
 ---
 

@@ -202,8 +202,17 @@ def verificar_archivos_fundacion(desde: float) -> list:
     que run_generator() no lo detecta) -- mtime reciente no prueba que lo
     escrito sirva para algo.
 
+    EXCEPCIÓN: voz.md/voice.md NO se verifica por mtime. gen_voice.py
+    genera la voz una sola vez y la congela -- a partir de la segunda
+    iteración de fundación, su mtime siempre va a ser anterior a `desde`
+    a propósito (es la iteración 1 la que la escribió). Verificarla por
+    mtime abortaría todas las iteraciones después de la primera. Para
+    voz.md alcanza con "existe y la Parte 2 tiene contenido real"
+    (`fundacion_comun.voz_parte2_tiene_contenido()`), sin importar cuándo
+    se escribió.
+
     Devuelve la lista de lo que falta (vacía si todo está bien)."""
-    from fundacion_comun import ruta_bilingue
+    from fundacion_comun import ruta_bilingue, voz_parte2_tiene_contenido
 
     def _no_valido(ruta):
         if not ruta.exists():
@@ -213,6 +222,13 @@ def verificar_archivos_fundacion(desde: float) -> list:
         return not ruta.read_text(encoding="utf-8").strip()
 
     faltantes = []
+
+    ruta_voz = ruta_bilingue(BASE_DIR, "voz.md", "voice.md")
+    if not ruta_voz.exists() or not voz_parte2_tiene_contenido(
+        ruta_voz.read_text(encoding="utf-8")
+    ):
+        faltantes.append("voz.md/voice.md")
+
     for nombre_es, nombre_en in FUNDACION_ARCHIVOS_BILINGUES:
         ruta = ruta_bilingue(BASE_DIR, nombre_es, nombre_en)
         if _no_valido(ruta):
@@ -328,6 +344,14 @@ def run_foundation(state: dict) -> dict:
         banner(f"Foundation Iteration {i}", "-")
         state["iteration"] = i
         inicio_iteracion = time.time()
+
+        # 0. Voice discovery -- PRIMERO, antes que todo lo demás. Solo
+        # depende de la semilla (gen_world.py/gen_characters.py leen la
+        # voz, así que la voz no puede leerlos a ellos sin circularidad).
+        # Se genera una sola vez -- gen_voice.py es idempotente: si la
+        # Parte 2 ya tiene contenido, no llama a la API.
+        step("Discovering voice (once)...")
+        run_generator("gen_voice.py", state, timeout=300)
 
         # 1. Generate planning documents
         step("Generating world bible...")

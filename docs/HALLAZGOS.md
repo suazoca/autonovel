@@ -321,7 +321,10 @@ confianza.
 
 ---
 
-## Nada genera la Parte 2 de `voice.md`/`voz.md` -- hermano de la Tarea 6, prioridad alta
+## RESUELTO: nada generaba la Parte 2 de `voice.md`/`voz.md`
+
+**Corregido como Tarea 7** (`gen_voice.py`, mismo patrón que el resto de
+la Tarea 6). Lo que decía esta entrada, para referencia:
 
 **Confirmado con grep, no requiere `.env` para diagnosticarse:**
 
@@ -368,22 +371,80 @@ gen_outline_part2.py -> gen_canon.py -> voice_fingerprint.py`
 (confirmado en `run_pipeline.py::run_foundation()`); la voz entraría
 antes que todo eso.
 
-**Pregunta de diseño abierta, sin resolver:** ¿la voz se genera una sola
-vez y se congela desde la iteración 1 de fundación, o se regenera en cada
-iteración? `AUDITORIA_Y_PLAN.md` (B4) dice que la voz **no se redescubre
-entre libros** de una serie ("voz.md Parte 2 se congela al terminar el
-Libro I y se copia idéntica") -- pero no dice nada sobre qué pasa con las
-iteraciones **dentro** del Libro I, que es un caso distinto (todavía no
-hay libro publicado, el mundo mismo puede cambiar de iteración a
-iteración). Si la voz se regenerara cada iteración, cada vuelta del loop
-de fundación sonaría distinta, lo cual podría ser deseable (explorar) o
-indeseable (inestable) según qué tan madura esté ya la fundación. No
-resuelto -- queda para cuando se escriba `gen_voice.py`.
+**Pregunta de diseño que estaba abierta, ya resuelta:** ¿la voz se genera
+una sola vez y se congela desde la iteración 1 de fundación, o se
+regenera en cada iteración? **Decisión: se genera una sola vez.**
+`gen_voice.py` es idempotente -- si la Parte 2 ya tiene contenido real, no
+llama a la API, informa que ya existe y sale. Motivo: la voz solo puede
+depender de la semilla (no de `mundo.md`/`personajes.md`, por la
+restricción de orden de arriba), y la semilla no cambia entre
+iteraciones -- regenerarla sería ruido, no exploración. Coherente con la
+regla de `AUDITORIA_Y_PLAN.md` B4 (la voz no se redescubre entre libros
+de una serie).
 
-**Estado:** NO corregido, sin tarea formal asignada. Diagnosticar esto no
-necesitó `.env`; escribir el script (`gen_voice.py` o similar, con el
-mismo patrón main()/`fundacion_comun.py`/tests con `call_writer`
-parcheado que el resto de la Tarea 6) tampoco lo necesitaría. Lo que sí
-requiere `.env` es validar que los 5 pasajes de prueba que generaría
-tengan alguna calidad real -- eso es juicio de un modelo, no algo que se
-pueda mockear con sentido.
+**Estado:** RESUELTO. `gen_voice.py` corre PRIMERO en
+`run_pipeline.py::run_foundation()`, antes de `gen_world.py`, solo con
+la semilla y `CRAFT.md` como insumos. Llena 7 de las 8 subsecciones de la
+Parte 2 (Tono, Ritmo de oración, Registro léxico, POV y tiempo,
+Convenciones de diálogo, Pasajes ejemplares, Anti-ejemplares) sin tocar
+la Parte 1 ni la subsección opcional "Reglas específicas de capítulo"
+(que se llena más tarde, por capítulo, no en el descubrimiento de voz).
+
+**Ajuste necesario en `verificar_archivos_fundacion()`:** como la voz se
+congela, su `mtime` queda viejo a propósito desde la iteración 2 en
+adelante -- el criterio de mtime que sí aplica a
+mundo/personajes/esquema/canon (Tarea 6) le haría creer, en toda
+iteración después de la primera, que nadie escribió la voz esta vuelta, y
+abortaría el pipeline sin motivo real. `voz.md`/`voice.md` se verifica
+aparte, solo por contenido (`fundacion_comun.voz_parte2_tiene_contenido()`),
+sin importar su mtime.
+
+**Simplificación consciente respecto a `PIPELINE.md`:** el paso documentado
+ahí ("write 5 trial passages ... select best ...") es un proceso de
+explorar-evaluar-elegir en varios pasos. `gen_voice.py` hace una sola
+llamada al modelo (mismo patrón de una llamada que los otros seis
+generadores), pidiéndole en el prompt que considere internamente varias
+direcciones antes de comprometerse a una sola voz coherente -- no
+literalmente 5 pasajes generados y comparados por separado. Si en algún
+momento se quiere el proceso completo de exploración, es un cambio de
+arquitectura (multi-llamada), no algo que quepa en "mismo método de
+siempre".
+
+---
+
+## `voz_parte2_tiene_contenido()` verifica la Parte 2 como un todo, no subsección por subsección
+
+**Dónde:** `fundacion_comun.py::voz_parte2_tiene_contenido()`, usada como
+guardia de idempotencia en `gen_voice.py::main()` y como criterio de
+"voz completa" en `run_pipeline.py::verificar_archivos_fundacion()`.
+
+**Qué falta:** la función mira si HAY contenido real en algún lugar de la
+Parte 2 (le basta con que sobreviva algo después de sacar comentarios HTML
+y encabezados), pero `gen_voice.py::llenar_parte2()` escribe subsección
+por subsección (Tono, Ritmo de oración, Registro léxico, POV y tiempo,
+Convenciones de diálogo, Pasajes ejemplares, Anti-ejemplares), usando el
+parseo por rangos que ya existe en `_rango_subseccion()`.
+
+**Por qué importa:** si una corrida real llena algunas de las 7
+subsecciones y se corta a mitad de camino (respuesta del modelo truncada,
+faltan algunos de los marcadores `###...###` esperados), `parsear_secciones()`
+devuelve un dict parcial, `llenar_parte2()` llena solo lo que recibió, pero
+`voz_parte2_tiene_contenido()` ya encuentra contenido real en las
+subsecciones que sí se llenaron y devuelve `True`. Consecuencia doble:
+
+1. `gen_voice.py::main()`, en la siguiente corrida, ve que "ya tiene
+   contenido" y sale sin volver a llamar a la API -- las subsecciones que
+   quedaron en placeholder (`<!-- Generated during foundation. -->`) se
+   quedan así **para siempre**, no hay ningún mecanismo que las complete.
+2. `run_pipeline.py::verificar_archivos_fundacion()` usa el mismo criterio
+   para decidir si la voz está lista antes de gastar la llamada al juez
+   LLM -- también da la voz por buena, aunque le falten subsecciones
+   enteras.
+
+**Arreglo propuesto (no implementado):** que la guardia mire subsección
+por subsección en vez de la Parte 2 como bloque único, apoyándose en el
+mismo parseo por rangos que `llenar_parte2()` ya usa (`_rango_subseccion()`
+por cada entrada de `SECCIONES`) -- solo dar la voz por completa si las 7
+subsecciones obligatorias tienen contenido real, no solo alguna.
+
+**Estado:** NO corregido, anotado como hallazgo abierto a pedido explícito.

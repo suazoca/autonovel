@@ -1,21 +1,20 @@
 # TRASPASO — rama `framework/es-multilibro`
 
-Estado real al cierre de esta sesión (2026-07-27, tras la Tarea 2c). Este
-documento reemplaza la necesidad de releer `ESTADO.md` completo o el
-historial de commits para retomar el trabajo -- es la foto actual, no la
-bitácora de cómo se llegó acá (para eso está `ESTADO.md`, que sí es
-narrativo).
+Estado real al cierre de esta sesión (2026-07-27, tras la Tarea 7 --
+generador de voz). Este documento reemplaza la necesidad de releer
+`ESTADO.md` completo o el historial de commits para retomar el trabajo --
+es la foto actual, no la bitácora de cómo se llegó acá (para eso está
+`ESTADO.md`, que sí es narrativo).
 
 ## En una línea
 
-Tareas 0, 1c, 1d, 2, 2b, 2c, 3, 4 y 6 del `ENCARGO_CLAUDE_CODE.md` están
-completas y testeadas (101 tests, todos en verde, sin necesitar API). Toda
-esa construcción se hizo **sin `.env`**, con `call_writer()`/`uv_run()`
-parcheados -- el mismo patrón sigue disponible para lo que falta: el
-generador de voz que falta (hallazgo, prioridad alta) se puede escribir y
-testear sin API. Lo que sí necesita `.env` es correr contra el modelo real
-y validar calidad -- 1a, 1b, 1d parte final, `overall_score` en BASELINE,
-y correr la fundación completa por primera vez.
+Tareas 0, 1c, 1d, 2, 2b, 2c, 3, 4, 6 y 7 del `ENCARGO_CLAUDE_CODE.md`
+están completas y testeadas (113 tests, todos en verde, sin necesitar
+API). Toda esa construcción se hizo **sin `.env`**, con
+`call_writer()`/`uv_run()` parcheados. Lo que sí necesita `.env` es
+correr contra el modelo real y validar calidad -- 1a, 1b, 1d parte final,
+`overall_score` en BASELINE, y correr la fundación completa (7 pasos, de
+punta a punta) por primera vez.
 
 ## Estado del repositorio
 
@@ -24,7 +23,7 @@ y correr la fundación completa por primera vez.
 | Rama | `framework/es-multilibro` |
 | `.env` / `ANTHROPIC_API_KEY` | No existe en este entorno |
 | Rama `autonovel/bells` | No existe en el remoto (verificado con `git fetch --all` + `git ls-remote --heads origin`) |
-| Push | Al día hasta `4ad70b7` (Tarea 2c). Confirmar con `git log origin/framework/es-multilibro..HEAD --oneline` si algo quedó sin pushear después |
+| Push | Al día hasta `40cfbd5`. El commit de la Tarea 7 puede estar sin pushear -- confirmar con `git log origin/framework/es-multilibro..HEAD --oneline` |
 | Working tree | Limpio |
 | `gh` CLI | No instalado en este entorno |
 | Incidentes de seguridad | **RESUELTO.** Cuatro tokens de GitHub distintos quedaron expuestos en el chat en una sesión anterior (pegados mal en la terminal, en varios intentos de push). **Los cuatro están revocados**, confirmado por el usuario -- sin verificación pendiente. |
@@ -54,7 +53,11 @@ b18ca4a docs: corrige el conteo de tokens expuestos (cuatro, no dos)
 48395a8 docs: mueve AUDITORIA_Y_PLAN.md a docs/                       (del usuario, no de esta conversación)
 bb4c7ce Tarea 6: persistencia en la fase de fundación
 4ad70b7 Tarea 2c: descontamina gen_world.py, gen_characters.py, gen_canon.py
+40cfbd5 docs: incidente de tokens pasa a RESUELTO, anota vencimiento del token vigente
 ```
+
+El commit de la Tarea 7 (`gen_voice.py`) se hace a continuación de este
+documento -- correr `git log -1 --oneline` para ver su hash real.
 
 `3ded223` (auditoría + plan + `deteccion_es.py`) es el commit base de todo
 esto y llegó por `git pull`, no se generó en esta sesión.
@@ -65,7 +68,7 @@ esto y llegó por `git pull`, no se generó en esta sesión.
 uv run python -m pytest tests/ -v
 ```
 
-**101 tests, todos en verde, ninguno requiere `.env`.**
+**113 tests, todos en verde, ninguno requiere `.env`.**
 
 | Archivo | Qué cubre |
 |---|---|
@@ -76,8 +79,9 @@ uv run python -m pytest tests/ -v
 | `tests/test_siembras.py` | Validador de alcance de siembra (Tarea 4) |
 | `tests/test_gen_outline.py` | Prompts de `gen_outline.py`/`gen_outline_part2.py` (Tarea 2b) |
 | `tests/test_fundacion.py` | `fundacion_comun.py` + `gen_world.py`/`gen_characters.py`/`gen_canon.py` (Tarea 6) |
-| `tests/test_run_pipeline_fundacion.py` | `run_generator()` + `verificar_archivos_fundacion()` en `run_pipeline.py`, incluyendo el criterio de mtime (Tarea 6) |
+| `tests/test_run_pipeline_fundacion.py` | `run_generator()` + `verificar_archivos_fundacion()`, incluyendo mtime (Tarea 6) y la excepción de `voz.md` (Tarea 7) |
 | `tests/test_descontaminacion_2c.py` | Ausencia de términos de *Bells* en `gen_world.py`/`gen_characters.py`/`gen_canon.py` (Tarea 2c) |
+| `tests/test_gen_voice.py` | `gen_voice.py`: idempotencia, Parte 1 intacta, resolución bilingüe, parseo/llenado de secciones (Tarea 7) |
 
 ## Tareas cerradas
 
@@ -92,6 +96,7 @@ uv run python -m pytest tests/ -v
 | 2b | `5a78c52` | `gen_outline.py`/`gen_outline_part2.py` descontaminados, ya no leen de `/tmp`, ahora se guardan a sí mismos |
 | 6 | `bb4c7ce` | `gen_world.py`/`gen_characters.py`/`gen_canon.py` se guardan a sí mismos; `gen_outline_part2.py` pasa a usar `fundacion_comun.py` (sin cambio de comportamiento); `run_pipeline.py` aborta y guarda `state` si un generador falla; verifica archivos antes de evaluar (por mtime, no solo "no vacío"). **No descontamina prompts** -- eso es la Tarea 2c. |
 | 2c | `4ad70b7` | `gen_world.py`/`gen_characters.py`/`gen_canon.py` descontaminados de *Bells*: reparto fijo reemplazado por requisito estructural, secciones genéricas, género y sistema de magia condicionados a la semilla, prompts traducidos al español. |
+| 7 | (pendiente de commitear) | `gen_voice.py` nuevo: genera la Parte 2 de `voz.md`/`voice.md` una sola vez (idempotente, no regenera si ya hay contenido real); `run_pipeline.py` lo corre como paso 0 de `run_foundation()`, antes que el resto; `verificar_archivos_fundacion()` chequea la voz por contenido, no por mtime (se congela a propósito). |
 
 Además, `214768e` y `d3c4c72` son fixes puntuales (bug de `calcos_detectados()`,
 y el valor correcto de `palabras_objetivo_capitulo`).
@@ -105,15 +110,6 @@ sin `.env` es correr contra el modelo real y juzgar calidad.
 
 ### Se puede escribir código sin `.env` (validar calidad sí necesita API)
 
-- **El generador de voz que falta** (hallazgo, prioridad alta):
-  no existe ningún script que llene `voice.md`/`voz.md` Parte 2 --
-  confirmado con grep, ni `gen_voice.py` ni ningún `write_text` a ese
-  archivo en todo el repo. `draft_chapter.py`, `gen_brief.py` y
-  `gen_outline.py` la leen esperando contenido real; hoy es plantilla
-  vacía. Se puede escribir el script (mismo patrón `main()` +
-  `fundacion_comun.py` + tests con `call_writer` parcheado) sin `.env`;
-  validar que los pasajes de prueba generados tengan calidad real sí lo
-  necesita.
 - **Acumulación de canon en la fase de redacción**: no hay script que
   devuelva al canon los hechos que los capítulos establecen (nombres,
   edades, objetos mencionados al pasar). `evaluate_chapter()` ya devuelve
@@ -160,19 +156,17 @@ sin `.env` es correr contra el modelo real y juzgar calidad.
    contaminados con *Bells*: era la Tarea 2c, ya completa.
 6. No hay script que acumule al canon los hechos establecidos durante la
    redacción -- ver "Pendiente" arriba.
-7. **Nada genera la Parte 2 de `voice.md`/`voz.md`** -- prioridad alta,
-   hermano de la Tarea 6 (no la misma: no hay un script roto, no existe
-   el script). `draft_chapter.py`/`gen_brief.py`/`gen_outline.py` la leen
-   esperando contenido real. Ver "Pendiente" arriba.
+7. **RESUELTO** -- Nada generaba la Parte 2 de `voice.md`/`voz.md`: era
+   la Tarea 7, ya completa (`gen_voice.py`, generación única e idempotente).
 
 ## Cómo retomar
 
 1. `git status` y `git log origin/framework/es-multilibro..HEAD --oneline`
    para confirmar que seguimos al día (deberían estar vacíos si nadie más
    tocó la rama).
-2. Si no hay `.env` todavía, dos frentes para escribir código: el
-   **generador de voz que falta**, o avanzar el diseño del formato de
-   `canon.md`/Foreshadowing Ledger.
+2. Si no hay `.env` todavía, un frente para escribir código: avanzar el
+   diseño del formato de `canon.md`/Foreshadowing Ledger (acumulación de
+   canon en la fase de redacción).
 3. Si ya hay `.env` con `ANTHROPIC_API_KEY`:
    a. Correr `evaluate.py --chapter` (sin `--solo-mecanico`) sobre los
       fixtures de `tests/fixtures/` para completar `docs/BASELINE.md`.
