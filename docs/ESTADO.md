@@ -1,6 +1,6 @@
 # ESTADO — rama `framework/es-multilibro`
 
-Última actualización: 2026-07-27 (tras cerrar la Tarea 4). Escrito para
+Última actualización: 2026-07-27 (tras cerrar la Tarea 2b). Escrito para
 retomar en otra sesión sin releer todo el historial de commits.
 
 ## Punto de partida que sigue vigente
@@ -11,12 +11,17 @@ retomar en otra sesión sin releer todo el historial de commits.
   `git fetch --all` + `git ls-remote --heads origin`). No hay comparación
   disponible contra la novela anterior en inglés; toda la línea base se
   armó con fixtures de prueba en español, no con capítulos reales.
-- **Los commits de esta rama están solo en local, sin pushear.** Se
-  intentó `git push` y un token de GitHub quedó expuesto por accidente en
-  el chat durante el intento (pegado mal en la terminal). El usuario lo
-  revocó de inmediato. El push queda pendiente para la próxima sesión, con
-  un token nuevo y cuidado de no volver a pegarlo en el chat -- pasarlo
-  solo como variable de entorno ya exportada en la terminal del usuario.
+- **Push: hecho, parcialmente.** `git push` llegó a subir hasta `c513adf`
+  (cierre de la Tarea 4). Los commits de la Tarea 2b en adelante
+  (`5a78c52` y los que sigan) **todavía no están pusheados** -- confirmar
+  con `git log origin/framework/es-multilibro..HEAD` al retomar.
+  **Dos tokens de GitHub quedaron expuestos en el chat durante esta
+  sesión** (pegados mal en la terminal, dos veces), y el usuario los
+  revocó las dos veces. Si se necesita pushear de nuevo: token nuevo,
+  exportado como variable de entorno en la terminal del usuario, nunca
+  pegado en el chat. `gh` no está instalado en este entorno (se intentó
+  `gh auth login`, no existe el binario) -- la única vía probada es
+  `git push https://$TOKEN@github.com/...`.
 
 ## Commits de esta rama (orden cronológico)
 
@@ -34,6 +39,8 @@ retomar en otra sesión sin releer todo el historial de commits.
 d3c4c72 fix: palabras_objetivo_capitulo=2000 (era 3800, error de mi sesión anterior)
 506f435 Tarea 4: alcance de siembra para series (libro | serie)
 df7b06c docs: suma gen_outline_part2.py a la Tarea 2b, documenta dependencia de libros_completos
+c513adf docs: ESTADO.md al día con el cierre de la Tarea 4              <- pusheado hasta acá
+5a78c52 Tarea 2b: descontamina gen_outline.py y gen_outline_part2.py     <- sin pushear
 ```
 
 `1c` y `1d` no estaban en el `ENCARGO_CLAUDE_CODE.md` original -- se
@@ -136,8 +143,9 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
   `voz.md`/`personajes.md` inventados y el caso de sección vacía.
 - **Corrección de registro**: `docs/BASELINE.md` decía que `voice.md`/
   `world.md`/`characters.md` eran los de *Bells* en inglés. Es falso --
-  son plantillas vacías (Parte 2 sin llenar), no contenido contaminado.
-  Corregido en `docs/BASELINE.md` durante esta tarea.
+  son plantillas, no contenido contaminado. (Esta corrección se corrigió
+  otra vez en la Tarea 2b: están vacías no solo "porque son plantillas"
+  sino porque el pipeline nunca pudo escribirlas -- ver Tarea 6 abajo.)
 
 ### Tarea 3 — Campo de ambición por capítulo (COMPLETA, commit `5af3cb9`)
 
@@ -227,6 +235,46 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
   fuera del repo -- con contenedores efímeros eso es una bomba de tiempo.
   La Tarea 2b en `ENCARGO_CLAUDE_CODE.md` ya incluye arreglarlo.
 
+### Tarea 2b — Descontaminar `gen_outline.py`/`gen_outline_part2.py` (COMPLETA, commit `5a78c52`)
+
+- **`gen_outline.py`**: prompt partido en armazón invariante (Save the
+  Cat / MICE Quotient / Dan Harmon, formato por capítulo con Ambición y
+  tabla de siembras con Alcance ya integradas) + contenido leído de
+  `mundo.md`/`personajes.md`/`MISTERIO.md`/`semilla.txt` (bilingüe, mismo
+  patrón que `draft_chapter.py`). KEY PLOT ARCHITECTURE y CONSTRAINTS ya
+  no asumen personajes ni mecánicas específicas de Bells -- se derivan de
+  los documentos cargados. Capítulos/palabras desde `CALIBRACION` (2000
+  palabras/capítulo, ~46 capítulos calculados), no hardcodeado a
+  "22-26 capítulos, ~80,000 palabras".
+- **`gen_outline_part2.py`**: mismo tratamiento, más el fix del bug real:
+  ya no lee `/tmp/outline_output.md` -- lee `esquema.md`/`outline.md` con
+  el resolver bilingüe.
+- **Efecto lateral necesario**: los dos scripts ahora **guardan** su
+  resultado en `esquema.md`/`outline.md` (antes solo hacían
+  `print(result)`, nada quedaba persistido). Arreglar el `/tmp` sin esto
+  no alcanzaba -- seguía sin haber un archivo real del que
+  `gen_outline_part2.py` pudiera leer.
+- **Aceptación verificada**: `grep -riE "cass|bell|bronze|under-note|
+  perin|maret|torvald|lenne|tonal" gen_outline.py gen_outline_part2.py` →
+  cero. `grep -n "/tmp/" gen_outline_part2.py` → cero. 62 tests en verde
+  (`uv run python -m pytest tests/ -v`), incluyendo tests funcionales con
+  seed/mundo/personajes/MISTERIO inventados para los dos scripts.
+- **Hallazgo mayor → formalizado como TAREA 6** (prioridad alta,
+  confirmada por el usuario) en `ENCARGO_CLAUDE_CODE.md`: el mismo patrón
+  "`print(result)` sin guardar" existe en `gen_world.py`,
+  `gen_characters.py` y `gen_canon.py`, y `run_pipeline.py` tampoco
+  captura su stdout. Tal como está, correr la fase de fundación completa
+  **no dejaría nada escrito** en `world.md`/`characters.md`/`canon.md`,
+  ni con `.env` configurado. Es la tarea con más impacto de todas las
+  pendientes -- bloquea completar la fundación de cualquier novela nueva.
+- **Corrección de registro (otra vez)**: `docs/BASELINE.md` y
+  `docs/ESTADO.md` decían que `world.md`/`characters.md` estaban vacíos
+  "porque son plantillas". Incompleto: están vacíos porque el pipeline
+  nunca pudo escribirlos (ver Tarea 6). Corregido en los dos archivos.
+- **Dos tokens de GitHub expuestos en el chat durante esta tarea** (no
+  durante la ejecución de la tarea en sí, sino en los intentos de push en
+  paralelo) -- ver "Punto de partida" arriba.
+
 ## Qué falta de la Tarea 1
 
 - **1a** (parte no cubierta por 1c): flag `--idioma es|en` para que
@@ -249,34 +297,34 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
 - El **`overall_score`** completo de `evaluate.py` (juez LLM + mecánico)
   sobre los dos fixtures sigue **PENDIENTE** en `docs/BASELINE.md`.
 
-## Qué sigue (Tarea 2b -- la última que no depende de `.env`)
+## Qué sigue
 
-Ver `ENCARGO_CLAUDE_CODE.md` para el detalle completo. Las Tareas 2, 3 y 4
-ya están completas (ver arriba).
+Las Tareas 0, 1c, 1d, 2, 2b, 3 y 4 están completas. Lo que queda:
 
-- **Tarea 2b — Descontaminar `gen_outline.py` y `gen_outline_part2.py`.**
-  Tarea 2 incompleta, no un hallazgo aparte: se le pasó al usuario en la
-  auditoría original y en la Tarea 2 (solo nombraba
-  `draft_chapter.py`/`gen_brief.py`). Mismo tratamiento que A1: armazón
-  invariante + reglas leídas de `mundo.md`/`personajes.md`/`MISTERIO.md`.
-  Incluye arreglar el bug real de `gen_outline_part2.py` (ruta absoluta
-  `/tmp/outline_output.md` hardcodeada). Grep de aceptación sobre los dos
-  archivos: `cass|bell|bronze|under-note|perin|maret|torvald|lenne|tonal`
-  → cero, más `grep -n "/tmp/" gen_outline_part2.py` → cero.
-  **En curso ahora mismo, siguiente después de este ESTADO.md.**
-
-Después de la Tarea 2b, todo lo que queda (1a completo, 1b, y completar el
-`overall_score` en `docs/BASELINE.md`) necesita `.env`.
+- **Tarea 6 — Persistencia de la fase de fundación (prioridad alta,
+  NO depende de `.env`).** `gen_world.py`, `gen_characters.py` y
+  `gen_canon.py` tienen el mismo bug que tenían `gen_outline.py`/
+  `gen_outline_part2.py` antes de la Tarea 2b: terminan con
+  `print(result)` y no guardan nada. `run_pipeline.py` tampoco lo
+  compensa. Ver detalle completo en `ENCARGO_CLAUDE_CODE.md` (sección
+  TAREA 6) y en `docs/HALLAZGOS.md`. **Es la única tarea que queda sin
+  bloquear por `.env` -- candidata natural para la próxima sesión sin
+  API key.**
+- **1a** (flag `--idioma es|en`), **1b** (prompts del juez en español),
+  **1d** (conectar los fixtures de voz/mundo a una corrida real), y
+  completar el `overall_score` en `docs/BASELINE.md`: todo bloqueado por
+  falta de `.env`.
 
 ## Cómo retomar
 
-1. Cuando haya `.env` con `ANTHROPIC_API_KEY`: correr `evaluate.py
+1. Verificar qué falta pushear: `git log origin/framework/es-multilibro..HEAD
+   --oneline`. Si hay algo, pushear con un token nuevo, exportado como
+   variable de entorno, nunca pegado en el chat.
+2. Si se retoma sin `.env` todavía: **Tarea 6** es la única que queda sin
+   depender de la API key.
+3. Cuando haya `.env` con `ANTHROPIC_API_KEY`: correr `evaluate.py
    --chapter` (sin `--solo-mecanico`) sobre los fixtures para completar
    el `overall_score` pendiente en `docs/BASELINE.md`, y recién ahí
-   arrancar la Tarea 1b.
-2. Push pendiente: `git push origin framework/es-multilibro` (o a la URL
-   con token, nunca pegado en el chat -- solo como variable de entorno ya
-   exportada).
-3. Si se retoma sin `.env` todavía: Tarea 2b (en curso) es la única que
-   queda sin depender de la API key. Después de ella, todo lo restante
-   necesita `.env`.
+   arrancar la Tarea 1b. Después de la Tarea 6, con `.env` disponible, se
+   podría intentar correr `run_pipeline.py --phase foundation` de punta a
+   punta por primera vez.
