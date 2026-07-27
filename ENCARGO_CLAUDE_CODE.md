@@ -216,18 +216,19 @@ la novela anterior.
 
 ---
 
-## TAREA 2b — Descontaminar `gen_outline.py` (Tarea 2 incompleta)
+## TAREA 2b — Descontaminar `gen_outline.py` y `gen_outline_part2.py` (Tarea 2 incompleta)
 
-Encontrado durante la Tarea 3, no es un hallazgo aparte: se me pasó en la
-auditoría original (`AUDITORIA_Y_PLAN.md` Clase A no lista `gen_outline.py`
-ni como contaminado ni como limpio) y en la Tarea 2 (solo nombraba
+Encontrado durante la Tarea 3 (`gen_outline.py`) y la Tarea 4
+(`gen_outline_part2.py`), no es un hallazgo aparte: se me pasó en la
+auditoría original (`AUDITORIA_Y_PLAN.md` Clase A no lista ninguno de los
+dos ni como contaminado ni como limpio) y en la Tarea 2 (solo nombraba
 `draft_chapter.py`/`gen_brief.py`). Es exactamente el mismo problema que
 A1: un prompt hardcodeado a *The Second Son of the House of Bells* que
-cualquier novela nueva hereda igual.
+cualquier novela nueva hereda igual. Confirmado por el usuario: los dos
+archivos entran en esta tarea, no solo `gen_outline.py`.
 
-**Orden de ejecución: después de la Tarea 4.** Es la última tarea sin
-bloquear por `.env` y no hay dependencia entre ellas, pero conviene
-terminar el trabajo de serie (Tarea 4) antes de volver a tocar redacción.
+**Orden de ejecución: después de la Tarea 4** (ya completa). Es la última
+tarea sin bloquear por `.env`.
 
 ### Qué está hardcodeado en `gen_outline.py`
 
@@ -238,29 +239,49 @@ terminar el trabajo de serie (Tarea 4) antes de volver a tocar redacción.
 - "Tonal Law", "the Bellwrights", "the harmonic", "father's tremor".
 - Todo el arco de Actos I-III escrito para la trama específica de Bells.
 
+### Qué está hardcodeado en `gen_outline_part2.py`
+
+- Los capítulos 17-24 escritos a mano para la trama de Bells: la
+  confrontación con Maret, "the void", el clímax en "the Bell Tower", el
+  Final Image espejado del Ch 1.
+- El `system` prompt asume que continúa un esquema de 24 capítulos
+  específico.
+- **Bug real, no solo contaminación:** `part1 = open('/tmp/outline_output.md').read()`
+  es una ruta absoluta hardcodeada fuera del repo. No existe en este
+  entorno -- el script rompe si se lo corre tal cual. Con contenedores
+  efímeros esto es una bomba de tiempo (el archivo puede no existir nunca,
+  o existir con contenido de una corrida anterior sin relación). Arreglar
+  esto también, como parte de esta tarea, no como hallazgo aparte:
+  `gen_outline.py` ya imprime su resultado por stdout (`print(result)`,
+  línea final) -- lo más simple es que `gen_outline_part2.py` lea de
+  `outline.md` (si `gen_outline.py` ya lo guardó ahí) o reciba la ruta por
+  argumento, nunca una ruta fija en `/tmp`.
+
 ### Cómo reemplazarlo
 
-Mismo tratamiento que A1 (`draft_chapter.py` en la Tarea 2): partir el
+Mismo tratamiento que A1 (`draft_chapter.py` en la Tarea 2): partir cada
 prompt en armazón invariante (estructura de Save the Cat / MICE Quotient /
 Dan Harmon, formato de salida por capítulo, instrucciones de cantidad de
 capítulos y palabras) + bloque de contenido leído de `mundo.md`,
 `personajes.md`, `MISTERIO.md` y `seed.txt`/`semilla.txt` (ya se cargan al
-principio del script, pero el prompt no los usa para nada específico de
-la trama -- KEY PLOT ARCHITECTURE debería derivarse de esos archivos, no
-estar escrito a mano).
+principio de `gen_outline.py`, pero el prompt no los usa para nada
+específico de la trama -- KEY PLOT ARCHITECTURE debería derivarse de esos
+archivos, no estar escrito a mano). Para `gen_outline_part2.py`, lo mismo
+aplicado a REMAINING STRUCTURE NEEDED y a los beats del clímax.
 
 ### Test de aceptación de la Tarea 2b
 
 ```bash
-grep -riE "cass|bell|bronze|under-note|perin|maret|torvald|lenne|tonal" gen_outline.py
+grep -riE "cass|bell|bronze|under-note|perin|maret|torvald|lenne|tonal" gen_outline.py gen_outline_part2.py
+grep -n "/tmp/" gen_outline_part2.py
 ```
 
-Debe devolver **cero resultados**.
+Los dos deben devolver **cero resultados**.
 
-Y un test funcional equivalente al de la Tarea 2: construir el prompt con
-un `seed.txt`/`mundo.md`/`personajes.md`/`MISTERIO.md` de prueba
-inventados, y verificar que el resultado no contiene ninguna referencia a
-la novela anterior.
+Y un test funcional equivalente al de la Tarea 2: construir el prompt de
+cada script con un `seed.txt`/`mundo.md`/`personajes.md`/`MISTERIO.md` de
+prueba inventados, y verificar que el resultado no contiene ninguna
+referencia a la novela anterior.
 
 ---
 

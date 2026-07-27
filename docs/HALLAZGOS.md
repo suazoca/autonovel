@@ -142,9 +142,33 @@ ruta absoluta hardcodeada fuera del repo, que no existe en este entorno
 "Alcance" a la tabla del Foreshadowing Ledger que el prompt le pide al
 modelo, sin tocar el resto.
 
-**Estado:** NO corregido. Debería sumarse al alcance de la **Tarea 2b**
-(`ENCARGO_CLAUDE_CODE.md`) en vez de quedar como hallazgo aparte -- es el
-mismo tipo de problema que `gen_outline.py`, literalmente la segunda mitad
-del mismo pipeline. A confirmar con el usuario si se agrega el grep de
-Tarea 2b sobre este archivo también, y se corrige la ruta hardcodeada de
-paso.
+**Estado:** confirmado por el usuario -- sumado al alcance de la Tarea 2b
+en `ENCARGO_CLAUDE_CODE.md` (mismo grep de aceptación, más la corrección
+de la ruta hardcodeada). Esta entrada queda como puntero; ver ese archivo
+para el detalle. Pendiente de ejecutar.
+
+---
+
+## `libros_completos` en `validar_siembra()` no tiene de dónde salir todavía
+
+**Dónde:** `evaluate.py`, parámetro `libros_completos` de `validar_siembra()`
+/ `validar_libro_de_siembras()` (regla 4 de la Tarea 4: alcance "serie" con
+pago asignado a un libro ya publicado → error).
+
+**Qué falta:** hoy nadie llena ese parámetro -- por diseño, ningún llamador
+real lo provee todavía, así que la regla 4 solo se ejerció en los tests
+(pasando el set a mano). Según `AUDITORIA_Y_PLAN.md` sección B2/B7, esa
+información vive en `estado_serie.json`, con la forma
+`{"libros_completos": [1], "libro_actual": 2, ...}` -- pero ese archivo es
+parte de la Clase B (la capa de serie completa: `serie.md`,
+`arco_serie.md`, `canon_serie.md`, `personajes_serie.md`, `estado_serie.json`,
+etc.), que todavía no existe en este repositorio. Ninguna tarea del
+encargo actual (0-4) crea `estado_serie.json`.
+
+**Estado:** dependencia documentada, no bloqueante. `validar_siembra()`
+funciona hoy con `libros_completos=None` (equivalente a "no hay libros
+publicados todavía", razonable como default mientras la Clase B no
+exista). Cuando se implemente `estado_serie.json`, el único cambio
+necesario es que quien llame a `validar_libro_de_siembras()` le pase
+`set(estado_serie["libros_completos"])` -- la función ya está lista para
+recibirlo, no hace falta tocar la lógica de validación.
