@@ -17,14 +17,14 @@ corrigieron retroactivamente.
   `git fetch --all` + `git ls-remote --heads origin`). No hay comparación
   disponible contra la novela anterior en inglés; toda la línea base se
   armó con fixtures de prueba en español, no con capítulos reales.
-- **Push: al día hasta `bb4c7ce`** (Tarea 6). El commit de la Tarea 2c
-  que sigue a este documento puede estar sin pushear -- confirmar con
-  `git log origin/framework/es-multilibro..HEAD --oneline`.
-  **Cuatro tokens de GitHub distintos quedaron expuestos en el chat
-  durante esta sesión** (pegados mal en la terminal, en varios intentos
-  de push). El primero fue revocado con confirmación explícita del
-  usuario; los otros tres no tienen confirmación explícita en el chat --
-  **verificar que estén revocados**, no asumir que sí.
+- **Push: al día hasta `4ad70b7`** (Tarea 2c). Confirmar con
+  `git log origin/framework/es-multilibro..HEAD --oneline` si algo quedó
+  sin pushear después de este documento.
+  **RESUELTO: los cuatro tokens de GitHub que quedaron expuestos en el
+  chat en una sesión anterior** (pegados mal en la terminal, en varios
+  intentos de push) **están revocados**, confirmado por el usuario. Sin
+  verificación pendiente. Queda el registro de que ocurrió y cómo se
+  evita, más abajo.
 
   **Por qué falla `git push` corrido con `!` (y cómo se resuelve):** el
   prefijo `!` ejecuta el comando sin TTY -- `git` no tiene dónde mostrar
@@ -36,12 +36,16 @@ corrigieron retroactivamente.
   distinta), correr `git push` ahí directamente, pegar el token cuando lo
   pida, volver a entrar con `claude`. Con `credential.helper store` ya
   configurado (`~/.git-credentials`), esto solo hace falta una vez -- los
-  próximos `git push` (incluso corridos con `!`) van a reusar la
-  credencial guardada sin pedir nada, siempre que no se haya revocado.
-  Si el credential guardado deja de servir (token revocado), limpiarlo
+  próximos `git push` (incluso corridos con `!`) reusan la credencial
+  guardada sin pedir nada.
+
+  **Token vigente:** fine-grained, creado el 2026-07-27, alcance limitado
+  a `suazoca/autonovel`, permiso `Contents: read/write` únicamente,
+  **vence a los 30 días (~2026-08-26)**. Cuando venza, el `git push`
+  guardado va a fallar reusando la credencial vieja -- limpiarla primero
   con `git credential reject` (protocol=https, host=github.com) antes de
-  repetir la receta -- si no, git sigue reintentando la credencial vieja
-  y falla igual.
+  autenticar de nuevo con un token nuevo, o `git push` va a seguir
+  reintentando la credencial vencida y fallando igual.
 
 ## Commits de esta rama (orden cronológico)
 
@@ -65,8 +69,8 @@ c513adf docs: ESTADO.md al día con el cierre de la Tarea 4
 2b31156 docs: TRASPASO.md -- estado real para retomar sin releer ESTADO.md completo
 b18ca4a docs: corrige el conteo de tokens expuestos (cuatro, no dos) y el estado del push
 48395a8 docs: mueve AUDITORIA_Y_PLAN.md a docs/                          <- del usuario, no de esta conversación
-bb4c7ce Tarea 6: persistencia en la fase de fundación                    <- pusheado hasta acá
-                                                                          <- Tarea 2c sigue, sin pushear al escribir esto
+bb4c7ce Tarea 6: persistencia en la fase de fundación
+4ad70b7 Tarea 2c: descontamina gen_world.py, gen_characters.py, gen_canon.py  <- pusheado hasta acá
 ```
 
 `1c` y `1d` no estaban en el `ENCARGO_CLAUDE_CODE.md` original -- se
@@ -297,10 +301,12 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
   `docs/ESTADO.md` decían que `world.md`/`characters.md` estaban vacíos
   "porque son plantillas". Incompleto: están vacíos porque el pipeline
   nunca pudo escribirlos (ver Tarea 6). Corregido en los dos archivos.
-- **Cuatro tokens de GitHub expuestos en el chat en total durante la
-  sesión** (no durante la ejecución de las tareas en sí, sino en los
-  intentos de push en paralelo) -- ver "Punto de partida" arriba. El push
-  terminó al día: todo hasta `648b0c3` está en el remoto.
+- **Cuatro tokens de GitHub expuestos en el chat en total, en una sesión
+  anterior** (no durante la ejecución de las tareas en sí, sino en
+  intentos de push en paralelo) -- **RESUELTO, los cuatro revocados**,
+  confirmado por el usuario. Ver "Punto de partida" arriba. El push
+  terminó al día: todo hasta `648b0c3` estaba en el remoto en ese
+  momento.
 
 ### Tarea 6 — Persistencia en la fase de fundación (COMPLETA, prioridad alta)
 

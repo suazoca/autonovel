@@ -24,11 +24,12 @@ y correr la fundación completa por primera vez.
 | Rama | `framework/es-multilibro` |
 | `.env` / `ANTHROPIC_API_KEY` | No existe en este entorno |
 | Rama `autonovel/bells` | No existe en el remoto (verificado con `git fetch --all` + `git ls-remote --heads origin`) |
-| Push | Al día hasta `bb4c7ce` (Tarea 6). El commit de la Tarea 2c puede estar sin pushear -- confirmar con `git log origin/framework/es-multilibro..HEAD --oneline` |
+| Push | Al día hasta `4ad70b7` (Tarea 2c). Confirmar con `git log origin/framework/es-multilibro..HEAD --oneline` si algo quedó sin pushear después |
 | Working tree | Limpio |
 | `gh` CLI | No instalado en este entorno |
-| Incidentes de seguridad | **Cuatro** tokens de GitHub distintos quedaron expuestos en el chat durante esta sesión (pegados mal en la terminal, en varios intentos de push). El primero fue revocado con confirmación explícita del usuario; para los otros tres no hay confirmación explícita en esta conversación -- **verificar que estén revocados**. |
-| Por qué falla `git push` con `!` | El prefijo `!` corre el comando sin TTY -- `git` no tiene dónde pedir usuario/token y aborta con "could not read Username ... No such device or address". No es un problema de que el token se vea; es que no hay terminal interactiva. Receta: `Ctrl+D` para salir de Claude Code (**misma terminal**, no otra máquina), `git push` ahí directo, pegar el token cuando lo pida, volver a entrar con `claude`. Con `credential.helper store` ya configurado, solo hace falta una vez -- después, hasta los `git push` corridos con `!` reusan la credencial guardada. Si el token guardado se revoca, limpiarlo primero con `git credential reject` (protocol=https, host=github.com) antes de repetir la receta. |
+| Incidentes de seguridad | **RESUELTO.** Cuatro tokens de GitHub distintos quedaron expuestos en el chat en una sesión anterior (pegados mal en la terminal, en varios intentos de push). **Los cuatro están revocados**, confirmado por el usuario -- sin verificación pendiente. |
+| Por qué falla `git push` con `!` | El prefijo `!` corre el comando sin TTY -- `git` no tiene dónde pedir usuario/token y aborta con "could not read Username ... No such device or address". No es un problema de que el token se vea; es que no hay terminal interactiva. Receta: `Ctrl+D` para salir de Claude Code (**misma terminal**, no otra máquina), `git push` ahí directo, pegar el token cuando lo pida, volver a entrar con `claude`. Con `credential.helper store` ya configurado, solo hace falta una vez -- después, hasta los `git push` corridos con `!` reusan la credencial guardada. |
+| Token vigente | Fine-grained, creado 2026-07-27, alcance solo a `suazoca/autonovel`, permiso `Contents: read/write` únicamente, **vence a los 30 días (~2026-08-26)**. Al vencer, el `git push` guardado va a fallar reusando la credencial vieja -- limpiarla con `git credential reject` (protocol=https, host=github.com) antes de autenticar con un token nuevo. |
 
 ## Commits de esta rama (los que no vinieron por `git pull`)
 
@@ -52,11 +53,8 @@ c513adf docs: ESTADO.md al día con el cierre de la Tarea 4
 b18ca4a docs: corrige el conteo de tokens expuestos (cuatro, no dos)
 48395a8 docs: mueve AUDITORIA_Y_PLAN.md a docs/                       (del usuario, no de esta conversación)
 bb4c7ce Tarea 6: persistencia en la fase de fundación
+4ad70b7 Tarea 2c: descontamina gen_world.py, gen_characters.py, gen_canon.py
 ```
-
-El commit de la Tarea 2c (descontaminar gen_world.py/gen_characters.py/
-gen_canon.py) se hace a continuación de este documento -- correr
-`git log -1 --oneline` para ver su hash real una vez hecho.
 
 `3ded223` (auditoría + plan + `deteccion_es.py`) es el commit base de todo
 esto y llegó por `git pull`, no se generó en esta sesión.
@@ -93,7 +91,7 @@ uv run python -m pytest tests/ -v
 | 4 | `506f435` | Alcance de siembra libro/serie, validadores sobre dicts, regla de regresión sin `siembras_serie.md` |
 | 2b | `5a78c52` | `gen_outline.py`/`gen_outline_part2.py` descontaminados, ya no leen de `/tmp`, ahora se guardan a sí mismos |
 | 6 | `bb4c7ce` | `gen_world.py`/`gen_characters.py`/`gen_canon.py` se guardan a sí mismos; `gen_outline_part2.py` pasa a usar `fundacion_comun.py` (sin cambio de comportamiento); `run_pipeline.py` aborta y guarda `state` si un generador falla; verifica archivos antes de evaluar (por mtime, no solo "no vacío"). **No descontamina prompts** -- eso es la Tarea 2c. |
-| 2c | (este commit) | `gen_world.py`/`gen_characters.py`/`gen_canon.py` descontaminados de *Bells*: reparto fijo reemplazado por requisito estructural, secciones genéricas, género y sistema de magia condicionados a la semilla, prompts traducidos al español. |
+| 2c | `4ad70b7` | `gen_world.py`/`gen_characters.py`/`gen_canon.py` descontaminados de *Bells*: reparto fijo reemplazado por requisito estructural, secciones genéricas, género y sistema de magia condicionados a la semilla, prompts traducidos al español. |
 
 Además, `214768e` y `d3c4c72` son fixes puntuales (bug de `calcos_detectados()`,
 y el valor correcto de `palabras_objetivo_capitulo`).
