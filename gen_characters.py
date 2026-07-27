@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
+from fundacion_comun import ruta_bilingue, load_file, load_file_bilingue, extraer_voz_parte2, exigir_semilla
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -39,16 +41,9 @@ def call_writer(prompt, max_tokens=16000):
     resp.raise_for_status()
     return resp.json()["content"][0]["text"]
 
-seed = (BASE_DIR / "seed.txt").read_text()
-world = (BASE_DIR / "world.md").read_text()
 
-# Voice Part 2 only
-voice = (BASE_DIR / "voice.md").read_text()
-voice_lines = voice.split('\n')
-part2_start = next(i for i, l in enumerate(voice_lines) if 'Part 2' in l)
-voice_part2 = '\n'.join(voice_lines[part2_start:])
-
-prompt = f"""Build a complete character registry for this fantasy novel. This is CHARACTERS.MD --
+def build_prompt(seed, world, voice_part2):
+    return f"""Build a complete character registry for this fantasy novel. This is CHARACTERS.MD --
 the definitive reference for WHO exists in this story, what drives them, how they speak,
 and what secrets they carry.
 
@@ -99,7 +94,7 @@ BUILD THE REGISTRY WITH AT LEAST THESE CHARACTERS:
    - His relationship to the sealed journals, the shaking hands
    - What he knows and what he's hiding
 
-3. **Perin Bellwright** (brother) 
+3. **Perin Bellwright** (brother)
    - Even though he's absent for much of the story, he needs full depth
    - What actually happened with the Corda contract
    - His presence through absence
@@ -143,6 +138,25 @@ IMPORTANT:
 - Target ~3000-4000 words. Dense character work, not padding.
 """
 
-print("Calling writer model...", file=sys.stderr)
-result = call_writer(prompt)
-print(result)
+
+def main():
+    seed = load_file_bilingue(BASE_DIR, "semilla.txt", "seed.txt")
+    exigir_semilla(seed, "generar personajes")
+
+    world = load_file_bilingue(BASE_DIR, "mundo.md", "world.md")
+    voice = load_file_bilingue(BASE_DIR, "voz.md", "voice.md")
+    voice_part2 = extraer_voz_parte2(voice)
+
+    prompt = build_prompt(seed, world, voice_part2)
+
+    print("Calling writer model...", file=sys.stderr)
+    result = call_writer(prompt)
+
+    out_path = ruta_bilingue(BASE_DIR, "personajes.md", "characters.md")
+    out_path.write_text(result, encoding="utf-8")
+    print(f"Saved to {out_path}", file=sys.stderr)
+    print(result)
+
+
+if __name__ == "__main__":
+    main()

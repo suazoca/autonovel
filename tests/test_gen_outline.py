@@ -13,6 +13,8 @@ El grep de aceptación se corre por separado:
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
@@ -78,17 +80,22 @@ def test_gen_outline_extraer_voz_parte2_espanol():
     assert "Guardarraíles" not in resultado
 
 
-def test_gen_outline_ruta_bilingue_prefiere_espanol(tmp_path, monkeypatch):
-    monkeypatch.setattr(go, "BASE_DIR", tmp_path)
+def test_gen_outline_ruta_bilingue_prefiere_espanol(tmp_path):
     (tmp_path / "semilla.txt").write_text("es", encoding="utf-8")
     (tmp_path / "seed.txt").write_text("en", encoding="utf-8")
-    assert go.load_file_bilingue("semilla.txt", "seed.txt") == "es"
+    assert go.load_file_bilingue(tmp_path, "semilla.txt", "seed.txt") == "es"
 
 
-def test_gen_outline_ruta_bilingue_cae_al_ingles(tmp_path, monkeypatch):
-    monkeypatch.setattr(go, "BASE_DIR", tmp_path)
+def test_gen_outline_ruta_bilingue_cae_al_ingles(tmp_path):
     (tmp_path / "seed.txt").write_text("en", encoding="utf-8")
-    assert go.load_file_bilingue("semilla.txt", "seed.txt") == "en"
+    assert go.load_file_bilingue(tmp_path, "semilla.txt", "seed.txt") == "en"
+
+
+def test_gen_outline_main_sale_si_semilla_vacia(tmp_path, monkeypatch):
+    monkeypatch.setattr(go, "BASE_DIR", tmp_path)
+    (tmp_path / "seed.txt").write_text("   \n", encoding="utf-8")  # solo espacios
+    with pytest.raises(SystemExit):
+        go.main()
 
 
 # --- gen_outline_part2.py ---
@@ -126,19 +133,17 @@ def test_gen_outline_part2_build_prompt_usa_calibracion_no_hardcodeado():
     assert "Ch 18" not in prompt
 
 
-def test_gen_outline_part2_no_lee_de_tmp(tmp_path, monkeypatch):
+def test_gen_outline_part2_no_lee_de_tmp(tmp_path):
     """El bug original: gen_outline_part2.py leía de una ruta absoluta
     hardcodeada fuera del repo (/tmp/outline_output.md). Ahora lee de
-    esquema.md/outline.md dentro de BASE_DIR."""
-    monkeypatch.setattr(gop, "BASE_DIR", tmp_path)
+    esquema.md/outline.md dentro de un directorio explícito."""
     (tmp_path / "outline.md").write_text(OUTLINE_PARCIAL, encoding="utf-8")
-    ruta = gop.ruta_bilingue("esquema.md", "outline.md")
+    ruta = gop.ruta_bilingue(tmp_path, "esquema.md", "outline.md")
     assert ruta == tmp_path / "outline.md"
     assert gop.load_file(ruta) == OUTLINE_PARCIAL
 
 
-def test_gen_outline_part2_ruta_bilingue_prefiere_esquema(tmp_path, monkeypatch):
-    monkeypatch.setattr(gop, "BASE_DIR", tmp_path)
+def test_gen_outline_part2_ruta_bilingue_prefiere_esquema(tmp_path):
     (tmp_path / "esquema.md").write_text("es", encoding="utf-8")
     (tmp_path / "outline.md").write_text("en", encoding="utf-8")
-    assert gop.load_file_bilingue("esquema.md", "outline.md") == "es"
+    assert gop.load_file_bilingue(tmp_path, "esquema.md", "outline.md") == "es"

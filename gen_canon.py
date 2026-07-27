@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
+from fundacion_comun import load_file, load_file_bilingue, exigir_semilla
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -37,11 +39,9 @@ def call_writer(prompt, max_tokens=16000):
     resp.raise_for_status()
     return resp.json()["content"][0]["text"]
 
-world = (BASE_DIR / "world.md").read_text()
-characters = (BASE_DIR / "characters.md").read_text()
-seed = (BASE_DIR / "seed.txt").read_text()
 
-prompt = f"""Extract EVERY hard fact from these planning documents into a structured canon database.
+def build_prompt(seed, world, characters):
+    return f"""Extract EVERY hard fact from these planning documents into a structured canon database.
 A "hard fact" is anything a writer must not contradict: names, ages, dates, physical descriptions,
 rules of the magic system, geography, relationships, established events.
 
@@ -90,6 +90,24 @@ RULES:
 - DO NOT invent facts. Only record what's explicitly stated.
 """
 
-print("Calling writer model...", file=sys.stderr)
-result = call_writer(prompt)
-print(result)
+
+def main():
+    seed = load_file_bilingue(BASE_DIR, "semilla.txt", "seed.txt")
+    exigir_semilla(seed, "extraer canon")
+
+    world = load_file_bilingue(BASE_DIR, "mundo.md", "world.md")
+    characters = load_file_bilingue(BASE_DIR, "personajes.md", "characters.md")
+
+    prompt = build_prompt(seed, world, characters)
+
+    print("Calling writer model...", file=sys.stderr)
+    result = call_writer(prompt)
+
+    out_path = BASE_DIR / "canon.md"
+    out_path.write_text(result, encoding="utf-8")
+    print(f"Saved to {out_path}", file=sys.stderr)
+    print(result)
+
+
+if __name__ == "__main__":
+    main()

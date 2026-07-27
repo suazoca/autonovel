@@ -210,3 +210,143 @@ registrado que `world.md`/`characters.md` estaban vacíos "porque son
 plantillas" -- cierto pero incompleto. Están vacíos porque **el pipeline
 nunca pudo escribirlos**, ni siquiera con `.env` configurado. Corregido en
 los dos archivos.
+
+**Estado de la Tarea 6, actualizado:** implementada en un commit propio.
+`gen_world.py`, `gen_characters.py` y `gen_canon.py` ya se guardan a sí
+mismos (mismo patrón que `gen_outline.py`/`gen_outline_part2.py` de la
+Tarea 2b), con las cuatro funciones compartidas movidas a
+`fundacion_comun.py` en vez de duplicadas en cinco archivos.
+`run_pipeline.py::run_foundation()` aborta si un generador falla (antes
+ignoraba el returncode) y verifica que los archivos de fundación existen
+y no están vacíos antes de gastar una llamada al juez LLM evaluándolos.
+
+---
+
+## `gen_world.py`/`gen_characters.py`/`gen_canon.py` también contaminados con *Bells*
+
+**Dónde:** los tres prompts (no tocados en la Tarea 6, a pedido explícito
+del usuario -- "sin tocar prompts todavía"). `gen_world.py` pide
+"Cantamura", "Tonal Law", "Cass's Gift". `gen_characters.py` pide
+personajes por nombre: Cass Bellwright, Eddan Bellwright, Perin
+Bellwright, Maret Corda, Rector Suvaine, Torvald Hess. `gen_canon.py`
+menciona "Tonal Law", "Cass's gift", "the Perin contract, the Expansion
+Wars" como ejemplos en las instrucciones de formato.
+
+**Por qué no se tocó:** la Tarea 6 era específicamente sobre persistencia
+(que los scripts se guarden a sí mismos), no sobre descontaminación. El
+usuario fue explícito: ningún prompt se toca en este commit.
+
+**Estado:** NO corregido. Es el mismo tipo de problema que A1
+(`draft_chapter.py`, Tarea 2) y el de `gen_outline.py`/`gen_outline_part2.py`
+(Tarea 2b) -- candidato natural a una **Tarea 2c** con el mismo
+tratamiento (armazón invariante + contenido derivado de
+`mundo.md`/`personajes.md`/`semilla.txt`, en vez de nombres y lugares
+escritos a mano). A confirmar con el usuario si se agrega formalmente al
+encargo.
+
+---
+
+## No hay mecanismo que devuelva al canon los hechos establecidos durante la redacción
+
+**Dónde:** `gen_canon.py` (fundación) + el flujo de redacción en general.
+`gen_canon.py` reescribe `canon.md` entero a partir de
+`semilla.txt`/`mundo.md`/`personajes.md` -- eso está bien para la fase de
+fundación (ver la corrección de la Tarea 6 arriba: canon ahí es derivado,
+no tiene hechos propios).
+
+**El hallazgo real:** una vez que empieza la redacción, los capítulos van
+a establecer hechos que **no** están en `mundo.md` ni en `personajes.md`
+-- un nombre de calle mencionado al pasar en el Ch 3, la edad exacta de un
+personaje secundario revelada en el Ch 7, un objeto que resulta
+importante en el Ch 12. `PIPELINE.md` (Fase 2, paso 5) da por sentado que
+esto pasa ("Extract new canon entries from eval output → append to
+canon.md"), pero **no existe ningún script que lo haga**. `evaluate.py`
+ya devuelve `new_canon_entries` en el JSON de `evaluate_chapter()` (se
+puede confirmar leyendo el prompt), pero nada lee ese campo y lo escribe
+en ningún lado.
+
+**Por qué es distinto del hallazgo de arriba:** esto no es "gen_canon.py
+mal diseñado" -- es una **fase distinta** (redacción, no fundación), que
+necesita un script propio (algo como `actualizar_canon.py`, corriendo
+después de cada capítulo aceptado) que sí sea acumulativo, a diferencia
+de `gen_canon.py`.
+
+**Por qué no se corrige ahora:** depende de fijar primero el formato
+definitivo de `canon.md` como estructura parseable (hoy es prosa/bullets
+libres generados por LLM) -- el mismo problema de fondo que bloquea el
+hallazgo de los validadores de siembra más arriba (`libros_completos` /
+parser del Foreshadowing Ledger). Los dos esperan la misma decisión de
+diseño: qué tan estructurado tiene que ser un documento que hoy es texto
+libre para que un script pueda leerlo y escribirle de vuelta con
+confianza.
+
+**Estado:** NO corregido, sin tarea formal asignada todavía.
+
+---
+
+## Nada genera la Parte 2 de `voice.md`/`voz.md` -- hermano de la Tarea 6, prioridad alta
+
+**Confirmado con grep, no requiere `.env` para diagnosticarse:**
+
+- No existe `gen_voice.py` (ni ningún script equivalente) en el repo.
+- `run_pipeline.py::run_foundation()` no tiene ningún paso que llene
+  `voice.md`/`voz.md` -- solo `gen_world.py`, `gen_characters.py`,
+  `gen_outline.py`, `gen_outline_part2.py`, `gen_canon.py` y
+  `voice_fingerprint.py`.
+- `voice_fingerprint.py` (el único script relacionado con "voice" en el
+  loop) **no escribe en `voice.md`**: escribe
+  `edit_logs/voice_fingerprint.json`, y `edit_logs/` está en
+  `.gitignore`. Es un medidor de patrones sobre capítulos YA escritos
+  (frecuencia de diálogo, longitud de oración, etc.), no un generador de
+  identidad de voz. No hay ningún `write_text` en todo el repo que
+  apunte a `voice.md`/`voz.md`.
+- `PIPELINE.md` (Fase 1, paso 5) documenta este paso como si existiera:
+  *"Voice discovery: write 5 trial passages in different registers,
+  select best, fill voice.md Part 2 with exemplars + anti-exemplars"* --
+  pero no hay ningún script que lo implemente.
+
+**Por qué importa:** `draft_chapter.py`, `gen_brief.py` y `gen_outline.py`
+leen `voice.md`/`voz.md` Parte 2 esperando tono, registro léxico y
+pasajes ejemplares reales. Hoy esa sección es pura plantilla (comentarios
+HTML sin contenido -- confirmado, no son hechos inventados). El pipeline
+redactaría con identidad de voz vacía, y `voice_fingerprint.py` mediría
+los capítulos resultantes contra un documento en blanco, sin nada contra
+qué comparar.
+
+**Por qué es hermano de la Tarea 6, no la misma tarea:** la Tarea 6 fue
+sobre scripts que generan algo pero no lo guardan. Este hallazgo es sobre
+un paso del pipeline que **no existe en absoluto** -- no hay nada que
+arreglarle a un script porque el script nunca se escribió.
+
+**Restricción de orden, no obvia:** `gen_world.py` **lee** la Parte 2 de
+`voice.md` como insumo (vía `extraer_voz_parte2()`, para que el mundo se
+construya en el tono correcto). Eso significa que un futuro `gen_voice.py`
+tendría que correr **primero** en `run_foundation()`, antes que
+`gen_world.py` -- y solo puede depender de la semilla (`seed.txt`/
+`semilla.txt`), porque leer `mundo.md`/`personajes.md` para generar la
+voz crearía una dependencia circular con `gen_world.py`/`gen_characters.py`,
+que a su vez leen la voz. El orden actual del loop es
+`gen_world.py -> gen_characters.py -> gen_outline.py ->
+gen_outline_part2.py -> gen_canon.py -> voice_fingerprint.py`
+(confirmado en `run_pipeline.py::run_foundation()`); la voz entraría
+antes que todo eso.
+
+**Pregunta de diseño abierta, sin resolver:** ¿la voz se genera una sola
+vez y se congela desde la iteración 1 de fundación, o se regenera en cada
+iteración? `AUDITORIA_Y_PLAN.md` (B4) dice que la voz **no se redescubre
+entre libros** de una serie ("voz.md Parte 2 se congela al terminar el
+Libro I y se copia idéntica") -- pero no dice nada sobre qué pasa con las
+iteraciones **dentro** del Libro I, que es un caso distinto (todavía no
+hay libro publicado, el mundo mismo puede cambiar de iteración a
+iteración). Si la voz se regenerara cada iteración, cada vuelta del loop
+de fundación sonaría distinta, lo cual podría ser deseable (explorar) o
+indeseable (inestable) según qué tan madura esté ya la fundación. No
+resuelto -- queda para cuando se escriba `gen_voice.py`.
+
+**Estado:** NO corregido, sin tarea formal asignada. Diagnosticar esto no
+necesitó `.env`; escribir el script (`gen_voice.py` o similar, con el
+mismo patrón main()/`fundacion_comun.py`/tests con `call_writer`
+parcheado que el resto de la Tarea 6) tampoco lo necesitaría. Lo que sí
+requiere `.env` es validar que los 5 pasajes de prueba que generaría
+tengan alguna calidad real -- eso es juicio de un modelo, no algo que se
+pueda mockear con sentido.

@@ -394,13 +394,42 @@ Tarea 2b: cada script se guarda a sí mismo, con resolución bilingüe
 
 - `gen_world.py` → escribe en `mundo.md`/`world.md`.
 - `gen_characters.py` → escribe en `personajes.md`/`characters.md`.
-- `gen_canon.py` → lee `canon.md` existente y agrega las entradas nuevas
-  (no lo reescribe entero -- a diferencia de outline, canon es
-  acumulativo entre iteraciones).
+- `gen_canon.py` → **reescribe `canon.md` entero, no lo acumula.**
+  Corrección sobre una versión anterior de este documento, que decía lo
+  contrario. `canon.md`, en la fase de fundación, es una extracción
+  derivada de `semilla.txt` + `mundo.md` + `personajes.md` -- no tiene
+  hechos propios que no vengan de esos tres archivos. Y el descarte de
+  una iteración de fundación ya lo hace `git reset --hard` en
+  `run_pipeline.py`: si la iteración N se descarta porque el score no
+  mejoró, mundo/personajes vuelven al estado de la iteración N-1.
+  Acumular canon entre iteraciones arrastraría hechos de un mundo que
+  ya no existe -- canon quedaría corriendo desincronizado de los
+  documentos de los que depende. Reescribir entero mantiene canon.md
+  siempre consistente con el mundo/personajes actuales.
 
-`run_pipeline.py` no necesita cambios si cada script se guarda solo (que
-es la razón para hacerlo así y no al revés): sigue llamando
-`uv_run("gen_world.py")` etc. sin tocar el stdout.
+Guard de semilla vacía: `fundacion_comun.exigir_semilla(seed, accion)`,
+compartido (no una cuarta o quinta copia), usado por los **cuatro**
+generadores que consumen la semilla -- `gen_world.py`, `gen_characters.py`,
+`gen_canon.py`, y **`gen_outline.py`** (ya existía de la Tarea 2b, se le
+agregó el guard acá por la misma razón: llama a la API con la semilla como
+insumo central). `gen_outline_part2.py` no carga `seed.txt`/`semilla.txt`
+en absoluto -- no le corresponde.
+
+`run_pipeline.py::run_foundation()` sí necesitó cambios, más allá de que
+cada script se guarde solo: hoy cada `uv_run()` ignoraba el returncode.
+Un generador que falla ahora aborta el pipeline entero (no solo la
+iteración -- un returncode != 0 es un fallo de infraestructura, reintentar
+no lo arregla), guarda `state` antes de salir para poder retomar desde la
+iteración en curso, e imprime qué script falló con su stderr completo.
+Y antes de llamar a `evaluate.py --phase=foundation`, se verifica que
+`mundo.md`/`personajes.md`/`esquema.md`/`canon.md` se modificaron **en
+esta iteración** (mtime posterior al inicio de la iteración) y no están
+vacíos. "Existe y no está vacío" no alcanza por sí solo:
+`world.md`/`characters.md`/`outline.md` están trackeados en git como
+plantillas con contenido real (encabezados + comentarios HTML, no bytes
+vacíos), así que ese chequeo por sí solo daría verde contra el andamio
+sin tocar, sin que ningún generador haya corrido de verdad. Una fundación
+incompleta no debe producir un puntaje que entre a `results.tsv`.
 
 ### Test de aceptación de la Tarea 6
 

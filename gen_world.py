@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
+from fundacion_comun import ruta_bilingue, load_file, load_file_bilingue, extraer_voz_parte2, exigir_semilla
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -40,17 +42,10 @@ def call_writer(prompt, max_tokens=16000):
     resp.raise_for_status()
     return resp.json()["content"][0]["text"]
 
-seed = (BASE_DIR / "seed.txt").read_text()
-voice = (BASE_DIR / "voice.md").read_text()
-craft = (BASE_DIR / "CRAFT.md").read_text()
 
-# Extract voice Part 2 only (the novel-specific voice)
-voice_lines = voice.split('\n')
-part2_start = next(i for i, l in enumerate(voice_lines) if 'Part 2' in l)
-voice_part2 = '\n'.join(voice_lines[part2_start:])
-
-prompt = f"""Build a complete world bible for this fantasy novel. This is the WORLD.MD file -- 
-the definitive reference for everything that EXISTS in this world. A writer should be able 
+def build_prompt(seed, voice_part2, craft):
+    return f"""Build a complete world bible for this fantasy novel. This is the WORLD.MD file --
+the definitive reference for everything that EXISTS in this world. A writer should be able
 to resolve any worldbuilding question from this document alone.
 
 SEED CONCEPT:
@@ -108,19 +103,38 @@ Hard constraints a writer must not violate. The physics of sound in this world.
 What's possible and what's not.
 
 IMPORTANT:
-- Be SPECIFIC. Not "the city has districts" but name them, describe them, 
+- Be SPECIFIC. Not "the city has districts" but name them, describe them,
   give them sensory signatures.
 - Every rule should have a COST or LIMITATION stated alongside it.
-- Include 2-3 facts per section that are unexplained, hinting at deeper systems 
+- Include 2-3 facts per section that are unexplained, hinting at deeper systems
   (iceberg depth).
-- Facts should INTERCONNECT: the magic should shape the politics, the geography 
+- Facts should INTERCONNECT: the magic should shape the politics, the geography
   should shape the culture, the history should explain current faction conflicts.
 - Write in clean, direct prose. No AI slop. No "rich tapestry." No "delving."
-- The world should feel grounded and LIVED-IN, not imagined. Think: what does 
+- The world should feel grounded and LIVED-IN, not imagined. Think: what does
   breakfast smell like? What do children play? How do old people complain?
 - Target ~3000-4000 words. Dense, not padded.
 """
 
-print("Calling writer model...", file=sys.stderr)
-result = call_writer(prompt)
-print(result)
+
+def main():
+    seed = load_file_bilingue(BASE_DIR, "semilla.txt", "seed.txt")
+    exigir_semilla(seed, "generar un mundo")
+
+    voice = load_file_bilingue(BASE_DIR, "voz.md", "voice.md")
+    voice_part2 = extraer_voz_parte2(voice)
+    craft = load_file(BASE_DIR / "CRAFT.md")
+
+    prompt = build_prompt(seed, voice_part2, craft)
+
+    print("Calling writer model...", file=sys.stderr)
+    result = call_writer(prompt)
+
+    out_path = ruta_bilingue(BASE_DIR, "mundo.md", "world.md")
+    out_path.write_text(result, encoding="utf-8")
+    print(f"Saved to {out_path}", file=sys.stderr)
+    print(result)
+
+
+if __name__ == "__main__":
+    main()

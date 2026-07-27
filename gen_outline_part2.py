@@ -6,6 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from deteccion_es import CALIBRACION
+from fundacion_comun import ruta_bilingue, load_file, load_file_bilingue
 
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
@@ -36,27 +37,6 @@ def call_writer(prompt, max_tokens=16000):
     resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=600)
     resp.raise_for_status()
     return resp.json()["content"][0]["text"]
-
-
-def load_file(path):
-    try:
-        return Path(path).read_text()
-    except FileNotFoundError:
-        return ""
-
-
-def ruta_bilingue(nombre_es, nombre_en):
-    """Nomenclatura de AUDITORIA_Y_PLAN.md: preferí el nombre en español si
-    existe; si no, caé al nombre en inglés (compatibilidad con ramas/
-    plantillas viejas)."""
-    ruta_es = BASE_DIR / nombre_es
-    if ruta_es.exists():
-        return ruta_es
-    return BASE_DIR / nombre_en
-
-
-def load_file_bilingue(nombre_es, nombre_en):
-    return load_file(ruta_bilingue(nombre_es, nombre_en))
 
 
 def build_prompt(outline_so_far, mystery):
@@ -115,9 +95,9 @@ low-action, emotionally rich.
 
 
 def main():
-    outline_path = ruta_bilingue("esquema.md", "outline.md")
+    outline_path = ruta_bilingue(BASE_DIR, "esquema.md", "outline.md")
     outline_so_far = load_file(outline_path)
-    mystery = load_file_bilingue("MISTERIO.md", "MYSTERY.md")
+    mystery = load_file_bilingue(BASE_DIR, "MISTERIO.md", "MYSTERY.md")
 
     prompt = build_prompt(outline_so_far, mystery)
 
@@ -125,7 +105,7 @@ def main():
     result = call_writer(prompt)
 
     combined = (outline_so_far.rstrip() + "\n\n" + result) if outline_so_far.strip() else result
-    outline_path.write_text(combined)
+    outline_path.write_text(combined, encoding="utf-8")
     print(f"Saved to {outline_path}", file=sys.stderr)
     print(result)
 

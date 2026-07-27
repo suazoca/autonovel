@@ -1,7 +1,13 @@
 # ESTADO — rama `framework/es-multilibro`
 
-Última actualización: 2026-07-27 (tras cerrar la Tarea 2b). Escrito para
+Última actualización: 2026-07-27 (tras cerrar la Tarea 6). Escrito para
 retomar en otra sesión sin releer todo el historial de commits.
+
+**Nota:** `AUDITORIA_Y_PLAN.md` se movió a `docs/AUDITORIA_Y_PLAN.md` en un
+commit hecho directamente por el usuario (`48395a8`, fuera de esta
+conversación). Las referencias a `AUDITORIA_Y_PLAN.md` sin prefijo en
+commits anteriores de este archivo quedan desactualizadas de ruta; no se
+corrigieron retroactivamente.
 
 ## Punto de partida que sigue vigente
 
@@ -11,9 +17,11 @@ retomar en otra sesión sin releer todo el historial de commits.
   `git fetch --all` + `git ls-remote --heads origin`). No hay comparación
   disponible contra la novela anterior en inglés; toda la línea base se
   armó con fixtures de prueba en español, no con capítulos reales.
-- **Push: al día.** Todo hasta `648b0c3` está en
-  `origin/framework/es-multilibro` (confirmado con `git fetch` +
-  `git log origin/framework/es-multilibro..HEAD`, vacío).
+- **Push: al día hasta `48395a8`** (incluye un commit del usuario hecho
+  directamente, fuera de esta conversación: mover `AUDITORIA_Y_PLAN.md` a
+  `docs/`). El commit de la Tarea 6 que sigue a este documento **todavía
+  no está pusheado** al momento de escribir esto -- confirmar con
+  `git log origin/framework/es-multilibro..HEAD --oneline`.
   **Cuatro tokens de GitHub distintos quedaron expuestos en el chat
   durante esta sesión** (pegados mal en la terminal, en varios intentos
   de push). El primero fue revocado con confirmación explícita del
@@ -41,8 +49,13 @@ retomar en otra sesión sin releer todo el historial de commits.
 d3c4c72 fix: palabras_objetivo_capitulo=2000 (era 3800, error de mi sesión anterior)
 506f435 Tarea 4: alcance de siembra para series (libro | serie)
 df7b06c docs: suma gen_outline_part2.py a la Tarea 2b, documenta dependencia de libros_completos
-c513adf docs: ESTADO.md al día con el cierre de la Tarea 4              <- pusheado hasta acá
-5a78c52 Tarea 2b: descontamina gen_outline.py y gen_outline_part2.py     <- sin pushear
+c513adf docs: ESTADO.md al día con el cierre de la Tarea 4
+5a78c52 Tarea 2b: descontamina gen_outline.py y gen_outline_part2.py
+648b0c3 docs: ESTADO.md al día con el cierre de la Tarea 2b
+2b31156 docs: TRASPASO.md -- estado real para retomar sin releer ESTADO.md completo
+b18ca4a docs: corrige el conteo de tokens expuestos (cuatro, no dos) y el estado del push
+48395a8 docs: mueve AUDITORIA_Y_PLAN.md a docs/                          <- del usuario, no de esta conversación; pusheado hasta acá
+                                                                          <- Tarea 6 sigue, sin pushear al escribir esto
 ```
 
 `1c` y `1d` no estaban en el `ENCARGO_CLAUDE_CODE.md` original -- se
@@ -278,6 +291,117 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
   intentos de push en paralelo) -- ver "Punto de partida" arriba. El push
   terminó al día: todo hasta `648b0c3` está en el remoto.
 
+### Tarea 6 — Persistencia en la fase de fundación (COMPLETA, prioridad alta)
+
+**Importante: este commit NO descontamina prompts.** Los nombres de la
+novela anterior (Cass, Perin, Maret, Cantamura, Tonal Law, etc.) siguen
+intactos en `gen_world.py`, `gen_characters.py` y `gen_canon.py` -- eso
+queda para una **Tarea 2c**, todavía sin formalizar en
+`ENCARGO_CLAUDE_CODE.md` (solo anotada como hallazgo). La Tarea 6 fue
+estrictamente sobre persistencia: que los generadores se guarden a sí
+mismos y que `run_pipeline.py` no ignore sus fallos.
+
+- **`fundacion_comun.py` (módulo nuevo)**: `load_file()`, `ruta_bilingue()`,
+  `load_file_bilingue()`, `extraer_voz_parte2()` y `exigir_semilla()`,
+  compartidas por los cinco generadores de fundación en vez de duplicadas.
+  `ruta_bilingue()`/`load_file_bilingue()` toman `base_dir` como parámetro
+  explícito (no un global del módulo) -- se puede testear pasando un
+  `tmp_path` directo, sin monkeypatch.
+- **`gen_world.py`, `gen_characters.py`, `gen_canon.py`**: reescritos
+  siguiendo exactamente el patrón de `gen_outline.py` (Tarea 2b) -- todo
+  dentro de `main()`, guardia `if __name__ == "__main__":`, sin código a
+  nivel de módulo que dispare la API al importar. Arreglado también el
+  bug de `next(i for i, l in ... if 'Part 2' in l)` (`StopIteration` si no
+  había esa línea, y no reconocía "Parte 2") -- ahora usan
+  `extraer_voz_parte2()`. Guardan en:
+  - `gen_world.py` → `mundo.md`/`world.md`
+  - `gen_characters.py` → `personajes.md`/`characters.md`
+  - `gen_canon.py` → `canon.md` (**reescribe entero, no acumula** --
+    corrección sobre una versión anterior de `ENCARGO_CLAUDE_CODE.md` que
+    decía lo contrario: canon en fundación es derivado de
+    semilla+mundo+personajes, sin hechos propios, y el descarte de
+    iteración ya lo hace `git reset --hard`. Acumular arrastraría hechos
+    de un mundo descartado.)
+- **`gen_outline.py` también recibió el guard de semilla vacía** (ya
+  existía como archivo de la Tarea 2b, no estaba en el pedido original de
+  "los tres", pero consume la semilla igual que los otros -- dejarlo
+  como la única excepción sin guard habría sido raro). El guard es
+  **una sola función compartida** (`exigir_semilla()` en
+  `fundacion_comun.py`), no una cuarta/quinta copia.
+  **`gen_outline_part2.py` NO lo recibió**: no carga
+  `seed.txt`/`semilla.txt` en absoluto, no le corresponde.
+- **`run_pipeline.py::run_foundation()`**:
+  - `run_generator(script, state, timeout)`: si el generador falla
+    (returncode != 0), **guarda `state` con `save_state()` antes de
+    salir** (para poder retomar desde la iteración en curso, no desde
+    cero) y aborta **todo el pipeline** con `sys.exit(1)` -- no solo la
+    iteración. Decisión corregida a mitad de tarea: la primera versión
+    solo abortaba la iteración y dejaba que el loop reintentara hasta
+    `MAX_FOUNDATION_ITERS`; el usuario corrigió que un returncode != 0 es
+    un fallo de infraestructura (API, archivo faltante), no de calidad, y
+    reintentar sobre el mismo estado roto no lo arregla -- la iteración
+    es la unidad de reintento para puntaje bajo, no para scripts rotos.
+    Imprime el script que falló, su returncode, y su **stderr completo**
+    (no truncado) antes de salir.
+  - Envuelve **los cinco generadores + `voice_fingerprint.py`** con
+    `run_generator()` -- `voice_fingerprint.py` no estaba en el pedido
+    original, pero es el mismo loop de fundación: un returncode ignorado
+    ahí es el mismo bug que se está arreglando en los otros pasos.
+    (Corrección: `voice_fingerprint.py` NO genera nada de `voice.md` --
+    es un medidor que analiza capítulos ya escritos y guarda
+    `edit_logs/voice_fingerprint.json`, que ni siquiera se versiona
+    -`edit_logs/` está en `.gitignore`. Ver el hallazgo nuevo de abajo:
+    nada en el repo genera la Parte 2 de `voice.md`.)
+  - `verificar_archivos_fundacion(desde)`: antes de llamar a
+    `evaluate.py --phase=foundation`, confirma que
+    `mundo.md`/`personajes.md`/`esquema.md`/`canon.md` **se modificaron en
+    esta iteración** (mtime posterior a `desde`, un timestamp tomado al
+    empezar la iteración) y no están vacíos. Corregido a mitad de tarea:
+    el primer intento solo chequeaba "existe y no está vacío", pero
+    `world.md`/`characters.md`/`outline.md` están trackeados en git como
+    plantillas con contenido real (encabezados + comentarios HTML) --
+    ese chequeo por sí solo daría verde contra el andamio sin tocar,
+    aunque ningún generador hubiera corrido de verdad esta vuelta. El
+    chequeo de contenido no vacío se mantiene ADEMÁS del de mtime, no en
+    su lugar: un generador puede devolver 0 y haber escrito una respuesta
+    vacía de la API sin que `run_generator()` lo detecte (no hay
+    excepción de por medio). Si falta algo, también guarda `state` y
+    aborta -- una fundación incompleta no debe producir un puntaje que
+    entre a `results.tsv`.
+- **Aceptación verificada**: 91 tests en verde
+  (`uv run python -m pytest tests/ -v`), incluyendo import sin llamadas a
+  `httpx.post`, `main()` con `call_writer` parcheado escribiendo en el
+  archivo esperado, resolución bilingüe, los guards de semilla vacía, y
+  `run_generator()`/`verificar_archivos_fundacion()` con `uv_run()`
+  parcheado (nada de esto toca la API).
+- **Hallazgos nuevos, sin corregir** (`docs/HALLAZGOS.md`):
+  1. `gen_world.py`/`gen_characters.py`/`gen_canon.py` siguen contaminados
+     con *Bells* en el contenido de sus prompts (no tocado a pedido
+     explícito) -- candidato a **Tarea 2c**, sin formalizar todavía.
+  2. No hay ningún mecanismo que devuelva al canon los hechos que los
+     capítulos establecen durante la redacción (un nombre de calle
+     mencionado al pasar, la edad de un personaje secundario revelada más
+     tarde). `PIPELINE.md` da por sentado que esto pasa
+     ("Extract new canon entries from eval output → append to canon.md")
+     pero no existe el script. Distinto del punto de `gen_canon.py` de
+     arriba: esto es acumulación en la fase de **redacción**, no en
+     fundación, necesitaría un script propio, y depende de la misma
+     decisión de diseño pendiente que el hallazgo de los validadores de
+     siembra (Tarea 4): qué tan estructurado tiene que ser `canon.md`
+     para que un script pueda leerlo y escribirle de vuelta con
+     confianza.
+  3. **Nada genera la Parte 2 de `voice.md`/`voz.md`** -- prioridad alta,
+     hermano de la Tarea 6 (no la misma: acá no hay un script roto, no
+     existe el script). Confirmado con grep: no hay `gen_voice.py`,
+     `run_foundation()` no tiene ese paso, y ningún `write_text` en el
+     repo apunta a `voice.md`/`voz.md`. `PIPELINE.md` (Fase 1, paso 5)
+     documenta "voice discovery" como si existiera. `draft_chapter.py`,
+     `gen_brief.py` y `gen_outline.py` leen esa sección esperando
+     contenido real; hoy son comentarios HTML vacíos. El pipeline
+     redactaría con identidad de voz vacía. Diagnosticado sin `.env`;
+     escribir el script (mismo patrón que el resto de la Tarea 6) tampoco
+     lo necesitaría, pero validar la calidad de lo que generaría sí.
+
 ## Qué falta de la Tarea 1
 
 - **1a** (parte no cubierta por 1c): flag `--idioma es|en` para que
@@ -302,32 +426,51 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
 
 ## Qué sigue
 
-Las Tareas 0, 1c, 1d, 2, 2b, 3 y 4 están completas. Lo que queda:
+Las Tareas 0, 1c, 1d, 2, 2b, 3, 4 y 6 están completas.
 
-- **Tarea 6 — Persistencia de la fase de fundación (prioridad alta,
-  NO depende de `.env`).** `gen_world.py`, `gen_characters.py` y
-  `gen_canon.py` tienen el mismo bug que tenían `gen_outline.py`/
-  `gen_outline_part2.py` antes de la Tarea 2b: terminan con
-  `print(result)` y no guardan nada. `run_pipeline.py` tampoco lo
-  compensa. Ver detalle completo en `ENCARGO_CLAUDE_CODE.md` (sección
-  TAREA 6) y en `docs/HALLAZGOS.md`. **Es la única tarea que queda sin
-  bloquear por `.env` -- candidata natural para la próxima sesión sin
-  API key.**
-- **1a** (flag `--idioma es|en`), **1b** (prompts del juez en español),
-  **1d** (conectar los fixtures de voz/mundo a una corrida real), y
-  completar el `overall_score` en `docs/BASELINE.md`: todo bloqueado por
-  falta de `.env`.
+**Se puede seguir escribiendo y testeando código sin `.env`** -- todo lo
+de esta sesión (Tareas 2, 2b, 3, 4, 6) se construyó y probó así, con
+`call_writer()`/`uv_run()` parcheados. Lo que sin `.env` **no** se puede
+hacer es correr una generación real ni ver si el resultado tiene calidad.
+
+- **Sin `.env`, se puede avanzar en escribir código para:**
+  - **Tarea 2c (sin formalizar)** -- descontaminar `gen_world.py`,
+    `gen_characters.py` y `gen_canon.py` de Bells. Mismo tratamiento y
+    mismo patrón de tests con mocks que la Tarea 2b.
+  - **El generador de voz que falta** (hallazgo nuevo arriba, prioridad
+    alta) -- escribir el script (`gen_voice.py` o similar) que llene
+    `voice.md`/`voz.md` Parte 2, con el mismo patrón `main()` +
+    `fundacion_comun.py` + tests con `call_writer` parcheado.
+  - El script que acumule al canon los hechos de redacción, y el parser
+    del Foreshadowing Ledger (Tarea 4) -- ambos esperan primero fijar el
+    formato estructurado de esos documentos, que es una decisión de
+    diseño, no algo que necesite la API.
+- **Bloqueado por `.env` -- no hay código nuevo que escribir, hace falta
+  correr contra el modelo real:**
+  - Validar que el generador de voz (una vez escrito) produce pasajes de
+    calidad real -- eso es juicio, no algo mockeable con sentido.
+  - **1a** (flag `--idioma es|en`), **1b** (prompts del juez en español,
+    validados contra el juez real), **1d parte final** (conectar los
+    fixtures de voz/mundo a una corrida real de `evaluate_chapter()`).
+  - Completar el `overall_score` de los fixtures de la Tarea 0 en
+    `docs/BASELINE.md`.
+  - Intentar `run_pipeline.py --phase foundation` de punta a punta por
+    primera vez.
 
 ## Cómo retomar
 
 1. Verificar qué falta pushear: `git log origin/framework/es-multilibro..HEAD
    --oneline`. Si hay algo, pushear con un token nuevo, exportado como
    variable de entorno, nunca pegado en el chat.
-2. Si se retoma sin `.env` todavía: **Tarea 6** es la única que queda sin
-   depender de la API key.
-3. Cuando haya `.env` con `ANTHROPIC_API_KEY`: correr `evaluate.py
-   --chapter` (sin `--solo-mecanico`) sobre los fixtures para completar
-   el `overall_score` pendiente en `docs/BASELINE.md`, y recién ahí
-   arrancar la Tarea 1b. Después de la Tarea 6, con `.env` disponible, se
-   podría intentar correr `run_pipeline.py --phase foundation` de punta a
-   punta por primera vez.
+2. Si no hay `.env` todavía, hay tres frentes para escribir código (ver
+   "Qué sigue"): formalizar y ejecutar la **Tarea 2c**, escribir el
+   **generador de voz que falta** (hallazgo nuevo, prioridad alta), o
+   avanzar el diseño de formato de `canon.md`/Foreshadowing Ledger.
+3. Cuando haya `.env` con `ANTHROPIC_API_KEY`:
+   a. Correr `evaluate.py --chapter` (sin `--solo-mecanico`) sobre los
+      fixtures para completar el `overall_score` pendiente en
+      `docs/BASELINE.md`.
+   b. Arrancar la Tarea 1b.
+   c. Con la Tarea 6 ya resuelta, se puede intentar
+      `run_pipeline.py --phase foundation` de punta a punta por primera
+      vez (con un `seed.txt`/`semilla.txt` real).

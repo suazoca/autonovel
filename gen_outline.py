@@ -6,6 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from deteccion_es import CALIBRACION
+from fundacion_comun import ruta_bilingue, load_file, load_file_bilingue, extraer_voz_parte2, exigir_semilla
 
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
@@ -38,36 +39,6 @@ def call_writer(prompt, max_tokens=16000):
     resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=600)
     resp.raise_for_status()
     return resp.json()["content"][0]["text"]
-
-
-def load_file(path):
-    try:
-        return Path(path).read_text()
-    except FileNotFoundError:
-        return ""
-
-
-def ruta_bilingue(nombre_es, nombre_en):
-    """Nomenclatura de AUDITORIA_Y_PLAN.md: preferí el nombre en español si
-    existe; si no, caé al nombre en inglés (compatibilidad con ramas/
-    plantillas viejas)."""
-    ruta_es = BASE_DIR / nombre_es
-    if ruta_es.exists():
-        return ruta_es
-    return BASE_DIR / nombre_en
-
-
-def load_file_bilingue(nombre_es, nombre_en):
-    return load_file(ruta_bilingue(nombre_es, nombre_en))
-
-
-def extraer_voz_parte2(voice_text):
-    """Solo la Parte 2 (identidad de voz) de voz.md/voice.md."""
-    lines = voice_text.split('\n')
-    for i, line in enumerate(lines):
-        if 'Part 2' in line or 'Parte 2' in line:
-            return '\n'.join(lines[i:])
-    return voice_text
 
 
 def build_prompt(seed, world, characters, mystery, craft, voice_part2):
@@ -175,12 +146,14 @@ CONSTRAINTS:
 
 
 def main():
-    seed = load_file_bilingue("semilla.txt", "seed.txt")
-    world = load_file_bilingue("mundo.md", "world.md")
-    characters = load_file_bilingue("personajes.md", "characters.md")
-    mystery = load_file_bilingue("MISTERIO.md", "MYSTERY.md")
+    seed = load_file_bilingue(BASE_DIR, "semilla.txt", "seed.txt")
+    exigir_semilla(seed, "generar un esquema")
+
+    world = load_file_bilingue(BASE_DIR, "mundo.md", "world.md")
+    characters = load_file_bilingue(BASE_DIR, "personajes.md", "characters.md")
+    mystery = load_file_bilingue(BASE_DIR, "MISTERIO.md", "MYSTERY.md")
     craft = load_file(BASE_DIR / "CRAFT.md")
-    voice = load_file_bilingue("voz.md", "voice.md")
+    voice = load_file_bilingue(BASE_DIR, "voz.md", "voice.md")
     voice_part2 = extraer_voz_parte2(voice)
 
     prompt = build_prompt(seed, world, characters, mystery, craft, voice_part2)
@@ -188,8 +161,8 @@ def main():
     print("Calling writer model...", file=sys.stderr)
     result = call_writer(prompt)
 
-    out_path = ruta_bilingue("esquema.md", "outline.md")
-    out_path.write_text(result)
+    out_path = ruta_bilingue(BASE_DIR, "esquema.md", "outline.md")
+    out_path.write_text(result, encoding="utf-8")
     print(f"Saved to {out_path}", file=sys.stderr)
     print(result)
 

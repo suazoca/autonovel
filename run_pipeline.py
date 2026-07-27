@@ -21,6 +21,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -152,6 +153,78 @@ def uv_run(script: str, timeout: int = 600) -> subprocess.CompletedProcess:
     return run_tool(f"uv run python {script}", timeout=timeout)
 
 
+def run_generator(script: str, state: dict, timeout: int = 300) -> subprocess.CompletedProcess:
+    """Corre un generador de la fase de fundación (gen_world.py,
+    gen_characters.py, gen_outline.py, gen_outline_part2.py, gen_canon.py,
+    voice_fingerprint.py). Si falla, aborta el pipeline entero -- un
+    returncode != 0 señala un fallo de infraestructura (API, archivo
+    faltante), no de calidad, y reintentar sobre el mismo estado roto no
+    lo arregla. La iteración es la unidad de reintento para puntaje bajo,
+    no para scripts rotos (ver Tarea 6, ENCARGO_CLAUDE_CODE.md).
+
+    Antes de salir: guarda `state` (para poder retomar desde la iteración
+    en curso, no desde cero) e imprime el script que falló, su returncode,
+    y su stderr COMPLETO -- si el pipeline muere a las dos horas, ese
+    mensaje es todo lo que va a quedar."""
+    result = uv_run(script, timeout=timeout)
+    if result.returncode != 0:
+        save_state(state)
+        step(f"ABORT: {script} falló (exit code {result.returncode})")
+        print(f"--- stderr completo de {script} ---", file=sys.stderr)
+        print(result.stderr or "(sin stderr)", file=sys.stderr)
+        print(f"--- fin stderr de {script} ---", file=sys.stderr)
+        sys.exit(1)
+    return result
+
+
+FUNDACION_ARCHIVOS_BILINGUES = [
+    ("mundo.md", "world.md"),
+    ("personajes.md", "characters.md"),
+    ("esquema.md", "outline.md"),
+]
+
+
+def verificar_archivos_fundacion(desde: float) -> list:
+    """Antes de evaluar la fundación, confirmá que los generadores
+    realmente escribieron algo EN ESTA ITERACIÓN.
+
+    "Existe y no está vacío" no alcanza: world.md/characters.md/outline.md
+    están trackeados en git como plantillas (encabezados + comentarios
+    HTML, unos cientos de bytes) -- un archivo así siempre "existe y no
+    está vacío" aunque el generador correspondiente no haya tocado nada
+    esta vuelta. `desde` es un timestamp (time.time()) tomado al empezar
+    la iteración; un archivo con mtime anterior a `desde` no se escribió
+    en esta corrida, sin importar lo que diga su contenido.
+
+    El chequeo de contenido no vacío se mantiene además del de mtime, no
+    en su lugar: un generador puede terminar con returncode 0 y haber
+    escrito una respuesta vacía de la API (sin excepción de por medio, así
+    que run_generator() no lo detecta) -- mtime reciente no prueba que lo
+    escrito sirva para algo.
+
+    Devuelve la lista de lo que falta (vacía si todo está bien)."""
+    from fundacion_comun import ruta_bilingue
+
+    def _no_valido(ruta):
+        if not ruta.exists():
+            return True
+        if ruta.stat().st_mtime < desde:
+            return True
+        return not ruta.read_text(encoding="utf-8").strip()
+
+    faltantes = []
+    for nombre_es, nombre_en in FUNDACION_ARCHIVOS_BILINGUES:
+        ruta = ruta_bilingue(BASE_DIR, nombre_es, nombre_en)
+        if _no_valido(ruta):
+            faltantes.append(f"{nombre_es}/{nombre_en}")
+
+    ruta_canon = BASE_DIR / "canon.md"
+    if _no_valido(ruta_canon):
+        faltantes.append("canon.md")
+
+    return faltantes
+
+
 # ---------------------------------------------------------------------------
 # Helpers: git operations
 # ---------------------------------------------------------------------------
@@ -254,25 +327,39 @@ def run_foundation(state: dict) -> dict:
     for i in range(iteration + 1, MAX_FOUNDATION_ITERS + 1):
         banner(f"Foundation Iteration {i}", "-")
         state["iteration"] = i
+        inicio_iteracion = time.time()
 
         # 1. Generate planning documents
         step("Generating world bible...")
-        uv_run("gen_world.py", timeout=300)
+        run_generator("gen_world.py", state, timeout=300)
 
         step("Generating characters...")
-        uv_run("gen_characters.py", timeout=300)
+        run_generator("gen_characters.py", state, timeout=300)
 
         step("Generating outline (part 1)...")
-        uv_run("gen_outline.py", timeout=300)
+        run_generator("gen_outline.py", state, timeout=300)
 
         step("Generating outline (part 2 — foreshadowing)...")
-        uv_run("gen_outline_part2.py", timeout=300)
+        run_generator("gen_outline_part2.py", state, timeout=300)
 
         step("Generating canon...")
-        uv_run("gen_canon.py", timeout=300)
+        run_generator("gen_canon.py", state, timeout=300)
 
         step("Running voice fingerprint...")
-        uv_run("voice_fingerprint.py", timeout=300)
+        run_generator("voice_fingerprint.py", state, timeout=300)
+
+        # 1b. Verify the generators actually wrote something THIS ITERATION
+        # before paying for an evaluation of stale/empty files. Templates
+        # like world.md/characters.md/outline.md are tracked in git with
+        # real (old) content, so "exists and non-empty" alone would pass
+        # against the untouched scaffold -- verificar_archivos_fundacion()
+        # also checks mtime >= inicio_iteracion.
+        faltantes = verificar_archivos_fundacion(inicio_iteracion)
+        if faltantes:
+            save_state(state)
+            step(f"ABORT: archivos de fundación vacíos, ausentes, o no "
+                 f"modificados en esta iteración: {', '.join(faltantes)}")
+            sys.exit(1)
 
         # 2. Evaluate
         step("Evaluating foundation...")
