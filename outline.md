@@ -30,5 +30,11 @@
 ## Act 3: [Title]
 
 ## Foreshadowing Ledger
-| ID   | Planted | Payoff | Thread           | Status    |
-|------|---------|--------|------------------|-----------|
+<!-- Alcance: "libro" (default) = must pay off within THIS book, same as
+     always. "serie" = allowed to pay off in a later book of the series --
+     only meaningful if siembras_serie.md exists in this branch; if it
+     doesn't, every thread is alcance "libro" no matter what's written
+     here (novela suelta = comportamiento de siempre). For "serie" threads,
+     Payoff should name the book too, e.g. "Libro 2, Ch 14". -->
+| ID   | Planted | Payoff | Alcance | Thread           | Status    |
+|------|---------|--------|---------|------------------|-----------|

@@ -98,3 +98,53 @@ capítulos, que quedó mal actualizado.
 = 2000`, con la nota de por qué). `draft_chapter.py` no necesitó cambios:
 ya leía el valor de `CALIBRACION` dinámicamente en vez de hardcodear
 ninguno de los dos números.
+
+---
+
+## Tarea 4: los validadores de siembra no están conectados a un parser real
+
+**Dónde:** `evaluate.py`, `validar_siembra()` / `validar_libro_de_siembras()`.
+
+**Qué falta:** las funciones validan entradas ya estructuradas (dicts con
+`id`/`siembra`/`pago`/`alcance`/`estado`, el esquema exacto del encargo),
+y están completamente probadas contra los 4 casos de la tabla + la
+regresión. Pero **no hay todavía un parser** que extraiga esas entradas
+desde la tabla real del "Foreshadowing Ledger" en `outline.md`/`esquema.md`
+(que sigue siendo texto libre generado por un LLM, ahora con una columna
+"Alcance" agregada a la plantilla). Sin ese parser, `evaluar_foundation()`
+no puede llamar a estos validadores contra un esquema real todavía.
+
+**Por qué no se hizo ahora:** construir un parser confiable de una tabla
+markdown generada por LLM (formato variable) es un problema aparte, con
+riesgo real de bugs silenciosos si el formato no coincide exactamente con
+lo esperado. Los 5 tests de aceptación de la Tarea 4 (los 4 casos + la
+regresión) no lo exigían -- pedían la lógica de validación, no el parser.
+Mismo criterio que se usó en la Tarea 1d (fixtures de voz/mundo creados
+pero no conectados a una corrida real de `evaluate_chapter()`).
+
+**Estado:** pendiente. Cuando se construya, probablemente conviene
+escribirlo con el mismo estilo que `extraer_ambicion()` (regex tolerante,
+degrada con gracia si faltan columnas) y agregar sus propios tests con
+tablas reales generadas por `gen_outline_part2.py`.
+
+---
+
+## `gen_outline_part2.py` también está contaminado con *Bells* (más que `gen_outline.py`)
+
+**Dónde:** `gen_outline_part2.py`, todo el prompt: capítulos 17-24
+escritos a mano para la trama específica de Bells (Maret, "the void", "the
+Bell Tower", el clímax de Cass), y además **un bug real** independiente de
+la contaminación -- `part1 = open('/tmp/outline_output.md').read()` es una
+ruta absoluta hardcodeada fuera del repo, que no existe en este entorno
+(el script rompe si se lo corre tal cual).
+
+**Qué se hizo en la Tarea 4:** edición mínima -- se agregó la columna
+"Alcance" a la tabla del Foreshadowing Ledger que el prompt le pide al
+modelo, sin tocar el resto.
+
+**Estado:** NO corregido. Debería sumarse al alcance de la **Tarea 2b**
+(`ENCARGO_CLAUDE_CODE.md`) en vez de quedar como hallazgo aparte -- es el
+mismo tipo de problema que `gen_outline.py`, literalmente la segunda mitad
+del mismo pipeline. A confirmar con el usuario si se agrega el grep de
+Tarea 2b sobre este archivo también, y se corrige la ruta hardcodeada de
+paso.

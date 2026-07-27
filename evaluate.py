@@ -161,6 +161,83 @@ def validar_diversidad_ambicion(outline_text):
     return " ".join(advertencias) if advertencias else None
 
 
+# ---- Alcance de siembra (Tarea 4) ----
+#
+# Hoy toda siembra del libro de siembras debe pagarse dentro del mismo
+# volumen, y el evaluador castiga las que quedan abiertas. Para una serie
+# eso está mal: el Libro I tiene que poder sembrar para el Libro V sin que
+# lo marquen como hilo suelto. Cada entrada de siembra:
+#
+#   {
+#     "id": "identificador-legible",
+#     "siembra": {"libro": 1, "capitulo": 3},
+#     "pago":    {"libro": 2, "capitulo": 14},   # o None si no está asignado
+#     "alcance": "libro" | "serie",
+#     "estado":  "pendiente" | "pagada",
+#   }
+#
+# NOTA DE ALCANCE: estas funciones validan entradas ya estructuradas
+# (dicts). Todavía no hay un parser que las extraiga de la tabla del
+# Foreshadowing Ledger en outline.md/esquema.md -- ver docs/HALLAZGOS.md.
+
+SIEMBRAS_SERIE_PATH = BASE_DIR / "siembras_serie.md"
+
+
+def alcance_serie_disponible():
+    """True si existe siembras_serie.md (estamos en una rama de serie).
+    Si no existe, la novela es suelta: el alcance de serie no está
+    disponible y toda siembra se trata como alcance 'libro', sin importar
+    lo que declare -- comportamiento idéntico al de antes de esta tarea."""
+    return SIEMBRAS_SERIE_PATH.exists()
+
+
+def validar_siembra(entrada, alcance_serie_disponible_, libros_completos=None):
+    """Valida una entrada del libro de siembras contra las 4 reglas de la
+    Tarea 4. Devuelve un mensaje de error, o None si está bien.
+
+    alcance_serie_disponible_: si es False (no existe siembras_serie.md),
+    la entrada se valida como si fuera alcance "libro" sin importar lo que
+    declare -- es la regla de regresión: novela suelta = comportamiento de
+    siempre.
+    libros_completos: colección de números de libro ya publicados/cerrados
+    (para la regla 4). None o vacío si no aplica."""
+    libros_completos = libros_completos or set()
+    ident = entrada.get("id", "?")
+    alcance = entrada.get("alcance", "libro")
+    if not alcance_serie_disponible_:
+        alcance = "libro"
+
+    siembra_libro = entrada["siembra"]["libro"]
+    pago = entrada.get("pago") or {}
+    pago_libro = pago.get("libro")
+    pagada_en_el_volumen = pago_libro is not None and pago_libro == siembra_libro
+
+    if alcance == "libro":
+        if not pagada_en_el_volumen:
+            return f'"{ident}": alcance "libro" sin pago dentro del volumen.'
+        return None
+
+    # alcance == "serie"
+    if pago_libro is None:
+        return f'"{ident}": alcance "serie" sin libro de pago asignado.'
+    if pago_libro in libros_completos:
+        return (f'"{ident}": alcance "serie" con pago asignado al libro '
+                f'{pago_libro}, ya publicado.')
+    return None
+
+
+def validar_libro_de_siembras(entradas, libros_completos=None):
+    """Valida todas las entradas del libro de siembras. Devuelve la lista
+    de mensajes de error (vacía si todo está bien). Consulta
+    alcance_serie_disponible() una sola vez para todas las entradas."""
+    disponible = alcance_serie_disponible()
+    return [
+        error
+        for entrada in entradas
+        if (error := validar_siembra(entrada, disponible, libros_completos))
+    ]
+
+
 def slop_score(text):
     """
     Detección mecánica de slop (español -- deteccion_es.py). Devuelve un dict:

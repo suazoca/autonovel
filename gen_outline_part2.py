@@ -62,11 +62,17 @@ Then write:
 
 ## Foreshadowing Ledger
 
-| # | Thread | Planted (Ch) | Reinforced (Ch) | Payoff (Ch) | Type |
-|---|--------|-------------|-----------------|-------------|------|
+| # | Thread | Planted (Ch) | Reinforced (Ch) | Payoff (Ch) | Alcance | Type |
+|---|--------|-------------|-----------------|-------------|---------|------|
+
+Alcance is "libro" (default -- must pay off within THIS book) or "serie"
+(allowed to pay off in a later book of the series; only meaningful if this
+branch has a siembras_serie.md -- if it doesn't, treat every thread as
+"libro" regardless). For "serie" threads, Payoff should name the book too.
 
 Include at LEAST 15 threads. Types: object, dialogue, action, symbolic, structural.
-Plant-to-payoff distance must be at least 3 chapters.
+Plant-to-payoff distance must be at least 3 chapters (within the same book;
+cross-book "serie" threads are exempt from this distance rule).
 
 REMEMBER:
 - The climax uses the fourth option: Cass amplifies the question into audible range
