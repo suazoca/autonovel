@@ -216,6 +216,54 @@ la novela anterior.
 
 ---
 
+## TAREA 2b — Descontaminar `gen_outline.py` (Tarea 2 incompleta)
+
+Encontrado durante la Tarea 3, no es un hallazgo aparte: se me pasó en la
+auditoría original (`AUDITORIA_Y_PLAN.md` Clase A no lista `gen_outline.py`
+ni como contaminado ni como limpio) y en la Tarea 2 (solo nombraba
+`draft_chapter.py`/`gen_brief.py`). Es exactamente el mismo problema que
+A1: un prompt hardcodeado a *The Second Son of the House of Bells* que
+cualquier novela nueva hereda igual.
+
+**Orden de ejecución: después de la Tarea 4.** Es la última tarea sin
+bloquear por `.env` y no hay dependencia entre ellas, pero conviene
+terminar el trabajo de serie (Tarea 4) antes de volver a tocar redacción.
+
+### Qué está hardcodeado en `gen_outline.py`
+
+- El comentario `# always Cass, third-person limited` en la plantilla por
+  capítulo.
+- "Cass's lie" y la instrucción de cómo se refuerza/desafía por capítulo.
+- Los nombres Perin, Maret, Torvald, Lenne en KEY PLOT ARCHITECTURE.
+- "Tonal Law", "the Bellwrights", "the harmonic", "father's tremor".
+- Todo el arco de Actos I-III escrito para la trama específica de Bells.
+
+### Cómo reemplazarlo
+
+Mismo tratamiento que A1 (`draft_chapter.py` en la Tarea 2): partir el
+prompt en armazón invariante (estructura de Save the Cat / MICE Quotient /
+Dan Harmon, formato de salida por capítulo, instrucciones de cantidad de
+capítulos y palabras) + bloque de contenido leído de `mundo.md`,
+`personajes.md`, `MISTERIO.md` y `seed.txt`/`semilla.txt` (ya se cargan al
+principio del script, pero el prompt no los usa para nada específico de
+la trama -- KEY PLOT ARCHITECTURE debería derivarse de esos archivos, no
+estar escrito a mano).
+
+### Test de aceptación de la Tarea 2b
+
+```bash
+grep -riE "cass|bell|bronze|under-note|perin|maret|torvald|lenne|tonal" gen_outline.py
+```
+
+Debe devolver **cero resultados**.
+
+Y un test funcional equivalente al de la Tarea 2: construir el prompt con
+un `seed.txt`/`mundo.md`/`personajes.md`/`MISTERIO.md` de prueba
+inventados, y verificar que el resultado no contiene ninguna referencia a
+la novela anterior.
+
+---
+
 ## TAREA 3 — Campo de ambición por capítulo
 
 Hoy todos los capítulos compiten contra un umbral único (6.0), lo que

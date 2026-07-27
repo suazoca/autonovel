@@ -64,53 +64,37 @@ para calibrar el umbral con datos, no con una estimación a ojo.
 
 ---
 
-## `gen_outline.py` está contaminado con contenido de *Bells* (no estaba en la Tarea 2)
+## `gen_outline.py` contaminado con *Bells* -- promovido a Tarea 2b
 
-**Dónde:** `gen_outline.py`, todo el prompt (título de acto, comentario
-`# always Cass, third-person limited`, "Cass's lie", Perin/Maret/Torvald/
-Lenne, "Tonal Law", "the Bellwrights", "father's tremor", "the harmonic").
+Encontrado durante la Tarea 3: `gen_outline.py` tiene todo el prompt
+hardcodeado a *The Second Son of the House of Bells* (POV fijado a Cass,
+"Cass's lie", Perin/Maret/Torvald/Lenne, "Tonal Law", "the Bellwrights",
+"the harmonic"). Se me había pasado en la auditoría original
+(`AUDITORIA_Y_PLAN.md` Clase A no lo lista ni como contaminado ni como
+limpio) y en la Tarea 2 (solo nombraba `draft_chapter.py`/`gen_brief.py`).
 
-**Por qué no se tocó:** `ENCARGO_CLAUDE_CODE.md` Tarea 2 solo nombra
-`draft_chapter.py` y `gen_brief.py`, y `AUDITORIA_Y_PLAN.md` (Clase A) no
-incluye `gen_outline.py` ni en la lista de contaminados ni en la de
-"archivos limpios" -- quedó afuera de la auditoría original. Es
-exactamente el mismo tipo de problema que A1 (`draft_chapter.py`): un
-prompt hardcodeado a una novela específica, que cualquier serie nueva
-heredaría igual.
-
-**Qué se hizo en la Tarea 3:** se agregó el campo `Ambición` a la plantilla
-de salida por capítulo (edición mínima, sin tocar el resto del prompt),
-porque era necesario para que `gen_outline.py` empiece a generar ese campo.
-El resto del contenido de *Bells* en este archivo sigue ahí.
-
-**Estado:** NO corregido -- descontaminar `gen_outline.py` completo (mismo
-tratamiento que A1: armazón + reglas leídas de `mundo.md`/`personajes.md`/
-`MISTERIO.md`) es trabajo del tamaño de la Tarea 2, no algo para hacer de
-paso dentro de la Tarea 3.
+El usuario confirmó que esto NO es un hallazgo aparte sino Tarea 2
+incompleta, y lo agregó como **Tarea 2b** en `ENCARGO_CLAUDE_CODE.md`
+(mismo tratamiento que A1: armazón invariante + reglas leídas de
+`mundo.md`/`personajes.md`/`MISTERIO.md`, grep de aceptación en cero),
+programada para después de la Tarea 4. Ver ese archivo para el detalle;
+esta entrada queda solo como puntero.
 
 ---
 
-## Discrepancia sin resolver: objetivo de palabras por capítulo
+## RESUELTO: objetivo de palabras por capítulo
 
-**Dónde:** `deteccion_es.py`, `CALIBRACION["palabras_objetivo_capitulo"]`
-vale **3800** (comentario: `# era 3200`, consistente con "el español corre
-15-20% más largo" documentado en el resto del mismo archivo).
-`ENCARGO_CLAUDE_CODE.md`, Tarea 2, dice en cambio: *"Ajustá el objetivo de
-palabras por capítulo a CALIBRACION["palabras_objetivo_capitulo"], que
-ahora es **2000**. Capítulos más cortos, mismo largo total."*
+Lo que en la sesión anterior se registró acá como "discrepancia sin
+resolver" (3800 en `deteccion_es.py` vs. 2000 en `ENCARGO_CLAUDE_CODE.md`)
+era un error del propio `deteccion_es.py`, no una ambigüedad real. El
+usuario lo confirmó: **2000 es el valor correcto**. La novela pasó de
+~22 capítulos de 3200-3800 palabras a ~45 capítulos de 2000 palabras --
+mismo largo total (~90-92k), pero más puntos de parada (abandonar un
+libro hoy cuesta cero, y un capítulo de 4000 palabras es una barrera para
+retomar). El 3800 era un número transitorio de cuando la novela tenía 22
+capítulos, que quedó mal actualizado.
 
-**Por qué importa:** son números opuestos con justificaciones opuestas --
-uno implica capítulos más largos (3200→3800, por la extensión del
-español), el otro capítulos más cortos (→2000, "mismo largo total"
-sugeriría más capítulos, no necesariamente más cortos por igual). No se
-puede satisfacer las dos afirmaciones a la vez.
-
-**Qué se hizo:** `draft_chapter.py` (Tarea 2) lee el valor real de
-`CALIBRACION` en vez de hardcodear ninguno de los dos números, así que no
-se tomó partido -- pero el valor que efectivamente se usa hoy es **3800**,
-porque es el que está en el archivo.
-
-**Estado:** sin resolver. Si la intención era 2000, hay que editar
-`deteccion_es.py`; si era 3800 (y la prosa del encargo tiene un error de
-tipeo), no hay que tocar nada. Confirmar con el usuario antes de cambiar
-`CALIBRACION`.
+**Corregido** en `deteccion_es.py` (`CALIBRACION["palabras_objetivo_capitulo"]
+= 2000`, con la nota de por qué). `draft_chapter.py` no necesitó cambios:
+ya leía el valor de `CALIBRACION` dinámicamente en vez de hardcodear
+ninguno de los dos números.

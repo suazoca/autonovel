@@ -299,7 +299,14 @@ def cv_longitud_oracion(texto: str) -> float:
 # El español corre entre 15% y 20% más largo que el inglés para el mismo
 # contenido. Los umbrales del repositorio original se recalibran así:
 CALIBRACION = {
-    "palabras_objetivo_capitulo": 3800,      # era 3200
+    # 2000, no 3800. La novela pasó de ~22 capítulos de 3200-3800 palabras
+    # a ~45 capítulos de 2000 palabras -- mismo largo total (~90-92k), pero
+    # más puntos de parada: el costo de abandonar un libro hoy es cero, y
+    # un capítulo de 4000 palabras es una barrera para retomar la lectura.
+    # (3800 fue un número transitorio de cuando la novela tenía 22
+    # capítulos; quedó mal actualizado en una versión anterior de este
+    # archivo -- ver docs/HALLAZGOS.md.)
+    "palabras_objetivo_capitulo": 2000,
     "umbral_cv_oracion": 0.32,               # era 0.30
     "umbral_raya_parentetica": 6.0,          # era 15 (contando todas las rayas)
     "umbral_aceptacion_capitulo": 6.0,       # sin cambio

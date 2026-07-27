@@ -1,6 +1,6 @@
 # ESTADO — rama `framework/es-multilibro`
 
-Última actualización: 2026-07-27 (tras cerrar la Tarea 2). Escrito para
+Última actualización: 2026-07-27 (tras cerrar la Tarea 3). Escrito para
 retomar en otra sesión sin releer todo el historial de commits.
 
 ## Punto de partida que sigue vigente
@@ -29,6 +29,8 @@ retomar en otra sesión sin releer todo el historial de commits.
 49a5976 Tarea 1d: fixtures mínimos de voz y mundo en español
 76454a5 docs: ESTADO.md para retomar sin releer el historial
 04b6439 Tarea 2: descontamina draft_chapter.py y gen_brief.py
+4ad802c docs: ESTADO.md al día con el cierre de la Tarea 2
+5af3cb9 Tarea 3: campo de ambición por capítulo (pico | sosten | valle)
 ```
 
 `1c` y `1d` no estaban en el `ENCARGO_CLAUDE_CODE.md` original -- se
@@ -97,7 +99,9 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
   `### Reglas específicas de capítulo` en `voz.md` Parte 2 (acepta también
   el nombre legado en inglés "Chapter-Specific Rules"; lista vacía si no
   existe, no rompe). Objetivo de palabras: `CALIBRACION["palabras_objetivo_capitulo"]`
-  (2000), no hardcodeado.
+  (2000 -- corregido en `deteccion_es.py` durante la Tarea 3, ver más
+  abajo; el código de `draft_chapter.py` no cambió, ya leía el valor real
+  en vez de hardcodear), no hardcodeado.
 - **`ultimos_finales(n=3)`**: función nueva en `draft_chapter.py`. Lee el
   párrafo final de los últimos n capítulos ya escritos y se inyecta en el
   prompt con la instrucción de no repetir ese tipo de cierre. Reemplaza el
@@ -132,6 +136,53 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
   son plantillas vacías (Parte 2 sin llenar), no contenido contaminado.
   Corregido en `docs/BASELINE.md` durante esta tarea.
 
+### Tarea 3 — Campo de ambición por capítulo (COMPLETA, commit `5af3cb9`)
+
+- **`evaluate.py`**: `UMBRALES_AMBICION = {pico: 7.5, sosten: 6.5, valle:
+  6.0}`. `extraer_ambicion()` lee el campo declarado en la entrada del
+  esquema del capítulo (acepta `ambicion:`/`ambición:`, con o sin acento,
+  formato YAML o bullet en negrita). `umbral_por_ambicion()` devuelve el
+  umbral correspondiente -- **sin ambición declarada, cae a
+  `UMBRAL_POR_DEFECTO_SIN_AMBICION` ("sosten", 6.5), nunca a "valle" (6.0,
+  el más laxo)**. Esto se corrigió a mitad de tarea: el primer intento
+  caía al umbral general (6.0, igual a "valle"), lo que habría hecho que
+  cualquier esquema sin declarar ambición volviera en silencio al
+  comportamiento que esta tarea vino a corregir. `evaluate_chapter()` ahora
+  expone `ambicion`/`umbral_aceptacion`/`aceptado` en el resultado.
+- **`validar_diversidad_ambicion()`**: dos formas de esquema plano, no una.
+  (1) menos del 15% de capítulos son 'pico' (o ninguno declara ambición).
+  (2) 80%+ de los picos declarados concentrados en el último tercio del
+  esquema -- aunque la proporción total esté bien, si los momentos
+  memorables se amontonan al final, el resto sigue siendo plano. Este
+  segundo caso también se agregó a mitad de tarea, a pedido explícito del
+  usuario (no estaba en mi primera implementación). Se llama desde
+  `evaluate_foundation()`.
+- **`run_pipeline.py`**: `run_drafting()` lee `umbral_aceptacion` del
+  stdout de `evaluate.py` en vez de comparar contra `CHAPTER_THRESHOLD`
+  fijo. Esa constante queda solo como último respaldo si `evaluate.py` no
+  llega a calcular el umbral (capítulo vacío); subida a 6.5 por la misma
+  razón que el default de arriba.
+- **`gen_outline.py`** y **`outline.md`**: agregado el campo "Ambición:
+  pico | sosten | valle" a la plantilla de salida por capítulo (edición
+  mínima -- el resto de `gen_outline.py` sigue contaminado con Bells, ver
+  Tarea 2b abajo).
+- **Aceptación verificada, los 4 casos con test dedicado**: capítulo
+  "pico" con score 7.0 → rechazado; el mismo "valle" → aceptado; esquema
+  sin picos → advertencia; esquema con 80%+ de picos en el último tercio →
+  advertencia. 38 tests en verde (`uv run python -m pytest tests/ -v`).
+- **`gen_outline.py` contaminado con Bells → promovido a Tarea 2b**: no es
+  un hallazgo aparte, es Tarea 2 incompleta (se le pasó al usuario en la
+  auditoría original). Agregada como Tarea 2b en `ENCARGO_CLAUDE_CODE.md`,
+  programada para después de la Tarea 4, mismo tratamiento que A1.
+- **Objetivo de palabras corregido**: lo que se había registrado como
+  "discrepancia sin resolver" (3800 en `deteccion_es.py` vs. 2000 en el
+  encargo) era un error del propio `deteccion_es.py`, no una ambigüedad
+  real. El usuario confirmó **2000** como valor correcto -- la novela pasó
+  de ~22 capítulos de 3200-3800 palabras a ~45 capítulos de 2000 palabras
+  (mismo largo total ~90-92k, más puntos de parada). Corregido en
+  `deteccion_es.py` con nota explicando el porqué. `draft_chapter.py` no
+  necesitó cambios, ya leía el valor dinámicamente.
+
 ## Qué falta de la Tarea 1
 
 - **1a** (parte no cubierta por 1c): flag `--idioma es|en` para que
@@ -154,28 +205,36 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
 - El **`overall_score`** completo de `evaluate.py` (juez LLM + mecánico)
   sobre los dos fixtures sigue **PENDIENTE** en `docs/BASELINE.md`.
 
-## Qué sigue (Tareas 3 y 4 del encargo, sin empezar)
+## Qué sigue (Tarea 4, después Tarea 2b -- ninguna depende de `.env`)
 
-Ver `ENCARGO_CLAUDE_CODE.md` para el detalle completo de cada una. La
-Tarea 2 ya está completa (ver arriba).
+Ver `ENCARGO_CLAUDE_CODE.md` para el detalle completo. Las Tareas 2 y 3 ya
+están completas (ver arriba).
 
-- **Tarea 3 — Campo de ambición por capítulo.** Cada capítulo del esquema
-  declara `ambicion: pico | sosten | valle` con umbral propio (7.5 / 6.5 /
-  6.0) en vez de un umbral único de 6.0. Toca `gen_outline.py`,
-  `evaluate.py` (el umbral de aceptación deja de ser una constante
-  global) y `run_pipeline.py`. Incluye validación: esquema con <15% de
-  picos debe advertir. No depende de `.env` para la lógica del umbral,
-  aunque `evaluate.py` sigue necesitando la API para el resto. **En curso
-  ahora mismo, siguiente después de este ESTADO.md.**
 - **Tarea 4 — Alcance de siembra (serie).** El libro de siembras hoy
   exige que todo se pague dentro del mismo volumen; para una serie hace
   falta `alcance: "libro" | "serie"` con las 4 reglas de validación de la
-  tabla del encargo, más `siembras_serie.md` en la rama de serie (si no
-  existe, todo es alcance de libro -- comportamiento actual sin cambios).
-  Toca `gen_outline_part2.py`. Tampoco depende de `.env`.
+  tabla del encargo:
+  | Caso | Resultado |
+  |---|---|
+  | `alcance: libro`, sin pago en el volumen | ERROR (como hoy) |
+  | `alcance: serie`, sin pago en el volumen, con libro de pago asignado | OK |
+  | `alcance: serie`, sin libro de pago asignado | ERROR |
+  | `alcance: serie`, pago asignado a un libro ya publicado | ERROR |
+  Más `siembras_serie.md` en la rama de serie (si no existe, todo es
+  alcance de libro -- comportamiento actual sin cambios, necesita test de
+  regresión explícito). Toca `gen_outline_part2.py` y su validador.
+  **En curso ahora mismo, siguiente después de este ESTADO.md.**
+- **Tarea 2b — Descontaminar `gen_outline.py`.** Tarea 2 incompleta, no un
+  hallazgo aparte: se le pasó al usuario en la auditoría original y en la
+  Tarea 2 (solo nombraba `draft_chapter.py`/`gen_brief.py`). Mismo
+  tratamiento que A1: armazón invariante + reglas leídas de `mundo.md`/
+  `personajes.md`/`MISTERIO.md`, grep de aceptación en cero (`cass|bell|
+  bronze|under-note|perin|maret|torvald|lenne|tonal`). **Programada para
+  después de la Tarea 4** -- terminar el trabajo de serie antes de volver
+  a tocar redacción.
 
-Ninguna de las dos está bloqueada por la falta de `.env` -- son las
-candidatas naturales mientras no haya API key.
+Después de la Tarea 2b, todo lo que queda (1b, y completar el
+`overall_score` en `docs/BASELINE.md`) necesita `.env`.
 
 ## Cómo retomar
 
@@ -186,5 +245,6 @@ candidatas naturales mientras no haya API key.
 2. Push pendiente: `git push origin framework/es-multilibro` (o a la URL
    con token, nunca pegado en el chat -- solo como variable de entorno ya
    exportada).
-3. Si se retoma sin `.env` todavía, la Tarea 3 (en curso) o la Tarea 4 son
-   las que se pueden avanzar.
+3. Si se retoma sin `.env` todavía: Tarea 4 (en curso) y después Tarea 2b
+   son las que quedan sin depender de la API key. Después de la 2b, todo
+   lo restante necesita `.env`.
