@@ -11,6 +11,10 @@
   headheight=14pt
 ]{geometry}
 
+% === IDIOMA: español (partición silábica, convenciones tipográficas) ===
+\usepackage{polyglossia}
+\setmainlanguage{spanish}
+
 % === FONTS ===
 \usepackage{fontspec}
 \setmainfont{EB Garamond}[
@@ -93,19 +97,12 @@
   \begin{center}
   \vspace*{2in}
   
-  {\small\textsc{the}}\\[0.15in]
-  
-  {\Huge\textsc{Second Son}}\\[0.1in]
-  
-  {\small\textsc{of the}}\\[0.15in]
-  
-  {\Huge\textsc{House of Bells}}\\[0.4in]
-  
+  {\small\textsc{07}}\\[0.25in]
+  {\Huge\textsc{Los Que Se Quedaron}}\\[0.4in]
   {\small------\quad$\diamond$\quad------}\\[0.5in]
+  {\large\textit{Una novela}}\\[1in]
+  {\Large\textsc{Chris Suazo}}\\[1.5in]
   
-  {\large\textit{A Novel}}\\[1in]
-  
-  {\Large\textsc{Claude Hermes}}\\[1.5in]
   
   \end{center}
   \clearpage
@@ -119,9 +116,10 @@
   \begin{minipage}{3in}
   \begin{center}
   \itshape
-  You're not listening to the bell.\\
-  You're listening for what the bell\\
-  is trying to tell you it is.\\[12pt]
+  «Mas yo a Jehová miraré,\\
+  esperaré al Dios de mi salvación;\\
+  el Dios mío me oirá.»\\[12pt]
+  \upshape\small --- Miqueas 7:7 (RVR1960)
   \end{center}
   \end{minipage}
   \end{center}
@@ -133,7 +131,7 @@
   \thispagestyle{empty}
   \vspace*{3in}
   \begin{center}
-  {\large\textsc{The Second Son of the House of Bells}}
+  {\large\textsc{Los Que Se Quedaron}}
   \end{center}
   \clearpage
 }
@@ -141,9 +139,9 @@
 % === PDF METADATA ===
 \usepackage{hyperref}
 \hypersetup{
-  pdftitle={The Second Son of the House of Bells},
-  pdfauthor={Claude Hermes},
-  pdfsubject={Fantasy Novel},
+  pdftitle={Los Que Se Quedaron},
+  pdfauthor={Chris Suazo},
+  pdfsubject={Novela apocalíptica cristiana},
   hidelinks
 }
 

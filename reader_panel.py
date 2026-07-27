@@ -79,6 +79,7 @@ READERS = {
 READER_PROMPT = """You have just read a complete fantasy novel in summary form.
 The summaries include chapter-by-chapter events, opening and closing passages
 from each chapter, and key dialogue. The full novel is 72,422 words across
+from lang_es import ES_JUDGE_NOTE  # instrucción de idioma español para los jueces
 24 chapters.
 
 {arc_summary}
@@ -90,7 +91,7 @@ Respond with JSON:
 {{
   "momentum_loss": "Where does the story lose momentum? Name the specific chapter(s) and what causes the drag. If it never loses momentum, say so and explain why.",
   
-  "earned_ending": "Does the ending feel earned by everything before it? Does Cass's choice in Ch 22 land? Does the final image in Ch 24 mirror Ch 1 in a way that satisfies? What, if anything, feels unearned?",
+  "earned_ending": "¿El final se siente ganado por todo lo anterior? ¿Las decisiones de los protagonistas en el clímax aterrizan? ¿La imagen final refleja la del capítulo 1 de forma satisfactoria? ¿Qué, si algo, se siente no ganado?",
   
   "cut_candidate": "If the novel had to be 10% shorter (~7,000 words), which chapter or section would you cut first? Why? What would be lost?",
   
@@ -123,7 +124,7 @@ def call_reader(reader_key, arc_summary):
         "max_tokens": 4000,
         "temperature": 0.7,  # Higher temp for personality
         "system": reader["system"],
-        "messages": [{"role": "user", "content": READER_PROMPT.format(arc_summary=arc_summary)}],
+        "messages": [{"role": "user", "content": ES_JUDGE_NOTE + READER_PROMPT.format(arc_summary=arc_summary)}],
     }
     resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=300)
     resp.raise_for_status()

@@ -8,3 +8,9 @@ __pycache__/
 typeset/*.pdf
 typeset/chapters_content.tex
 *.pdf
+*.bak
+*.bak_*
+*.bak2
+typeset/*.aux
+typeset/*.log
+typeset/*.out

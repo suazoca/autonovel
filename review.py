@@ -31,7 +31,42 @@ API_BASE = os.environ.get("AUTONOVEL_API_BASE_URL", "https://api.anthropic.com")
 CHAPTERS_DIR = BASE_DIR / "chapters"
 LOGS_DIR = BASE_DIR / "edit_logs"
 
-REVIEW_PROMPT = """Read the below novel, "{title}". Review it first as a literary critic (like a newspaper book review) and then as a professor of fiction. In the later review, give specific, actionable suggestions for any defects you find. Be fair but honest. You don't *have* to find defects.
+REVIEW_PROMPT = """Lee la novela a continuación, "{title}", escrita EN ESPAÑOL.
+
+Revísala en TRES pasadas, cada una con una persona distinta:
+
+1. CRÍTICO LITERARIO (como una reseña de periódico): valoración honesta
+   de la obra como literatura en español — prosa, ritmo, personajes,
+   estructura. Vigila especialmente calcos del inglés, abuso de gerundio
+   y de adverbios en -mente, y diálogo que no suene a habla real.
+
+2. PROFESOR DE FICCIÓN: sugerencias específicas y accionables sobre
+   cualquier defecto de oficio que encuentres (arcos, beats, tensión,
+   punto de vista, mostrar vs. contar).
+
+3. TEÓLOGO REVISOR evangélico, especializado en escatología bíblica,
+   verificando contra el marco declarado en TEOLOGIA.md (incluido abajo):
+   futurista premilenial, rapto pretribulacional, semana setenta de
+   7 años con la traición a Israel exactamente en el punto medio.
+   Verifica: (a) cronología de la semana setenta; (b) toda cita bíblica
+   es textual Reina-Valera 1960 con referencia correcta — marca las que
+   no puedas verificar; (c) la progresión brazalete→cápsula→marca
+   respeta la salvaguarda de Apocalipsis 14:9-11 (adoración + marca,
+   irreversible, sin salvación posterior); (d) salvación por fe en
+   Cristo y no por supervivencia, conversiones con costo, manejo
+   correcto de 2 Tesalonicenses 2:10-12; (e) la voz narrativa no valida
+   afirmaciones doctrinales falsas (los personajes malvados sí pueden
+   decirlas: eso es caracterización). Señalar que otras tradiciones
+   interpretan distinto NO es un defecto; contradecir el marco declarado
+   o citar mal la Escritura SÍ lo es.
+
+En las pasadas 2 y 3, numera los items accionables (capítulo, pasaje
+problemático, corrección sugerida). Sé justo pero honesto. No *tienes*
+que encontrar defectos.
+
+=== TEOLOGIA.md (marco doctrinal declarado) ===
+{teologia}
+=== FIN TEOLOGIA.md ===
 
 {manuscript}"""
 
@@ -210,7 +245,7 @@ def cmd_review(args):
     title = get_title()
     manuscript = build_manuscript()
     
-    prompt = REVIEW_PROMPT.format(title=title, manuscript=manuscript)
+    prompt = REVIEW_PROMPT.format(title=title, manuscript=manuscript, teologia=(BASE_DIR / "TEOLOGIA.md").read_text() if (BASE_DIR / "TEOLOGIA.md").exists() else "(TEOLOGIA.md no encontrado)")
     
     review_text = call_opus(prompt)
     

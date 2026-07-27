@@ -28,10 +28,12 @@ def call_writer(prompt, max_tokens=16000):
         "max_tokens": max_tokens,
         "temperature": 0.8,
         "system": (
-            "You are rewriting a fantasy novel chapter based on a specific revision brief. "
-            "You follow the brief exactly. You preserve the voice, world, and characters "
-            "from the existing draft while making the structural changes specified. "
-            "You write the FULL chapter. Do not truncate or summarize."
+            "Eres un escritor literario reescribiendo un capítulo de novela "
+            "EN ESPAÑOL según un brief de revisión específico. Conservas todo "
+            "lo que funciona; cambias solo lo que el brief pide. Respetas la "
+            "voz, el canon, la teología y las reglas del español (diálogo con "
+            "raya, sin calcos del inglés, gerundio y -mente con moderación). "
+            "Devuelves el capítulo COMPLETO reescrito, sin comentarios."
         ),
         "messages": [{"role": "user", "content": prompt}],
     }
@@ -58,21 +60,21 @@ def main():
     old_path = BASE_DIR / "chapters" / f"ch_{ch_num:02d}.md"
     old_text = old_path.read_text() if old_path.exists() else "(no existing draft)"
     
-    prompt = f"""Rewrite Chapter {ch_num} of "The Second Son of the House of Bells."
+    prompt = f"""Reescribe el Capítulo {ch_num} de la novela (EN ESPAÑOL), aplicando el brief.
 
-REVISION BRIEF (follow this exactly):
+BRIEF DE REVISIÓN (síguelo exactamente):
 {brief}
 
-VOICE DEFINITION:
+DEFINICIÓN DE VOZ:
 {voice}
 
-CHARACTER REGISTRY:
+REGISTRO DE PERSONAJES:
 {characters}
 
-WORLD BIBLE:
+BIBLIA DEL MUNDO:
 {world}
 
-PREVIOUS CHAPTER ENDING (maintain continuity):
+FINAL DEL CAPÍTULO ANTERIOR (mantener continuidad):
 {prev_tail}
 
 NEXT CHAPTER OPENING (end so this flows into it):

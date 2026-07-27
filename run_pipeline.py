@@ -225,7 +225,7 @@ def get_total_chapters(state: dict) -> int:
     outline = BASE_DIR / "outline.md"
     if outline.exists():
         text = outline.read_text()
-        matches = re.findall(r'###\s*Ch(?:apter)?\s*(\d+)', text)
+        matches = re.findall(r'###\s*C(?:h(?:apter)?|ap\.?)\s*(\d+)', text)
         if matches:
             return max(int(m) for m in matches)
     return 24  # sensible default
@@ -244,6 +244,20 @@ def run_foundation(state: dict) -> dict:
 
     best_score = state.get("foundation_score", 0.0)
     iteration = state.get("iteration", 0)
+
+    # GUARDIA (adaptación ES): si existe una fundación construida a mano
+    # (TEOLOGIA.md presente), JAMÁS regenerarla — solo evaluarla una vez.
+    if (BASE_DIR / "TEOLOGIA.md").exists():
+        banner("Fundación construida a mano detectada (TEOLOGIA.md) — no se regenera")
+        eval_result = uv_run("evaluate.py --phase=foundation", timeout=300)
+        score = parse_score(eval_result.stdout, "overall_score")
+        state["foundation_score"] = score
+        state["chapters_total"] = get_total_chapters(state)
+        state["phase"] = "drafting"
+        save_state(state)
+        banner(f"FOUNDATION (manual) — score {score}, "
+               f"{state['chapters_total']} capítulos")
+        return state
 
     for i in range(iteration + 1, MAX_FOUNDATION_ITERS + 1):
         banner(f"Foundation Iteration {i}", "-")
@@ -328,6 +342,8 @@ def run_drafting(state: dict) -> dict:
 
     for ch in range(start_chapter, total + 1):
         banner(f"Drafting Chapter {ch}/{total}", "-")
+        step(f"Generando informe de realidad para el capítulo {ch}...")
+        uv_run(f"realidad.py --brief {ch}", timeout=400)
         drafted = False
 
         for attempt in range(1, MAX_CHAPTER_ATTEMPTS + 1):
@@ -354,6 +370,10 @@ def run_drafting(state: dict) -> dict:
             step(f"Chapter {ch} score: {score}")
 
             if score >= CHAPTER_THRESHOLD:
+                step("Auditoría de realidad...")
+                uv_run(f"realidad.py --check {ch}", timeout=400)
+                step("Registrando hechos y resumen (cronista)...")
+                uv_run(f"cronista.py --registrar {ch}", timeout=400)
                 commit_hash = git_add_commit(
                     f"ch{ch:02d}: score {score}, {word_count}w")
                 log_result(commit_hash, f"ch{ch:02d}", score, word_count,

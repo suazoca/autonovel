@@ -30,21 +30,18 @@ CHAPTERS_DIR = BASE_DIR / "chapters"
 AUDIO_DIR = BASE_DIR / "audiobook"
 SCRIPTS_DIR = AUDIO_DIR / "scripts"
 
-# Characters from the novel
+# Personajes de la novela — RELLENAR en la fase de fundación
+# (nombre -> descripción de voz para el actor/narrador)
 CHARACTERS = {
-    "NARRATOR": "The narrative voice — warm, measured, precise. Reads prose with the rhythm of the novel's world.",
-    "CASS": "14-year-old boy. Dry, sharp, sometimes frustrated. His voice tightens when he lies or holds back.",
-    "EDDAN": "52, Cass's father. Deep, rough, terse. Sentences often trail off or restart. Workshop voice is steadier than kitchen voice.",
-    "PERIN": "26, Cass's brother. Dry, precise, carries something heavy. Letters-voice is more controlled than in-person voice.",
-    "LENNE": "14, female. Quick, confident, intellectually sharp. Composes while she talks — fingers moving, voice certain.",
-    "TORVALD": "63, retired dye merchant. Gravelly, warm, rambling. Outer-district speech — longer sentences, less careful, trade metaphors.",
-    "MARET": "60, female. Controlled, precise, still. No wasted words. When she finally shows emotion it's devastating.",
-    "DAV_SORN": "34, Court Singer. Formal, clipped, self-correcting. Starts sentences and abandons them. Qualifying everything.",
-    "PROCTOR_FEN": "Male, middle-aged, Academy teacher. Dry, archly amused, pedagogical.",
-    "FERREN": "40, acoustician. Clinical, measured, professional.",
-    "MIRA_FEN": "60s, female, Academy scholar. Quiet, precise, carrying thirty years of regret.",
-    "VELLA": "Lenne's mother, Court Singer. Measured, formal, the weight of knowing she's about to risk everything.",
-    "OSSIAN": "14, male student. Nervous, eager, tends to overstate.",
+    "NARRADOR": "La voz narrativa — medida, cálida, precisa. Español neutro latinoamericano.",
+    # "EMPRESARIO": "50s, hondureño-americano. Voz grave, práctica, acento hondureño suave.",
+    # "LIMPIADOR": "30s, afgano. Español con acento extranjero, frases cortas, cauteloso.",
+    # "AGRICULTOR": "60, ucraniano. Voz áspera, pausada, español rudimentario con acento eslavo.",
+    # "CIENTIFICA": "28, estadounidense. Precisa, rápida, tecnicismos naturales.",
+    # "YOUTUBER": "25, española. Castellano peninsular, enérgica, registro coloquial.",
+    # "CARDIOLOGO": "48, hondureño de San Pedro Sula. Culto, seguro de sí, voseo ocasional.",
+    # "PILOTO": "32, israelí. Directa, militar, español funcional con acento.",
+    # "ANTICRISTO": "Grimaldi, monegasco. Suave, magnético, dicción impecable.",
 }
 
 AUDIO_TAG_GUIDE = """
@@ -106,16 +103,24 @@ CHARACTERS IN THIS NOVEL:
 AUDIO TAG GUIDE:
 {AUDIO_TAG_GUIDE}
 
-RULES:
-1. Every piece of text must be attributed to a speaker. Narration = "NARRATOR".
-2. Dialogue lines must be attributed to the character who speaks them.
-3. Remove quotation marks from dialogue — the voice actor performs them.
-4. Keep narration segments reasonably sized (2-4 sentences each). Split long paragraphs.
-5. Dialogue "he said" / "she said" tags should be part of the NARRATOR segment AFTER the dialogue, not part of the character's line.
-6. Scene breaks (---) become {{"speaker": "NARRATOR", "text": "[pause]"}}
-7. Chapter titles become the first segment: {{"speaker": "NARRATOR", "text": "[slowly] Chapter One: The Morning Pitch"}}
-8. Add audio tags based on emotional context. Be subtle — most lines need no tag.
-9. Internal thoughts in *italics* should be read by the CHARACTER (Cass usually), tagged [softly] or [whisper].
+REGLAS (la novela está EN ESPAÑOL y el diálogo usa RAYA —):
+1. Todo fragmento de texto se atribuye a un hablante. Narración = "NARRADOR".
+2. El diálogo en español abre con raya (—) al inicio de línea. Atribuye cada
+   línea al personaje que habla usando el contexto y los incisos.
+3. ELIMINA las rayas del texto a locutar — el actor de voz las interpreta.
+4. Los incisos del narrador dentro del diálogo (—dijo el empresario—) son
+   segmentos del NARRADOR, separados de la línea del personaje:
+   "—Súbete —dijo—. Nos queda camino." se divide en:
+   {{"speaker": "EMPRESARIO", "text": "Súbete."}},
+   {{"speaker": "NARRADOR", "text": "dijo."}},
+   {{"speaker": "EMPRESARIO", "text": "Nos queda camino."}}
+   (Si el inciso es trivial como "dijo", puedes omitirlo.)
+5. Segmentos de narración de tamaño razonable (2-4 oraciones). Divide párrafos largos.
+6. Los separadores de escena (---) se convierten en {{"speaker": "NARRADOR", "text": "[pause]"}}
+7. El título del capítulo es el primer segmento: {{"speaker": "NARRADOR", "text": "[slowly] Capítulo uno: ..."}}
+8. Añade etiquetas de audio según el contexto emocional. Sé sutil — la mayoría de líneas no necesitan etiqueta.
+9. Los pensamientos internos en *cursivas* los lee el PERSONAJE POV, con [softly] o [whisper].
+10. Las citas entre comillas angulares « » (versículos, letreros) las lee el NARRADOR con [slowly].
 
 OUTPUT FORMAT: A JSON array of objects, each with:
   "speaker": character name (from the list above)

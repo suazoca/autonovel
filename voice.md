@@ -1,157 +1,124 @@
-# Voice Profile
+# Perfil de Voz
 
-This file has two parts:
-1. **Guardrails** -- universal rules to avoid AI-generated slop. These
-   apply to ALL voices and are non-negotiable.
-2. **Voice Identity** -- the specific voice for THIS novel. Generated
-   during the foundation phase. Could be anything: dense and mythic,
-   spare and brutal, warm and whimsical. The voice emerges from the
-   story's needs.
-
----
-
-## Part 1: Guardrails (permanent, all novels)
-
-These are the cliff edges. Stay away from them regardless of voice.
-
-### Tier 1: Banned words -- kill on sight
-
-These are statistically overrepresented in LLM output vs. human writing.
-If one appears, rewrite the sentence. No exceptions.
-
-| Kill this         | Use instead                                    |
-|-------------------|------------------------------------------------|
-| delve             | dig into, examine, look at                     |
-| utilize           | use                                            |
-| leverage (verb)   | use, take advantage of                         |
-| facilitate        | help, enable, make possible                    |
-| elucidate         | explain, clarify                               |
-| embark            | start, begin                                   |
-| endeavor          | effort, try                                    |
-| encompass         | include, cover                                 |
-| multifaceted      | complex, varied                                |
-| tapestry          | (describe the actual thing)                    |
-| testament to      | shows, proves, demonstrates                    |
-| paradigm          | model, approach, framework                     |
-| synergy           | (delete the sentence and start over)           |
-| holistic          | whole, complete, full-picture                  |
-| catalyze          | trigger, cause, spark                          |
-| juxtapose         | compare, contrast, set against                 |
-| nuanced (filler)  | (cut it -- if it's nuanced, show how)          |
-| realm             | area, field, domain                            |
-| landscape (metaphorical) | field, space, situation                 |
-| myriad            | many, lots of                                  |
-| plethora          | many, a lot                                    |
-
-### Tier 2: Suspicious in clusters
-
-Fine alone. Three in one paragraph = rewrite that paragraph.
-
-robust, comprehensive, seamless, cutting-edge, innovative, streamline,
-empower, foster, enhance, elevate, optimize, pivotal, intricate,
-profound, resonate, underscore, harness, navigate (metaphorical),
-cultivate, bolster, galvanize, cornerstone, game-changer, scalable
-
-### Tier 3: Filler phrases -- delete on sight
-
-These add zero information. The sentence is always better without them.
-
-- "It's worth noting that..." -> just state it
-- "It's important to note that..." -> just state it
-- "Importantly, ..." / "Notably, ..." / "Interestingly, ..." -> just state it
-- "Let's dive into..." / "Let's explore..." -> start with the content
-- "As we can see..." -> they can see
-- "Furthermore, ..." / "Moreover, ..." / "Additionally, ..." -> and, also, or just start
-- "In today's [fast-paced/digital/modern] world..." -> delete the clause
-- "At the end of the day..." -> delete
-- "It goes without saying..." -> then don't say it
-- "When it comes to..." -> just talk about the thing
-- "One might argue that..." -> argue it or don't
-- "Not just X, but Y" -> restructure (the #1 LLM rhetorical crutch)
-
-### Structural slop patterns
-
-These are the shapes that betray machine origin. Avoid them in any voice.
-
-**Paragraph template machine**: Don't repeat the same paragraph
-structure (topic sentence -> elaboration -> example -> wrap-up).
-Vary it. Sometimes the point comes last. Sometimes a paragraph is
-one sentence. Sometimes three long ones in a row.
-
-**Sentence length uniformity**: If every sentence is 15-25 words,
-it reads as synthetic. Mix in fragments. And long, winding,
-clause-heavy sentences that carry the reader through a thought
-the way a river carries a leaf. Then a short one.
-
-**Transition word addiction**: If consecutive paragraphs start with
-"However," "Furthermore," "Additionally," "Moreover," "Nevertheless"
--- rewrite. Start with the subject. Start with action. Start with
-dialogue. Start with a sense detail.
-
-**Symmetry addiction**: Don't balance everything. Three pros, three
-cons, five steps -- that's a tell. Real writing is lumpy. Some
-sections are long because they need to be. Some are two lines.
-
-**Hedge parade**: "may," "might," "could potentially," "it's possible
-that" -- pick one per page, max. State things or don't.
-
-**Em dash overload**: One or two per page is fine. Five per paragraph
-is a dead giveaway. Use commas, parentheses, or two sentences instead.
-
-**List abuse**: Prose, not bullets. If the scene calls for a list
-(a merchant's inventory, a spell's components), earn it. Don't
-default to bullet points because it's easy.
-
-### The smell test
-
-After writing any passage, ask:
-- Read it aloud. Does it sound like a person talking?
-- Is there a single surprising sentence? Human writing surprises.
-- Does it say something specific? Could you swap the topic and the
-  words would still work? Specificity kills slop.
-- Would a reader think "AI wrote this"? If yes, rewrite.
+Este archivo tiene dos partes:
+1. **Barandillas** — reglas universales para evitar slop de IA en español.
+   Aplican a TODAS las voces y no son negociables.
+2. **Identidad de Voz** — la voz específica de ESTA novela. Se genera
+   durante la fase de fundación. La voz emerge de las necesidades de
+   la historia.
 
 ---
 
-## Part 2: Voice Identity (generated per novel)
+## Parte 1: Barandillas (permanentes, todas las novelas)
 
-Everything below is discovered during the foundation phase.
-The agent proposes a voice that serves THIS story, writes exemplar
-passages, and calibrates against them throughout drafting.
+Estos son los acantilados. Mantente lejos de ellos sin importar la voz.
 
-### Tone
-<!-- Generated during foundation. Examples:
-     "Mythic and weighty, like stone tablets being read aloud."
-     "Warm, slightly breathless, like a traveler telling stories by firelight."
-     "Spare and cold. Sentences like knife cuts." -->
+### Nivel 1: Palabras prohibidas — matar al verlas
 
-### Sentence Rhythm
-<!-- Generated during foundation. Not rules -- tendencies.
-     "Long sentences for worldbuilding, short for violence."
-     "Dialogue is clipped. Narration flows." -->
+Sobrerrepresentadas en output de LLM en español. Si aparece una,
+reescribe la oración. Sin excepciones.
 
-### Vocabulary Register
-<!-- Generated during foundation. The word-hoard for this world.
-     What does this world SOUND like? Anglo-Saxon blunt? Latinate
-     baroque? Colloquial modern? A mix? -->
+| Mata esto              | Usa esto                                    |
+|------------------------|---------------------------------------------|
+| sumergirse/adentrarse en (metafórico) | la acción concreta           |
+| desentrañar            | descubrir, entender, resolver               |
+| un sinfín de           | muchos (o el número real)                   |
+| una miríada de         | muchos                                      |
+| plétora                | montón, abundancia                          |
+| crisol de              | (describe la mezcla real)                   |
+| tapiz de               | (describe la cosa real)                     |
+| un abanico de          | varias, distintas                           |
+| una amplia gama de     | varios                                      |
+| paradigma              | modelo, esquema                             |
+| sinergia               | (borra la oración y empieza de nuevo)       |
+| holístico              | completo, integral                          |
+| catalizador            | detonante, causa                            |
+| inquebrantable         | firme (o muestra la firmeza)                |
+| marcar un antes y un después | (di qué cambió, en concreto)          |
+| en el corazón de       | en el centro de, en medio de                |
+| testimonio de          | demuestra, prueba                           |
 
-### POV and Tense
-<!-- Generated during foundation.
-     Third limited? First? Rotating? Omniscient?
-     Past tense? Present? Does it shift for effect? -->
+### Nivel 2: Sospechosas en racimos
 
-### Dialogue Conventions
-<!-- Generated during foundation.
-     Tags: "said" only? Action beats? No tags at all?
-     How do characters sound different from each other?
-     Subtext rules: do characters say what they mean? -->
+Bien aisladas. Tres en un párrafo = reescribir ese párrafo.
 
-### Exemplar Passages
-<!-- 3-5 paragraphs that ARE the voice. Written during foundation.
-     The agent calibrates every chapter against these.
-     These are the tuning fork. -->
+vibrante, bullicioso, imponente, majestuoso, fascinante, cautivador,
+envolvente, impresionante, sin igual, innegable, palpable, abrumador,
+sobrecogedor, crucial, fundamental, profundo, intrincado, meticuloso,
+resonar (metafórico), albergar, dejar huella, emblemático, icónico
 
-### Anti-Exemplars
-<!-- 3-5 paragraphs showing what this voice is NOT.
-     Not the generic anti-slop stuff above -- specific to this novel.
-     "This is too flowery for our tone." "This is too modern." -->
+### Nivel 3: Relleno — borrar al verlo
+
+- "Cabe destacar que..." → di la cosa y ya
+- "Es importante mencionar que..." → di la cosa y ya
+- "Además, ..." / "Asimismo, ..." al abrir párrafo → borra o une
+- "En resumen..." / "En conclusión..." → borra
+- "Hoy en día..." / "En un mundo donde..." → borra la cláusula
+- "No es solo X, sino Y" → reestructura
+
+### Calcos del inglés — prohibidos
+
+- eventualmente (por *eventually*) → finalmente
+- hacer sentido → tener sentido
+- tomar acción / ventaja / lugar → actuar / aprovechar / ocurrir
+- cerró **sus** ojos → cerró **los** ojos (posesivo redundante)
+- sacudió la cabeza → negó con la cabeza
+- asintió con su cabeza → asintió
+- pasiva calcada ("fue entregado por") → activa o pasiva refleja
+
+### Gerundio y -mente
+
+- Gerundio de posterioridad: NUNCA ("disparó, matándolo" → "disparó y lo mató")
+- Dos gerundios seguidos: NUNCA
+- Máximo ~12 gerundios por mil palabras
+- Máximo ~4 adverbios en -mente por mil palabras
+
+### Clichés de ficción — prohibidos
+
+una sensación de X · no pudo evitar sentir · el peso de X · el aire
+cargado de tensión · ojos como platos / de par en par · una ola de X
+lo invadió · una punzada de X · el corazón le martilleaba · un
+escalofrío recorrió su espalda · un nudo en la garganta · sonrisa
+cómplice · el silencio ensordecedor · un suspiro que no sabía que
+contenía · algo oscuro despertó · se le heló la sangre · el tiempo
+pareció detenerse · sudor frío
+
+La cura: el efecto físico específico de ESTE personaje en ESTA escena.
+
+### Emociones: mostrar, no nombrar
+
+Prohibido: "se sentía culpable", "estaba furioso", "parecía nervioso",
+"tristemente", "nerviosamente". Muestra el cuerpo, la acción, el diálogo.
+
+### Léxico regional y accesibilidad (reglas del autor)
+
+- Radio/comunicaciones: "copiado", nunca "cópialo".
+- Los creyentes evangélicos ORAN. "Rezar" solo para personajes de
+  contexto católico. (Distinción de registro crucial para el público
+  de la obra.)
+- Palabras que alejan al lector promedio: prohibidas cuando existe la
+  forma llana ("crepitar" -> estática, sonar; "yermo" -> seco, vacío).
+- La narración usa el registro léxico del personaje POV: un camionero
+  no dice "tendones del antebrazo"; un médico sí puede.
+- Verbos de máquina en registro latinoamericano: los motores rugen o
+  rechinan (no "gruñen").
+
+### Convenciones tipográficas del español
+
+1. Diálogo con raya: —Súbete —dijo—. Nos queda camino.
+2. Comillas angulares « » para citas dentro de narración.
+3. Signos de apertura ¿ ¡ siempre.
+4. Nunca comillas inglesas para diálogo.
+
+---
+
+## Parte 2: Identidad de Voz (generada en fundación — POR COMPLETAR)
+
+> Variedad narrativa: español neutro latinoamericano.
+> Diálogos: variedad dialectal por personaje (voseo hondureño para el
+> empresario y el cardiólogo; castellano peninsular para la youtuber;
+> español con interferencias para el limpiador afgano, el agricultor
+> ucraniano y la piloto israelí).
+>
+> [El resto se genera con gen_world.py / voice_fingerprint.py durante
+> la Fase 1 de la fundación.]

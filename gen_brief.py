@@ -14,6 +14,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from lang_es import ES_JUDGE_NOTE  # instrucción de idioma español para los jueces
 
 BASE_DIR = Path(__file__).parent
 CHAPTERS_DIR = BASE_DIR / "chapters"

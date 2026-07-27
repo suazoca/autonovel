@@ -30,13 +30,16 @@ def call_writer(prompt, max_tokens=16000):
         "max_tokens": max_tokens,
         "temperature": 0.8,
         "system": (
-            "You are a literary fiction writer drafting a fantasy novel chapter. "
-            "You write in third-person limited past tense, locked to one POV character. "
-            "You follow the voice definition exactly. You hit every beat in the outline. "
-            "You never use words from the banned list. You show, never tell emotions. "
-            "Your prose is specific, sensory, grounded. Metaphors come from the character's "
-            "experience. You vary sentence length. You trust the reader. "
-            "You write the FULL chapter -- do not truncate, summarize, or skip ahead."
+            "Eres un escritor literario redactando un capítulo de novela EN ESPAÑOL. "
+            "Escribes en tercera persona limitada, tiempo pasado, anclado a UN solo "
+            "personaje punto de vista por capítulo. Sigues la definición de voz al pie "
+            "de la letra. Cubres todos los beats del outline. Nunca usas palabras de la "
+            "lista prohibida. Muestras las emociones, nunca las nombras. Tu prosa es "
+            "específica, sensorial, concreta. Las metáforas nacen de la experiencia del "
+            "personaje. Varías la longitud de las oraciones. Confías en el lector. "
+            "El diálogo usa raya (—) según la convención literaria del español, nunca "
+            "comillas inglesas. Escribes el capítulo COMPLETO: no truncas, no resumes, "
+            "no saltas escenas."
         ),
         "messages": [{"role": "user", "content": prompt}],
     }
@@ -73,6 +76,16 @@ def main():
     characters = load_file(BASE_DIR / "characters.md")
     outline = load_file(BASE_DIR / "outline.md")
     canon = load_file(BASE_DIR / "canon.md")
+    teologia = load_file(BASE_DIR / "TEOLOGIA.md")
+    craft = load_file(BASE_DIR / "CRAFT-ES.md")
+    resumen_caps = load_file(BASE_DIR / "resumen_capitulos.md") or (
+        "(Aún no hay capítulos registrados por el cronista.)")
+    _brief_path = BASE_DIR / "briefs" / f"realidad_ch{chapter_num:02d}.md"
+    informe_realidad = load_file(_brief_path) if _brief_path.exists() else (
+        "(No se generó informe de realidad para este capítulo. Correr "
+        "'python realidad.py --brief N' antes de redactar es el flujo "
+        "recomendado. En su ausencia: máxima cautela con física, "
+        "demografía del rapto, geografía y escalada temporal.)")
     
     # Chapter-specific context
     chapter_outline = extract_chapter_outline(outline, chapter_num)
@@ -86,72 +99,139 @@ def main():
     else:
         prev_tail = "(first chapter -- no previous)"
     
-    prompt = f"""Write Chapter {chapter_num} of "The Second Son of the House of Bells."
+    prompt = f"""Escribe el Capítulo {chapter_num} de la novela.
 
-VOICE DEFINITION (follow this exactly):
+DEFINICIÓN DE VOZ (síguela exactamente):
 {voice}
 
-THIS CHAPTER'S OUTLINE (hit every beat):
+OUTLINE DE ESTE CAPÍTULO (cubre todos los beats):
 {chapter_outline}
 
-NEXT CHAPTER'S OUTLINE (for continuity -- end this chapter so it flows into the next):
+OUTLINE DEL CAPÍTULO SIGUIENTE (para continuidad — cierra este capítulo de modo que fluya hacia el próximo):
 {next_chapter}
 
-PREVIOUS CHAPTER'S ENDING (continue from here):
+FINAL DEL CAPÍTULO ANTERIOR (continúa desde aquí):
 {prev_tail}
 
-WORLD BIBLE (reference for worldbuilding details):
+BIBLIA DEL MUNDO (referencia para detalles de worldbuilding):
 {world}
 
-CHARACTER REGISTRY (reference for speech patterns and behavior):
+REGISTRO DE PERSONAJES (referencia para patrones de habla y conducta):
 {characters}
 
-WRITING INSTRUCTIONS:
-1. Write the COMPLETE chapter. Target ~3,200 words. Do not truncate or summarize.
-2. Third-person limited, past tense, locked to Cass's POV.
-3. Hit ALL numbered beats from the outline in order.
-4. Plant ALL foreshadowing elements listed under "Plants."
-5. Show sensory detail: what Cass hears, smells, feels physically.
-6. The under-note causes specific physical pain (needle behind left eye, not vague discomfort).
-7. Dialogue follows the speech patterns defined in characters.md.
-8. No banned words from voice.md Part 1 guardrails.
-9. No AI fiction tells: no "a sense of," no "couldn't help but feel," no "eyes widened."
-10. Vary sentence length. Short sentences for impact. Longer ones to build.
-11. Metaphors from Cass's experience: sound, bronze, craft, the body's response to pitch.
-12. Trust the reader. Don't explain what scenes mean. Let them land.
-13. Start the chapter in scene, not with exposition. End on a moment, not a summary.
+CANON DOCTRINAL (TEOLOGIA.md — NADA en el capítulo puede contradecirlo;
+citas bíblicas SIEMPRE textuales RVR1960 con referencia):
+{teologia}
 
-PATTERNS TO AVOID (these have been flagged in previous chapters):
-14. NO triadic sensory lists. Never "X. Y. Z." or "X and Y and Z" as three
-    separate items in a row. Combine two, cut one, or restructure.
-15. NO "He did not [verb]" more than once per chapter. Convert negatives
-    to active alternatives or just cut them.
-16. NO "He thought about [X]" constructions. Replace with: the thought
-    itself as a fragment, a physical action, or dialogue.
-17. NO "the way [X] did [Y]" as a simile connector more than twice per
-    chapter. Use different simile structures or cut the comparison.
-18. NO over-explaining after showing. If a scene demonstrates something,
-    do not have the narrator restate it. Trust the scene.
-19. NO section breaks (---) as rhythm crutches. Only use for genuine
-    time/location jumps. Max 2 per chapter.
-20. VARY paragraph length deliberately. Never more than 3 consecutive
-    paragraphs of similar length. Include at least one 1-2 sentence
-    paragraph and one 6+ sentence paragraph.
-21. END the chapter differently from previous chapters. Do NOT end with
-    Cass outside listening to his father work. Find the ending that
-    belongs to THIS chapter specifically.
-22. INCLUDE at least one moment that surprises -- a character saying
-    the wrong thing, an emotional beat arriving early or late, a detail
-    that doesn't fit the expected pattern. Predictable excellence is
-    still predictable.
-23. FAVOR scene over summary. At least 70% of the chapter should be
-    in-scene (moment by moment, with dialogue and action) rather than
-    summary (narrator compressing time).
-24. DIALOGUE should sound like speech, not prose. Characters should
-    occasionally stumble, interrupt, trail off, or say something
-    slightly wrong. A 14-year-old does not speak in polished epigrams.
+LO YA ESTABLECIDO EN CAPÍTULOS ANTERIORES (continuidad OBLIGATORIA —
+los nombres, hechos, objetos y estados registrados aquí NO pueden
+contradecirse; si un personaje secundario ya tiene nombre, usa ESE
+nombre):
+{resumen_caps}
 
-Write the chapter now. Full text, beginning to end.
+INFORME DE REALIDAD (contexto OBLIGATORIO del estado del mundo en la
+fecha de este capítulo — obedece sus restricciones duras):
+{informe_realidad}
+
+REGLAS DE OFICIO NARRATIVO (CRAFT-ES.md — gobiernan cada escena;
+el evaluador clasificará tus escenas contra ellas):
+{craft}
+
+INSTRUCCIONES DE ESCRITURA:
+1. Escribe el capítulo COMPLETO. Objetivo: ~3,200 palabras. No truncar ni resumir.
+2. Tercera persona limitada, tiempo pasado, anclado al personaje POV que indica el outline.
+3. Cubre TODOS los beats numerados del outline, en orden.
+4. Planta TODOS los elementos de presagio listados bajo "Siembras".
+5. Detalle sensorial: qué oye, huele y siente físicamente el personaje POV.
+6. El diálogo sigue los patrones de habla definidos en characters.md,
+   incluida la variedad dialectal de cada personaje (hondureño, peninsular, etc.).
+7. Nada de palabras prohibidas de voice.md Parte 1.
+8. Nada de clichés de IA: ni "una sensación de", ni "no pudo evitar sentir",
+   ni "sus ojos se abrieron como platos", ni "una ola de X lo invadió".
+9. Varía la longitud de las oraciones. Cortas para el impacto. Largas para construir.
+10. Metáforas desde la experiencia del personaje POV, no genéricas.
+11. Confía en el lector. No expliques qué significan las escenas. Deja que aterricen.
+12. Empieza el capítulo EN escena, no con exposición. Termina en un momento, no en un resumen.
+
+REGLAS DEL ESPAÑOL (obligatorias):
+13. DIÁLOGO con raya (—): —Súbete —dijo—. Nos queda camino.
+    Nunca comillas inglesas para diálogo. Comillas angulares « » solo para
+    citas dentro de narración (p. ej., la cita de un letrero o un versículo).
+14. Signos de apertura ¿ ¡ siempre.
+15. MÁXIMO 3-4 adverbios en -mente por cada mil palabras. Prefiere
+    reformular: "caminó lentamente" -> "caminó sin prisa" o muestra el ritmo.
+16. GERUNDIO con moderación: nunca gerundio de posterioridad
+    ("salió corriendo, chocando luego con..."), nunca dos gerundios seguidos.
+17. CERO calcos del inglés: ni "eventualmente" por finalmente, ni "hacer
+    sentido", ni posesivos redundantes ("cerró sus ojos" -> "cerró los ojos"),
+    ni "sacudió la cabeza" -> "negó con la cabeza".
+18. Voz activa por defecto. La pasiva con "ser" solo si el énfasis lo exige;
+    prefiere la pasiva refleja ("se distribuyeron los brazaletes").
+
+PATRONES A EVITAR (marcados en capítulos previos por el evaluador):
+19. NADA de listas sensoriales triádicas ("X. Y. Z." o "X y Y y Z").
+    Combina dos, corta una, o reestructura.
+20. "No + verbo" como recurso retórico: máximo una vez por capítulo.
+21. Nada de "Pensó en X": usa el pensamiento mismo como fragmento,
+    una acción física, o diálogo.
+22. NO sobre-expliques después de mostrar. Si la escena lo demuestra,
+    el narrador no lo repite.
+23. Separadores de sección (---) solo para saltos reales de tiempo/lugar.
+    Máximo 2 por capítulo.
+24. VARÍA la longitud de párrafos deliberadamente: al menos un párrafo de
+    1-2 oraciones y uno de 6+ oraciones. Nunca más de 3 párrafos seguidos
+    de longitud similar.
+25. TERMINA el capítulo de forma distinta a los anteriores. Busca el final
+    que pertenece a ESTE capítulo.
+26. INCLUYE al menos un momento que sorprenda: alguien que dice lo
+    incorrecto, un beat emocional que llega antes o después de lo esperado,
+    un detalle que rompe el patrón.
+27. ESCENA sobre resumen: al menos 70% del capítulo en escena (momento a
+    momento, con diálogo y acción), no en resumen narrativo.
+28. El DIÁLOGO suena a habla, no a prosa: la gente titubea, se interrumpe,
+    deja frases a medias, dice algo levemente equivocado.
+
+REGLAS DE REALIDAD (obligatorias — nacidas de la revisión del autor):
+29. RAPTO PARCIAL: desapareció ~1 de cada 8 personas (más en Honduras y
+    Latinoamérica, menos en Europa/Asia). NINGUNA escena muestra al 100%
+    de la gente desaparecida, salvo agrupación verosímil justificada EN
+    escena (un bus de iglesia, una vigilia). Todo desastre incluye su
+    consecuencia humana: heridos, gritos, sobrevivientes en shock,
+    gente buscando a los suyos. El horror del Día 0 es el CONTRASTE
+    entre el caos de los que quedaron y los espacios inexplicablemente
+    vacíos — nunca una quietud fantasmal total.
+30. GEOGRAFÍA: solo usa datos geográficos presentes en GEOGRAFIA.md o
+    en el informe de realidad (vegetación, distancias, clima, rutas).
+    Si no está verificado, mantenlo vago ("el cerro", "la carretera").
+    No inventes paisaje.
+31. LÉXICO REGIONAL Y ACCESIBLE: la narración usa el registro del
+    personaje POV. Protocolo de radio en español: "copiado" (nunca
+    "cópialo"). Los creyentes evangélicos ORAN (nunca "rezan"; "rezar"
+    solo en boca de personajes de contexto católico). Evita palabras
+    que el lector promedio no usa ("crepitar", "yermo"): di lo mismo
+    en llano. Nada de anatomía técnica en narración de personaje no
+    médico ("tendones del antebrazo" -> "los brazos").
+32. FÍSICA CON COSTO: toda maniobra difícil (mover camiones entre
+    choques, cruzar zonas bloqueadas, tratar un herido) se muestra
+    COSTANDO tiempo y esfuerzo concreto, nunca resuelta en una frase.
+33bis. ORDEN CAUSAL DE BEATS (regla dura): los beats del outline con
+    fechas (D+/T+) están en ORDEN CAUSAL OBLIGATORIO. No muevas un
+    evento fechado a otra posición del capítulo aunque el arco
+    emocional lo sugiera — las dependencias causales (una conversión
+    antes de un pacto, una decisión antes de una acción) son canon.
+    Si el orden del outline te parece dramáticamente inferior, escribe
+    el orden del outline de todas formas: la estructura ya fue
+    decidida por el autor.
+33. PROVIDENCIA SIN FABRICACIÓN: la fe de esta novela se muestra en lo
+    que los personajes ELIGEN mirar y hacer, jamás en coincidencias
+    que trabajen por ellos. Prohibido: objetos sagrados que aparecen
+    sin explicación mundana, biblias que se abren "solas" en el verso
+    perfecto, señales inequívocas que sustituyen la decisión del
+    personaje. Las señales legítimas preexisten y están disponibles
+    para cualquiera (como las pintas de Miqueas 7:7); la gracia está
+    en que el personaje decide atenderlas, con esfuerzo y con costo.
+
+Escribe el capítulo ahora. Texto completo, de principio a fin.
 """
 
     print(f"Drafting Chapter {chapter_num}...", file=sys.stderr)

@@ -28,7 +28,7 @@ def call_writer(prompt, max_tokens=4000):
         "model": WRITER_MODEL,
         "max_tokens": max_tokens,
         "temperature": 0.1,
-        "system": "You summarize novel chapters precisely. State what HAPPENS, what CHANGES, and what QUESTIONS are left open. No evaluation. No praise. Just events and shifts.",
+        "system": "Resumes capítulos de novela con precisión, EN ESPAÑOL. Di qué OCURRE, qué CAMBIA y qué PREGUNTAS quedan abiertas. Sin evaluación. Sin elogios. Solo eventos y giros.",
         "messages": [{"role": "user", "content": prompt}],
     }
     resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=120)
@@ -83,21 +83,25 @@ def main():
     total_wc = sum(len((CHAPTERS_DIR / f"ch_{c:02d}.md").read_text().split()) for c in range(1, 20))
     
     # Assemble
-    full = f"""# THE SECOND SON OF THE HOUSE OF BELLS
-## Full-Arc Summary for Reader Panel
+    full = f"""# NOVELA — RESUMEN DE ARCO COMPLETO
+## Para el panel de lectores
 
-This document contains chapter summaries, opening/closing passages,
-and key dialogue for all 23 chapters. Total novel: {total_wc:,} words.
+Este documento contiene resúmenes de capítulos, pasajes de apertura y
+cierre, y diálogos clave. Total de la novela: {total_wc:,} palabras.
 
-PREMISE: In Cantamura, a city where law is sung into binding through
-specific musical intervals, 14-year-old Cass Bellwright can hear when
-someone is lying -- a quarter-tone between F and F-sharp that causes
-him physical pain. His older brother Perin has been bound to service
-in the House of Corda for 10 years through a contract their father
-allowed. The bells their family maintains contain a secret: a question
-("Do you consent to be bound?") embedded in the sub-harmonics by the
-city's founder 200 years ago. No one has ever heard it. No one has
-ever answered. Every binding in Cantamura is technically void.
+PREMISA: La madrugada del 7 de enero, a la 01:07 UTC, desaparecen en
+un instante los creyentes en Cristo y todos los niños menores de siete
+años: mil cuatrocientos millones de personas. Siete desconocidos en
+cuatro continentes sobreviven al momento marcados por un mismo número
+(las 7:07, las 5:07, las 3:07) y un versículo pintado en paredones de
+medio mundo (Miqueas 7:7, RVR1960). Mientras el financiero monegasco
+Massimo Lucenti ordena el caos con un pacto de siete años con Israel y
+un sistema de brazaletes que evoluciona hacia la marca, los siete
+convergen hacia un refugio en los Alpes suizos. A los 3.5 años exactos,
+Lucenti traiciona a Israel e impone la marca — y la resistencia
+responde con una infiltración, una liberación y la jugada maestra de
+un camionero. Thriller apocalíptico cristiano, marco futurista
+premilenial pretribulacional.
 
 ---
 

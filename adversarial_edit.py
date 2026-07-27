@@ -12,6 +12,7 @@ import json
 import re
 from pathlib import Path
 from dotenv import load_dotenv
+from lang_es import ES_JUDGE_NOTE  # instrucción de idioma español para los jueces
 
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
@@ -24,6 +25,7 @@ EDIT_LOG_DIR = BASE_DIR / "edit_logs"
 EDIT_LOG_DIR.mkdir(exist_ok=True)
 
 def call_judge(prompt, max_tokens=8000):
+    prompt = ES_JUDGE_NOTE + prompt
     import httpx
     headers = {
         "x-api-key": API_KEY,

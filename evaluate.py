@@ -44,80 +44,12 @@ EVAL_LOG_DIR.mkdir(exist_ok=True)
 
 # ---- Mechanical Slop Detection (no LLM needed) ----
 
-TIER1_BANNED = [
-    "delve", "utilize", "leverage", "facilitate", "elucidate",
-    "embark", "endeavor", "encompass", "multifaceted", "tapestry",
-    "paradigm", "synergy", "synergize", "holistic", "catalyze",
-    "catalyst", "juxtapose", "myriad", "plethora",
-]
-
-TIER2_SUSPICIOUS = [
-    "robust", "comprehensive", "seamless", "seamlessly", "cutting-edge",
-    "innovative", "streamline", "empower", "foster", "enhance", "elevate",
-    "optimize", "pivotal", "intricate", "profound", "resonate",
-    "underscore", "harness", "cultivate", "bolster", "galvanize",
-    "cornerstone", "game-changer", "scalable",
-]
-
-TIER3_FILLER = [
-    r"it'?s worth noting that",
-    r"it'?s important to note that",
-    r"^importantly,?\s",
-    r"^notably,?\s",
-    r"^interestingly,?\s",
-    r"let'?s dive into",
-    r"let'?s explore",
-    r"as we can see",
-    r"^furthermore,?\s",
-    r"^moreover,?\s",
-    r"^additionally,?\s",
-    r"in today'?s .*(fast-paced|digital|modern)",
-    r"at the end of the day",
-    r"it goes without saying",
-    r"when it comes to",
-    r"one might argue that",
-    r"not just .+, but",
-]
-
-TRANSITION_OPENERS = [
-    "however", "furthermore", "additionally", "moreover",
-    "nevertheless", "consequently", "nonetheless", "similarly",
-]
-
-# Fiction-specific AI tells (prose clichés that betray machine origin)
-FICTION_AI_TELLS = [
-    r"a sense of \w+",
-    r"couldn'?t help but feel",
-    r"the weight of \w+",
-    r"the air was thick with",
-    r"eyes widened",
-    r"a wave of \w+ washed over",
-    r"a pang of \w+",
-    r"heart pounded in (?:his|her|their) chest",
-    r"(?:raven|dark|golden|silver) (?:hair|tresses) (?:spilled|cascaded|tumbled|fell)",
-    r"piercing (?:blue|green|gray|grey|dark) eyes",
-    r"a knowing (?:smile|grin|look|glance)",
-    r"(?:he|she|they) felt a (?:surge|rush|wave|pang|flicker) of",
-    r"the silence (?:was|hung|stretched|grew) (?:heavy|thick|oppressive|deafening)",
-    r"let out a breath (?:he|she|they) didn'?t (?:know|realize)",
-    r"something (?:dark|ancient|primal|unnamed) stirred",
-]
-
-# Structural AI tics -- rhetorical formulas that betray AI composition
-STRUCTURAL_AI_TICS = [
-    r"(?:I'm|I am) not (?:saying|asking|suggesting) .{3,40}(?:I'm|I am) (?:saying|asking|suggesting)",  # "I'm not saying X. I'm saying Y"
-    r"(?:which|that) means either .{3,40} or ",  # "which means either X, or Y"
-    r"[Tt]here'?s a (?:difference|distinction)\.",  # formula capper
-    r"[Tt]hose are (?:different|not the same) things\.",  # formula capper
-    r"[Nn]ot (?:just|merely|simply) .{3,40}, but ",  # "not just X, but Y"
-    r"[Nn]ot (?:from|by|because of) .{3,40}, but (?:from|by|because)",  # "not from X, but from Y" in narration
-]
-
-# Show-don't-tell detectors: emotion TELLING patterns
-TELLING_PATTERNS = [
-    r"\b(?:he|she|they|I|we|[A-Z]\w+) (?:felt|was|seemed|looked|appeared) (?:angry|sad|happy|scared|nervous|excited|jealous|guilty|anxious|lonely|desperate|furious|terrified|elated|miserable|hopeful|confused|relieved|horrified|disgusted|ashamed|proud|bitter|defeated|triumphant)\b",
-    r"\b(?:angrily|sadly|happily|nervously|excitedly|desperately|furiously|anxiously|guiltily|bitterly|wearily|miserably)\b",
-]
+# Listas de detección en ESPAÑOL — ver lang_es.py
+from lang_es import (
+    TIER1_BANNED, TIER2_SUSPICIOUS, TIER3_FILLER, TRANSITION_OPENERS,
+    FICTION_AI_TELLS, STRUCTURAL_AI_TICS, TELLING_PATTERNS,
+    CALCOS_INGLES, UMBRAL_MENTE_X1000, UMBRAL_GERUNDIO_X1000, ES_JUDGE_NOTE,
+)
 
 
 def slop_score(text):
@@ -134,10 +66,14 @@ def slop_score(text):
     words = text.lower().split()
     word_count = len(words) or 1
 
-    # Tier 1
+    # Tier 1 — soporta frases multipalabra del español ("un sinfín de")
     tier1_hits = []
+    lower_text = text.lower()
     for w in TIER1_BANNED:
-        c = sum(1 for token in words if token.strip(".,;:!?\"'()") == w)
+        if " " in w:
+            c = lower_text.count(w)
+        else:
+            c = sum(1 for token in words if token.strip(".,;:!?\"'()¿¡«»—") == w)
         if c > 0:
             tier1_hits.append((w, c))
 
@@ -162,8 +98,16 @@ def slop_score(text):
         if matches:
             tier3_hits.append((pattern, len(matches)))
 
-    # Em dash density
-    em_dashes = text.count("—") + text.count("--")
+    # Densidad de rayas — EXCLUYENDO las de diálogo (convención española).
+    # Una línea que abre con — es diálogo; se descuentan la raya inicial
+    # y hasta dos rayas de inciso ("—dijo—") que son legítimas.
+    em_dashes = 0
+    for _ln in text.split("\n"):
+        _s = _ln.lstrip()
+        _d = _s.count("—") + _s.count("--")
+        if _s.startswith("—") or _s.startswith("--"):
+            _d = max(0, _d - 3)
+        em_dashes += _d
     em_dash_density = (em_dashes / word_count) * 1000
 
     # Sentence length variation (coefficient of variation)
@@ -181,7 +125,7 @@ def slop_score(text):
     # Transition opener ratio
     transition_starts = 0
     for para in paragraphs:
-        first_word = para.split()[0].lower().strip(".,;:!?\"'()") if para.split() else ""
+        first_word = para.split()[0].lower().strip(".,;:!?\"'()¿¡«»—") if para.split() else ""
         if first_word in TRANSITION_OPENERS:
             transition_starts += 1
     transition_ratio = transition_starts / len(paragraphs) if paragraphs else 0
@@ -198,6 +142,23 @@ def slop_score(text):
     telling_count = 0
     for pattern in TELLING_PATTERNS:
         telling_count += len(re.findall(pattern, text, re.IGNORECASE))
+
+    # --- Métricas específicas del ESPAÑOL ---
+    # Calcos del inglés
+    calcos = []
+    for pattern in CALCOS_INGLES:
+        matches = re.findall(pattern, text, re.IGNORECASE)
+        if matches:
+            calcos.append((pattern[:40], len(matches)))
+    calco_count = sum(c for _, c in calcos)
+
+    # Densidad de adverbios en -mente
+    mente_count = len(re.findall(r"\b\w{3,}mente\b", text, re.IGNORECASE))
+    mente_density = (mente_count / word_count) * 1000
+
+    # Densidad de gerundios
+    gerundio_count = len(re.findall(r"\b\w+(?:ando|iendo|yendo)\b", text, re.IGNORECASE))
+    gerundio_density = (gerundio_count / word_count) * 1000
 
     # Structural AI tics (rhetorical formulas)
     structural_tics = []
@@ -221,6 +182,11 @@ def slop_score(text):
     penalty += min(fiction_tell_count * 0.3, 2.0)     # fiction AI tells: up to 2 pts
     penalty += min(telling_count * 0.2, 1.5)          # show-don't-tell: up to 1.5 pts
     penalty += min(structural_tic_count * 0.5, 2.0)   # structural AI tics: up to 2 pts
+    penalty += min(calco_count * 0.4, 1.5)            # calcos del inglés: hasta 1.5 pts
+    if mente_density > UMBRAL_MENTE_X1000:
+        penalty += min((mente_density - UMBRAL_MENTE_X1000) * 0.2, 1.0)
+    if gerundio_density > UMBRAL_GERUNDIO_X1000:
+        penalty += min((gerundio_density - UMBRAL_GERUNDIO_X1000) * 0.1, 1.0)
 
     penalty = min(penalty, 10.0)
 
@@ -232,6 +198,9 @@ def slop_score(text):
         "fiction_ai_tells": fiction_tells,
         "structural_ai_tics": structural_tics,
         "telling_violations": telling_count,
+        "calcos_ingles": calcos,
+        "mente_density": round(mente_density, 2),
+        "gerundio_density": round(gerundio_density, 2),
         "em_dash_density": round(em_dash_density, 2),
         "sentence_length_cv": round(sentence_length_cv, 3),
         "transition_opener_ratio": round(transition_ratio, 3),
@@ -255,6 +224,8 @@ def load_layer_files():
         "characters": load_file(BASE_DIR / "characters.md"),
         "outline": load_file(BASE_DIR / "outline.md"),
         "canon": load_file(BASE_DIR / "canon.md"),
+        "teologia": load_file(BASE_DIR / "TEOLOGIA.md"),
+        "resumen_caps": load_file(BASE_DIR / "resumen_capitulos.md"),
     }
 
 
@@ -273,6 +244,7 @@ def load_all_chapters():
 
 
 def call_judge(prompt, max_tokens=2000):
+    prompt = ES_JUDGE_NOTE + prompt  # instrucción de idioma para el juez
     """Call the Anthropic judge LLM and return its response text."""
     import httpx
 
@@ -298,7 +270,7 @@ def call_judge(prompt, max_tokens=2000):
         f"{API_BASE_URL}/v1/messages",
         headers=headers,
         json=payload,
-        timeout=180,
+        timeout=400,
     )
     resp.raise_for_status()
     return resp.json()["content"][0]["text"]
@@ -387,6 +359,9 @@ OUTLINE:
 CANON (established facts):
 {canon}
 
+TEOLOGIA (marco doctrinal declarado):
+{teologia}
+
 CROSS-CHECKS (perform these before scoring):
 1. Check all example dialogue lines against ANTI-SLOP patterns:
    - Look for structural formulas repeated across characters
@@ -396,7 +371,7 @@ CROSS-CHECKS (perform these before scoring):
      share the same sentence structures
 2. Check for missing NEGATIVE SPACE -- what's absent?
    - Are there gaps in the magic system that would block a specific
-     plot scene? (e.g., can Cass hear lies in written documents?
+     plot scene? (¿alguna capacidad, tecnología o regla del mundo se usa fuera de sus límites establecidos?
      What happens during the climax -- what rule resolves it?)
    - Are there characters needed for the plot who don't exist?
    - Are there scenes the outline demands that the world can't support?
@@ -558,6 +533,13 @@ CHARACTER REGISTRY:
 CANON (established hard facts -- violations are bugs):
 {canon}
 
+TEOLOGIA (marco doctrinal declarado -- las contradicciones son bugs):
+{teologia}
+
+RESUMEN DE CAPÍTULOS ANTERIORES (continuidad -- contradicciones con
+nombres, hechos u objetos ya establecidos son bugs):
+{resumen_caps}
+
 CHAPTER OUTLINE ENTRY:
 {chapter_outline}
 
@@ -568,6 +550,29 @@ THE CHAPTER TO EVALUATE:
 {chapter_text}
 
 CROSS-CHECKS (perform before scoring):
+-1. ESTRUCTURA DE ESCENAS (CRAFT-ES): segmenta el capítulo en escenas.
+   Para cada una identifica: (a) qué QUIERE el POV en la escena, (b) la
+   oposición, (c) el tipo de desenlace ("Sí, pero" / "No, y además" /
+   "No, pero" / "Sí, y"), (d) valor emocional de entrada -> salida.
+   Reglas: >=60% de desenlaces deben ser "Sí, pero" o "No, y además";
+   ninguna escena puede salir con el mismo valor con que entró;
+   ninguna escena de puro servicio informativo; conexión entre escenas
+   por "por lo tanto/pero", nunca "y luego"; el POV termina el
+   capítulo distinto de como empezó. Reporta la tabla de escenas en
+   "escenas" y penaliza las violaciones en el score.
+0bis. CONTINUIDAD ENTRE CAPÍTULOS: verifica nombres de personajes
+   (¿algún secundario ya nombrado en capítulos previos aparece aquí
+   con OTRO nombre?), estados de objetos (¿un objeto está donde el
+   resumen dice que quedó?), y conocimiento (¿el POV sabe solo lo que
+   los capítulos previos le dieron?). Cualquier contradicción va en
+   "continuity_issues" y penaliza el score.
+0. VERIFICACIÓN TEOLÓGICA (contra TEOLOGIA.md, no contra otras
+   tradiciones): (a) citas bíblicas textuales RVR1960 con referencia
+   correcta; (b) cronología compatible con la semana setenta y con el
+   instante del rapto (01:07 UTC, invierno); (c) brazalete/cápsula/marca
+   en la etapa correcta con la salvaguarda de Ap 14:9-11; (d) salvación
+   por fe, no por supervivencia; sin salvación post-marca. Cualquier
+   violación se reporta en "teologia_issues" y penaliza el score.
 1. QUOTE TEST: Find the 3 best sentences and 3 weakest sentences.
    If you can't find 3 weak ones, lower your standards -- every
    chapter has weak moments. Look for: generic phrasing where
@@ -610,7 +615,7 @@ Score these dimensions:
 
 - character_voice: Remove all dialogue tags mentally. Can you tell who's
   speaking? Do characters ever sound alike? Does dialogue read as speech
-  or as written prose? Does Cass sound like a specific 14-year-old, or
+  or as written prose? ¿Suena el personaje POV como la persona específica definida en characters.md, o
   like "young protagonist"? Does anyone say something surprising -- not
   just the right thing, but a REAL thing? Characters who never stumble,
   hesitate, or say something slightly wrong are AI-pattern characters.
@@ -621,7 +626,7 @@ Score these dimensions:
 
 - prose_quality: Sentence variety (measure: do 3+ consecutive sentences
   start the same way?). Specificity (concrete nouns > abstract).
-  Metaphors from Cass's experience, not from a thesaurus. Show-don't-tell
+  Metáforas desde la experiencia del personaje POV, no de un diccionario. Show-don't-tell
   at emotional peaks. QUOTE the weakest sentence and explain why. Also
   check for: repeated phrases, leaned-on constructions, paragraphs that
   could be cut without loss.
@@ -657,6 +662,9 @@ Respond with JSON:
   "three_weakest_sentences": ["quote 1", "quote 2", "quote 3"],
   "three_strongest_sentences": ["quote 1", "quote 2", "quote 3"],
   "ai_patterns_detected": ["list any AI writing patterns found"],
+  "escenas": [["escena (3-5 palabras)", "deseo del POV", "desenlace: Sí-pero/No-y-además/No-pero/Sí-y", "valor entrada -> salida"]],
+  "continuity_issues": [["cita del capítulo actual", "qué contradice de capítulos previos", "corrección"]],
+  "teologia_issues": [["capítulo o pasaje", "problema doctrinal/cita/cronología", "corrección sugerida"]],
   "overall_score": N,
   "weakest_dimension": "...",
   "top_3_revisions": ["specific, actionable revision 1", "revision 2", "revision 3"],
@@ -692,6 +700,8 @@ def evaluate_chapter(chapter_num):
         world=layers["world"][:4000],  # truncate world bible
         characters=layers["characters"],
         canon=layers["canon"],
+        teologia=layers["teologia"][:6000],
+        resumen_caps=(layers.get("resumen_caps") or "(sin capítulos registrados)")[:5000],
         chapter_outline=chapter_outline,
         prev_chapter_tail=prev_tail,
         chapter_text=chapter_text,
