@@ -1,7 +1,7 @@
 # ESTADO — rama `framework/es-multilibro`
 
-Última actualización: 2026-07-27. Escrito para retomar en otra sesión sin
-releer todo el historial de commits.
+Última actualización: 2026-07-27 (tras cerrar la Tarea 2). Escrito para
+retomar en otra sesión sin releer todo el historial de commits.
 
 ## Punto de partida que sigue vigente
 
@@ -11,7 +11,7 @@ releer todo el historial de commits.
   `git fetch --all` + `git ls-remote --heads origin`). No hay comparación
   disponible contra la novela anterior en inglés; toda la línea base se
   armó con fixtures de prueba en español, no con capítulos reales.
-- **Los 5 commits de esta rama están solo en local, sin pushear.** Se
+- **Los commits de esta rama están solo en local, sin pushear.** Se
   intentó `git push` y un token de GitHub quedó expuesto por accidente en
   el chat durante el intento (pegado mal en la terminal). El usuario lo
   revocó de inmediato. El push queda pendiente para la próxima sesión, con
@@ -27,6 +27,8 @@ releer todo el historial de commits.
 625fc7f Tarea 1c (A): flag --solo-mecanico en evaluate.py
 975ac18 Tarea 1c (B): integra deteccion_es.py en slop_score()
 49a5976 Tarea 1d: fixtures mínimos de voz y mundo en español
+76454a5 docs: ESTADO.md para retomar sin releer el historial
+04b6439 Tarea 2: descontamina draft_chapter.py y gen_brief.py
 ```
 
 `1c` y `1d` no estaban en el `ENCARGO_CLAUDE_CODE.md` original -- se
@@ -84,6 +86,52 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
      estimación sin corpus de referencia, pendiente de recalibrar con
      prosa española real.
 
+### Tarea 2 — Descontaminar el redactor (COMPLETA, commit `04b6439`)
+
+- **`draft_chapter.py`**: prompt partido en armazón invariante + reglas
+  leídas de archivos. `TITULO` viene de `state.json` clave `"titulo"` (con
+  fallback a `"title"` por compatibilidad hacia atrás). `POV` combina el
+  nombre desde `personajes.md`/`characters.md` (encabezado `## Nombre
+  (POV...)`) y la persona/tiempo desde `voz.md` Parte 2. `POZOS_LEXICOS`
+  desde "Registro léxico". `REGLAS_ESPECIFICAS` desde la subsección nueva
+  `### Reglas específicas de capítulo` en `voz.md` Parte 2 (acepta también
+  el nombre legado en inglés "Chapter-Specific Rules"; lista vacía si no
+  existe, no rompe). Objetivo de palabras: `CALIBRACION["palabras_objetivo_capitulo"]`
+  (2000), no hardcodeado.
+- **`ultimos_finales(n=3)`**: función nueva en `draft_chapter.py`. Lee el
+  párrafo final de los últimos n capítulos ya escritos y se inyecta en el
+  prompt con la instrucción de no repetir ese tipo de cierre. Reemplaza el
+  antipatrón hardcodeado ("no termines con Cass escuchando a su padre").
+  Vacía sin capítulos previos -- no rompe (probado).
+- **Prompt completo en español** (system message + instrucciones de
+  escritura + patrones a evitar): el modelo escribe en castellano, así que
+  pedirle instrucciones en inglés aumentaba la probabilidad de calcos. El
+  ítem sobre clichés de IA ahora referencia `CLICHES_FICCION` (español) en
+  vez de frases en inglés.
+- **Nomenclatura bilingüe**: `draft_chapter.py` (`ruta_bilingue()`/
+  `load_file_bilingue()`) y `gen_brief.py` (`_ruta_bilingue()`) buscan
+  primero `voz.md`/`personajes.md`/`mundo.md`/`esquema.md`, caen a los
+  nombres en inglés si no existen. `canon.md` no cambia.
+- **`gen_brief.py::extract_voice_rules()`**: ya no devuelve 7 reglas fijas
+  (4 de *Bells*). Ahora parsea `voice.md`/`voz.md` Parte 1 (patrones
+  estructurales reales) y Parte 2 (una regla por subsección con contenido
+  real, ninguna para subsecciones vacías -- probado explícitamente con un
+  `voice.md` a medio llenar, que es el estado normal durante varias
+  iteraciones de fundación).
+- **Bug propio corregido en el camino**: el helper `_seccion()` (usado en
+  los dos archivos) rompía el anclaje `^...$` cuando el patrón de búsqueda
+  tenía `|` sin agrupar -- buscar "Guardrails" hacía match con la palabra
+  suelta del párrafo introductorio de `voice.md` en vez del encabezado
+  `## Part 1`. Corregido envolviendo el patrón en `(?:...)`.
+- **Aceptación verificada**: `grep -riE "cass|bell|bronze|under-note"
+  draft_chapter.py gen_brief.py` → cero resultados. 24 tests en verde
+  (`uv run python -m pytest tests/ -v`), incluyendo tests funcionales con
+  `voz.md`/`personajes.md` inventados y el caso de sección vacía.
+- **Corrección de registro**: `docs/BASELINE.md` decía que `voice.md`/
+  `world.md`/`characters.md` eran los de *Bells* en inglés. Es falso --
+  son plantillas vacías (Parte 2 sin llenar), no contenido contaminado.
+  Corregido en `docs/BASELINE.md` durante esta tarea.
+
 ## Qué falta de la Tarea 1
 
 - **1a** (parte no cubierta por 1c): flag `--idioma es|en` para que
@@ -106,25 +154,19 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
 - El **`overall_score`** completo de `evaluate.py` (juez LLM + mecánico)
   sobre los dos fixtures sigue **PENDIENTE** en `docs/BASELINE.md`.
 
-## Qué sigue (Tareas 2, 3 y 4 del encargo, sin empezar)
+## Qué sigue (Tareas 3 y 4 del encargo, sin empezar)
 
-Ver `ENCARGO_CLAUDE_CODE.md` para el detalle completo de cada una.
+Ver `ENCARGO_CLAUDE_CODE.md` para el detalle completo de cada una. La
+Tarea 2 ya está completa (ver arriba).
 
-- **Tarea 2 — Descontaminar el redactor.** `draft_chapter.py` tiene
-  hardcodeado el título, POV y metáforas de *Bells* (Cass, "the
-  under-note", bronce y campanas). Hay que partir el prompt en armazón
-  invariante + reglas leídas de `voz.md`/`personajes.md`, y agregar
-  `ultimos_finales(n=3)` para reemplazar el antipatrón hardcodeado sobre
-  cómo termina cada capítulo. Mismo tratamiento para
-  `gen_brief.py::extract_voice_rules()`. No depende de `.env` para
-  escribirse, pero probarlo con contenido real sí.
 - **Tarea 3 — Campo de ambición por capítulo.** Cada capítulo del esquema
   declara `ambicion: pico | sosten | valle` con umbral propio (7.5 / 6.5 /
   6.0) en vez de un umbral único de 6.0. Toca `gen_outline.py`,
   `evaluate.py` (el umbral de aceptación deja de ser una constante
   global) y `run_pipeline.py`. Incluye validación: esquema con <15% de
   picos debe advertir. No depende de `.env` para la lógica del umbral,
-  aunque `evaluate.py` sigue necesitando la API para el resto.
+  aunque `evaluate.py` sigue necesitando la API para el resto. **En curso
+  ahora mismo, siguiente después de este ESTADO.md.**
 - **Tarea 4 — Alcance de siembra (serie).** El libro de siembras hoy
   exige que todo se pague dentro del mismo volumen; para una serie hace
   falta `alcance: "libro" | "serie"` con las 4 reglas de validación de la
@@ -132,11 +174,8 @@ Ver `ENCARGO_CLAUDE_CODE.md` para el detalle completo de cada una.
   existe, todo es alcance de libro -- comportamiento actual sin cambios).
   Toca `gen_outline_part2.py`. Tampoco depende de `.env`.
 
-De las tres, **la 2 y la 3 se pueden empezar sin API key** (son cambios
-estructurales/de prompt-armado, no requieren invocar el juez para
-escribirse, aunque sí para validarlas del todo). La 4 tampoco depende de
-`.env`. Ninguna estaba bloqueada por la falta de key -- si se retoma antes
-de tener `.env`, son las candidatas naturales.
+Ninguna de las dos está bloqueada por la falta de `.env` -- son las
+candidatas naturales mientras no haya API key.
 
 ## Cómo retomar
 
@@ -147,5 +186,5 @@ de tener `.env`, son las candidatas naturales.
 2. Push pendiente: `git push origin framework/es-multilibro` (o a la URL
    con token, nunca pegado en el chat -- solo como variable de entorno ya
    exportada).
-3. Si se retoma sin `.env` todavía, las Tareas 2, 3 o 4 son las que se
-   pueden avanzar.
+3. Si se retoma sin `.env` todavía, la Tarea 3 (en curso) o la Tarea 4 son
+   las que se pueden avanzar.
