@@ -11,17 +11,19 @@ retomar en otra sesión sin releer todo el historial de commits.
   `git fetch --all` + `git ls-remote --heads origin`). No hay comparación
   disponible contra la novela anterior en inglés; toda la línea base se
   armó con fixtures de prueba en español, no con capítulos reales.
-- **Push: hecho, parcialmente.** `git push` llegó a subir hasta `c513adf`
-  (cierre de la Tarea 4). Los commits de la Tarea 2b en adelante
-  (`5a78c52` y los que sigan) **todavía no están pusheados** -- confirmar
-  con `git log origin/framework/es-multilibro..HEAD` al retomar.
-  **Dos tokens de GitHub quedaron expuestos en el chat durante esta
-  sesión** (pegados mal en la terminal, dos veces), y el usuario los
-  revocó las dos veces. Si se necesita pushear de nuevo: token nuevo,
-  exportado como variable de entorno en la terminal del usuario, nunca
-  pegado en el chat. `gh` no está instalado en este entorno (se intentó
-  `gh auth login`, no existe el binario) -- la única vía probada es
-  `git push https://$TOKEN@github.com/...`.
+- **Push: al día.** Todo hasta `648b0c3` está en
+  `origin/framework/es-multilibro` (confirmado con `git fetch` +
+  `git log origin/framework/es-multilibro..HEAD`, vacío).
+  **Cuatro tokens de GitHub distintos quedaron expuestos en el chat
+  durante esta sesión** (pegados mal en la terminal, en varios intentos
+  de push). El primero fue revocado con confirmación explícita del
+  usuario; los otros tres no tienen confirmación explícita en el chat --
+  **verificar que estén revocados**, no asumir que sí. Si se necesita
+  pushear de nuevo: token nuevo, exportado como variable de entorno en la
+  terminal del usuario, nunca pegado en el chat -- o mejor, un credential
+  helper de git configurado una sola vez. `gh` no está instalado en este
+  entorno (se intentó `gh auth login`, no existe el binario) -- la única
+  vía probada es `git push https://$TOKEN@github.com/...`.
 
 ## Commits de esta rama (orden cronológico)
 
@@ -271,9 +273,10 @@ para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
   `docs/ESTADO.md` decían que `world.md`/`characters.md` estaban vacíos
   "porque son plantillas". Incompleto: están vacíos porque el pipeline
   nunca pudo escribirlos (ver Tarea 6). Corregido en los dos archivos.
-- **Dos tokens de GitHub expuestos en el chat durante esta tarea** (no
-  durante la ejecución de la tarea en sí, sino en los intentos de push en
-  paralelo) -- ver "Punto de partida" arriba.
+- **Cuatro tokens de GitHub expuestos en el chat en total durante la
+  sesión** (no durante la ejecución de las tareas en sí, sino en los
+  intentos de push en paralelo) -- ver "Punto de partida" arriba. El push
+  terminó al día: todo hasta `648b0c3` está en el remoto.
 
 ## Qué falta de la Tarea 1
 

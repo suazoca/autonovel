@@ -22,7 +22,7 @@ y testeadas (62 tests, todos en verde, sin necesitar API). Falta: Tarea 6
 | Push | Al día -- todo hasta `648b0c3` está en `origin/framework/es-multilibro` |
 | Working tree | Limpio |
 | `gh` CLI | No instalado en este entorno |
-| Incidentes de seguridad | Dos tokens de GitHub quedaron expuestos en el chat durante esta sesión (pegados mal en la terminal). Ambos revocados por el usuario de inmediato. Si hace falta pushear: token nuevo, **solo** como variable de entorno ya exportada en la terminal del usuario, nunca pegado en el chat. |
+| Incidentes de seguridad | **Cuatro** tokens de GitHub distintos quedaron expuestos en el chat durante esta sesión (pegados mal en la terminal, en varios intentos de push). El primero fue revocado con confirmación explícita del usuario; para los otros tres no hay confirmación explícita en esta conversación -- **verificar que estén revocados** antes de asumir que no. Si hace falta pushear de nuevo: token nuevo, **solo** como variable de entorno ya exportada en la terminal del usuario, nunca pegado en el chat. Considerar un credential helper de git configurado una sola vez, para no tener que pegar el token en cada push. |
 
 ## Commits de esta rama (los que no vinieron por `git pull`)
 
