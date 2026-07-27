@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
+from deteccion_es import CALIBRACION
 from fundacion_comun import ruta_bilingue, load_file, load_file_bilingue, extraer_voz_parte2, exigir_semilla
 
 BASE_DIR = Path(__file__).parent
@@ -29,11 +30,12 @@ def call_writer(prompt, max_tokens=16000):
         "max_tokens": max_tokens,
         "temperature": 0.7,
         "system": (
-            "You are a character designer for literary fiction with deep knowledge of "
-            "wound/want/need/lie frameworks, Sanderson's three sliders, and dialogue "
-            "distinctiveness. You create characters who feel like real people with "
-            "contradictions, secrets, and speech patterns you can hear. "
-            "You never use AI slop words. You write in clean, direct prose."
+            "Sos un diseñador de personajes de ficción literaria con conocimiento "
+            "profundo de los frameworks herida/quiere/necesita/mentira, los tres "
+            "sliders de Sanderson, y distintividad de diálogo. Creás personajes que se "
+            "sienten personas reales, con contradicciones, secretos y patrones de habla "
+            "que se pueden escuchar. Nunca usás relleno de IA. Escribís en prosa limpia "
+            "y directa, en español."
         ),
         "messages": [{"role": "user", "content": prompt}],
     }
@@ -43,99 +45,85 @@ def call_writer(prompt, max_tokens=16000):
 
 
 def build_prompt(seed, world, voice_part2):
-    return f"""Build a complete character registry for this fantasy novel. This is CHARACTERS.MD --
-the definitive reference for WHO exists in this story, what drives them, how they speak,
-and what secrets they carry.
+    palabras_capitulo = CALIBRACION["palabras_objetivo_capitulo"]
+    palabras_novela = CALIBRACION["palabras_objetivo_novela"]
+    capitulos_totales = round(palabras_novela / palabras_capitulo)
 
-SEED CONCEPT:
+    return f"""Construí un registro de personajes completo para esta novela. Este es el
+archivo PERSONAJES.MD -- la referencia definitiva de QUIÉN existe en esta historia,
+qué los mueve, cómo hablan, y qué secretos cargan.
+
+El género sale de la SEMILLA y del MUNDO cargados abajo, no de este prompt. Los
+nombres, roles y relaciones deben derivarse de esos documentos -- no inventes un
+reparto genérico de fantasía ni reutilices nombres de ninguna otra novela.
+
+CONCEPTO SEMILLA:
 {seed}
 
-WORLD BIBLE (the world these characters inhabit):
+BIBLIA DE MUNDO (el mundo que habitan estos personajes):
 {world}
 
-VOICE IDENTITY (the novel's tone):
+IDENTIDAD DE VOZ (el tono de la novela):
 {voice_part2}
 
-CHARACTER CRAFT REQUIREMENTS (from CRAFT.md):
+REQUISITOS DE OFICIO:
 
-### The Three Sliders (Sanderson)
-Every character has three independent dials (0-10):
-  PROACTIVITY -- Do they drive the plot or react to it?
-  LIKABILITY  -- Does the reader empathize with them?
-  COMPETENCE  -- Are they good at what they do?
-Rule: compelling = HIGH on at least TWO, or HIGH on one with clear growth.
+### Los tres sliders (Sanderson)
+Cada personaje tiene tres diales independientes (0-10):
+  PROACTIVIDAD -- ¿impulsa la trama o reacciona a ella?
+  SIMPATÍA     -- ¿el lector empatiza con él/ella?
+  COMPETENCIA  -- ¿es bueno/a en lo que hace?
+Regla: un personaje atractivo tiene ALTO en al menos dos, o ALTO en uno con
+crecimiento claro.
 
-### Wound / Want / Need / Lie Framework
-A causal chain:
-  GHOST (backstory event) -> WOUND (ongoing damage) -> LIE (false belief to cope)
-    -> WANT (external goal driven by Lie) -> NEED (internal truth, opposes Lie)
-Rules: Want and Need must be IN TENSION. Lie statable in one sentence.
-  Truth is its direct opposite.
+### Framework fantasma/herida/quiere/necesita/mentira
+Una cadena causal:
+  FANTASMA (evento de trasfondo) -> HERIDA (daño persistente)
+    -> MENTIRA (creencia falsa para sobrellevarlo)
+    -> QUIERE (objetivo externo impulsado por la mentira)
+    -> NECESITA (verdad interna, opuesta a la mentira)
+Reglas: quiere y necesita deben estar EN TENSIÓN. La mentira debe poder decirse
+en una oración. La verdad es su opuesto directo.
 
-### Dialogue Distinctiveness (8 dimensions)
-1. Vocabulary level  2. Sentence length  3. Contractions/formality
-4. Verbal tics  5. Question vs statement ratio  6. Interruption patterns
-7. Metaphor domain  8. Directness vs indirectness
-Test: Remove dialogue tags. Can you tell who's speaking?
+### Distintividad de diálogo (8 dimensiones)
+1. Nivel de vocabulario  2. Longitud de oración  3. Contracciones/formalidad
+4. Muletillas  5. Proporción pregunta/afirmación  6. Patrones de interrupción
+7. Dominio metafórico  8. Directo vs. indirecto
+Prueba: quitá las acotaciones de diálogo. ¿Se puede saber quién habla?
 
-BUILD THE REGISTRY WITH AT LEAST THESE CHARACTERS:
+CUÁNTOS PERSONAJES:
 
-1. **Cass Bellwright** (protagonist, POV character)
-   - Full wound/want/need/lie chain
-   - Three sliders with justification
-   - Arc type (positive/negative/flat)
-   - Detailed speech pattern (8 dimensions)
-   - Physical habits and tells
-   - At least 2 secrets
-   - Key relationships mapped
+Construí el registro con los personajes que la trama necesite -- ni un reparto
+fijo ni una lista mínima arbitraria. Como mínimo: el/la protagonista (POV) y
+quien encarna el antagonismo del conflicto central (no necesariamente un
+villano: alguien cuyos intereses chocan con los del protagonista). Para una
+novela de ~{capitulos_totales} capítulos, esto suele significar entre 5 y 9
+personajes con profundidad completa, más los secundarios que la semilla y el
+mundo pidan. Los nombres salen de la semilla/mundo, nunca de otra novela.
 
-2. **Eddan Bellwright** (father)
-   - Same depth as Cass
-   - His relationship to the sealed journals, the shaking hands
-   - What he knows and what he's hiding
+PARA CADA PERSONAJE INCLUÍ:
+- Nombre, edad, rol
+- Cadena fantasma/herida/quiere/necesita/mentira (para los principales)
+- Los tres sliders (proactividad/simpatía/competencia) con números y
+  justificación
+- Tipo y trayectoria de arco
+- Patrón de habla (las 8 dimensiones, con líneas de ejemplo)
+- Apariencia física (específica, no genérica)
+- Hábitos físicos y tics inconscientes
+- Secretos (lo que el lector no sabe de entrada)
+- Relaciones clave (mapeadas a otros personajes)
+- Rol temático (¿qué pregunta encarna este personaje?)
 
-3. **Perin Bellwright** (brother)
-   - Even though he's absent for much of the story, he needs full depth
-   - What actually happened with the Corda contract
-   - His presence through absence
-
-4. **Maret Corda** (antagonist)
-   - Not a villain -- someone whose interests conflicts with Cass's
-   - Her own wound/want/need/lie (she should be understandable)
-
-5. **Rector Suvaine** (Academy Chancellor)
-   - The institutional antagonist -- the system personified
-   - She believes she's protecting Cantamura
-
-6. **Torvald Hess** (Compact leader)
-   - The outsider perspective on the system
-   - What he represents thematically
-
-7. **At least 1-2 additional characters** that the story needs
-   - A peer/friend for Cass at the Academy?
-   - Someone at the House of Corda who knows Perin?
-   - A Court Singer with divided loyalties?
-
-FOR EACH CHARACTER INCLUDE:
-- Name, age, role
-- Ghost/Wound/Want/Need/Lie chain (for major characters)
-- Three sliders (proactivity/likability/competence) with numbers and justification
-- Arc type and arc trajectory
-- Speech pattern (all 8 dimensions, with example lines)
-- Physical appearance (specific, not generic)
-- Physical habits and unconscious tells
-- Secrets (what the reader doesn't learn immediately)
-- Key relationships (mapped to other characters)
-- Thematic role (what question does this character embody?)
-
-IMPORTANT:
-- Characters must INTERCONNECT. Their wants should conflict with each other.
-- Every secret should be something that would CHANGE the story if revealed.
-- Speech patterns must be distinct enough to pass the no-tags test.
-- Give Cass habits that come from his gift (the pain, the constant listening).
-- The father's shaking hands should connect to something specific.
-- Maret Corda should be as fully realized as Cass -- a worthy antagonist.
-- Target ~3000-4000 words. Dense character work, not padding.
+IMPORTANTE:
+- Los personajes deben INTERCONECTAR. Sus deseos deberían chocar entre sí.
+- Cada secreto debería ser algo que CAMBIARÍA la historia si se revelara.
+- Los patrones de habla deben ser lo bastante distintos para pasar la prueba
+  sin acotaciones.
+- Los hábitos físicos de cada personaje deberían conectar con algo específico
+  de su historia o su mundo -- no ser decorativos.
+- Quien encarne el antagonismo debería estar tan bien realizado/a como el/la
+  protagonista.
+- Extensión objetivo ~3000-4000 palabras. Trabajo de personaje denso, no relleno.
 """
 
 

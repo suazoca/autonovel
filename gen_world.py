@@ -29,12 +29,13 @@ def call_writer(prompt, max_tokens=16000):
         "max_tokens": max_tokens,
         "temperature": 0.7,
         "system": (
-            "You are a fantasy worldbuilder with deep knowledge of Sanderson's Laws, "
-            "Le Guin's prose philosophy, and TTRPG-quality lore design. "
-            "You write world bibles that are specific, interconnected, and imply depth "
-            "beyond what's stated. You never use AI slop words (delve, tapestry, myriad, etc). "
-            "You write in clean, direct prose. Every rule has a cost. Every cultural detail "
-            "implies a history. Every location has a sensory signature."
+            "Sos un diseñador de mundos con conocimiento profundo de las Leyes de "
+            "Sanderson, la filosofía de prosa de Le Guin, y diseño de lore de calidad "
+            "TTRPG. Escribís biblias de mundo específicas, interconectadas, que sugieren "
+            "profundidad más allá de lo dicho. Nunca usás relleno de IA (profundizar, "
+            "entramado, miríada, etc). Escribís en prosa limpia y directa, en español. "
+            "Cada regla tiene un costo. Cada detalle cultural implica una historia. "
+            "Cada lugar tiene una firma sensorial."
         ),
         "messages": [{"role": "user", "content": prompt}],
     }
@@ -44,76 +45,88 @@ def call_writer(prompt, max_tokens=16000):
 
 
 def build_prompt(seed, voice_part2, craft):
-    return f"""Build a complete world bible for this fantasy novel. This is the WORLD.MD file --
-the definitive reference for everything that EXISTS in this world. A writer should be able
-to resolve any worldbuilding question from this document alone.
+    return f"""Construí una biblia de mundo completa para esta novela. Este es el
+archivo MUNDO.MD -- la referencia definitiva de todo lo que EXISTE en este mundo.
+Un escritor debería poder resolver cualquier pregunta de ambientación a partir de
+este documento solo.
 
-SEED CONCEPT:
+El género y el tono salen de la SEMILLA, no de este prompt -- no asumas que es
+fantasía ni que necesita un sistema de magia. Si la semilla no plantea reglas
+excepcionales (magia, tecnología especulativa, o cualquier otra capacidad que no
+existe en el mundo real), no inventes ninguna.
+
+CONCEPTO SEMILLA:
 {seed}
 
-VOICE IDENTITY (the tone and register of this novel):
+IDENTIDAD DE VOZ (tono y registro de esta novela):
 {voice_part2}
 
-CRAFT REQUIREMENTS (from CRAFT.md -- follow these):
-- Magic system needs HARD RULES with COSTS and LIMITATIONS per Sanderson's Second Law
-- Limitations >= powers in narrative prominence
-- Trace implications of magic through society, economy, law, religion
-- At least 2-3 societal implications of magic explored in depth
-- History must create PRESENT-DAY TENSIONS that drive the plot (not just backdrop)
-- Geography must be specific and sensory (not generic fantasy)
-- Iceberg principle: imply more than you state
-- Interconnection: pulling one thread should move everything
+REQUISITOS DE OFICIO:
+- SI el mundo tiene un sistema de magia u otra capacidad excepcional (según lo
+  que pida la semilla): reglas duras con COSTOS y LIMITACIONES, según la Segunda
+  Ley de Sanderson. Las limitaciones deben pesar tanto o más que los poderes en
+  el relato. Rastreá las implicaciones a través de la sociedad, la economía, la
+  ley, la religión (al menos 2-3 implicaciones sociales exploradas en profundidad).
+- La historia debe crear TENSIONES DEL PRESENTE que impulsen la trama, no ser
+  solo telón de fondo.
+- La geografía debe ser específica y sensorial.
+- Principio del iceberg: sugerí más de lo que decís.
+- Interconexión: tirar de un hilo debería mover todo lo demás.
 
-STRUCTURE THE DOCUMENT WITH THESE SECTIONS:
+ESTRUCTURÁ EL DOCUMENTO CON ESTAS SECCIONES:
 
-## Cosmology & History
-A timeline of major events. Focus on events that create PRESENT-DAY tensions.
-Include the founding myth, key turning points, and recent events that matter to the plot.
+## Cosmología e historia
+Una línea de tiempo de eventos mayores. Enfocate en eventos que generen
+tensiones del PRESENTE. Incluí el mito fundacional (si aplica), puntos de
+quiebre clave, y eventos recientes que importen a la trama.
 
-## Magic System
-### Hard Rules (Tonal Law)
-Specific, testable rules. What intervals do what. What progressions bind.
-What happens when you break the rules. Include COSTS and LIMITATIONS prominently.
+## Reglas excepcionales del mundo (si aplica)
+### Reglas duras
+Reglas específicas y comprobables, si la semilla plantea algún sistema de
+magia u otra capacidad excepcional. Qué hace qué. Qué las ata. Qué pasa si se
+rompen. Costos y limitaciones bien visibles. Si la semilla no pide nada de
+esto, escribí "No aplica" y seguí -- no inventes un sistema que nadie pidió.
 
-### Soft Magic (Cass's Gift)
-What he perceives, how it works, what it costs HIM specifically.
-This should be mysterious but have consistent internal logic.
+### Implicaciones sociales
+Cómo esas reglas (si existen) moldean: gobierno, comercio, educación,
+estructura de clases, delito, vida familiar, infancia, vejez, discapacidad.
 
-### Societal Implications
-How does tonal law shape: governance, commerce, education, class structure,
-crime, family life, childhood, aging, disability?
+## Geografía
+Disposición física del lugar central de la historia, zonas o distritos,
+lugares vecinos (al menos 2-3). Firma sensorial para cada lugar. Los nombres
+de lugares salen de la semilla o se inventan de cero -- nunca de otra novela.
 
-## Geography
-Cantamura's physical layout, districts, the natural amphitheater's acoustic properties.
-Neighboring places (at least 2-3). Sensory signatures for each location.
+## Facciones y política
+Quién tiene poder, quién lo quiere, a quién está aplastando. Al menos 3-4
+facciones con intereses opuestos.
 
-## Factions & Politics
-Who holds power, who wants it, who's being crushed by it.
-At least 3-4 factions with opposing interests.
+## Bestiario / flora / mundo natural
+Qué tiene de particular el mundo natural de este lugar. Si la semilla plantea
+un mundo contemporáneo realista sin fauna o flora relevante a la trama, esta
+sección puede quedar breve o "No aplica".
 
-## Bestiary / Flora / Natural World
-What's unique about the natural world in and around Cantamura?
+## Detalles culturales
+Costumbres, tabúes, festividades, comida, vestimenta, rituales de paso. Cosas
+que hacen que la vida cotidiana se sienta ESPECÍFICA.
 
-## Cultural Details
-Customs, taboos, festivals, food, clothing, coming-of-age rituals.
-Things that make daily life feel SPECIFIC.
+## Reglas de consistencia interna
+Restricciones duras que un escritor no debe violar. Qué es posible y qué no
+en este mundo.
 
-## Internal Consistency Rules
-Hard constraints a writer must not violate. The physics of sound in this world.
-What's possible and what's not.
-
-IMPORTANT:
-- Be SPECIFIC. Not "the city has districts" but name them, describe them,
-  give them sensory signatures.
-- Every rule should have a COST or LIMITATION stated alongside it.
-- Include 2-3 facts per section that are unexplained, hinting at deeper systems
-  (iceberg depth).
-- Facts should INTERCONNECT: the magic should shape the politics, the geography
-  should shape the culture, the history should explain current faction conflicts.
-- Write in clean, direct prose. No AI slop. No "rich tapestry." No "delving."
-- The world should feel grounded and LIVED-IN, not imagined. Think: what does
-  breakfast smell like? What do children play? How do old people complain?
-- Target ~3000-4000 words. Dense, not padded.
+IMPORTANTE:
+- Sé ESPECÍFICO. No "la ciudad tiene distritos" sino nombralos, describilos,
+  dales firma sensorial.
+- Cada regla debería tener un COSTO o LIMITACIÓN al lado.
+- Incluí 2-3 datos por sección que queden sin explicar del todo, sugiriendo
+  sistemas más profundos (profundidad de iceberg).
+- Los datos deben INTERCONECTAR: lo excepcional (si existe) debe moldear la
+  política, la geografía debe moldear la cultura, la historia debe explicar
+  los conflictos de facciones actuales.
+- Escribí en prosa limpia y directa. Nada de relleno de IA. Nada de "rico
+  entramado". Nada de "profundizar".
+- El mundo debe sentirse habitado, no imaginado. Pensá: ¿a qué huele el
+  desayuno? ¿A qué juegan los chicos? ¿De qué se queja la gente mayor?
+- Extensión objetivo ~3000-4000 palabras. Denso, no relleno.
 """
 
 

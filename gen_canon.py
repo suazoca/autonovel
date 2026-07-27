@@ -28,10 +28,11 @@ def call_writer(prompt, max_tokens=16000):
         "max_tokens": max_tokens,
         "temperature": 0.2,  # Low temp for factual extraction
         "system": (
-            "You are a continuity editor extracting hard facts from fantasy novel "
-            "planning documents. You are precise, exhaustive, and never invent facts "
-            "that aren't in the source material. Every entry must be traceable to a "
-            "specific statement in the source documents."
+            "Sos un editor de continuidad que extrae hechos duros de documentos de "
+            "planificación de una novela. Sos preciso, exhaustivo, y nunca inventás "
+            "hechos que no estén en el material fuente. Cada entrada debe poder "
+            "rastrearse a una afirmación específica en los documentos fuente. "
+            "Escribís en español."
         ),
         "messages": [{"role": "user", "content": prompt}],
     }
@@ -41,53 +42,55 @@ def call_writer(prompt, max_tokens=16000):
 
 
 def build_prompt(seed, world, characters):
-    return f"""Extract EVERY hard fact from these planning documents into a structured canon database.
-A "hard fact" is anything a writer must not contradict: names, ages, dates, physical descriptions,
-rules of the magic system, geography, relationships, established events.
+    return f"""Extraé TODO hecho duro de estos documentos de planificación a una base
+de datos de canon estructurada. Un "hecho duro" es cualquier cosa que un escritor no
+debe contradecir: nombres, edades, fechas, descripciones físicas, reglas de cualquier
+sistema excepcional del mundo, geografía, relaciones, eventos ya establecidos.
 
-SOURCE DOCUMENTS:
+DOCUMENTOS FUENTE:
 
-=== SEED.TXT ===
+=== SEMILLA ===
 {seed}
 
-=== WORLD.MD ===
+=== MUNDO.MD ===
 {world}
 
-=== CHARACTERS.MD ===
+=== PERSONAJES.MD ===
 {characters}
 
-FORMAT THE OUTPUT AS CANON.MD with these categories:
+FORMATEÁ LA SALIDA COMO CANON.MD CON ESTAS CATEGORÍAS:
 
-## Geography
-- Specific facts about locations, distances, physical properties
+## Geografía
+- Hechos específicos sobre lugares, distancias, propiedades físicas
 
-## Timeline
-- Dated events, ages, durations
+## Cronología
+- Eventos fechados, edades, duraciones
 
-## Magic System Rules
-- Hard rules of Tonal Law (intervals, costs, limitations)
-- Cass's gift specifics
+## Reglas excepcionales del mundo
+- Reglas duras del sistema de magia u otra capacidad excepcional, si el mundo
+  tiene una -- si no, esta sección queda vacía o con "No aplica"
 
-## Character Facts
-- Ages, physical descriptions, habits, relationships
-- One entry per fact (not paragraphs)
+## Hechos de personajes
+- Edades, descripciones físicas, hábitos, relaciones
+- Una entrada por hecho (no párrafos)
 
-## Political / Factional
-- Who controls what, alliances, conflicts, contracts
+## Político / faccional
+- Quién controla qué, alianzas, conflictos, contratos
 
 ## Cultural
-- Customs, taboos, laws, festivals, food, clothing
+- Costumbres, tabúes, leyes, festividades, comida, vestimenta
 
-## Established In-Story
-- Events that have already happened in the story's past
-- The Perin contract, the Expansion Wars, etc.
+## Establecido en la historia
+- Eventos que ya pasaron en el pasado de la historia, según lo que hayan
+  establecido mundo.md y personajes.md -- no inventes ejemplos
 
-RULES:
-- One fact per bullet point. Short. Specific. Checkable.
-- Include the source (world.md or characters.md) in parentheses after each fact.
-- Aim for 80-120 entries minimum. Be exhaustive.
-- If two documents give slightly different details, note the discrepancy.
-- DO NOT invent facts. Only record what's explicitly stated.
+REGLAS:
+- Un hecho por viñeta. Corto. Específico. Verificable.
+- Incluí la fuente (mundo.md o personajes.md) entre paréntesis después de
+  cada hecho.
+- Apuntá a un mínimo de 80-120 entradas. Sé exhaustivo.
+- Si los dos documentos dan detalles levemente distintos, anotá la discrepancia.
+- NO inventes hechos. Solo registrá lo explícitamente declarado.
 """
 
 

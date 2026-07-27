@@ -222,27 +222,64 @@ y no están vacíos antes de gastar una llamada al juez LLM evaluándolos.
 
 ---
 
-## `gen_world.py`/`gen_characters.py`/`gen_canon.py` también contaminados con *Bells*
+## RESUELTO: `gen_world.py`/`gen_characters.py`/`gen_canon.py` contaminados con *Bells*
 
-**Dónde:** los tres prompts (no tocados en la Tarea 6, a pedido explícito
-del usuario -- "sin tocar prompts todavía"). `gen_world.py` pide
-"Cantamura", "Tonal Law", "Cass's Gift". `gen_characters.py` pide
-personajes por nombre: Cass Bellwright, Eddan Bellwright, Perin
-Bellwright, Maret Corda, Rector Suvaine, Torvald Hess. `gen_canon.py`
-menciona "Tonal Law", "Cass's gift", "the Perin contract, the Expansion
-Wars" como ejemplos en las instrucciones de formato.
+**Lo que decía esta entrada:** los tres prompts tenían contenido de *The
+Second Son of the House of Bells* escrito a mano -- `gen_world.py` pedía
+"Cantamura", "Tonal Law", "Cass's Gift"; `gen_characters.py` exigía el
+reparto entero por nombre (Cass Bellwright, Eddan, Perin, Maret Corda,
+Rector Suvaine, Torvald Hess) más "1-2 personajes adicionales";
+`gen_canon.py` mencionaba "the Perin contract, the Expansion Wars" como
+ejemplos.
 
-**Por qué no se tocó:** la Tarea 6 era específicamente sobre persistencia
-(que los scripts se guarden a sí mismos), no sobre descontaminación. El
-usuario fue explícito: ningún prompt se toca en este commit.
+**Corregido** como Tarea 2c (mismo tratamiento que A1/Tarea 2b): armazón
+invariante + contenido derivado de `semilla.txt`/`mundo.md`/`personajes.md`.
+El reparto fijo de `gen_characters.py` se reemplazó por un requisito
+estructural (mínimo protagonista + antagonismo del conflicto central, más
+secundarios según la semilla; el número de personajes con profundidad
+completa se deriva de `CALIBRACION` en vez de estar hardcodeado). Los
+títulos de sección de `gen_world.py` pasaron a ser genéricos ("Reglas
+excepcionales del mundo" en vez de "Magic System / Hard Rules (Tonal
+Law)"). Los tres además exigían "fantasy novel" y un sistema de magia
+obligatorio -- ahora el género sale de la semilla, y el sistema de magia
+es condicional ("si aplica"). Los tres prompts se tradujeron al español,
+mismo motivo que la Tarea 2: pedir en inglés que el modelo escriba en
+español induce los calcos que `deteccion_es.py` caza.
 
-**Estado:** NO corregido. Es el mismo tipo de problema que A1
-(`draft_chapter.py`, Tarea 2) y el de `gen_outline.py`/`gen_outline_part2.py`
-(Tarea 2b) -- candidato natural a una **Tarea 2c** con el mismo
-tratamiento (armazón invariante + contenido derivado de
-`mundo.md`/`personajes.md`/`semilla.txt`, en vez de nombres y lugares
-escritos a mano). A confirmar con el usuario si se agrega formalmente al
-encargo.
+**Aceptación verificada:** `grep -in "cass|bellwright|perin|corda|
+suvaine|torvald|cantamura|tonal law|expansion wars" gen_world.py
+gen_characters.py gen_canon.py` → cero resultados. Test dedicado
+(`tests/test_descontaminacion_2c.py`) para que esos términos no puedan
+volver a entrar sin que el suite lo note.
+
+---
+
+## `gen_world.py` cargaba `craft` (CRAFT.md) pero nunca lo usaba en el prompt
+
+**Encontrado al reescribir el prompt para la Tarea 2c, no corregido --
+fuera de alcance de esa tarea.** `gen_world.py::main()` carga
+`CRAFT.md` y lo pasa a `build_prompt(seed, voice_part2, craft)` como
+tercer parámetro, pero el f-string de `build_prompt()` nunca interpola
+`{craft}` en ningún lado -- el contenido real de `CRAFT.md` se descarta,
+reemplazado por un resumen escrito a mano dentro del prompt. Bug
+preexistente, no introducido por la Tarea 2c (ya estaba así antes de
+tocar el archivo).
+
+`gen_characters.py` tiene una variante del mismo problema, más completa:
+ni siquiera carga `CRAFT.md` -- `main()` no lo lee, `build_prompt()` no
+lo recibe como parámetro. Los frameworks de personaje (sliders,
+wound/want/need/lie, las 8 dimensiones de diálogo) están escritos a mano
+dentro del prompt en vez de derivarse del archivo.
+
+**Por qué no se corrige ahora:** no estaba en el pedido de la Tarea 2c
+(descontaminación de Bells, no arquitectura de cómo se usa CRAFT.md).
+Arreglarlo bien implica decidir si el resumen manual actual es preferible
+a interpolar `CRAFT.md` completo (que es mucho más largo y genérico,
+cubre las tres capas del framework -- plot, character, world, prose --
+no solo lo relevante a cada script), lo cual es una decisión de diseño,
+no un fix mecánico.
+
+**Estado:** NO corregido, sin tarea asignada.
 
 ---
 

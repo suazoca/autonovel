@@ -1,6 +1,6 @@
 # TRASPASO — rama `framework/es-multilibro`
 
-Estado real al cierre de esta sesión (2026-07-27, tras la Tarea 6). Este
+Estado real al cierre de esta sesión (2026-07-27, tras la Tarea 2c). Este
 documento reemplaza la necesidad de releer `ESTADO.md` completo o el
 historial de commits para retomar el trabajo -- es la foto actual, no la
 bitácora de cómo se llegó acá (para eso está `ESTADO.md`, que sí es
@@ -8,15 +8,14 @@ narrativo).
 
 ## En una línea
 
-Tareas 0, 1c, 1d, 2, 2b, 3, 4 y 6 del `ENCARGO_CLAUDE_CODE.md` están
-completas y testeadas (91 tests, todos en verde, sin necesitar API). Toda
+Tareas 0, 1c, 1d, 2, 2b, 2c, 3, 4 y 6 del `ENCARGO_CLAUDE_CODE.md` están
+completas y testeadas (101 tests, todos en verde, sin necesitar API). Toda
 esa construcción se hizo **sin `.env`**, con `call_writer()`/`uv_run()`
-parcheados -- el mismo patrón sigue disponible para lo que falta: Tarea
-2c (sin formalizar) y el generador de voz que falta (hallazgo nuevo,
-prioridad alta) se pueden escribir y testear sin API. Lo que sí necesita
-`.env` es correr contra el modelo real y validar calidad -- 1a, 1b, 1d
-parte final, `overall_score` en BASELINE, y correr la fundación completa
-por primera vez.
+parcheados -- el mismo patrón sigue disponible para lo que falta: el
+generador de voz que falta (hallazgo, prioridad alta) se puede escribir y
+testear sin API. Lo que sí necesita `.env` es correr contra el modelo real
+y validar calidad -- 1a, 1b, 1d parte final, `overall_score` en BASELINE,
+y correr la fundación completa por primera vez.
 
 ## Estado del repositorio
 
@@ -25,10 +24,11 @@ por primera vez.
 | Rama | `framework/es-multilibro` |
 | `.env` / `ANTHROPIC_API_KEY` | No existe en este entorno |
 | Rama `autonovel/bells` | No existe en el remoto (verificado con `git fetch --all` + `git ls-remote --heads origin`) |
-| Push | Al día hasta `48395a8` (incluye un commit del usuario, hecho fuera de esta conversación: mover `AUDITORIA_Y_PLAN.md` a `docs/`). El commit de la Tarea 6 puede estar sin pushear -- confirmar con `git log origin/framework/es-multilibro..HEAD --oneline` |
+| Push | Al día hasta `bb4c7ce` (Tarea 6). El commit de la Tarea 2c puede estar sin pushear -- confirmar con `git log origin/framework/es-multilibro..HEAD --oneline` |
 | Working tree | Limpio |
 | `gh` CLI | No instalado en este entorno |
-| Incidentes de seguridad | **Cuatro** tokens de GitHub distintos quedaron expuestos en el chat durante esta sesión (pegados mal en la terminal, en varios intentos de push). El primero fue revocado con confirmación explícita del usuario; para los otros tres no hay confirmación explícita en esta conversación -- **verificar que estén revocados** antes de asumir que sí. Si hace falta pushear de nuevo: token nuevo, **solo** como variable de entorno ya exportada en la terminal del usuario, nunca pegado en el chat. Considerar un credential helper de git configurado una sola vez. |
+| Incidentes de seguridad | **Cuatro** tokens de GitHub distintos quedaron expuestos en el chat durante esta sesión (pegados mal en la terminal, en varios intentos de push). El primero fue revocado con confirmación explícita del usuario; para los otros tres no hay confirmación explícita en esta conversación -- **verificar que estén revocados**. |
+| Por qué falla `git push` con `!` | El prefijo `!` corre el comando sin TTY -- `git` no tiene dónde pedir usuario/token y aborta con "could not read Username ... No such device or address". No es un problema de que el token se vea; es que no hay terminal interactiva. Receta: `Ctrl+D` para salir de Claude Code (**misma terminal**, no otra máquina), `git push` ahí directo, pegar el token cuando lo pida, volver a entrar con `claude`. Con `credential.helper store` ya configurado, solo hace falta una vez -- después, hasta los `git push` corridos con `!` reusan la credencial guardada. Si el token guardado se revoca, limpiarlo primero con `git credential reject` (protocol=https, host=github.com) antes de repetir la receta. |
 
 ## Commits de esta rama (los que no vinieron por `git pull`)
 
@@ -51,11 +51,12 @@ c513adf docs: ESTADO.md al día con el cierre de la Tarea 4
 2b31156 docs: TRASPASO.md -- estado real para retomar sin releer ESTADO.md completo
 b18ca4a docs: corrige el conteo de tokens expuestos (cuatro, no dos)
 48395a8 docs: mueve AUDITORIA_Y_PLAN.md a docs/                       (del usuario, no de esta conversación)
+bb4c7ce Tarea 6: persistencia en la fase de fundación
 ```
 
-El commit de la Tarea 6 (persistencia en la fase de fundación) se hace a
-continuación de este documento -- correr `git log -1 --oneline` para ver
-su hash real una vez hecho.
+El commit de la Tarea 2c (descontaminar gen_world.py/gen_characters.py/
+gen_canon.py) se hace a continuación de este documento -- correr
+`git log -1 --oneline` para ver su hash real una vez hecho.
 
 `3ded223` (auditoría + plan + `deteccion_es.py`) es el commit base de todo
 esto y llegó por `git pull`, no se generó en esta sesión.
@@ -66,7 +67,7 @@ esto y llegó por `git pull`, no se generó en esta sesión.
 uv run python -m pytest tests/ -v
 ```
 
-**91 tests, todos en verde, ninguno requiere `.env`.**
+**101 tests, todos en verde, ninguno requiere `.env`.**
 
 | Archivo | Qué cubre |
 |---|---|
@@ -77,7 +78,8 @@ uv run python -m pytest tests/ -v
 | `tests/test_siembras.py` | Validador de alcance de siembra (Tarea 4) |
 | `tests/test_gen_outline.py` | Prompts de `gen_outline.py`/`gen_outline_part2.py` (Tarea 2b) |
 | `tests/test_fundacion.py` | `fundacion_comun.py` + `gen_world.py`/`gen_characters.py`/`gen_canon.py` (Tarea 6) |
-| `tests/test_run_pipeline_fundacion.py` | `run_generator()` + `verificar_archivos_fundacion()` en `run_pipeline.py` (Tarea 6) |
+| `tests/test_run_pipeline_fundacion.py` | `run_generator()` + `verificar_archivos_fundacion()` en `run_pipeline.py`, incluyendo el criterio de mtime (Tarea 6) |
+| `tests/test_descontaminacion_2c.py` | Ausencia de términos de *Bells* en `gen_world.py`/`gen_characters.py`/`gen_canon.py` (Tarea 2c) |
 
 ## Tareas cerradas
 
@@ -90,7 +92,8 @@ uv run python -m pytest tests/ -v
 | 3 | `5af3cb9` | Ambición por capítulo (pico/sosten/valle), umbral por defecto "sosten" (no el más laxo) |
 | 4 | `506f435` | Alcance de siembra libro/serie, validadores sobre dicts, regla de regresión sin `siembras_serie.md` |
 | 2b | `5a78c52` | `gen_outline.py`/`gen_outline_part2.py` descontaminados, ya no leen de `/tmp`, ahora se guardan a sí mismos |
-| 6 | (este commit) | `gen_world.py`/`gen_characters.py`/`gen_canon.py` se guardan a sí mismos; `gen_outline_part2.py` pasa a usar `fundacion_comun.py` (sin cambio de comportamiento); `run_pipeline.py` aborta y guarda `state` si un generador falla; verifica archivos antes de evaluar. **No descontamina prompts** -- eso es la Tarea 2c. |
+| 6 | `bb4c7ce` | `gen_world.py`/`gen_characters.py`/`gen_canon.py` se guardan a sí mismos; `gen_outline_part2.py` pasa a usar `fundacion_comun.py` (sin cambio de comportamiento); `run_pipeline.py` aborta y guarda `state` si un generador falla; verifica archivos antes de evaluar (por mtime, no solo "no vacío"). **No descontamina prompts** -- eso es la Tarea 2c. |
+| 2c | (este commit) | `gen_world.py`/`gen_characters.py`/`gen_canon.py` descontaminados de *Bells*: reparto fijo reemplazado por requisito estructural, secciones genéricas, género y sistema de magia condicionados a la semilla, prompts traducidos al español. |
 
 Además, `214768e` y `d3c4c72` son fixes puntuales (bug de `calcos_detectados()`,
 y el valor correcto de `palabras_objetivo_capitulo`).
@@ -98,20 +101,13 @@ y el valor correcto de `palabras_objetivo_capitulo`).
 ## Pendiente
 
 Ninguna tarea numerada está formalmente asignada sin bloquear por `.env`,
-pero hay tres frentes donde **sí se puede escribir y testear código ya**
+pero hay dos frentes donde **sí se puede escribir y testear código ya**
 (mismo patrón de mocks que toda esta sesión) -- lo que no se puede hacer
 sin `.env` es correr contra el modelo real y juzgar calidad.
 
 ### Se puede escribir código sin `.env` (validar calidad sí necesita API)
 
-- **Tarea 2c (candidata, sin formalizar)**: `gen_world.py`,
-  `gen_characters.py` y `gen_canon.py` siguen con los prompts
-  contaminados de *Bells* (Cass Bellwright, Perin, Maret Corda, Rector
-  Suvaine, Torvald Hess, Cantamura, Tonal Law). La Tarea 6 fue
-  estrictamente persistencia, no tocó contenido de prompts a pedido
-  explícito del usuario. Mismo tratamiento que A1/Tarea 2b cuando se
-  formalice.
-- **El generador de voz que falta** (hallazgo nuevo, prioridad alta):
+- **El generador de voz que falta** (hallazgo, prioridad alta):
   no existe ningún script que llene `voice.md`/`voz.md` Parte 2 --
   confirmado con grep, ni `gen_voice.py` ni ningún `write_text` a ese
   archivo en todo el repo. `draft_chapter.py`, `gen_brief.py` y
@@ -129,6 +125,11 @@ sin `.env` es correr contra el modelo real y juzgar calidad.
   la Tarea 4): los validadores de siembra funcionan sobre dicts, no hay
   parser que los extraiga de la tabla real, y `libros_completos` no tiene
   fuente de datos (`estado_serie.json`, Clase B, no existe todavía).
+- **`craft` (CRAFT.md) no se usa realmente** en `gen_world.py` (se carga
+  pero nunca se interpola en el prompt) ni en `gen_characters.py` (ni se
+  carga). Encontrado al reescribir los prompts en la Tarea 2c, no
+  corregido -- decisión de diseño (resumen manual vs. interpolar el
+  archivo completo), no un fix mecánico.
 
 ### Bloqueado por `.env` / `ANTHROPIC_API_KEY` (correr contra el modelo real)
 
@@ -157,8 +158,8 @@ sin `.env` es correr contra el modelo real y juzgar calidad.
 4. `libros_completos` (regla 4 de siembras) no tiene fuente de datos
    todavía -- depende de `estado_serie.json` (Clase B), que no existe en
    este repo.
-5. `gen_world.py`/`gen_characters.py`/`gen_canon.py` contaminados con
-   *Bells* -- candidato a Tarea 2c, sin formalizar.
+5. **RESUELTO** -- `gen_world.py`/`gen_characters.py`/`gen_canon.py`
+   contaminados con *Bells*: era la Tarea 2c, ya completa.
 6. No hay script que acumule al canon los hechos establecidos durante la
    redacción -- ver "Pendiente" arriba.
 7. **Nada genera la Parte 2 de `voice.md`/`voz.md`** -- prioridad alta,
@@ -171,9 +172,9 @@ sin `.env` es correr contra el modelo real y juzgar calidad.
 1. `git status` y `git log origin/framework/es-multilibro..HEAD --oneline`
    para confirmar que seguimos al día (deberían estar vacíos si nadie más
    tocó la rama).
-2. Si no hay `.env` todavía, tres frentes para escribir código: formalizar
-   y arrancar la **Tarea 2c**, escribir el **generador de voz que falta**,
-   o avanzar el diseño del formato de `canon.md`/Foreshadowing Ledger.
+2. Si no hay `.env` todavía, dos frentes para escribir código: el
+   **generador de voz que falta**, o avanzar el diseño del formato de
+   `canon.md`/Foreshadowing Ledger.
 3. Si ya hay `.env` con `ANTHROPIC_API_KEY`:
    a. Correr `evaluate.py --chapter` (sin `--solo-mecanico`) sobre los
       fixtures de `tests/fixtures/` para completar `docs/BASELINE.md`.

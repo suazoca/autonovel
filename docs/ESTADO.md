@@ -1,6 +1,6 @@
 # ESTADO — rama `framework/es-multilibro`
 
-Última actualización: 2026-07-27 (tras cerrar la Tarea 6). Escrito para
+Última actualización: 2026-07-27 (tras cerrar la Tarea 2c). Escrito para
 retomar en otra sesión sin releer todo el historial de commits.
 
 **Nota:** `AUDITORIA_Y_PLAN.md` se movió a `docs/AUDITORIA_Y_PLAN.md` en un
@@ -17,21 +17,31 @@ corrigieron retroactivamente.
   `git fetch --all` + `git ls-remote --heads origin`). No hay comparación
   disponible contra la novela anterior en inglés; toda la línea base se
   armó con fixtures de prueba en español, no con capítulos reales.
-- **Push: al día hasta `48395a8`** (incluye un commit del usuario hecho
-  directamente, fuera de esta conversación: mover `AUDITORIA_Y_PLAN.md` a
-  `docs/`). El commit de la Tarea 6 que sigue a este documento **todavía
-  no está pusheado** al momento de escribir esto -- confirmar con
+- **Push: al día hasta `bb4c7ce`** (Tarea 6). El commit de la Tarea 2c
+  que sigue a este documento puede estar sin pushear -- confirmar con
   `git log origin/framework/es-multilibro..HEAD --oneline`.
   **Cuatro tokens de GitHub distintos quedaron expuestos en el chat
   durante esta sesión** (pegados mal en la terminal, en varios intentos
   de push). El primero fue revocado con confirmación explícita del
   usuario; los otros tres no tienen confirmación explícita en el chat --
-  **verificar que estén revocados**, no asumir que sí. Si se necesita
-  pushear de nuevo: token nuevo, exportado como variable de entorno en la
-  terminal del usuario, nunca pegado en el chat -- o mejor, un credential
-  helper de git configurado una sola vez. `gh` no está instalado en este
-  entorno (se intentó `gh auth login`, no existe el binario) -- la única
-  vía probada es `git push https://$TOKEN@github.com/...`.
+  **verificar que estén revocados**, no asumir que sí.
+
+  **Por qué falla `git push` corrido con `!` (y cómo se resuelve):** el
+  prefijo `!` ejecuta el comando sin TTY -- `git` no tiene dónde mostrar
+  el prompt de usuario/contraseña y aborta con *"could not read Username
+  for 'https://github.com': No such device or address"*. No es un
+  problema de que el token quede visible; es que no hay terminal
+  interactiva para pedirlo. La receta que funcionó para el push de la
+  Tarea 6: **salir de Claude Code con Ctrl+D** (misma terminal, no una
+  distinta), correr `git push` ahí directamente, pegar el token cuando lo
+  pida, volver a entrar con `claude`. Con `credential.helper store` ya
+  configurado (`~/.git-credentials`), esto solo hace falta una vez -- los
+  próximos `git push` (incluso corridos con `!`) van a reusar la
+  credencial guardada sin pedir nada, siempre que no se haya revocado.
+  Si el credential guardado deja de servir (token revocado), limpiarlo
+  con `git credential reject` (protocol=https, host=github.com) antes de
+  repetir la receta -- si no, git sigue reintentando la credencial vieja
+  y falla igual.
 
 ## Commits de esta rama (orden cronológico)
 
@@ -54,8 +64,9 @@ c513adf docs: ESTADO.md al día con el cierre de la Tarea 4
 648b0c3 docs: ESTADO.md al día con el cierre de la Tarea 2b
 2b31156 docs: TRASPASO.md -- estado real para retomar sin releer ESTADO.md completo
 b18ca4a docs: corrige el conteo de tokens expuestos (cuatro, no dos) y el estado del push
-48395a8 docs: mueve AUDITORIA_Y_PLAN.md a docs/                          <- del usuario, no de esta conversación; pusheado hasta acá
-                                                                          <- Tarea 6 sigue, sin pushear al escribir esto
+48395a8 docs: mueve AUDITORIA_Y_PLAN.md a docs/                          <- del usuario, no de esta conversación
+bb4c7ce Tarea 6: persistencia en la fase de fundación                    <- pusheado hasta acá
+                                                                          <- Tarea 2c sigue, sin pushear al escribir esto
 ```
 
 `1c` y `1d` no estaban en el `ENCARGO_CLAUDE_CODE.md` original -- se
@@ -402,6 +413,42 @@ mismos y que `run_pipeline.py` no ignore sus fallos.
      escribir el script (mismo patrón que el resto de la Tarea 6) tampoco
      lo necesitaría, pero validar la calidad de lo que generaría sí.
 
+### Tarea 2c — Descontaminar `gen_world.py`/`gen_characters.py`/`gen_canon.py` (COMPLETA)
+
+- **`gen_characters.py` (el peor de los tres)**: el reparto fijo por
+  nombre (Cass Bellwright, Eddan, Perin, Maret Corda, Rector Suvaine,
+  Torvald Hess + "1-2 adicionales") se reemplazó por un requisito
+  estructural: protagonista (POV) + antagonismo del conflicto central
+  como mínimo, más secundarios según la semilla. El número de personajes
+  con profundidad completa se deriva de `CALIBRACION` (capítulos
+  totales), no está hardcodeado. Los frameworks de oficio (tres sliders
+  de Sanderson, wound/want/need/lie, 8 dimensiones de diálogo) **se
+  mantienen intactos** -- son método, no trama de la novela anterior.
+- **`gen_world.py`**: títulos de sección genéricos ("Reglas excepcionales
+  del mundo (si aplica)" en vez de "Magic System / Hard Rules (Tonal
+  Law)" / "Soft Magic (Cass's Gift)"). Sacado "Cantamura" y "the natural
+  amphitheater's acoustic properties".
+- **`gen_canon.py`**: el ejemplo "the Perin contract, the Expansion Wars"
+  se reemplazó por una instrucción de no inventar ejemplos.
+- **Los tres**: ya no asumen "fantasy novel" ni exigen sistema de magia
+  obligatorio -- el género y si hay reglas excepcionales del mundo salen
+  de la semilla; si no aplica, el prompt instruye escribir "No aplica".
+- **Los tres prompts traducidos al español** (system message + texto de
+  usuario), mismo criterio que la Tarea 2: pedir en inglés que el modelo
+  escriba en español induce los calcos que `deteccion_es.py` caza.
+- **Aceptación verificada**: `grep -in "cass|bellwright|perin|corda|
+  suvaine|torvald|cantamura|tonal law|expansion wars" gen_world.py
+  gen_characters.py gen_canon.py` → cero. 101 tests en verde
+  (`uv run python -m pytest tests/ -v`), incluyendo
+  `tests/test_descontaminacion_2c.py` dedicado (10 tests) para que esos
+  términos no puedan volver a entrar sin que el suite lo note.
+- **Hallazgo nuevo, sin corregir** (`docs/HALLAZGOS.md`): `gen_world.py`
+  carga `CRAFT.md` pero nunca lo interpola en el prompt (`{craft}` no
+  aparece en el f-string -- bug preexistente, no introducido por esta
+  tarea). `gen_characters.py` ni siquiera carga `CRAFT.md`. Fuera de
+  alcance de la Tarea 2c (arreglarlo bien es una decisión de diseño:
+  resumen manual vs. interpolar el archivo completo).
+
 ## Qué falta de la Tarea 1
 
 - **1a** (parte no cubierta por 1c): flag `--idioma es|en` para que
@@ -426,25 +473,27 @@ mismos y que `run_pipeline.py` no ignore sus fallos.
 
 ## Qué sigue
 
-Las Tareas 0, 1c, 1d, 2, 2b, 3, 4 y 6 están completas.
+Las Tareas 0, 1c, 1d, 2, 2b, 2c, 3, 4 y 6 están completas.
 
 **Se puede seguir escribiendo y testeando código sin `.env`** -- todo lo
-de esta sesión (Tareas 2, 2b, 3, 4, 6) se construyó y probó así, con
+de esta sesión (Tareas 2, 2b, 2c, 3, 4, 6) se construyó y probó así, con
 `call_writer()`/`uv_run()` parcheados. Lo que sin `.env` **no** se puede
 hacer es correr una generación real ni ver si el resultado tiene calidad.
 
 - **Sin `.env`, se puede avanzar en escribir código para:**
-  - **Tarea 2c (sin formalizar)** -- descontaminar `gen_world.py`,
-    `gen_characters.py` y `gen_canon.py` de Bells. Mismo tratamiento y
-    mismo patrón de tests con mocks que la Tarea 2b.
-  - **El generador de voz que falta** (hallazgo nuevo arriba, prioridad
-    alta) -- escribir el script (`gen_voice.py` o similar) que llene
+  - **El generador de voz que falta** (hallazgo, prioridad alta) --
+    escribir el script (`gen_voice.py` o similar) que llene
     `voice.md`/`voz.md` Parte 2, con el mismo patrón `main()` +
-    `fundacion_comun.py` + tests con `call_writer` parcheado.
+    `fundacion_comun.py` + tests con `call_writer` parcheado. Tiene una
+    restricción de orden: debe correr antes que `gen_world.py`, y solo
+    puede depender de la semilla (ver hallazgo arriba).
   - El script que acumule al canon los hechos de redacción, y el parser
     del Foreshadowing Ledger (Tarea 4) -- ambos esperan primero fijar el
     formato estructurado de esos documentos, que es una decisión de
     diseño, no algo que necesite la API.
+  - El hallazgo del `craft` no usado en `gen_world.py`/`gen_characters.py`
+    (Tarea 2c) -- decisión de diseño (resumen manual vs. interpolar
+    `CRAFT.md` completo), no bloqueado por `.env`.
 - **Bloqueado por `.env` -- no hay código nuevo que escribir, hace falta
   correr contra el modelo real:**
   - Validar que el generador de voz (una vez escrito) produce pasajes de
@@ -460,12 +509,15 @@ hacer es correr una generación real ni ver si el resultado tiene calidad.
 ## Cómo retomar
 
 1. Verificar qué falta pushear: `git log origin/framework/es-multilibro..HEAD
-   --oneline`. Si hay algo, pushear con un token nuevo, exportado como
-   variable de entorno, nunca pegado en el chat.
-2. Si no hay `.env` todavía, hay tres frentes para escribir código (ver
-   "Qué sigue"): formalizar y ejecutar la **Tarea 2c**, escribir el
-   **generador de voz que falta** (hallazgo nuevo, prioridad alta), o
-   avanzar el diseño de formato de `canon.md`/Foreshadowing Ledger.
+   --oneline`. Si hay algo y el credential guardado sigue vigente, `git
+   push` debería funcionar directo, incluso corrido con `!`. Si falla con
+   "could not read Username": salir con Ctrl+D, `git push` en la terminal
+   interactiva, volver a entrar con `claude` (ver "Punto de partida"
+   arriba -- no hace falta otra máquina ni otra sesión SSH).
+2. Si no hay `.env` todavía, hay dos frentes para escribir código (ver
+   "Qué sigue"): el **generador de voz que falta** (hallazgo, prioridad
+   alta), o avanzar el diseño de formato de `canon.md`/Foreshadowing
+   Ledger.
 3. Cuando haya `.env` con `ANTHROPIC_API_KEY`:
    a. Correr `evaluate.py --chapter` (sin `--solo-mecanico`) sobre los
       fixtures para completar el `overall_score` pendiente en

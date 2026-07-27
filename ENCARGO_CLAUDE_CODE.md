@@ -285,6 +285,67 @@ referencia a la novela anterior.
 
 ---
 
+## TAREA 2c — Descontaminar `gen_world.py`, `gen_characters.py`, `gen_canon.py` (COMPLETA)
+
+Encontrado durante la Tarea 6, deliberadamente no tocado ahí ("sin tocar
+prompts todavía"). Mismo problema que A1/2b: los tres generadores de
+fundación restantes tenían el prompt de *The Second Son of the House of
+Bells* escrito a mano.
+
+### Qué estaba hardcodeado
+
+- `gen_characters.py` (el peor de los tres): el prompt exigía el reparto
+  entero por nombre -- Cass Bellwright, Eddan Bellwright, Perin
+  Bellwright, Maret Corda, Rector Suvaine, Torvald Hess -- más "1-2
+  personajes adicionales" con sugerencias también atadas a esa trama.
+- `gen_world.py`: títulos de sección con la novela anterior ("Magic
+  System / Hard Rules (Tonal Law)", "Soft Magic (Cass's Gift)"), más
+  "Cantamura" y "the natural amphitheater's acoustic properties".
+- `gen_canon.py`: pedía extraer "the Perin contract, the Expansion Wars"
+  como ejemplos de hechos ya establecidos.
+- Los tres asumían "fantasy novel" y exigían un sistema de magia con
+  reglas duras -- el género y si hay o no reglas excepcionales del mundo
+  los define la semilla, no el script.
+- Los tres en inglés, pidiéndole al modelo que escriba en español --
+  mismo problema que la Tarea 2: induce los calcos que `deteccion_es.py`
+  caza.
+
+### Cómo se reemplazó
+
+- `gen_characters.py`: el reparto fijo se reemplazó por un requisito
+  estructural -- como mínimo protagonista (POV) + quien encarna el
+  antagonismo del conflicto central, más los secundarios que la semilla y
+  el mundo pidan. El número de personajes con profundidad completa se
+  deriva de `CALIBRACION` (capítulos totales), no está hardcodeado. Los
+  frameworks (los tres sliders de Sanderson, wound/want/need/lie, las 8
+  dimensiones de diálogo) se mantienen intactos -- son método de oficio,
+  no trama de la novela anterior.
+- `gen_world.py`: secciones renombradas genéricamente ("Reglas
+  excepcionales del mundo (si aplica)" en vez de "Magic System"). El
+  sistema de magia pasa a ser condicional a lo que pida la semilla; si no
+  aplica, el prompt instruye escribir "No aplica" en vez de inventar uno.
+- `gen_canon.py`: los ejemplos de hechos ya establecidos ahora dicen
+  "según lo que hayan establecido mundo.md y personajes.md -- no
+  inventes ejemplos".
+- Prompts completos traducidos al español (system message + texto del
+  usuario), mismo criterio que la Tarea 2.
+
+### Test de aceptación de la Tarea 2c
+
+```bash
+grep -in "cass|bellwright|perin|corda|suvaine|torvald|cantamura|tonal law|expansion wars" \
+    gen_world.py gen_characters.py gen_canon.py
+```
+
+Debe devolver **cero resultados**.
+
+Test dedicado (`tests/test_descontaminacion_2c.py`) que llama a
+`build_prompt()` de los tres scripts con inputs de prueba inventados y
+verifica la ausencia de esos términos, para que no puedan volver a
+entrar sin que el suite lo note.
+
+---
+
 ## TAREA 3 — Campo de ambición por capítulo
 
 Hoy todos los capítulos compiten contra un umbral único (6.0), lo que
