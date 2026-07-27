@@ -37,7 +37,12 @@ EDIT_LOGS_DIR = BASE_DIR / "edit_logs"
 EVAL_LOGS_DIR = BASE_DIR / "eval_logs"
 
 FOUNDATION_THRESHOLD = 7.5
-CHAPTER_THRESHOLD = 6.0
+# Última red de contención si evaluate.py no llega a imprimir
+# "umbral_aceptacion" (p.ej. capítulo vacío -> overall_score 0.0 de por sí
+# no pasa ningún umbral). 6.5 ("sosten"), no 6.0 ("valle") -- el default
+# nunca debe ser el umbral más laxo, ver UMBRAL_POR_DEFECTO_SIN_AMBICION
+# en evaluate.py.
+CHAPTER_THRESHOLD = 6.5
 MAX_FOUNDATION_ITERS = 20
 MAX_CHAPTER_ATTEMPTS = 5
 MIN_REVISION_CYCLES = 3
@@ -352,9 +357,16 @@ def run_drafting(state: dict) -> dict:
             # Evaluate
             eval_result = uv_run(f"evaluate.py --chapter={ch}", timeout=300)
             score = parse_score(eval_result.stdout, "overall_score")
-            step(f"Chapter {ch} score: {score}")
+            # Umbral por ambición del capítulo (Tarea 3), no una constante
+            # global -- evaluate.py lo calcula y lo imprime. Si no aparece
+            # (p.ej. capítulo vacío -> evaluate.py no llega a calcularlo),
+            # cae al umbral general de siempre.
+            threshold = parse_score(eval_result.stdout, "umbral_aceptacion")
+            if threshold < 0:
+                threshold = CHAPTER_THRESHOLD
+            step(f"Chapter {ch} score: {score} (umbral: {threshold})")
 
-            if score >= CHAPTER_THRESHOLD:
+            if score >= threshold:
                 commit_hash = git_add_commit(
                     f"ch{ch:02d}: score {score}, {word_count}w")
                 log_result(commit_hash, f"ch{ch:02d}", score, word_count,
@@ -364,7 +376,7 @@ def run_drafting(state: dict) -> dict:
                 drafted = True
                 break
             else:
-                step(f"Score {score} < {CHAPTER_THRESHOLD}, discarding attempt")
+                step(f"Score {score} < {threshold}, discarding attempt")
                 log_result("discarded", f"ch{ch:02d}", score, word_count,
                            "discard", f"Chapter {ch} attempt {attempt}")
                 # Remove the bad chapter file so next attempt starts fresh

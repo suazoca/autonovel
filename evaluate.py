@@ -68,6 +68,99 @@ from deteccion_es import (
 _PUNTUACION = ".,;:!?\"'()¿¡«»"
 
 
+# ---- Ambición por capítulo (Tarea 3) ----
+#
+# Un umbral único (6.0) empuja la novela hacia la media. Cada capítulo del
+# esquema declara su propia ambición y compite contra su propio umbral.
+
+UMBRALES_AMBICION = {
+    "pico": 7.5,     # escena que el lector tiene que recordar
+    "sosten": 6.5,   # capítulo de trabajo, avanza la trama
+    "valle": CALIBRACION["umbral_aceptacion_capitulo"],  # respiro deliberado
+}
+
+# Sin ambición declarada, el umbral por defecto NO puede ser el más flojo
+# ("valle", 6.0): eso haría que cualquier esquema que no se moleste en
+# declarar ambición vuelva en silencio al comportamiento que esta tarea
+# vino a corregir. "sosten" (6.5) es el default -- un capítulo de trabajo
+# normal, ni el más exigente ni el más laxo.
+UMBRAL_POR_DEFECTO_SIN_AMBICION = UMBRALES_AMBICION["sosten"]
+
+PROPORCION_MINIMA_PICOS = 0.15
+PROPORCION_MAXIMA_PICOS_ULTIMO_TERCIO = 0.80
+
+
+def extraer_ambicion(chapter_outline_text):
+    """Ambición declarada del capítulo (pico|sosten|valle) desde su entrada
+    en el esquema. None si no está declarada -- esquemas viejos sin este
+    campo siguen funcionando, no rompen (ver UMBRAL_POR_DEFECTO_SIN_AMBICION)."""
+    m = re.search(
+        r'ambici[oó]n\W{0,6}(pico|sost[ée]n|valle)',
+        chapter_outline_text, re.IGNORECASE,
+    )
+    if not m:
+        return None
+    return m.group(1).lower().replace('é', 'e')
+
+
+def umbral_por_ambicion(ambicion):
+    """Umbral de aceptación según la ambición declarada. Sin ambición
+    (esquemas viejos, o campo ausente en este capítulo) usa
+    UMBRAL_POR_DEFECTO_SIN_AMBICION ("sosten", 6.5) -- nunca el umbral más
+    laxo, para no revertir en silencio al comportamiento anterior."""
+    return UMBRALES_AMBICION.get(ambicion, UMBRAL_POR_DEFECTO_SIN_AMBICION)
+
+
+def validar_diversidad_ambicion(outline_text):
+    """Dos formas en que un esquema puede fallar en tener picos reales:
+
+    1. Esquema plano: menos del 15% de los capítulos son 'pico' (o ninguno
+       declara ambición). Empuja la novela hacia el promedio.
+    2. Picos mal distribuidos: 80%+ o más de los picos declarados están
+       amontonados en el último tercio del esquema. Aunque la proporción
+       total esté bien, si todos los momentos memorables se acumulan al
+       final, el resto de la novela sigue siendo plano.
+
+    Devuelve un mensaje de advertencia (puede combinar ambos problemas) o
+    None si el esquema está bien."""
+    ambiciones = re.findall(
+        r'ambici[oó]n\W{0,6}(pico|sost[ée]n|valle)', outline_text, re.IGNORECASE,
+    )
+    if not ambiciones:
+        return ("El esquema no declara ambición por capítulo (pico/sostén/"
+                "valle) en ningún capítulo -- no se puede validar la "
+                "proporción ni la distribución de picos.")
+    ambiciones = [a.lower().replace('é', 'e') for a in ambiciones]
+    total = len(ambiciones)
+    picos_totales = sum(1 for a in ambiciones if a == "pico")
+
+    advertencias = []
+
+    proporcion = picos_totales / total
+    if proporcion < PROPORCION_MINIMA_PICOS:
+        advertencias.append(
+            f"Esquema plano: solo {picos_totales}/{total} capítulos "
+            f"({proporcion:.0%}) están marcados como 'pico'. Se recomienda "
+            f"al menos {PROPORCION_MINIMA_PICOS:.0%}."
+        )
+
+    if picos_totales > 0:
+        inicio_ultimo_tercio = (2 * total) // 3
+        picos_ultimo_tercio = sum(
+            1 for a in ambiciones[inicio_ultimo_tercio:] if a == "pico"
+        )
+        concentracion = picos_ultimo_tercio / picos_totales
+        if concentracion >= PROPORCION_MAXIMA_PICOS_ULTIMO_TERCIO:
+            advertencias.append(
+                f"Picos mal distribuidos: {picos_ultimo_tercio}/{picos_totales} "
+                f"picos ({concentracion:.0%}) están concentrados en el último "
+                f"tercio del esquema. Deberían repartirse a lo largo de la "
+                f"novela, no acumularse al final."
+            )
+
+    return " ".join(advertencias) if advertencias else None
+
+
 def slop_score(text):
     """
     Detección mecánica de slop (español -- deteccion_es.py). Devuelve un dict:
@@ -468,7 +561,13 @@ def evaluate_foundation():
     layers = load_layer_files()
     prompt = FOUNDATION_PROMPT.format(**layers)
     raw = call_judge(prompt, max_tokens=16000)
-    return parse_json_response(raw)
+    result = parse_json_response(raw)
+
+    advertencia = validar_diversidad_ambicion(layers["outline"])
+    if advertencia:
+        result["advertencia_ambicion"] = advertencia
+
+    return result
 
 
 # --- Chapter Evaluation ---
@@ -655,6 +754,15 @@ def evaluate_chapter(chapter_num):
         adjusted = max(0, result["overall_score"] - slop["slop_penalty"])
         result["raw_judge_score"] = result["overall_score"]
         result["overall_score"] = round(adjusted, 2)
+
+    # Umbral de aceptación por ambición del capítulo (Tarea 3), no una
+    # constante global -- ver UMBRALES_AMBICION.
+    ambicion = extraer_ambicion(chapter_outline)
+    umbral = umbral_por_ambicion(ambicion)
+    result["ambicion"] = ambicion or "(no declarada)"
+    result["umbral_aceptacion"] = umbral
+    if "overall_score" in result:
+        result["aceptado"] = result["overall_score"] >= umbral
 
     return result
 

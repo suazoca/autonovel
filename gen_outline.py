@@ -84,6 +84,11 @@ For EACH chapter, provide:
 - **Location:** Which districts/locations
 - **Save the Cat beat:** Which beat this chapter serves (Opening Image, Setup, Catalyst, etc.)
 - **% mark:** Where this falls in the novel
+- **Ambición:** pico | sosten | valle -- declare ONE per chapter.
+  "pico" = a scene the reader must remember (aim for at least 15% of all
+  chapters). "sosten" = a working chapter that advances the plot.
+  "valle" = a deliberate breather/transition. Do NOT make every chapter a
+  "sosten" -- a flat outline with no peaks reads as competent but forgettable.
 - **Emotional arc:** Starting emotion → ending emotion
 - **Try-fail cycle:** Yes-but / No-and / No-but / Yes-and
 - **Beats:** 3-5 specific scene beats that must happen
