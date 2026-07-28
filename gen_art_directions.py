@@ -34,7 +34,7 @@ def call_claude(prompt, max_tokens=3000):
         timeout=120,
     )
     resp.raise_for_status()
-    return resp.json()["content"][0]["text"]
+    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
 
 
 def generate_directions(art_type, style, n=6, world_excerpt=""):

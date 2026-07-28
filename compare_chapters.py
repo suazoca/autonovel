@@ -44,7 +44,7 @@ def call_judge(prompt, max_tokens=4000):
     }
     resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=300)
     resp.raise_for_status()
-    return resp.json()["content"][0]["text"]
+    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
 
 def parse_json(text):
     text = text.strip()

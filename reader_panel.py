@@ -126,7 +126,7 @@ def call_reader(reader_key, arc_summary):
     }
     resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=300)
     resp.raise_for_status()
-    raw = resp.json()["content"][0]["text"]
+    raw = next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
     
     # Parse JSON
     raw = raw.strip()

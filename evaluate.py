@@ -419,7 +419,7 @@ def call_judge(prompt, max_tokens=2000):
         timeout=180,
     )
     resp.raise_for_status()
-    return resp.json()["content"][0]["text"]
+    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
 
 
 def parse_json_response(text):

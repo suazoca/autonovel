@@ -32,7 +32,7 @@ def call_writer(prompt, max_tokens=4000):
     }
     resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=120)
     resp.raise_for_status()
-    return resp.json()["content"][0]["text"]
+    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
 
 def extract_key_passages(text):
     """Get opening, closing, and best dialogue from a chapter."""

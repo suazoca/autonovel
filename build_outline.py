@@ -38,7 +38,7 @@ def call_model(prompt, max_tokens=1500):
     }
     resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=120)
     resp.raise_for_status()
-    text = resp.json()["content"][0]["text"]
+    text = next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
     # Extract JSON from response
     text = text.strip()
     if text.startswith("```"):

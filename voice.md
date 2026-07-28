@@ -115,9 +115,9 @@ After writing any passage, ask:
 
 ## Part 2: Voice Identity (generated per novel)
 
-Everything below is discovered during the foundation phase.
+<!-- Everything below is discovered during the foundation phase.
 The agent proposes a voice that serves THIS story, writes exemplar
-passages, and calibrates against them throughout drafting.
+passages, and calibrates against them throughout drafting. -->
 
 ### Tone
 <!-- Generated during foundation. Examples:

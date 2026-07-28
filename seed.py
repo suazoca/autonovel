@@ -52,7 +52,7 @@ def call_writer(prompt, max_tokens=4000):
         timeout=120,
     )
     resp.raise_for_status()
-    return resp.json()["content"][0]["text"]
+    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
 
 
 GENERATE_PROMPT = """Generate {count} fantasy novel seed concepts. Each should be

@@ -56,7 +56,7 @@ def call_opus(prompt, max_tokens=8000):
         headers=headers, json=payload, timeout=600,
     )
     resp.raise_for_status()
-    return resp.json()["content"][0]["text"]
+    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
 
 
 def get_title():
