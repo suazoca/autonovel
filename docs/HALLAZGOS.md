@@ -448,3 +448,107 @@ por cada entrada de `SECCIONES`) -- solo dar la voz por completa si las 7
 subsecciones obligatorias tienen contenido real, no solo alguna.
 
 **Estado:** NO corregido, anotado como hallazgo abierto a pedido explícito.
+
+---
+
+## RESUELTO: cuatro incompatibilidades con Fable 5 encontradas en la primera corrida real
+
+La primera corrida real contra la API (Fable 5 como escritor, Opus 5 como
+juez, tras configurar `.env` en la rama `novela2`) reveló cuatro problemas
+que ningún test podía haber atrapado -- todos los tests de este repo
+mockean `call_writer()`/`httpx`, así que nunca ejercitan la forma real de
+un payload o de una respuesta de Fable 5. Se documentan acá los cuatro
+juntos porque los tres primeros solo existían, hasta ahora, en el mensaje
+de dos commits (`c8f7b99`, `7b66805`) -- sin esta entrada, nadie iba a
+saber por qué el payload no lleva `temperature` o por qué el texto se
+busca por tipo de bloque en vez de por índice fijo.
+
+### 1. `temperature` deprecado en Fable 5 -- devolvía 400
+
+**Qué pasaba:** los 19 scripts mandaban `"temperature": <algo>` en el
+payload de `/v1/messages` (heredado de cuando el escritor era Sonnet).
+Fable 5 rechaza ese parámetro con `400 Bad Request` -- la llamada nunca
+llegaba a generar nada.
+
+**Corregido en** `c8f7b99` ("fix: elimina temperature del payload
+(deprecado en Fable 5)") -- se sacó la clave `temperature` del payload en
+los 19 scripts. Con la Tarea 8 (`api_comun.py`, este commit), el payload
+de `llamar_api()` directamente nunca tuvo esa clave -- no hay forma de
+reintroducir el bug por accidente en un script nuevo que use el módulo
+compartido.
+
+### 2. Bloques `['thinking', 'text']` rompían `content[0]["text"]`
+
+**Qué pasaba:** los 19 scripts leían el texto de la respuesta como
+`resp.json()["content"][0]["text"]` -- asumiendo que el primer bloque del
+array `content` es siempre el de texto. Fable 5, con razonamiento
+adaptativo, antepone un bloque `{"type": "thinking", ...}` (sin clave
+`"text"`) antes del bloque de texto real. `content[0]["text"]` explotaba
+con `KeyError: 'text'` en cada llamada.
+
+**Corregido en** `7b66805` ("fix: compatibilidad con Fable 5 (temperature
+deprecado, bloque thinking en la respuesta)") -- se cambió a
+`next(b["text"] for b in resp.json()["content"] if b.get("type") ==
+"text")` en los 19 scripts: busca el bloque por tipo, no por posición.
+Con la Tarea 8, `api_comun.py::llamar_api()` hace lo mismo pero sobre
+deltas de streaming (`content_block_start`/`content_block_delta`
+indexados), ignorando explícitamente los deltas de bloques `thinking` --
+ver su docstring.
+
+### 3. Prosa de plantilla fuera de comentario HTML en `voice.md` -- `gen_voice.py` nunca generaba, en silencio
+
+**Qué pasaba:** la Parte 2 de `voice.md` empezaba con tres líneas de
+prosa explicativa ("Everything below is discovered during the foundation
+phase. The agent proposes a voice that serves THIS story...") que **no**
+estaban envueltas en un comentario HTML, a diferencia del resto de la
+plantilla (cada subsección sí tenía su placeholder en `<!-- ... -->`).
+`fundacion_comun.voz_parte2_tiene_contenido()` saca los comentarios HTML y
+los encabezados de la Parte 2 y devuelve `True` si sobrevive algo -- esas
+tres líneas de prosa sobrevivían al filtro, así que la función siempre
+devolvía `True`, incluso en un `voice.md` recién creado desde la
+plantilla, sin una sola subsección real generada. `gen_voice.py::main()`
+interpretaba eso como "la voz ya está decidida" y salía sin llamar a la
+API -- **sin ningún mensaje de error**, porque desde su lógica no era un
+error: es exactamente el comportamiento correcto para el caso real de
+idempotencia (no regenerar una voz ya elegida). El bug era indistinguible
+de un funcionamiento normal hasta que alguien miraba `voice.md` a mano y
+notaba que las 7 subsecciones seguían siendo placeholder.
+
+**Corregido en** `7b66805` -- esas tres líneas de prosa se envolvieron en
+`<!-- ... -->`, igual que el resto de la plantilla. No hubo cambio de
+código en `gen_voice.py`/`fundacion_comun.py`: el bug estaba en el
+contenido de `voice.md`, no en la lógica de detección.
+
+**Por qué importa más allá de esta corrida:** `voz_parte2_tiene_contenido()`
+confía en que *toda* la plantilla siga la misma convención (todo lo que no
+sea contenido generado va en comentario HTML). Si en el futuro se edita
+`voice.md`/`voz.md` a mano y se agrega texto explicativo fuera de un
+comentario, el mismo silencio se repite. Ver también el hallazgo de
+arriba ("`voz_parte2_tiene_contenido()` verifica la Parte 2 como un todo,
+no subsección por subsección") -- son la misma función, dos maneras
+distintas de que un falso positivo pase desapercibido.
+
+### 4. Timeout sin streaming perdía respuestas ya generadas y cobradas
+
+**Qué pasaba:** `call_writer()`/`call_judge()`/equivalentes hacían un
+`httpx.post()` bloqueante con un timeout fijo por script (120-600s según
+la llamada). Con razonamiento adaptativo y `max_tokens` alto, Fable 5
+podía tardar más que ese timeout en terminar de generar -- la respuesta
+se generaba igual (y se cobraba igual), pero si el timeout saltaba antes
+de que `httpx` terminara de recibirla completa, la excepción cortaba la
+llamada sin devolver nada. Pasó en la práctica: cuatro llamadas pagadas
+sin ningún archivo generado.
+
+**Corregido en la Tarea 8** (`api_comun.py`, este commit) -- los 19
+scripts pasaron a usar `llamar_api()`, que llama a `/v1/messages` en modo
+streaming (`"stream": True`) y acumula los deltas de texto a medida que
+llegan. El timeout pasó a significar "silencio entre eventos SSE", no
+"duración total del pedido" -- unificado en 120s para los 19 (antes
+variaba 120-600s). Ver el docstring de `llamar_api()` en `api_comun.py`
+para el detalle de por qué el número más chico es, en este caso, más
+estricto y no más laxo.
+
+**Estado:** las cuatro RESUELTAS. Los tres primeros fixes viven en
+`c8f7b99`/`7b66805` (ya en el historial de `novela2` antes de esta
+sesión); el cuarto es `api_comun.py` + el rewiring de los 19 scripts
+(Tarea 8, este commit).

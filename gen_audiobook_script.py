@@ -19,6 +19,8 @@ import re
 from pathlib import Path
 from dotenv import load_dotenv
 
+from api_comun import llamar_api
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env", override=True)
 
@@ -66,24 +68,14 @@ Rules:
 
 
 def call_claude(prompt, max_tokens=8000):
-    import httpx
-    resp = httpx.post(
-        f"{API_BASE}/v1/messages",
-        headers={
-            "x-api-key": API_KEY,
-            "anthropic-version": "2023-06-01",
-            "anthropic-beta": "context-1m-2025-08-07",
-            "content-type": "application/json",
-        },
-        json={
-            "model": WRITER_MODEL,
-            "max_tokens": max_tokens,
-            "messages": [{"role": "user", "content": prompt}],
-        },
-        timeout=300,
+    return llamar_api(
+        prompt,
+        model=WRITER_MODEL,
+        max_tokens=max_tokens,
+        beta="context-1m-2025-08-07",
+        api_key=API_KEY,
+        api_base=API_BASE,
     )
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
 
 
 def parse_chapter(ch_num):

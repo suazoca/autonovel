@@ -11,6 +11,8 @@ import re
 from pathlib import Path
 from dotenv import load_dotenv
 
+from api_comun import llamar_api
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -20,25 +22,18 @@ API_BASE = os.environ.get("AUTONOVEL_API_BASE_URL", "https://api.anthropic.com")
 CHAPTERS_DIR = BASE_DIR / "chapters"
 
 def call_model(prompt, max_tokens=1500):
-    import httpx
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": JUDGE_MODEL,
-        "max_tokens": max_tokens,
-        "system": (
+    text = llamar_api(
+        prompt,
+        model=JUDGE_MODEL,
+        max_tokens=max_tokens,
+        system=(
             "You produce structured outline entries for novel chapters. "
             "Be precise about what HAPPENS, what CHANGES, and what threads are planted/harvested. "
             "Output valid JSON only."
         ),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=120)
-    resp.raise_for_status()
-    text = next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
+        api_key=API_KEY,
+        api_base=API_BASE,
+    )
     # Extract JSON from response
     text = text.strip()
     if text.startswith("```"):

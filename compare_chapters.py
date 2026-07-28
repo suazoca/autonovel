@@ -16,6 +16,8 @@ from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
 
+from api_comun import llamar_api
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -25,26 +27,19 @@ API_BASE = os.environ.get("AUTONOVEL_API_BASE_URL", "https://api.anthropic.com")
 CHAPTERS_DIR = BASE_DIR / "chapters"
 
 def call_judge(prompt, max_tokens=4000):
-    import httpx
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": JUDGE_MODEL,
-        "max_tokens": max_tokens,
-        "system": (
+    return llamar_api(
+        prompt,
+        model=JUDGE_MODEL,
+        max_tokens=max_tokens,
+        system=(
             "You are a literary editor comparing two chapters of the same novel. "
             "You pick the better one. You are not allowed to call it a tie. "
             "You quote specific passages to justify your choice. "
             "Respond with valid JSON only."
         ),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=300)
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
+        api_key=API_KEY,
+        api_base=API_BASE,
+    )
 
 def parse_json(text):
     text = text.strip()

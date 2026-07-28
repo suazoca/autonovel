@@ -25,6 +25,7 @@ from fundacion_comun import (
     ruta_bilingue, load_file, load_file_bilingue, extraer_voz_parte2,
     voz_parte2_tiene_contenido, exigir_semilla,
 )
+from api_comun import llamar_api
 
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
@@ -34,16 +35,11 @@ API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_BASE = os.environ.get("AUTONOVEL_API_BASE_URL", "https://api.anthropic.com")
 
 def call_writer(prompt, max_tokens=8000):
-    import httpx
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": WRITER_MODEL,
-        "max_tokens": max_tokens,
-        "system": (
+    return llamar_api(
+        prompt,
+        model=WRITER_MODEL,
+        max_tokens=max_tokens,
+        system=(
             "Sos un descubridor de voz narrativa. A partir de una semilla de "
             "novela, proponés una identidad de voz específica -- tono, ritmo, "
             "registro léxico, punto de vista -- y escribís pasajes de ejemplo "
@@ -52,11 +48,9 @@ def call_writer(prompt, max_tokens=8000):
             "de ninguna novela existente -- lo que necesites para los pasajes "
             "de ejemplo, lo derivás de la semilla o lo inventás de cero."
         ),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=300)
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
+        api_key=API_KEY,
+        api_base=API_BASE,
+    )
 
 
 # ---------------------------------------------------------------------------

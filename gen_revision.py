@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
+from api_comun import llamar_api
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -16,27 +18,20 @@ API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_BASE = os.environ.get("AUTONOVEL_API_BASE_URL", "https://api.anthropic.com")
 
 def call_writer(prompt, max_tokens=16000):
-    import httpx
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "anthropic-beta": "context-1m-2025-08-07",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": WRITER_MODEL,
-        "max_tokens": max_tokens,
-        "system": (
+    return llamar_api(
+        prompt,
+        model=WRITER_MODEL,
+        max_tokens=max_tokens,
+        system=(
             "You are rewriting a fantasy novel chapter based on a specific revision brief. "
             "You follow the brief exactly. You preserve the voice, world, and characters "
             "from the existing draft while making the structural changes specified. "
             "You write the FULL chapter. Do not truncate or summarize."
         ),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=600)
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
+        beta="context-1m-2025-08-07",
+        api_key=API_KEY,
+        api_base=API_BASE,
+    )
 
 def main():
     ch_num = int(sys.argv[1])

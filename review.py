@@ -20,6 +20,8 @@ from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
 
+from api_comun import llamar_api
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env", override=True)
 
@@ -38,25 +40,15 @@ REVIEW_PROMPT = """Read the below novel, "{title}". Review it first as a literar
 
 def call_opus(prompt, max_tokens=8000):
     """Call Opus with the full manuscript."""
-    import httpx
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "anthropic-beta": "context-1m-2025-08-07",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": REVIEW_MODEL,
-        "max_tokens": max_tokens,
-        "messages": [{"role": "user", "content": prompt}],
-    }
     print(f"Sending to {REVIEW_MODEL} ({len(prompt):,} chars)...", file=sys.stderr)
-    resp = httpx.post(
-        f"{API_BASE}/v1/messages",
-        headers=headers, json=payload, timeout=600,
+    return llamar_api(
+        prompt,
+        model=REVIEW_MODEL,
+        max_tokens=max_tokens,
+        beta="context-1m-2025-08-07",
+        api_key=API_KEY,
+        api_base=API_BASE,
     )
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
 
 
 def get_title():

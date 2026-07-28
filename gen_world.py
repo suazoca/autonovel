@@ -9,6 +9,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from fundacion_comun import ruta_bilingue, load_file, load_file_bilingue, extraer_voz_parte2, exigir_semilla
+from api_comun import llamar_api
 
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
@@ -18,16 +19,11 @@ API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_BASE = os.environ.get("AUTONOVEL_API_BASE_URL", "https://api.anthropic.com")
 
 def call_writer(prompt, max_tokens=16000):
-    import httpx
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": WRITER_MODEL,
-        "max_tokens": max_tokens,
-        "system": (
+    return llamar_api(
+        prompt,
+        model=WRITER_MODEL,
+        max_tokens=max_tokens,
+        system=(
             "Sos un diseñador de mundos con conocimiento profundo de las Leyes de "
             "Sanderson, la filosofía de prosa de Le Guin, y diseño de lore de calidad "
             "TTRPG. Escribís biblias de mundo específicas, interconectadas, que sugieren "
@@ -36,11 +32,9 @@ def call_writer(prompt, max_tokens=16000):
             "Cada regla tiene un costo. Cada detalle cultural implica una historia. "
             "Cada lugar tiene una firma sensorial."
         ),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=300)
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
+        api_key=API_KEY,
+        api_base=API_BASE,
+    )
 
 
 def build_prompt(seed, voice_part2, craft):

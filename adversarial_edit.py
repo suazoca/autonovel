@@ -13,6 +13,8 @@ import re
 from pathlib import Path
 from dotenv import load_dotenv
 
+from api_comun import llamar_api
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -24,26 +26,19 @@ EDIT_LOG_DIR = BASE_DIR / "edit_logs"
 EDIT_LOG_DIR.mkdir(exist_ok=True)
 
 def call_judge(prompt, max_tokens=8000):
-    import httpx
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": JUDGE_MODEL,
-        "max_tokens": max_tokens,
-        "system": (
+    return llamar_api(
+        prompt,
+        model=JUDGE_MODEL,
+        max_tokens=max_tokens,
+        system=(
             "You are a ruthless literary editor. You cut fat from prose. "
             "You have no sentiment about good-enough sentences -- if a sentence "
             "isn't earning its place, it goes. You quote exactly from the text. "
             "You never invent or paraphrase. Always respond with valid JSON."
         ),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=300)
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
+        api_key=API_KEY,
+        api_base=API_BASE,
+    )
 
 def parse_json(text):
     text = text.strip()

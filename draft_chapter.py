@@ -11,6 +11,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from deteccion_es import CALIBRACION
+from api_comun import llamar_api
 
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
@@ -22,17 +23,11 @@ CHAPTERS_DIR = BASE_DIR / "chapters"
 STATE_PATH = BASE_DIR / "state.json"
 
 def call_writer(prompt, max_tokens=16000):
-    import httpx
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "anthropic-beta": "context-1m-2025-08-07",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": WRITER_MODEL,
-        "max_tokens": max_tokens,
-        "system": (
+    return llamar_api(
+        prompt,
+        model=WRITER_MODEL,
+        max_tokens=max_tokens,
+        system=(
             "Sos un escritor de ficción literaria redactando un capítulo de "
             "novela, en español. Seguís la definición de voz exactamente. "
             "Cumplís cada beat del esquema. Nunca usás palabras de la lista "
@@ -42,11 +37,10 @@ def call_writer(prompt, max_tokens=16000):
             "Confiás en el lector. Escribís el capítulo COMPLETO -- no "
             "truncás, no resumís, no saltás adelante."
         ),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=600)
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
+        beta="context-1m-2025-08-07",
+        api_key=API_KEY,
+        api_base=API_BASE,
+    )
 
 def load_file(path):
     try:

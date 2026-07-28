@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 from deteccion_es import CALIBRACION
 from fundacion_comun import ruta_bilingue, load_file, load_file_bilingue, extraer_voz_parte2, exigir_semilla
+from api_comun import llamar_api
 
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
@@ -15,29 +16,22 @@ WRITER_MODEL = os.environ.get("AUTONOVEL_WRITER_MODEL", "claude-sonnet-4-6")
 API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_BASE = os.environ.get("AUTONOVEL_API_BASE_URL", "https://api.anthropic.com")
 
-def call_writer(prompt, max_tokens=16000):
-    import httpx
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "anthropic-beta": "context-1m-2025-08-07",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": WRITER_MODEL,
-        "max_tokens": max_tokens,
-        "system": (
+def call_writer(prompt, max_tokens=32000):
+    return llamar_api(
+        prompt,
+        model=WRITER_MODEL,
+        max_tokens=max_tokens,
+        system=(
             "You are a novel architect with deep knowledge of Save the Cat beats, "
             "Sanderson's plotting principles, Dan Harmon's Story Circle, and MICE Quotient. "
             "You build outlines that an author can draft from without inventing structure "
             "on the fly. Every chapter has beats, emotional arc, and try-fail cycle type. "
             "You never use AI slop words. You write in clean, direct prose."
         ),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=600)
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
+        beta="context-1m-2025-08-07",
+        api_key=API_KEY,
+        api_base=API_BASE,
+    )
 
 
 def build_prompt(seed, world, characters, mystery, craft, voice_part2):

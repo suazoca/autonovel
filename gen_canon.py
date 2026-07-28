@@ -8,6 +8,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from fundacion_comun import load_file, load_file_bilingue, exigir_semilla
+from api_comun import llamar_api
 
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
@@ -17,27 +18,20 @@ API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_BASE = os.environ.get("AUTONOVEL_API_BASE_URL", "https://api.anthropic.com")
 
 def call_writer(prompt, max_tokens=16000):
-    import httpx
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": WRITER_MODEL,
-        "max_tokens": max_tokens,
-        "system": (
+    return llamar_api(
+        prompt,
+        model=WRITER_MODEL,
+        max_tokens=max_tokens,
+        system=(
             "Sos un editor de continuidad que extrae hechos duros de documentos de "
             "planificación de una novela. Sos preciso, exhaustivo, y nunca inventás "
             "hechos que no estén en el material fuente. Cada entrada debe poder "
             "rastrearse a una afirmación específica en los documentos fuente. "
             "Escribís en español."
         ),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=300)
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
+        api_key=API_KEY,
+        api_base=API_BASE,
+    )
 
 
 def build_prompt(seed, world, characters):

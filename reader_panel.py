@@ -14,6 +14,8 @@ from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
 
+from api_comun import llamar_api
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -110,24 +112,17 @@ Respond with JSON:
 }}
 """
 
-def call_reader(reader_key, arc_summary):
-    import httpx
+def call_reader(reader_key, arc_summary, max_tokens=4000):
     reader = READERS[reader_key]
-    headers = {
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": JUDGE_MODEL,
-        "max_tokens": 4000,
-        "system": reader["system"],
-        "messages": [{"role": "user", "content": READER_PROMPT.format(arc_summary=arc_summary)}],
-    }
-    resp = httpx.post(f"{API_BASE}/v1/messages", headers=headers, json=payload, timeout=300)
-    resp.raise_for_status()
-    raw = next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
-    
+    raw = llamar_api(
+        READER_PROMPT.format(arc_summary=arc_summary),
+        model=JUDGE_MODEL,
+        max_tokens=max_tokens,
+        system=reader["system"],
+        api_key=API_KEY,
+        api_base=API_BASE,
+    )
+
     # Parse JSON
     raw = raw.strip()
     if raw.startswith("```"):

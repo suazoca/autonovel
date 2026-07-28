@@ -15,6 +15,8 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
+from api_comun import llamar_api
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -25,17 +27,11 @@ ANTHROPIC_BETA = "context-1m-2025-08-07"
 
 
 def call_writer(prompt, max_tokens=4000):
-    import httpx
-    headers = {
-        "x-api-key": ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-        "anthropic-beta": ANTHROPIC_BETA,
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": WRITER_MODEL,
-        "max_tokens": max_tokens,
-        "system": (
+    return llamar_api(
+        prompt,
+        model=WRITER_MODEL,
+        max_tokens=max_tokens,
+        system=(
             "You are a fantasy novelist with deep knowledge of the genre's "
             "best works -- Tolkien, Le Guin, Rothfuss, Wolfe, Jemisin, Peake, "
             "Susanna Clarke, Andrew Peterson, Sofia Samatar. You generate "
@@ -43,16 +39,10 @@ def call_writer(prompt, max_tokens=4000):
             "SOUND. You never propose generic medieval Europe + elves. Each "
             "concept should make a reader think 'I've never seen THAT before.'"
         ),
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = httpx.post(
-        f"{API_BASE_URL}/v1/messages",
-        headers=headers,
-        json=payload,
-        timeout=120,
+        beta=ANTHROPIC_BETA,
+        api_key=ANTHROPIC_API_KEY,
+        api_base=API_BASE_URL,
     )
-    resp.raise_for_status()
-    return next(b["text"] for b in resp.json()["content"] if b.get("type") == "text")
 
 
 GENERATE_PROMPT = """Generate {count} fantasy novel seed concepts. Each should be
