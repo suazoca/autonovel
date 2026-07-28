@@ -33,7 +33,6 @@ def call_judge(prompt, max_tokens=8000):
     payload = {
         "model": JUDGE_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.3,
         "system": (
             "You are a ruthless literary editor. You cut fat from prose. "
             "You have no sentiment about good-enough sentences -- if a sentence "

@@ -43,7 +43,6 @@ def call_writer(prompt, max_tokens=8000):
     payload = {
         "model": WRITER_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.8,
         "system": (
             "Sos un descubridor de voz narrativa. A partir de una semilla de "
             "novela, proponés una identidad de voz específica -- tono, ritmo, "

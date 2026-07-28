@@ -34,7 +34,6 @@ def call_judge(prompt, max_tokens=4000):
     payload = {
         "model": JUDGE_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.2,
         "system": (
             "You are a literary editor comparing two chapters of the same novel. "
             "You pick the better one. You are not allowed to call it a tie. "

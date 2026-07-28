@@ -25,7 +25,6 @@ def call_writer(prompt, max_tokens=16000):
     payload = {
         "model": WRITER_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.5,
         "system": (
             "You are a novel architect continuing an outline. Write in the same format "
             "as the preceding chapters. Every chapter needs: POV, Location, Save the Cat beat, "

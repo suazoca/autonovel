@@ -29,7 +29,6 @@ def call_model(prompt, max_tokens=1500):
     payload = {
         "model": JUDGE_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.1,
         "system": (
             "You produce structured outline entries for novel chapters. "
             "Be precise about what HAPPENS, what CHANGES, and what threads are planted/harvested. "

@@ -27,7 +27,6 @@ def call_writer(prompt, max_tokens=4000):
     payload = {
         "model": WRITER_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.1,
         "system": "You summarize novel chapters precisely. State what HAPPENS, what CHANGES, and what QUESTIONS are left open. No evaluation. No praise. Just events and shifts.",
         "messages": [{"role": "user", "content": prompt}],
     }

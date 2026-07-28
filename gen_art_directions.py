@@ -29,7 +29,6 @@ def call_claude(prompt, max_tokens=3000):
         json={
             "model": WRITER_MODEL,
             "max_tokens": max_tokens,
-            "temperature": 0.9,
             "messages": [{"role": "user", "content": prompt}],
         },
         timeout=120,

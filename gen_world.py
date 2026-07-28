@@ -27,7 +27,6 @@ def call_writer(prompt, max_tokens=16000):
     payload = {
         "model": WRITER_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.7,
         "system": (
             "Sos un diseñador de mundos con conocimiento profundo de las Leyes de "
             "Sanderson, la filosofía de prosa de Le Guin, y diseño de lore de calidad "

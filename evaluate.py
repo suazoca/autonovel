@@ -404,7 +404,6 @@ def call_judge(prompt, max_tokens=2000):
     payload = {
         "model": JUDGE_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.3,
         "system": "You are a literary critic and novel editor. "
                   "You evaluate fiction with precision. Always respond with valid JSON. "
                   "No markdown fences, no preamble -- just the JSON object.",

@@ -121,7 +121,6 @@ def call_reader(reader_key, arc_summary):
     payload = {
         "model": JUDGE_MODEL,
         "max_tokens": 4000,
-        "temperature": 0.7,  # Higher temp for personality
         "system": reader["system"],
         "messages": [{"role": "user", "content": READER_PROMPT.format(arc_summary=arc_summary)}],
     }

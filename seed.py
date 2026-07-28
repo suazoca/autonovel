@@ -35,7 +35,6 @@ def call_writer(prompt, max_tokens=4000):
     payload = {
         "model": WRITER_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 1.0,  # high temp for creative diversity
         "system": (
             "You are a fantasy novelist with deep knowledge of the genre's "
             "best works -- Tolkien, Le Guin, Rothfuss, Wolfe, Jemisin, Peake, "

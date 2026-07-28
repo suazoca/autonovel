@@ -32,7 +32,6 @@ def call_writer(prompt, max_tokens=16000):
     payload = {
         "model": WRITER_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.8,
         "system": (
             "Sos un escritor de ficción literaria redactando un capítulo de "
             "novela, en español. Seguís la definición de voz exactamente. "

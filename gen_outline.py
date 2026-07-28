@@ -26,7 +26,6 @@ def call_writer(prompt, max_tokens=16000):
     payload = {
         "model": WRITER_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.5,
         "system": (
             "You are a novel architect with deep knowledge of Save the Cat beats, "
             "Sanderson's plotting principles, Dan Harmon's Story Circle, and MICE Quotient. "

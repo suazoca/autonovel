@@ -48,7 +48,6 @@ def call_opus(prompt, max_tokens=8000):
     payload = {
         "model": REVIEW_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.3,
         "messages": [{"role": "user", "content": prompt}],
     }
     print(f"Sending to {REVIEW_MODEL} ({len(prompt):,} chars)...", file=sys.stderr)
