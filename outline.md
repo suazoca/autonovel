@@ -642,8 +642,112 @@
 - **~Word count target:** 2050
 
 ### Ch 42: El jardín de invierno
+
+### Ch 42: El jardín de invierno
 - **POV:** Vidal
-- **Location:** Cologny, jardín de invierno de Sandoz
+- **Location:** Cologny, Ginebra: casa de Sandoz, jardín de invierno
 - **Save the Cat beat:** **Climax**
 - **% mark:** 91.3%
-- **Ambición:** **p
+- **Ambición:** **pico**
+- **Emotional arc:** ofensiva preparada → comprensión total del diseño → la primera elección de su vida hecha sin mecanismo
+- **Try-fail cycle:** Yes-but
+- **Beats:** (1) El mismo jardín de invierno del Cap. 20. Sandoz sirve el té de Vidal; no se sirve a sí mismo; esta vez Vidal mira el gesto hasta el fondo y entiende lo que ve: un hombre que ya no puede tomar nada. Pone sobre la mesa la comparación de Chiara. Sandoz la lee entera, despacio, y la devuelve: "Está bien hecha. Dígale que su maestra la habría firmado." No niega. Nunca negó nada: solo seleccionó. (2) La confesión por capas, en el orden en que Vidal la pediría: compró los tres contenedores en 2003, un año después de la intervención, por la misma red que treinta años más tarde compraría la teca. Los midió durante dos décadas. Supo hace diez años lo que Vidal supo en el Cap. 32: *inescrutable*. Pero un resultado sobre fragmentos es atacable — y lo sabe porque él mismo lo demostró: **Basilea 2027 fue suya.** Pagó el acceso a los pesos del modelo para matar el mejor certificado de Europa y probar una sola cosa: la certeza auditable no muere por sus datos; muere por su custodia. El reglamento de 2029 — el que dejó a Vidal legalmente inexistente ante Turín — se redactó por Basilea. Sandoz construyó la puerta cerrada y, dos años después, la única puerta abierta. Vidal recorrió el pasillo creyendo que elegía. (3) El motivo, dicho sin patetismo: se está muriendo; los meses que le quedan cupieron en el calendario de la ostensión — "cuando esto termine" siempre tuvo dos significados. El archivo a perpetuidad no es una colección: es una tumba sellada para las certezas parciales. "Yo no compré la respuesta, doctor. Compré la imposibilidad de que alguien la falsifique. Un sí a medias o un no a medias, anunciados con su firma o con la mía, matan gente que espera del otro lado. Usted lo oyó de Ferrero. Yo lo leí en el ochenta y ocho, margen por margen." Vidal le devuelve la única pregunta que queda: ¿custodia o expropiación? Sandoz: "Elija usted la palabra. Es lo único que no puedo comprarle." (4) La oferta: sucesión. Custodio del archivo a la muerte de Sandoz; acceso vitalicio; el corpus; el 0,97 con todo su contexto. Todo lo que Vidal quiso, entregado con recibo. **Vidal rechaza.** No con indignación: con la calma del Cap. 34 — "Usted colecciona la pregunta. Yo aprendí a devolverla." Pide dos cosas en su lugar: el expediente de adquisición de 2003, para limpiar la sospecha que la maestra de Chiara cargó hasta morir; y que el 0,97 quede en el archivo con su rótulo exacto — *señal no auditable, no clasificada como ruido* — a perpetuidad. Sandoz concede ambas y sirve más té. (5) But: Vidal se va sin la respuesta, sin el archivo, sin el nombre de la palabra correcta para lo que Sandoz hizo. En el tren anota, debajo de la frase del Cap. 20: "No dijo nada verificablemente falso. Elegí igual." Es la primera anotación de su vida que no necesita verificarse.
+- **Plants:** —
+- **Payoffs:** **Hilo #11 pagado: Basilea, los pesos, y la revelación de que el reglamento que cerró la puerta institucional fue consecuencia del propio Sandoz — el diseño completo recontextualizado.** **Hilo #10 pagado: "cuando esto termine" era también su muerte.** **Hilo #15 pagado: servir a otros y nunca a sí mismo — el cuerpo lo explicaba desde el Cap. 20.** Hilo #9 (los márgenes del STURP como biografía del antagonista). La copia de Chiara (Cap. 40) usada como llave, no como arma. Cierre del hilo INQUIRY: no hay respuesta; hay elección — y Vidal la ejecuta.
+- **Character movement:** Responde la pregunta central del libro con un acto, no con un dato: rechaza la propiedad de la pregunta y elige la restitución de las verdades ajenas (la maestra, el 0,97) sobre la posesión de la propia. Cierre del hilo CHARACTER en su cara activa.
+- **The lie:** Refutada y reemplazada en la misma escena: frente al único hombre inauditable del libro, Vidal elige — y la elección, hecha sin mecanismo, no lo destruye. La regla de Sandoz ("ver si la regla sobrevive") se cumple: no sobrevivió; sobrevivió él.
+- **~Word count target:** 2200
+
+### Ch 43: Registro, no anuncio
+- **POV:** Vidal
+- **Location:** Ginebra; Turín, sede de la Comisión; Collegno (dirección que deja de existir)
+- **Save the Cat beat:** Finale (aftermath — la casa se ordena a medias)
+- **% mark:** 93.5%
+- **Ambición:** sosten
+- **Emotional arc:** ejecución de promesas → alivio incompleto: lo que se salva, se salva con costo
+- **Try-fail cycle:** Yes-but
+- **Beats:** (1) Ansermet entrega a Chiara, por canal notarial y sin explicación, el expediente de adquisición de 2003: fechas, firmas, la cadena que la maestra nunca pudo mostrar. "Lo que es de ella, es de ella" — la fórmula del Cap. 41 devuelta con destinataria nueva. Chiara llama a Vidal; la conversación dura cuatro frases; ninguna es de agradecimiento; todas lo son. (2) La investigación interna de la Comisión sobre la desviación del 12 de abril: Ferrero presenta sus "verificaciones discretas" con documentación real de trabajo real; Ceruti — conservador, no policía — co-firma el informe del sistema de clima. La distinción del Cap. 35 gobierna la escena: todo queda registrado; nada es anunciado. But: la desviación de doce segundos permanece en el historial para siempre, con el nombre de Ferrero atado a ella, legible para cualquiera que dentro de veinte años sepa qué buscar. Ferrero comunica su retiro para después de la ostensión: "Consecuencias" — la palabra, por última vez, como factura pagada al contado. (3) Collegno: Ledda cumple su plazo. La gemela — obra maestra sin propósito — arde en un horno industrial con acta de destrucción que nadie archivará. Setenta y dos horas después, la dirección no existió. A Vidal le entrega lo único personal del libro: "Si alguna vez necesita una operación limpia, no me llame. Que no la necesite es mi mejor trabajo." (4) But estructural, dicho por la voz sin comentario: el archivo completo del peritaje duerme en una custodia perpetua que ningún tribunal, ninguna iglesia y ningún laboratorio puede abrir — y eso es exactamente lo que su dueño quería. Vidal ya no sabe si eso es una derrota. Anota que no saberlo tampoco lo desvela.
+- **Plants:** —
+- **Payoffs:** La distinción registro/anuncio (Cap. 35) ejecutada como salvación de Ferrero. Hilo #7 cerrado del todo: la sospecha sobre la maestra, limpiada con papel. Hilo #5, coda: la gemela destruida — el peligro nunca fue la copia, fue el tiempo. La muletilla "consecuencias" (Cap. 7) cerrada en su tercera acepción: precio.
+- **Character movement:** Administra el desenlace de otros antes que el propio: la inversión exacta del hombre del Cap. 1, que administraba datos y dejaba a las personas afuera del laboratorio.
+- **The lie:** Stability trap en su lugar: dos cosas quedan sin auditar para siempre — la palabra correcta para Sandoz y la desviación en el log — y Vidal convive con ambas. La casa está en orden; el orden tiene grietas; las grietas están documentadas.
+- **~Word count target:** 2000
+
+### Ch 44: Ostensión
+- **POV:** Vidal
+- **Location:** Turín, plaza y catedral, 4 de mayo de 2033
+- **Save the Cat beat:** Finale (el mundo recibe lo que él devolvió)
+- **% mark:** 95.7%
+- **Ambición:** **pico**
+- **Emotional arc:** anonimato elegido → una emoción que por fin no intenta clasificar
+- **Try-fail cycle:** Yes-but
+- **Beats:** (1) Vidal en la fila, entre el público, sin acreditación: eligió la entrada que tarda tres horas. La tela expuesta en la teca que su operación tocó dos veces; los sensores que él conoce de memoria sosteniendo la atmósfera; el rostro en negativo bajo la luz diseñada por la donación de un muerto. (2) Ferrero en su rol oficial, última vez, Ceruti a su lado: dos conservadores mirando logs en una tableta mientras dos millones de personas miran otra cosa. Ferrero no ve a Vidal entre la multitud. Vidal cuenta los seis segundos que Ferrero, al pasar junto a la teca, deja los dedos cerca del cristal sin tocarlo — esta vez ni siquiera hace falta. (3) Chiara aparece a su lado en la fila, sin aviso, como quien retoma un turno de taller. No hablan de la operación: hablan de la tela — el vocabulario de ella, ganado. Frente al lienzo, ella reza dos frases sin mirar a nadie; él no reza; ninguno de los dos corrige al otro. (4) But: en toda la plaza, Vidal es el único que sostuvo eso con las manos y el único que jamás podrá decirlo. La verdad más importante de su vida es, por diseño propio, inauditable. La voz registra que la ironía no le duele: le pertenece. Al salir intenta contar la fila por hábito de un año atrás — y descubre que perdió la cuenta hace rato y no volvió a empezarla.
+- **Plants:** —
+- **Payoffs:** Hilo #6, coda final: los guantes ya no hacen falta — la distancia se volvió reverencia sin instrumento. Hilo #17 consumado en diálogo: Vidal dice "la tela" en voz alta por primera vez. Hilo #2 en transición: la cuenta que se abandona sin angustia — puente directo al Cap. 46. La imagen madre del Cap. 5 (la fila) devuelta a escala de multitud.
+- **Character movement:** Ocupa voluntariamente el lugar de las cuarenta y una personas del Cap. 5: adentro de la fila, no midiéndola. Todavía no sabe qué es lo que hace ahí. Ya no necesita saberlo para quedarse.
+- **The lie:** Invertida en espejo público: dos millones de personas creen sin mecanismo y él, que tiene todos los mecanismos, está entre ellas — y nadie en la plaza está cometiendo un error de método.
+- **~Word count target:** 2050
+
+### Ch 45: Márgenes
+- **POV:** Vidal
+- **Location:** Zúrich, su estudio — semanas después
+- **Save the Cat beat:** Finale (capítulo quieto — las deudas íntimas)
+- **% mark:** 97.8%
+- **Ambición:** valle (capítulo quieto)
+- **Emotional arc:** duelo sereno → restitución de la deuda más vieja del libro
+- **Try-fail cycle:** Yes-but
+- **Beats:** (1) Una esquela de tres líneas en la prensa financiera ginebrina: Emeric Sandoz, sin edad, sin causa, sin foto. Ansermet comunica lo formal: el archivo pasó a la estructura perpetua; las dos condiciones de Vidal, inscriptas. Con la carta llega un sobre: la última página del informe final de Vidal, fotocopiada, anotada a lápiz por la mano que discutía con los autores y solía ganar. Junto al rótulo del 0,97, dos palabras: *"Bien conservado."* Es la única vez que el lápiz concede. Vidal guarda la página dentro del libro del STURP, donde empezó. (2) La deuda de veinte años: Vidal redacta y deposita un addendum público al conjunto de datos de Amberes — la señal discordante, reclasificada con fecha y firma: *no auditable, no clasificada como ruido*. Lo contrario exacto de lo que hizo entonces. But: el addendum reabre preguntas sobre los bronces; un colega hostil escribe pidiendo explicaciones; Vidal responde con tres frases verdaderas y ninguna defensa. El costo estaba en el presupuesto. (3) Carta de Chiara, en papel: el círculo del Opificio recibió el expediente de 2003; la memoria de la maestra, limpiada donde importaba — no en la prensa: en el oficio. Última línea: "Ya no tengo cables que enrollar. Preguntá igual." (4) Vidal ordena el estudio. El archivo de Amberes ya no está cifrado; el libro del STURP ya tiene dueño y epitafio; quedan las cinco camisas grises y una planilla local, sin respaldo en la nube, con una columna que todavía se llama "tiempo perdido". No la abre. Todavía.
+- **Plants:** —
+- **Payoffs:** **Hilo #8 cerrado en acto público: Amberes restituido — la herida de origen, saldada con el gesto que la creó, invertido.** Hilo #9 cerrado: el lápiz concede y calla para siempre. Hilo #12, coda: el tic de Chiara, jubilado por escrito. Hilo #16, destino final del 0,97: conservado, no resuelto — creer es conservar algo que no es tuyo (Cap. 34), cumplido al pie de la letra.
+- **Character movement:** Paga hacia atrás: a la señal de Amberes le da el trato que le negó hace veinte años. El hombre que archivaba para protegerse ahora archiva para restituir.
+- **The lie:** Su lugar lo ocupa la definición de la maestra: mantenimiento, no certeza. El capítulo entero es Vidal haciendo mantenimiento de verdades que no cierran — y durmiendo bien.
+- **~Word count target:** 1900
+
+### Ch 46: La fila
+- **POV:** Vidal
+- **Location:** Jerusalén: laboratorio de la Autoridad de Antigüedades; Basílica del Santo Sepulcro — octubre de 2033
+- **Save the Cat beat:** **Final Image**
+- **% mark:** 100%
+- **Ambición:** sosten
+- **Emotional arc:** oficio recuperado → quietud sin inventario
+- **Try-fail cycle:** Yes-but
+- **Beats:** (1) Espejo del Cap. 1: la directora de distrito lo convoca para el segundo lote del yacimiento de Elah. Vidal supervisa la toma de muestra — microgramos, custodia, su letra prolija — y todo es igual salvo el hombre. Tamiz corre la pasada; el resultado vuelve a ser un intervalo; las facciones vuelven a estar insatisfechas. (2) La directora, a solas, repite su frase del Cap. 2 casi palabra por palabra: la gente que espera afuera no vive en un intervalo; en algún punto todos eligen. Vidal, esta vez: "Lo sé. Por eso entrego el intervalo: para que la elección sea de ellos y no mía. Eso es lo que vendo." Ella lo mira como se mira una calibración que por fin cerró. (3) Día sin datos antes del vuelo. Vidal no lo asigna a nada. Camina la ciudad vieja sin lógica de topógrafo y llega al Sepulcro por el camino largo. La fila: un metro cada tres minutos, y adentro no hay nada. **Se pone en la fila. No la cuenta.** La voz registra la omisión sin explicarla — el mismo tratamiento que dio al tic en el Cap. 1, invertido. (4) Entra al edículo. Adentro no hay nada, exactamente como la primera vez; la diferencia entera del libro cabe en que eso ya no es un dato que falta. Se queda lo que dura. Sale. (5) Esa noche abre la planilla local por última vez, escribe la visita en la columna de siempre y después borra el título de la columna. La entrada queda: fecha, lugar, duración. Sin categoría. Cierra el archivo sin ponerle otro nombre. Fin.
+- **Plants:** —
+- **Payoffs:** **Hilo #2 cerrado: deja de contar — el tic, presentado como método en el Cap. 1 y desenmascarado como oración en el Cap. 33, se apaga en el único lugar donde nació la pregunta.** **Hilo #1 cerrado: la planilla de tiempo perdido pierde el título, no la entrada — la pregunta queda custodiada, no resuelta.** La frase de la directora (Cap. 2) pagada en diálogo espejo. Cierre del hilo MILIEU: Jerusalén abre y cierra el libro; el mismo laboratorio, la misma fila, otro hombre. Cierre final del hilo CHARACTER.
+- **Character movement:** Transformación completa mostrada por sustracción: hace todo lo del Cap. 1 — peritaje, intervalos, ciudad, Sepulcro — y omite lo único que lo definía: medir lo inconmensurable. La fe no llegó; llegó la capacidad de estar en la fila sin auditarla.
+- **The lie:** Sustituida sin ceremonia: "solo es verdad lo que puede auditarse" terminó siendo falsa por insuficiente, no por errónea. La verdad nueva no se enuncia; se ejecuta: custodiar sin cerrar, elegir sin mecanismo, entregar el intervalo y quedarse en la fila.
+- **~Word count target:** 2000
+
+---
+
+## Foreshadowing Ledger
+
+| # | Thread | Planted (Ch) | Reinforced (Ch) | Payoff (Ch) | Alcance | Type |
+|---|--------|-------------|-----------------|-------------|---------|------|
+| 1 | La planilla de "tiempo perdido", único archivo sin respaldo en la nube | 4–5 | 8, 27, 34 | 46 (borra el título de la columna; la entrada queda) | libro | object |
+| 2 | El tic de contar / la fila como imagen madre | 1 | 5, 21, 26, 28, 31, 33, 37, 44 | 46 (se pone en la fila y no la cuenta) | libro | action |
+| 3 | La cláusula de archivo a perpetuidad — el verdadero robo | 10 | 16, 29 | 41 (entrega del archivo), 43 (custodia sellada como statu quo) | libro | structural |
+| 4 | Las dos ventanas de devolución (once y seis minutos) | 14 | 19, 35 | 35 (queda la peor), 38 (se ejecuta en cinco cuarenta) | libro | structural |
+| 5 | La limitación dura de la gemela: no resiste microscopio ni datación | 15 | 19, 23, 36 | 39 (la devolución como único acto con sentido), 43 (destrucción) | libro | object |
+| 6 | Los guantes de algodón de Ferrero como termómetro emocional | 15 | 19, 21, 28, 32 | 38 (se los quita ante Ceruti), 39/44 (reverencia sin tocar) | libro | symbolic |
+| 7 | Los tres contenedores desaparecidos del inventario de 2002 | 16 | 30 | 38 (verdad-escudo), 40 (están en el corpus), 42–43 (expediente de 2003; maestra limpiada) | libro | object |
+| 8 | Amberes: la señal descartada como ruido / el fantasma de los bronces | 2–3 | 11, 27 | 33 (relectura íntima), 45 (addendum público) | libro | object |
+| 9 | El libro del STURP anotado a lápiz por una mano sin nombre | 11 | 20 | 42 (la biografía del antagonista), 45 ("Bien conservado") | libro | object |
+| 10 | "Cuando esto termine" — la promesa de Sandoz | 20 | 39, 41 | 42 (la operación y su vida: doble sentido pagado) | libro | dialogue |
+| 11 | Basilea 2027 y el acceso nunca explicado a los pesos del modelo | 2 | 27 | 42 (fue Sandoz; el reglamento de 2029 nació de ahí — el diseño completo) | libro | structural |
+| 12 | El tic de Chiara: enrollar cables antes de una pregunta difícil | 13 | 26, 29, 34 | 40 (manos quietas = confesión), 45 ("ya no tengo cables que enrollar") | libro | action |
+| 13 | La desconfianza inexplicable de Chiara hacia el financista | 16 | 29 | 40 (motivo oculto confesado: los contenedores) | libro | dialogue |
+| 14 | La muñeca izquierda sin reloj de Ferrero | 7 | 17 | 32 (el hermano, 1988, el anuncio por radio) | libro | symbolic |
+| 15 | El tic de Sandoz: servir a otros y nunca a sí mismo | 20 | 41 (la mirada de Ansermet a quien no está) | 42 (un hombre que ya no puede tomar nada: se muere) | libro | action |
+| 16 | La capa de convergencia de Tamiz / el 0,97 inauditable | 1 | 26, 27, 32, 35 | 41 (rotulado en el informe), 42 (conservado a perpetuidad), 45 (destino final) | libro | structural |
+| 17 | El vocabulario objeto / tela / lienzo | 3 | 22, 24 | 41 ("la tela" en su letra), 44 ("la tela" en su voz) | libro | dialogue |
+| 18 | La desviación de doce segundos en el log de la teca | 23 | 25, 29, 35 | 38 (trae a Ceruti; Ferrero la convierte en salida), 43 (queda para siempre: stability trap) | libro | object |
+| 19 | "Una identidad verdadera con motivos ocultos" (regla de Ledda) | 12 | 21, 37 | 37–38 (ejecutada), 40 (Ledda la confirma con nombre: Chiara) | libro | dialogue |
+| 20 | La donación anónima de la teca como vector de acceso | 7 | 14, 22 | 37 (segunda y última vuelta), 42 (parte del diseño de Sandoz) | libro | structural |
+| 21 | La calidad inexplicable del corpus de referencia de Collegno | 24 | 30 | 40 (está hecho con los contenedores de 2002: la operación era una verificación) | libro | object |
+| 22 | La distinción registro / anuncio | 35 | 41 (el informe como registro) | 43 (salva a Ferrero ante la Comisión) | libro | dialogue |
+| 23 | El silencio de trece siglos como mejor argumento escéptico | 6 | 28 (el tablero en la pizarra) | 41 (Vidal lo usa contra la autenticidad en su propio informe final) | libro | structural |
+| 24 | "En algún punto todos eligen" (la frase de la directora) | 2 | 33 | 46 (diálogo espejo: Vidal la acepta y la responde) | libro | dialogue |
+| 25 | La muletilla "consecuencias" de Ferrero | 7 | 25, 28, 30 | 38 (precio elegido), 43 (factura pagada: el retiro) | libro | dialogue |
+
+**Notas de verificación:** Todos los hilos son de alcance "libro" (esta rama no tiene siembras_serie.md). Distancia mínima siembra→pago cumplida en todos los casos (mínimo 3 capítulos; el más corto: hilo #22, Cap. 35→43, ocho capítulos... y hilo #21, Cap. 24→40, dieciséis). Capítulos quietos en la segunda mitad: 30, 34 y 45. La excepción Yes-and se mantiene única (Cap. 17). Cierre MICE en orden inverso confirmado: EVENT (39–40) → INQUIRY/CHARACTER (42–45) → MILIEU (46).
