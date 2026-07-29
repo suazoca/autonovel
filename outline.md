@@ -361,9 +361,6 @@
 - **Ambición:** **pico**
 - **Emotional arc:** concentración total → euforia sin nombre, inmediatamente reprimida en procedimiento
 - **Try-fail cycle:** Yes-but
-- **Beats:** (1) La vent
-
-### Ch 23: Sustitución *(continuación)*
 - **Beats:** (1) La ventana se abre a las 03:10: personal mínimo, doce minutos de manipulación legítima dentro de las treinta horas. Chiara ejecuta el intercambio con las dos manos — la tela verdadera al contenedor de transporte, la gemela al soporte de la teca — mientras Vidal sostiene el registro falso con letra prolija verdadera. (2) Yes-but: el sensor de peso hidratado de la teca marca una desviación momentánea — la debilidad conocida de la gemela. Ledda ordena no tocar nada. Doce segundos hasta que la lectura estabiliza dentro de tolerancia. Vidal los cuenta; es lo único que puede hacer con las manos quietas. La desviación queda escrita en el log del sistema, y nadie puede borrarla sin dejar una huella peor. (3) Exfiltración limpia: el lienzo viaja a Collegno rotulado como "material de calibración". (4) Amanecer en el laboratorio: el equipo alrededor del contenedor cerrado. Nadie habla. Ferrero no se quita los guantes de algodón en toda la escena. Vidal anota la hora de inicio de los diecisiete días y descubre que la euforia no tiene casilla en su registro.
 - **Plants:** **La desviación de doce segundos en el log de la teca (hilo #18): la huella que nadie puede borrar y que alguien va a leer.**
 - **Payoffs:** Hilo #4 (la ventana de sustitución funciona como se diseñó). Hilo #5 (el peso hidratado casi los mata: la limitación de la gemela pasa de regla a experiencia). Hilo #19 (identidades verdaderas adentro).
@@ -640,8 +637,6 @@
 - **Character movement:** Entrega el trabajo de su vida sin pelear la cláusula, porque va a pelear otra cosa: la pregunta de quién es el hombre que colecciona no-respuestas.
 - **The lie:** Su lápida es el informe: el documento más riguroso de su carrera concluye que el rigor no alcanza, y lo dice con rigor.
 - **~Word count target:** 2050
-
-### Ch 42: El jardín de invierno
 
 ### Ch 42: El jardín de invierno
 - **POV:** Vidal
