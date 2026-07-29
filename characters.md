@@ -190,4 +190,63 @@ Alto, encorvado de microscopio, manos manchadas por décadas de reactivos; corba
 
 ### Secretos
 
-1. **Conoce el faltante de 2002.** Como miembro de la Comisión, detectó hace años la discrepancia del inventario y la cubrió —reclasificó, calló— para proteger a la institución de otro escándalo. No sabe adónde fue el material; sabe que su silencio lo hizo posible. Si se revelara: la traza adversa que atormenta a Vidal se vuelve inescrutable por culpa suya, y su autoridad moral frente
+1. **Conoce el faltante de 2002.** Como miembro de la Comisión, detectó hace años la discrepancia del inventario y la cubrió —reclasificó, calló— para proteger a la institución de otro escándalo. No sabe adónde fue el material; sabe que su silencio lo hizo posible. Si se revelara: la traza adversa que atormenta a Vidal se vuelve inescrutable por culpa suya, y su autoridad moral frentefrente a Ceruti —lo único que puede vencer a un log— queda gastada de un
+solo golpe, justo cuando más la necesita.
+
+2. **El deseo inconfesado.** Lleva treinta años queriendo ver el lienzo
+   con instrumentos que no existían en 1978 ni en 1988. Se lo niega
+   porque admitirlo lo pondría del lado de Vidal, y él necesita seguir
+   siendo el hombre que protege el objeto de la pregunta, no el que la
+   comparte.
+
+### Ledda
+
+*(Ficha pendiente de generación — no consta en el material recibido.
+Función confirmada por el esquema: seguridad y procedimiento del equipo;
+coordina ventanas de acceso, vigilancia y logística de la operación. No
+asignarle fantasma, secreto ni arco propio hasta que se genere una ficha
+completa — el esquema y el canon ya la usan solo en ese rol funcional.)*
+
+### Maître Ansermet
+
+*(Ficha pendiente de generación — no consta en el material recibido.
+Abogado de la Fondation Cassiodore; ejecuta mandatos de Sandoz desde hace
+veinte años sin hacer preguntas. Habla perfecto, completo, sin una frase
+utilizable en su contra.)*
+
+### Monseñor Ceruti
+
+*(Ficha pendiente de generación — no consta en el material recibido.
+Conservador sumado por la Comisión durante el traslado; antagonista de
+calendario en el Acto III; recibe la entrega de la operación de manos de
+Chiara con las condiciones que ella impone.)*
+frente a Ceruti —lo único que puede vencer a un log— queda gastada de un
+solo golpe, justo cuando más la necesita.
+
+2. **El deseo inconfesado.** Lleva treinta años queriendo ver el lienzo
+   con instrumentos que no existían en 1978 ni en 1988. Se lo niega
+   porque admitirlo lo pondría del lado de Vidal, y él necesita seguir
+   siendo el hombre que protege el objeto de la pregunta, no el que la
+   comparte.
+
+### Ledda
+
+*(Ficha pendiente de generación — no consta en el material recibido.
+Función confirmada por el esquema: seguridad y procedimiento del equipo;
+coordina ventanas de acceso, vigilancia y logística de la operación. No
+asignarle fantasma, secreto ni arco propio hasta que se genere una ficha
+completa — el esquema y el canon ya la usan solo en ese rol funcional.)*
+
+### Maître Ansermet
+
+*(Ficha pendiente de generación — no consta en el material recibido.
+Abogado de la Fondation Cassiodore; ejecuta mandatos de Sandoz desde hace
+veinte años sin hacer preguntas. Habla perfecto, completo, sin una frase
+utilizable en su contra.)*
+
+### Monseñor Ceruti
+
+*(Ficha pendiente de generación — no consta en el material recibido.
+Conservador sumado por la Comisión durante el traslado; antagonista de
+calendario en el Acto III; recibe la entrega de la operación de manos de
+Chiara con las condiciones que ella impone.)*
