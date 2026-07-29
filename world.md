@@ -57,4 +57,8 @@ Lo que sí necesita reglas duras es el **techo tecnológico de 2033**, porque la
 
 ### Implicaciones sociales
 
-Las del techo tecnológico, brevemente: el mercado del arte de 2033 desconfía de todo certificado y paga fortunas por **procedencia física ininterrumpida** —de ahí el renacimiento de los puertos francos, que venden exactamente eso: custodia sin preguntas—. En la academia, la generación de Vidal desplazó al connoisseurship tradicional y dejó un tendal de especialistas de sesenta años que lo odian con motivos. Y la Iglesia aprendió de 1988 la lección que gobierna todo el libro: **la 
+Las del techo tecnológico, brevemente: el mercado del arte de 2033 desconfía de todo certificado y paga fortunas por **procedencia física ininterrumpida** —de ahí el renacimiento de los puertos francos, que venden exactamente eso: custodia sin preguntas—. En la academia, la generación de Vidal desplazó al connoisseurship tradicional y dejó un tendal de especialistas de sesenta años que lo odian con motivos. Y la Iglesia aprendió de 1988 la lección que gobierna todo el libro: **la ostensión no se anuncia sin control absoluto sobre lo que se sabe antes de anunciarla.**
+
+---
+
+*Fin del documento.*
