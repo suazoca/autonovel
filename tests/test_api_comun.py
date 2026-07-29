@@ -23,15 +23,18 @@ def _sse(*eventos_data):
 
 def _stream_falso(cuerpo, status_ok=True):
     """Reemplazo de httpx.stream(): devuelve un context manager que rinde
-    un objeto con .raise_for_status() e .iter_lines() sobre `cuerpo`. El
-    mismo cuerpo se devuelve en cada llamada -- para tests de una sola
-    llamada HTTP (sin continuación)."""
+    un objeto con .status_code, .read(), .text e .iter_lines() sobre
+    `cuerpo`. El mismo cuerpo se devuelve en cada llamada -- para tests
+    de una sola llamada HTTP (sin continuación). `status_code` refleja
+    el chequeo `if resp.status_code >= 400` de _llamada_streaming (ya no
+    usa `raise_for_status()`)."""
 
     class _RespuestaFalsa:
-        def raise_for_status(self):
-            if not status_ok:
-                import httpx
-                raise httpx.HTTPStatusError("500 boom", request=None, response=self)
+        status_code = 200 if status_ok else 500
+        text = "" if status_ok else "boom"
+
+        def read(self):
+            pass
 
         def iter_lines(self):
             for linea in cuerpo.split("\n"):
@@ -53,11 +56,10 @@ def _stream_secuencia(cuerpos, capturas=None):
     it = iter(cuerpos)
 
     class _RespuestaFalsa:
+        status_code = 200
+
         def __init__(self, cuerpo):
             self._cuerpo = cuerpo
-
-        def raise_for_status(self):
-            pass
 
         def iter_lines(self):
             for linea in self._cuerpo.split("\n"):
@@ -173,8 +175,7 @@ def test_header_beta_se_manda_solo_si_se_pide(monkeypatch):
         capturado["json"] = json
 
         class _R:
-            def raise_for_status(self):
-                pass
+            status_code = 200
 
             def iter_lines(self):
                 for linea in TEXTO_SIMPLE.split("\n"):
@@ -204,8 +205,7 @@ def test_payload_manda_stream_true_y_no_manda_temperature(monkeypatch):
         capturado["json"] = json
 
         class _R:
-            def raise_for_status(self):
-                pass
+            status_code = 200
 
             def iter_lines(self):
                 for linea in TEXTO_SIMPLE.split("\n"):
@@ -234,8 +234,7 @@ def test_timeout_default_es_120_no_600(monkeypatch):
         capturado["timeout"] = timeout
 
         class _R:
-            def raise_for_status(self):
-                pass
+            status_code = 200
 
             def iter_lines(self):
                 for linea in TEXTO_SIMPLE.split("\n"):
@@ -259,8 +258,7 @@ def test_system_se_omite_del_payload_si_no_se_pasa(monkeypatch):
         capturado["json"] = json
 
         class _R:
-            def raise_for_status(self):
-                pass
+            status_code = 200
 
             def iter_lines(self):
                 for linea in TEXTO_SIMPLE.split("\n"):
@@ -277,7 +275,9 @@ def test_system_se_omite_del_payload_si_no_se_pasa(monkeypatch):
 
 
 # ---------------------------------------------------------------------------
-# Continuación automática cuando se corta por max_tokens (Tarea 9)
+# Continuación automática cuando se corta por max_tokens (Tarea 9;
+# mecanismo de continuación corregido en la Tarea 9b -- ver docstring de
+# api_comun.py: el prefill original quedó rechazado por Fable 5 con 400)
 # ---------------------------------------------------------------------------
 
 def test_end_turn_no_dispara_continuacion(monkeypatch):
@@ -339,7 +339,13 @@ def test_empalme_no_pierde_ni_duplica_texto_a_mitad_de_palabra(monkeypatch):
     assert resultado == "camino al pueblo"
 
 
-def test_continuacion_manda_prefill_como_turno_de_assistant_sin_turno_de_usuario(monkeypatch):
+def test_continuacion_manda_assistant_seguido_de_turno_de_usuario_pidiendo_continuar(monkeypatch):
+    # Tarea 9b: Fable 5 rechaza con 400 que la conversación termine en un
+    # turno de assistant ("This model does not support assistant message
+    # prefill. The conversation must end with a user message."). El texto
+    # parcial sigue yendo como turno de assistant -- eso sí lo acepta --
+    # pero ahora va seguido de un turno de usuario pidiendo que continúe,
+    # para que el assistant nunca sea el último mensaje.
     primera_llamada = _sse(
         '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
         '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "cami"}}',
@@ -365,13 +371,16 @@ def test_continuacion_manda_prefill_como_turno_de_assistant_sin_turno_de_usuario
     assert mensajes_segunda == [
         {"role": "user", "content": "el prompt original"},
         {"role": "assistant", "content": "cami"},
+        {"role": "user", "content": api_comun.MENSAJE_CONTINUAR},
     ]
+    # El último turno es de usuario, no de assistant -- lo que Fable 5 exige.
+    assert mensajes_segunda[-1]["role"] == "user"
 
 
-def test_prefill_se_manda_sin_espacio_en_blanco_al_final(monkeypatch):
-    # La API rechaza un mensaje de assistant que termine en whitespace --
-    # si el corte cayó justo después de una palabra completa (con un
-    # espacio ya emitido), ese espacio se saca del prefill.
+def test_texto_del_assistant_se_manda_sin_espacio_en_blanco_al_final(monkeypatch):
+    # Ya no hace falta para cumplir una regla de la API (el turno de
+    # assistant no es el último), pero evita un espacio de más en la
+    # juntura si el corte cayó justo después de una palabra completa.
     primera_llamada = _sse(
         '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
         '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "Hola   "}}',
@@ -392,9 +401,50 @@ def test_prefill_se_manda_sin_espacio_en_blanco_al_final(monkeypatch):
     resultado = api_comun.llamar_api(
         prompt="hola", model="m", max_tokens=10, api_key="k", api_base="https://x",
     )
-    prefill_mandado = capturas[1]["messages"][-1]["content"]
-    assert not prefill_mandado.endswith(" ")
+    texto_assistant_mandado = capturas[1]["messages"][-2]["content"]
+    assert not texto_assistant_mandado.endswith(" ")
     assert resultado == "Hola mundo"
+
+
+def test_recorta_solapamiento_si_la_continuacion_repite_la_ultima_palabra(monkeypatch):
+    # Ya no es prefill literal (Tarea 9b): el modelo puede repetir la
+    # última palabra/frase del texto acumulado para que su continuación
+    # "cierre" gramaticalmente. Si "el camino" quedó cortado y la
+    # continuación repite "camino" antes de seguir, no debe duplicarse.
+    primera_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "el camino"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "max_tokens"}, "usage": {"output_tokens": 100}}',
+    )
+    segunda_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "camino largo"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "end_turn"}, "usage": {"output_tokens": 2}}',
+    )
+    monkeypatch.setattr(
+        api_comun.httpx, "stream",
+        _stream_secuencia([primera_llamada, segunda_llamada]),
+    )
+    resultado = api_comun.llamar_api(
+        prompt="hola", model="m", max_tokens=10, api_key="k", api_base="https://x",
+    )
+    assert resultado == "el camino largo"
+
+
+def test_recortar_solapamiento_no_toca_nada_si_no_hay_repeticion():
+    assert api_comun._recortar_solapamiento("cami", "no al pueblo") == "no al pueblo"
+
+
+def test_recortar_solapamiento_primera_llamada_sin_acumulado_previo():
+    assert api_comun._recortar_solapamiento("", "cualquier cosa") == "cualquier cosa"
+
+
+def test_recortar_solapamiento_recorta_el_mayor_sufijo_que_coincide():
+    # "camino" coincide como sufijo de "el camino" y como prefijo de
+    # "camino largo" -- debe recortar los 6 caracteres, no menos.
+    assert api_comun._recortar_solapamiento("el camino", "camino largo") == " largo"
 
 
 def test_tope_de_continuaciones_agotado_sale_con_sys_exit(monkeypatch):
@@ -421,8 +471,9 @@ def test_tope_de_continuaciones_agotado_sale_con_sys_exit(monkeypatch):
 
 def test_max_tokens_sin_texto_alguno_sale_con_sys_exit_sin_loopear(monkeypatch):
     # Todo el presupuesto se va en thinking, cero texto -- no hay con qué
-    # armar el prefill de la continuación, así que debe abortar en la
-    # primera vuelta en vez de reintentar con un mensaje de assistant vacío.
+    # armar el turno de assistant de la continuación, así que debe
+    # abortar en la primera vuelta en vez de reintentar con un mensaje
+    # de assistant vacío.
     cuerpo = _sse(
         '{"type": "content_block_start", "index": 0, "content_block": {"type": "thinking"}}',
         '{"type": "content_block_delta", "index": 0, "delta": {"type": "thinking_delta", "thinking": "..."}}',
@@ -435,3 +486,54 @@ def test_max_tokens_sin_texto_alguno_sale_con_sys_exit_sin_loopear(monkeypatch):
             prompt="hola", model="m", max_tokens=10, api_key="k", api_base="https://x",
         )
     assert "sin producir" in str(exc.value) or "prefill" in str(exc.value).lower()
+
+
+# ---------------------------------------------------------------------------
+# stop_reason == "refusal" (hallazgo de la prueba contra la API real de la
+# Tarea 9b): el clasificador de seguridad de Fable 5 puede rechazar una
+# respuesta -- incluso a mitad de una continuación, con texto real ya
+# acumulado en llamadas previas. Sin manejo explícito, el loop lo trataba
+# igual que "end_turn" y devolvía ese texto truncado como si fuera la
+# respuesta completa, sin ningún aviso.
+# ---------------------------------------------------------------------------
+
+def test_sale_con_sys_exit_si_stop_reason_es_refusal(monkeypatch):
+    cuerpo = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "algo"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "refusal", '
+        '"stop_details": {"type": "refusal", "category": "cyber"}}, '
+        '"usage": {"output_tokens": 10}}',
+    )
+    with pytest.raises(SystemExit) as exc:
+        _llamar(monkeypatch, cuerpo)
+    mensaje = str(exc.value)
+    assert "refusal" in mensaje
+    assert "cyber" in mensaje
+
+
+def test_refusal_en_continuacion_no_devuelve_el_texto_acumulado_como_si_estuviera_completo(monkeypatch):
+    # Reproduce el hallazgo real: la primera llamada corta por max_tokens
+    # y deja texto genuino acumulado; la segunda -- ya en modo
+    # continuación, con el turno assistant+user de MENSAJE_CONTINUAR --
+    # es rechazada por el clasificador. Antes de este fix esto se
+    # devolvía como éxito con el texto trunco a media frase.
+    primera_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "Había una vez"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "max_tokens"}, "usage": {"output_tokens": 100}}',
+    )
+    segunda_llamada = _sse(
+        '{"type": "message_delta", "delta": {"stop_reason": "refusal"}, "usage": {"output_tokens": 0}}',
+    )
+    monkeypatch.setattr(
+        api_comun.httpx, "stream",
+        _stream_secuencia([primera_llamada, segunda_llamada]),
+    )
+    with pytest.raises(SystemExit) as exc:
+        api_comun.llamar_api(
+            prompt="hola", model="m", max_tokens=10, api_key="k", api_base="https://x",
+        )
+    assert "refusal" in str(exc.value)

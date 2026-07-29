@@ -49,29 +49,41 @@ part2 cortó en Ch 42 -- porque nada avisaba que `stop_reason ==
 seguí pidiendo más hasta `stop_reason == "end_turn"` (o hasta agotar
 `max_continuaciones`).
 
-El mecanismo NO es "mandale la respuesta parcial y un mensaje de usuario
-pidiendo que siga" -- es *prefill*: el texto acumulado se manda como el
-último mensaje de la conversación con `role: "assistant"` (sin ningún
-turno de usuario después). La API interpreta eso como "el asistente ya
-dijo esto, seguí escribiendo esta misma respuesta" y el texto que
-devuelve es pura continuación -- nunca repite el prefijo. Importa por
-dos motivos:
-  1. Cero riesgo de duplicar texto en la juntura: no hay nada que
-     deduplicar porque el modelo nunca vuelve a generar lo que ya
-     generó, a diferencia de pedirle "continuá" como mensaje nuevo (ahí
-     sí podría reformular o repetir la última frase para que "cierre"
-     gramaticalmente).
-  2. Corta a mitad de palabra sin problema: si el texto quedó en "cami"
-     (de "camino"), la continuación llega literalmente como "no..." y
-     concatenar sin separador da "camino..." -- porque para el modelo
-     no hay un límite de mensaje ahí, es la misma respuesta en curso.
-     Pedirle que "continúe" como turno nuevo casi seguro reinicia la
-     palabra en vez de completarla.
-Antes de mandar el prefill se le aplica `.rstrip()`: la API rechaza un
-mensaje de assistant que termine en espacio en blanco, y de paso evita
-un doble espacio en la juntura si el corte cayó justo después de una
-palabra completa (la continuación provee su propio espacio inicial si
-hace falta).
+Mecanismo (Tarea 9b -- corregido; la versión original de la Tarea 9 usaba
+prefill y quedó rota): NO es prefill. El primer intento (Tarea 9) mandaba
+el texto acumulado como último mensaje de la conversación con
+`role: "assistant"`, sin turno de usuario después, para que la API lo
+interpretara como "el asistente ya dijo esto, seguí escribiendo esta
+misma respuesta". Confirmado contra la API real que Fable 5 lo rechaza
+con 400: "This model does not support assistant message prefill. The
+conversation must end with a user message." Los tests con mock nunca lo
+habrían detectado porque el mock no valida reglas de la API real -- por
+eso el chequeo contra la API real (ver abajo) es parte del criterio de
+"terminado" para este mecanismo, no un extra.
+
+Mecanismo actual: el texto acumulado va como contenido de un turno
+`role: "assistant"` igual que antes (eso sí lo acepta la API -- lo que
+rechaza es que sea el ÚLTIMO turno), seguido de un turno `role: "user"`
+pidiendo explícitamente que continúe sin repetir texto ni agregar
+comentario (`MENSAJE_CONTINUAR`). Como ya no es prefill literal, el
+modelo ve el corte como el final de un turno propio y puede repetir la
+última palabra o frase para que la continuación "cierre"
+gramaticalmente -- exactamente el riesgo que el prefill evitaba por
+construcción. `_recortar_solapamiento()` compara el sufijo del texto
+acumulado contra el prefijo de cada continuación nueva y recorta la
+parte repetida antes de concatenar, como red de seguridad para cuando la
+instrucción no alcanza. Sigue sin garantizar que un corte a mitad de
+palabra ("cami" de "camino") se complete correctamente -- eso dependía
+del prefill literal y ya no está garantizado por la API; en la práctica
+el modelo suele completar la palabra igual porque ve el corte en el
+texto que "ya escribió", pero no es un contrato de la API como lo era el
+prefill.
+
+Antes de armar cada continuación se le aplica `.rstrip()` al texto
+acumulado: ya no hace falta para cumplir una regla de la API (el turno
+de assistant no es el último), pero evita un espacio de más en la
+juntura si el corte cayó justo después de una palabra completa y la
+continuación no aporta uno propio.
 
 Costo: cada continuación reenvía el prompt original completo como
 input (la API no tiene sesiones -- no hay forma de decir "seguí donde
@@ -99,15 +111,24 @@ import sys
 import httpx
 
 
+MENSAJE_CONTINUAR = (
+    "Continuá exactamente desde donde quedaste, sin repetir ninguna "
+    "palabra ni frase que ya hayas escrito y sin agregar comentarios, "
+    "saludos ni explicaciones -- seguí la prosa directamente desde el "
+    "corte."
+)
+
+
 def llamar_api(prompt, *, model, max_tokens, api_key, api_base, system=None,
                 beta=None, timeout=120.0, max_continuaciones=5):
     """Llama a POST /v1/messages en modo streaming y devuelve el texto
     completo -- pidiendo continuaciones automáticas si la respuesta se
     corta por `stop_reason == "max_tokens"` (ver docstring del módulo
-    para el mecanismo de prefill y por qué no duplica ni pierde texto en
-    la juntura). `max_continuaciones` limita cuántas veces se puede
-    volver a pedir más antes de rendirse -- 5 por defecto: cada vuelta
-    reenvía el prompt completo, así que no es gratis dejarlo sin tope.
+    para el mecanismo de continuación -- ya no es prefill -- y por qué
+    `_recortar_solapamiento()` existe). `max_continuaciones` limita
+    cuántas veces se puede volver a pedir más antes de rendirse -- 5 por
+    defecto: cada vuelta reenvía el prompt completo, así que no es
+    gratis dejarlo sin tope.
 
     Ignora por completo los deltas de bloques 'thinking' -- Fable 5 (y
     cualquier modelo con razonamiento extendido) manda esos bloques
@@ -116,16 +137,24 @@ def llamar_api(prompt, *, model, max_tokens, api_key, api_base, system=None,
     (es una llamada nueva a la API); también se ignora.
 
     Aborta con sys.exit (nunca con StopIteration/KeyError sin contexto)
-    en cuatro casos, todos con stop_reason/usage en el mensaje para
+    en cinco casos, todos con stop_reason/usage en el mensaje para
     poder diagnosticar sin tener que repetir la llamada -- ya se cobró:
       1. El stream manda un evento 'error' (p.ej. overloaded_error a
          mitad de generación, que puede pasar incluso después de un 200).
       2. Se agotan las `max_continuaciones` sin llegar a "end_turn".
       3. Se corta por max_tokens sin haber generado ni un carácter de
          texto (todo el presupuesto se fue en thinking) -- no hay nada
-         con qué armar el prefill de la continuación.
+         con qué armar el turno de assistant de la continuación.
       4. El stream (tras juntar todas las continuaciones) termina sin
          haber acumulado ningún bloque de texto.
+      5. `stop_reason == "refusal"` -- el clasificador de seguridad de
+         Fable 5 rechazó la respuesta (confirmado en pruebas reales:
+         pasa incluso con prompts inocuos, aparentemente un falso
+         positivo). Sin este chequeo, el loop lo trataba igual que
+         "end_turn" y devolvía el texto acumulado hasta ahí como si
+         fuera la respuesta completa -- truncado a media frase, sin
+         ningún aviso (hallazgo de la prueba contra la API real de la
+         Tarea 9b, no algo que los tests con mock detectaran).
 
     Errores HTTP (4xx/5xx) siguen sin capturarse acá -- se propaga la
     excepción de httpx tal como antes, sin cambio de comportamiento.
@@ -154,8 +183,22 @@ def llamar_api(prompt, *, model, max_tokens, api_key, api_base, system=None,
         if system:
             payload["system"] = system
 
-        texto_nuevo, stop_reason, usage = _llamada_streaming(headers, api_base, payload, timeout)
-        texto_acumulado += texto_nuevo
+        texto_nuevo, stop_reason, usage, stop_details = _llamada_streaming(
+            headers, api_base, payload, timeout
+        )
+
+        if stop_reason == "refusal":
+            sys.exit(
+                f"ERROR: la API rechazó la respuesta (stop_reason=refusal) -- "
+                f"el clasificador de seguridad la declinó, posiblemente un "
+                f"falso positivo sobre contenido inocuo. No se devuelve texto: "
+                f"{len(texto_acumulado)} caracteres acumulados en llamadas "
+                f"previas quedarían truncados a media frase sin aviso si se "
+                f"devolvieran como si fuera la respuesta completa. "
+                f"stop_details={stop_details} usage={usage}"
+            )
+
+        texto_acumulado += _recortar_solapamiento(texto_acumulado, texto_nuevo)
 
         if stop_reason != "max_tokens":
             break
@@ -170,18 +213,18 @@ def llamar_api(prompt, *, model, max_tokens, api_key, api_base, system=None,
                 f"hasta el corte. usage={usage}"
             )
 
-        prefill = texto_acumulado.rstrip()
-        if not prefill:
+        texto_acumulado = texto_acumulado.rstrip()
+        if not texto_acumulado:
             sys.exit(
                 f"ERROR: la respuesta se truncó por max_tokens sin producir "
                 f"ningún texto (todo el presupuesto se fue en thinking) -- "
                 f"no hay contenido con el que armar la continuación. "
                 f"usage={usage}"
             )
-        texto_acumulado = prefill
         mensajes = [
             {"role": "user", "content": prompt},
             {"role": "assistant", "content": texto_acumulado},
+            {"role": "user", "content": MENSAJE_CONTINUAR},
         ]
 
     if not texto_acumulado:
@@ -193,20 +236,49 @@ def llamar_api(prompt, *, model, max_tokens, api_key, api_base, system=None,
     return texto_acumulado
 
 
+def _recortar_solapamiento(acumulado, nuevo, max_solapamiento=300):
+    """Busca el mayor sufijo de `acumulado` que también aparece como
+    prefijo de `nuevo` (hasta `max_solapamiento` caracteres) y lo recorta
+    de `nuevo` antes de concatenar. Existe por la Tarea 9b: el mecanismo
+    de continuación ya no es prefill literal (ver docstring del módulo),
+    así que el modelo puede repetir la última palabra o frase de la
+    continuación anterior para que el nuevo turno "cierre"
+    gramaticalmente -- justo lo que el prefill evitaba por construcción.
+    `MENSAJE_CONTINUAR` ya le pide explícitamente que no repita nada;
+    esto es la red de seguridad para cuando no alcanza.
+
+    Coincidencia exacta de caracteres nada más -- no intenta detectar
+    paráfrasis ni reformulaciones. Con `acumulado == ""` (primera
+    llamada, sin continuación previa) no hay nada que recortar y
+    devuelve `nuevo` sin tocar."""
+    limite = min(len(acumulado), len(nuevo), max_solapamiento)
+    for longitud in range(limite, 0, -1):
+        if acumulado[-longitud:] == nuevo[:longitud]:
+            return nuevo[longitud:]
+    return nuevo
+
+
 def _llamada_streaming(headers, api_base, payload, timeout):
     """Una sola llamada POST /v1/messages en modo streaming. Devuelve
-    (texto, stop_reason, usage) de ESTA llamada nada más -- acumular
-    entre llamadas (para las continuaciones) es responsabilidad de
-    llamar_api(), no de acá."""
+    (texto, stop_reason, usage, stop_details) de ESTA llamada nada más --
+    acumular entre llamadas (para las continuaciones) es responsabilidad
+    de llamar_api(), no de acá. `stop_details` solo viene poblado cuando
+    `stop_reason == "refusal"` (categoría del rechazo, p.ej. "cyber" o
+    "bio") -- en cualquier otro caso queda en None; llamar_api() lo usa
+    nada más que para el mensaje de error si el clasificador de
+    seguridad rechaza la respuesta."""
     texto = []
     tipos_bloque = {}
     stop_reason = None
+    stop_details = None
     usage = None
 
     with httpx.stream(
         "POST", f"{api_base}/v1/messages", headers=headers, json=payload, timeout=timeout,
     ) as resp:
-        resp.raise_for_status()
+        if resp.status_code >= 400:
+            resp.read()
+            sys.exit(f"ERROR {resp.status_code} de la API: {resp.text}")
         for evento in _eventos_sse(resp):
             tipo = evento.get("type")
 
@@ -220,7 +292,9 @@ def _llamada_streaming(headers, api_base, payload, timeout):
                         texto.append(delta["text"])
 
             elif tipo == "message_delta":
-                stop_reason = evento.get("delta", {}).get("stop_reason", stop_reason)
+                delta = evento.get("delta", {})
+                stop_reason = delta.get("stop_reason", stop_reason)
+                stop_details = delta.get("stop_details", stop_details)
                 usage = evento.get("usage", usage)
 
             elif tipo == "error":
@@ -229,7 +303,7 @@ def _llamada_streaming(headers, api_base, payload, timeout):
                     f"{evento.get('error')} (stop_reason={stop_reason} usage={usage})"
                 )
 
-    return "".join(texto), stop_reason, usage
+    return "".join(texto), stop_reason, usage, stop_details
 
 
 def _eventos_sse(resp):
