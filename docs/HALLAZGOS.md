@@ -552,3 +552,45 @@ estricto y no más laxo.
 `c8f7b99`/`7b66805` (ya en el historial de `novela2` antes de esta
 sesión); el cuarto es `api_comun.py` + el rewiring de los 19 scripts
 (Tarea 8, este commit).
+
+---
+
+## Pendiente de validar contra la API real: continuación automática por prefill (Tarea 9)
+
+**Dónde:** `api_comun.py::llamar_api()`. Corrige el hallazgo de que
+`gen_outline.py`/`gen_outline_part2.py` cortaban a mitad de generación
+sin avisar cuando la salida excedía `max_tokens` -- pasó dos veces
+seguidas en la primera corrida real (`outline.md` cortó en Ch 23 de 46,
+`gen_outline_part2.py` cortó en Ch 42). Ahora, si `stop_reason ==
+"max_tokens"`, `llamar_api()` reenvía el texto acumulado como el último
+mensaje de la conversación con `role: "assistant"` (sin turno de usuario
+después -- técnica de *prefill*) y pide que la API continúe, hasta
+`stop_reason == "end_turn"` o hasta agotar `max_continuaciones` (default
+5).
+
+**Qué está probado y qué no:** los 7 tests de `tests/test_api_comun.py`
+cubren la lógica de acumulación, el tope de reintentos, y que el
+`.rstrip()` antes de mandar el prefill evita el doble espacio -- pero
+todos mockean `httpx.stream()` con un cuerpo SSE armado a mano. Un mock
+prueba que *este código* concatena bien lo que sea que reciba; no prueba
+que Fable 5, al recibir un prefill que corta literalmente a mitad de
+palabra (p.ej. `"...cami"`), efectivamente complete con `"no..."` en vez
+de reformular la oración, repetir el fragmento, o agregar una muletilla
+de transición. Eso depende de que el modelo real respete la semántica de
+prefill de la API, algo que no se puede confirmar sin gastar una llamada
+real.
+
+**Cómo validarlo:** correr `gen_outline.py` o `gen_outline_part2.py`
+contra la API real con un `max_tokens` deliberadamente bajo (lo
+suficiente para forzar `stop_reason=max_tokens` a las pocas centenas de
+palabras, muy por debajo de las ~32000 que usan en producción) y
+revisar a mano el `outline.md`/`esquema.md` resultante en la juntura
+exacta entre la primera respuesta y la continuación: que no haya
+palabras repetidas, que no falte texto, y que un corte a mitad de
+palabra (si se da naturalmente) haya quedado bien empalmado.
+
+**Estado:** implementado y probado con mocks; NO validado contra la API
+real todavía. No bloqueante -- si el prefill no empalmara bien en la
+práctica, el síntoma sería visible a simple vista en el archivo
+resultante (palabra partida o repetida en la juntura), no un fallo
+silencioso.

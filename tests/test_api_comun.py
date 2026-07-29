@@ -23,7 +23,9 @@ def _sse(*eventos_data):
 
 def _stream_falso(cuerpo, status_ok=True):
     """Reemplazo de httpx.stream(): devuelve un context manager que rinde
-    un objeto con .raise_for_status() e .iter_lines() sobre `cuerpo`."""
+    un objeto con .raise_for_status() e .iter_lines() sobre `cuerpo`. El
+    mismo cuerpo se devuelve en cada llamada -- para tests de una sola
+    llamada HTTP (sin continuación)."""
 
     class _RespuestaFalsa:
         def raise_for_status(self):
@@ -38,6 +40,34 @@ def _stream_falso(cuerpo, status_ok=True):
     @contextmanager
     def _stream(method, url, headers=None, json=None, timeout=None):
         yield _RespuestaFalsa()
+
+    return _stream
+
+
+def _stream_secuencia(cuerpos, capturas=None):
+    """Como _stream_falso, pero devuelve un cuerpo distinto en cada
+    llamada sucesiva a httpx.stream() -- simula una continuación real
+    (Tarea 9), donde cada reintento es un POST nuevo. Si se pasa
+    `capturas` (lista), guarda ahí el payload completo de cada llamada,
+    en orden, para poder inspeccionar qué `messages` se mandó."""
+    it = iter(cuerpos)
+
+    class _RespuestaFalsa:
+        def __init__(self, cuerpo):
+            self._cuerpo = cuerpo
+
+        def raise_for_status(self):
+            pass
+
+        def iter_lines(self):
+            for linea in self._cuerpo.split("\n"):
+                yield linea
+
+    @contextmanager
+    def _stream(method, url, headers=None, json=None, timeout=None):
+        if capturas is not None:
+            capturas.append(json)
+        yield _RespuestaFalsa(next(it))
 
     return _stream
 
@@ -94,17 +124,21 @@ def test_bloques_de_texto_no_contiguos_se_acumulan_en_orden(monkeypatch):
 
 
 def test_sale_con_sys_exit_si_no_hay_bloque_de_texto(monkeypatch):
+    # stop_reason=end_turn (no max_tokens) para que no dispare la lógica de
+    # continuación de la Tarea 9 -- este test cubre el chequeo final, para
+    # cuando la respuesta completa (diga lo que diga stop_reason) nunca
+    # trajo ni un bloque de texto.
     cuerpo = _sse(
         '{"type": "content_block_start", "index": 0, "content_block": {"type": "thinking"}}',
         '{"type": "content_block_delta", "index": 0, "delta": {"type": "thinking_delta", "thinking": "solo pienso"}}',
         '{"type": "content_block_stop", "index": 0}',
-        '{"type": "message_delta", "delta": {"stop_reason": "max_tokens"}, "usage": {"output_tokens": 500}}',
+        '{"type": "message_delta", "delta": {"stop_reason": "end_turn"}, "usage": {"output_tokens": 500}}',
     )
     with pytest.raises(SystemExit) as exc:
         _llamar(monkeypatch, cuerpo)
     mensaje = str(exc.value)
     assert "sin bloque de texto" in mensaje
-    assert "max_tokens" in mensaje
+    assert "end_turn" in mensaje
 
 
 def test_sale_con_sys_exit_si_el_stream_manda_un_evento_de_error(monkeypatch):
@@ -240,3 +274,164 @@ def test_system_se_omite_del_payload_si_no_se_pasa(monkeypatch):
         api_key="k", api_base="https://x",
     )
     assert "system" not in capturado["json"]
+
+
+# ---------------------------------------------------------------------------
+# Continuación automática cuando se corta por max_tokens (Tarea 9)
+# ---------------------------------------------------------------------------
+
+def test_end_turn_no_dispara_continuacion(monkeypatch):
+    # TEXTO_SIMPLE ya termina en end_turn -- confirmar que solo se hace
+    # UNA llamada HTTP (si continuara, el iterador de _stream_secuencia
+    # reventaría con StopIteration al pedir un segundo cuerpo inexistente).
+    monkeypatch.setattr(api_comun.httpx, "stream", _stream_secuencia([TEXTO_SIMPLE]))
+    resultado = api_comun.llamar_api(
+        prompt="hola", model="m", max_tokens=10, api_key="k", api_base="https://x",
+    )
+    assert resultado == "Hola mundo"
+
+
+def test_continua_automaticamente_si_stop_reason_es_max_tokens(monkeypatch):
+    primera_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "Hola"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "max_tokens"}, "usage": {"output_tokens": 100}}',
+    )
+    segunda_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": " mundo"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "end_turn"}, "usage": {"output_tokens": 3}}',
+    )
+    monkeypatch.setattr(
+        api_comun.httpx, "stream",
+        _stream_secuencia([primera_llamada, segunda_llamada]),
+    )
+    resultado = api_comun.llamar_api(
+        prompt="hola", model="m", max_tokens=10, api_key="k", api_base="https://x",
+    )
+    assert resultado == "Hola mundo"
+
+
+def test_empalme_no_pierde_ni_duplica_texto_a_mitad_de_palabra(monkeypatch):
+    # Se corta literalmente en el medio de "camino" -- la continuación
+    # completa la palabra sin repetir "cami" ni perder la "no".
+    primera_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "cami"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "max_tokens"}, "usage": {"output_tokens": 100}}',
+    )
+    segunda_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "no al pueblo"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "end_turn"}, "usage": {"output_tokens": 4}}',
+    )
+    monkeypatch.setattr(
+        api_comun.httpx, "stream",
+        _stream_secuencia([primera_llamada, segunda_llamada]),
+    )
+    resultado = api_comun.llamar_api(
+        prompt="hola", model="m", max_tokens=10, api_key="k", api_base="https://x",
+    )
+    assert resultado == "camino al pueblo"
+
+
+def test_continuacion_manda_prefill_como_turno_de_assistant_sin_turno_de_usuario(monkeypatch):
+    primera_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "cami"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "max_tokens"}, "usage": {"output_tokens": 100}}',
+    )
+    segunda_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "no"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "end_turn"}, "usage": {"output_tokens": 1}}',
+    )
+    capturas = []
+    monkeypatch.setattr(
+        api_comun.httpx, "stream",
+        _stream_secuencia([primera_llamada, segunda_llamada], capturas=capturas),
+    )
+    api_comun.llamar_api(
+        prompt="el prompt original", model="m", max_tokens=10, api_key="k", api_base="https://x",
+    )
+    assert len(capturas) == 2
+    mensajes_segunda = capturas[1]["messages"]
+    assert mensajes_segunda == [
+        {"role": "user", "content": "el prompt original"},
+        {"role": "assistant", "content": "cami"},
+    ]
+
+
+def test_prefill_se_manda_sin_espacio_en_blanco_al_final(monkeypatch):
+    # La API rechaza un mensaje de assistant que termine en whitespace --
+    # si el corte cayó justo después de una palabra completa (con un
+    # espacio ya emitido), ese espacio se saca del prefill.
+    primera_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "Hola   "}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "max_tokens"}, "usage": {"output_tokens": 100}}',
+    )
+    segunda_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": " mundo"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "end_turn"}, "usage": {"output_tokens": 3}}',
+    )
+    capturas = []
+    monkeypatch.setattr(
+        api_comun.httpx, "stream",
+        _stream_secuencia([primera_llamada, segunda_llamada], capturas=capturas),
+    )
+    resultado = api_comun.llamar_api(
+        prompt="hola", model="m", max_tokens=10, api_key="k", api_base="https://x",
+    )
+    prefill_mandado = capturas[1]["messages"][-1]["content"]
+    assert not prefill_mandado.endswith(" ")
+    assert resultado == "Hola mundo"
+
+
+def test_tope_de_continuaciones_agotado_sale_con_sys_exit(monkeypatch):
+    cuerpo_max_tokens = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "x"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "max_tokens"}, "usage": {"output_tokens": 100}}',
+    )
+    # 3 cuerpos alcanza: con max_continuaciones=2 se agota en la 3ra llamada.
+    monkeypatch.setattr(
+        api_comun.httpx, "stream",
+        _stream_secuencia([cuerpo_max_tokens, cuerpo_max_tokens, cuerpo_max_tokens]),
+    )
+    with pytest.raises(SystemExit) as exc:
+        api_comun.llamar_api(
+            prompt="hola", model="m", max_tokens=10, api_key="k", api_base="https://x",
+            max_continuaciones=2,
+        )
+    mensaje = str(exc.value)
+    assert "max_tokens" in mensaje
+    assert "2" in mensaje
+
+
+def test_max_tokens_sin_texto_alguno_sale_con_sys_exit_sin_loopear(monkeypatch):
+    # Todo el presupuesto se va en thinking, cero texto -- no hay con qué
+    # armar el prefill de la continuación, así que debe abortar en la
+    # primera vuelta en vez de reintentar con un mensaje de assistant vacío.
+    cuerpo = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "thinking"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "thinking_delta", "thinking": "..."}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "max_tokens"}, "usage": {"output_tokens": 100}}',
+    )
+    monkeypatch.setattr(api_comun.httpx, "stream", _stream_secuencia([cuerpo]))
+    with pytest.raises(SystemExit) as exc:
+        api_comun.llamar_api(
+            prompt="hola", model="m", max_tokens=10, api_key="k", api_base="https://x",
+        )
+    assert "sin producir" in str(exc.value) or "prefill" in str(exc.value).lower()

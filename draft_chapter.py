@@ -82,6 +82,34 @@ def extract_next_chapter_outline(outline_text, chapter_num):
     return '\n'.join(lines)
 
 
+UMBRAL_LONGITUD_MINIMA = 0.70
+
+
+def extraer_word_count_objetivo(chapter_outline_text):
+    """Objetivo de palabras de este capítulo, del campo '~Word count
+    target' que gen_outline.py/gen_outline_part2.py escriben en cada
+    entrada (ver esos scripts, build_prompt()). None si no se encuentra
+    -- un esquema viejo o con formato distinto no debe romper la
+    verificación de longitud, solo desactivarla (best-effort, como el
+    resto de los parsers de este archivo)."""
+    m = re.search(r'Word count target\**:?\**\s*~?\s*([\d.,]+)', chapter_outline_text, re.IGNORECASE)
+    if not m:
+        return None
+    digitos = re.sub(r'[^\d]', '', m.group(1))
+    return int(digitos) if digitos else None
+
+
+def capitulo_demasiado_corto(word_count, objetivo, umbral=UMBRAL_LONGITUD_MINIMA):
+    """True si word_count queda por debajo de `umbral` del objetivo. Un
+    capítulo corto puede ser legítimo (una elección deliberada de ritmo);
+    uno que es la mitad de su objetivo, no -- eso se lee como final
+    abrupto y pasa la evaluación sin que nadie lo note. Sin objetivo
+    (None o 0), nunca marca corto -- no hay nada contra qué comparar."""
+    if not objetivo:
+        return False
+    return word_count < objetivo * umbral
+
+
 # ---------------------------------------------------------------------------
 # Parsing helpers -- pull novel-specific facts out of voice.md/characters.md
 # instead of hardcoding them in the prompt. Everything here is best-effort:
@@ -308,8 +336,22 @@ def main():
     # Save
     out_path = CHAPTERS_DIR / f"ch_{chapter_num:02d}.md"
     out_path.write_text(result)
+    word_count = len(result.split())
     print(f"Saved to {out_path}", file=sys.stderr)
-    print(f"Word count: {len(result.split())}", file=sys.stderr)
+    print(f"Word count: {word_count}", file=sys.stderr)
+
+    objetivo = extraer_word_count_objetivo(extract_chapter_outline(outline, chapter_num))
+    if capitulo_demasiado_corto(word_count, objetivo):
+        umbral_palabras = objetivo * UMBRAL_LONGITUD_MINIMA
+        sys.exit(
+            f"ERROR: {out_path} tiene {word_count} palabras -- por debajo "
+            f"del {UMBRAL_LONGITUD_MINIMA:.0%} de su objetivo en el esquema "
+            f"({objetivo} palabras, umbral {umbral_palabras:.0f}). El "
+            f"archivo quedó guardado para inspección, pero el capítulo no "
+            f"pasa: puede ser un corte silencioso o un capítulo "
+            f"genuinamente débil -- revisalo a mano antes de seguir."
+        )
+
     print(result)
 
 if __name__ == "__main__":

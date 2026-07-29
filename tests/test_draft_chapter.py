@@ -157,3 +157,54 @@ def test_extraer_reglas_capitulo_acepta_encabezado_en_ingles_legado():
     )
     reglas = dc.extraer_reglas_capitulo(voz_legado)
     assert any("Nunca nombrar el mar directamente" in r for r in reglas)
+
+
+# ---------------------------------------------------------------------------
+# Tarea 9: verificación de longitud del capítulo guardado contra el
+# objetivo de palabras del esquema.
+# ---------------------------------------------------------------------------
+
+ENTRADA_ESQUEMA_REAL = """### Ch 5: El óstracon
+- **POV:** Vidal
+- **Location:** Jerusalén
+- **~Word count target:** 2000
+"""
+
+
+def test_extraer_word_count_objetivo_formato_real():
+    assert dc.extraer_word_count_objetivo(ENTRADA_ESQUEMA_REAL) == 2000
+
+
+def test_extraer_word_count_objetivo_con_coma_de_miles():
+    entrada = "- **~Word count target:** 2,000"
+    assert dc.extraer_word_count_objetivo(entrada) == 2000
+
+
+def test_extraer_word_count_objetivo_sin_tilde_ni_negrita():
+    entrada = "Word count target: 1800 words"
+    assert dc.extraer_word_count_objetivo(entrada) == 1800
+
+
+def test_extraer_word_count_objetivo_none_si_no_esta_el_campo():
+    entrada = "### Ch 5: El óstracon\n- **POV:** Vidal\n"
+    assert dc.extraer_word_count_objetivo(entrada) is None
+
+
+def test_capitulo_demasiado_corto_por_debajo_del_umbral():
+    # 900 / 2000 = 45% < 70%
+    assert dc.capitulo_demasiado_corto(900, 2000) is True
+
+
+def test_capitulo_demasiado_corto_justo_en_el_umbral_no_marca():
+    # Exactamente el 70% no es "por debajo" -- el corte es estricto (<).
+    assert dc.capitulo_demasiado_corto(1400, 2000) is False
+
+
+def test_capitulo_demasiado_corto_por_encima_del_umbral_pasa():
+    assert dc.capitulo_demasiado_corto(1950, 2000) is False
+
+
+def test_capitulo_demasiado_corto_sin_objetivo_nunca_marca():
+    # None u 0 -- sin nada contra qué comparar, no bloquea el guardado.
+    assert dc.capitulo_demasiado_corto(50, None) is False
+    assert dc.capitulo_demasiado_corto(50, 0) is False
