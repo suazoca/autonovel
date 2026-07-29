@@ -1,14 +1,191 @@
-# ESTADO — rama `framework/es-multilibro`
+# ESTADO — rama `framework/es-multilibro` (+ sección `novela2`, 2026-07-29)
 
-Última actualización: 2026-07-27 (tras cerrar la Tarea 7 -- generador de
-voz). Escrito para retomar en otra sesión sin releer todo el historial de
-commits.
+Última actualización de la parte original: 2026-07-27 (tras cerrar la
+Tarea 7 -- generador de voz). Escrito para retomar en otra sesión sin
+releer todo el historial de commits.
 
 **Nota:** `AUDITORIA_Y_PLAN.md` se movió a `docs/AUDITORIA_Y_PLAN.md` en un
 commit hecho directamente por el usuario (`48395a8`, fuera de esta
 conversación). Las referencias a `AUDITORIA_Y_PLAN.md` sin prefijo en
 commits anteriores de este archivo quedan desactualizadas de ruta; no se
 corrigieron retroactivamente.
+
+**Nota (2026-07-29):** todo lo que sigue de acá hasta "Sesión `novela2`"
+más abajo es historia de `framework/es-multilibro` tal como estaba al
+cerrar la Tarea 7, heredada sin cambios porque `novela2` arrancó como
+worktree desde ese mismo commit (`7b81700`). Sigue siendo válida como
+historia de cómo se construyó el framework, pero **ya no describe el
+estado actual de este directorio** (`/root/novela2`) -- para eso,
+saltar directo a "Sesión `novela2` (después de la Tarea 7)" o leer
+`docs/TRASPASO.md`, que es la foto corta y al día.
+
+## Sesión `novela2` (después de la Tarea 7) — 2026-07-29
+
+`novela2` es un worktree separado de `framework/es-multilibro`
+(confirmado con `git worktree list`) que diverge en `7b81700` (cierre de
+la Tarea 7) para escribir una novela concreta con el framework ya
+construido: **"La ostensión"** (Libro 1), a partir de `semilla.txt` --
+un científico de IA investigando la Sábana Santa antes de la ostensión
+de 2033. A diferencia de `framework/es-multilibro`, acá **sí existe
+`.env`** con `ANTHROPIC_API_KEY` real (`AUTONOVEL_WRITER_MODEL=claude-fable-5`,
+`AUTONOVEL_JUDGE_MODEL`/`AUTONOVEL_REVIEW_MODEL=claude-opus-5`), así que
+por primera vez se pudo correr la fundación completa contra la API real
+-- y eso destapó una serie de incompatibilidades con Fable 5 que
+`framework/es-multilibro` nunca había podido descubrir, porque nunca
+corrió contra el modelo real.
+
+### Commits de esta rama (desde que diverge de `framework/es-multilibro`)
+
+```
+c8f7b99 fix: elimina temperature del payload (deprecado en Fable 5)
+7b66805 fix: compatibilidad con Fable 5 (temperature deprecado, bloque thinking en la respuesta)
+61aeee4 voz: Parte 2 generada desde la semilla
+d03e879 Tarea 8: streaming en call_writer()/call_judge() vía api_comun.py
+b63a32b Tarea 9: continuación automática cuando la respuesta se corta por max_tokens
+aab3af4 novela: fundación generada (voz, mundo, personajes, esquema hasta Ch 42)
+c85b90f novela: esquema completo, 46 capítulos
+b0147a1 esquema: quita fragmento residual de la continuación
+9f28e5f Tarea 9b: corrige el mecanismo de continuación (Fable 5 rechazaba el prefill de assistant) y agrega manejo de stop_reason=refusal
+dde01c4 world.md: completa el cierre de Implicaciones sociales
+6f110dc characters.md: completa secretos de Ferrero, marca Ledda/Ansermet/Ceruti como pendientes
+aa8efd1 Cap. 1: Intervalo
+84618e8 esquema: quita los dos fragmentos residuales de continuación que quedaron (Ch 23, Ch 42)
+```
+
+`origin/novela2` está 4 commits atrás de `HEAD` al cierre de esta sesión
+(`dde01c4` en adelante) -- confirmar con
+`git log origin/novela2..HEAD --oneline`.
+
+### Bugs de compatibilidad con Fable 5, en el orden en que aparecieron
+
+Todos se dispararon la primera vez que se corrió algo contra la API real
+en esta línea de trabajo -- ninguno era detectable sin `.env`, y por eso
+`framework/es-multilibro` nunca los vio.
+
+1. **`temperature` deprecado en Fable 5 (400).** El payload de los ~19
+   scripts (`call_writer()`/`call_judge()`/etc., todavía sin centralizar
+   en este punto) mandaba `"temperature": 0.8` (o `1.0` en `seed.py`).
+   Fable 5 rechaza el parámetro directamente. Fix: sacarlo de los 19
+   payloads (`c8f7b99`).
+
+2. **Parseo de la respuesta asumía que el primer bloque de contenido era
+   texto.** `resp.json()["content"][0]["text"]` funcionaba con modelos
+   sin razonamiento extendido, pero Fable 5 manda un bloque `type:
+   "thinking"` primero -- `content[0]` deja de ser el texto. Fix:
+   filtrar por `b.get("type") == "text"` en vez de indexar por posición
+   (`7b66805`).
+
+3. **La guardia de idempotencia de `gen_voice.py` se rompía en
+   silencio.** La plantilla de `voice.md`, sección "Part 2: Voice
+   Identity (generated per novel)", tenía dos líneas de prosa
+   explicativa **fuera** de comentario HTML. `gen_voice.py` decide si ya
+   generó la voz sacando los bloques `<!-- ... -->` del cuerpo de esa
+   sección y comprobando si queda algo (línea ~186: `sin_comentarios =
+   re.sub(r'<!--.*?-->', '', cuerpo_actual, ...).strip(); if
+   sin_comentarios: continue`). Esa prosa de plantilla, al no estar
+   comentada, contaba como "contenido real" -- el script asumía que la
+   voz ya estaba generada y nunca llamaba a la API, sin ningún error ni
+   aviso. Fix: envolver esa prosa en el comentario HTML (`7b66805`,
+   mismo commit que el bug #2).
+
+4. **Tarea 8 -- streaming centralizado.** Con los tres bugs anteriores
+   ya resueltos de forma parchada en cada script, se centralizó todo en
+   `api_comun.py::llamar_api()`: streaming (`stream: true`) en vez de
+   una sola respuesta no incremental, para no perder generaciones ya
+   pagadas si un timeout fijo cortaba antes de que terminara de llegar
+   la respuesta completa. Cada script conserva su propio
+   `call_writer()`/`call_judge()` como wrapper de una línea sobre
+   `llamar_api()` (`d03e879`).
+
+5. **Tarea 9 -- continuación automática por `max_tokens`.** Pasó dos
+   veces en la primera corrida real de la fundación: `outline.md` cortó
+   en Ch 23 de 46, la segunda mitad del esquema cortó en Ch 42 -- porque
+   nada avisaba que `stop_reason == "max_tokens"` significa que la
+   respuesta no está completa. `llamar_api()` empezó a seguir pidiendo
+   más automáticamente hasta `stop_reason == "end_turn"` (tope
+   `max_continuaciones`) (`b63a32b`). El mecanismo elegido en esta
+   versión era **prefill**: mandar el texto acumulado como último
+   mensaje de la conversación con `role: "assistant"`, sin turno de
+   usuario después.
+
+6. **Tarea 9b -- el prefill de la Tarea 9 lo rechazaba Fable 5.**
+   Confirmado contra la API real: 400, *"This model does not support
+   assistant message prefill. The conversation must end with a user
+   message."* Los tests con mock de la Tarea 9 nunca lo habrían
+   detectado porque el mock no valida reglas de la API real -- pasaron
+   en verde con un mecanismo que la API real rechazaba. Corregido: el
+   texto parcial sigue yendo como turno `assistant` (eso la API sí lo
+   acepta -- lo que rechaza es que sea el *último* turno), pero ahora
+   seguido de un turno `user` explícito (`MENSAJE_CONTINUAR`) pidiendo
+   que continúe sin repetir texto ni agregar comentario. Como ya no es
+   prefill literal, se agregó `_recortar_solapamiento()`: compara el
+   sufijo del texto acumulado contra el prefijo de cada continuación
+   nueva y recorta la repetición si el modelo repite la última
+   palabra/frase pese a la instrucción. **Probado contra la API real**
+   (`claude-fable-5`, `max_tokens` bajo forzado a propósito): confirmó
+   que el 400 desapareció en dos continuaciones sucesivas. La misma
+   prueba destapó un séptimo bug -- `stop_reason == "refusal"` no se
+   manejaba: el loop lo trataba igual que `end_turn` y devolvía el texto
+   acumulado como si fuera la respuesta completa, truncado a media
+   frase, sin ningún aviso. Se agregó el chequeo explícito con
+   `sys.exit` (`9f28e5f`).
+
+Los dos fragmentos residuales que quedaron en `outline.md` (Ch 23 con un
+header truncado a media palabra + header duplicado
+`*(continuación)*`; Ch 42 con un header vacío duplicado) son la
+evidencia directa del bug #6 *antes* de corregirse -- `outline.md` se
+generó con el prefill viejo. Uno se había limpiado ya (`b0147a1`); los
+dos que quedaban se limpiaron en esta sesión (`84618e8`). En ningún caso
+se perdía contenido: `extract_chapter_outline()` en `draft_chapter.py`
+igual capturaba el texto completo (el regex no se corta en headers
+intermedios), pero el prompt que se le mandaba al modelo para esos dos
+capítulos quedaba con el fragmento roto visible.
+
+### Fundación y redacción
+
+- `voice.md`, `world.md`, `characters.md` (salvo tres fichas: **Ledda,
+  Ansermet y Ceruti quedan marcadas "ficha pendiente de generación"**),
+  `outline.md` (**46 capítulos**) y `canon.md` -- generados y revisados.
+- `chapters/ch_01.md` ("Intervalo") escrito y **aprobado tras lectura**
+  -- la voz se sostiene, el diálogo distingue personajes sin etiquetas
+  (`aa8efd1`).
+- `state.json` no se está actualizando (`chapters_drafted: 0` pese a que
+  ya hay un capítulo escrito) porque no se está orquestando con
+  `run_pipeline.py` -- no confiar en ese archivo para saber cuántos
+  capítulos hay, mirar `chapters/` directamente.
+- Working tree con dos cosas sin resolver, sin investigar a fondo en
+  esta sesión: `canon.md` tiene cambios sin commitear de antes de esta
+  sesión, y hay un archivo sin trackear `world.md.regenerado` (una
+  regeneración alternativa de `world.md`).
+
+### Tests
+
+`uv run python -m pytest tests/ -v` -- **144 tests, todos en verde**
+(eran 113 al cerrar la Tarea 7; los 31 nuevos son sobre todo
+`tests/test_api_comun.py`, que pasó de no existir a cubrir streaming,
+continuación por `max_tokens`, recorte de solapamiento y manejo de
+`refusal`). Sigue sin necesitar `.env` -- todo mockeado.
+
+### Qué sigue
+
+- **Tarea 10** (pendiente, no bloqueante): acumulación de canon durante
+  la redacción -- que cada capítulo escrito alimente `canon.md` con lo
+  que efectivamente quedó fijado en la página.
+- **Tarea 11** (pendiente, no bloqueante): punto de aprobación manual
+  por capítulo antes de seguir al siguiente (hoy es informal, leyendo el
+  archivo).
+- Fichas completas de Ledda, Ansermet y Ceruti en `characters.md`.
+- Mergear las Tareas 8, 9 y 9b hacia `framework/es-multilibro` cuando
+  convenga -- son mejoras al cliente de API en sí, no específicas de
+  esta novela, y esa rama sigue con el bug de prefill sin corregir si
+  algún día corre contra Fable 5.
+- Seguir escribiendo capítulos: `uv run python draft_chapter.py N`
+  (**el número va posicional, `sys.argv[1]` -- no hay flag
+  `--chapter`**), leyendo cada uno antes de avanzar (no hay
+  automatización de aprobación todavía).
+
+Para el detalle completo con tablas y commits exactos, ver
+`docs/TRASPASO.md`.
 
 ## Punto de partida que sigue vigente
 

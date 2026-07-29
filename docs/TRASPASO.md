@@ -1,176 +1,126 @@
-# TRASPASO — rama `framework/es-multilibro`
+# TRASPASO — rama `novela2` (worktree de `framework/es-multilibro`)
 
-Estado real al cierre de esta sesión (2026-07-27, tras la Tarea 7 --
-generador de voz). Este documento reemplaza la necesidad de releer
-`ESTADO.md` completo o el historial de commits para retomar el trabajo --
-es la foto actual, no la bitácora de cómo se llegó acá (para eso está
-`ESTADO.md`, que sí es narrativo).
+Estado real al cierre de esta sesión (2026-07-29). Este documento
+reemplaza la necesidad de releer `ESTADO.md` completo o el historial de
+commits para retomar el trabajo -- es la foto actual, no la bitácora
+(para eso está `ESTADO.md`, que sí es narrativo y ahora tiene una
+sección nueva para esta rama).
+
+## Qué es esta rama
+
+`novela2` es un **worktree separado** (`git worktree list` lo confirma:
+`/root/novela2` en la rama `novela2`, junto a `/root/autonovel` en
+`novela-es` -- otro libro, no tocar desde acá) que arrancó desde
+`framework/es-multilibro` en el commit de cierre de la Tarea 7
+(`7b81700`). A partir de ahí dejó de ser trabajo sobre el framework en
+sí y pasó a ser la escritura de una novela concreta con ese framework:
+**"La ostensión"** (Libro 1), a partir de `semilla.txt` -- un científico
+de IA investigando la Sábana Santa antes de la ostensión de 2033.
+
+El framework en sí (Tareas 0-7, `ENCARGO_CLAUDE_CODE.md`) sigue viviendo
+en `framework/es-multilibro`; lo que se agregó en esta rama después de
+divergir (Tareas 8, 9, 9b -- ver abajo) todavía **no se mergeó de
+vuelta**.
 
 ## En una línea
 
-Tareas 0, 1c, 1d, 2, 2b, 2c, 3, 4, 6 y 7 del `ENCARGO_CLAUDE_CODE.md`
-están completas y testeadas (113 tests, todos en verde, sin necesitar
-API). Toda esa construcción se hizo **sin `.env`**, con
-`call_writer()`/`uv_run()` parcheados. Lo que sí necesita `.env` es
-correr contra el modelo real y validar calidad -- 1a, 1b, 1d parte final,
-`overall_score` en BASELINE, y correr la fundación completa (7 pasos, de
-punta a punta) por primera vez.
+Fundación completa y revisada (voz, mundo, personajes, esquema de 46
+capítulos, canon), Cap. 1 escrito y aprobado, y el cliente de API
+(`api_comun.py`) reparado y probado contra la API real tras varios
+choques con reglas específicas de Fable 5 que `framework/es-multilibro`
+nunca conoció -- esa rama nunca corrió contra la API real.
 
 ## Estado del repositorio
 
 | | |
 |---|---|
-| Rama | `framework/es-multilibro` |
-| `.env` / `ANTHROPIC_API_KEY` | No existe en este entorno |
-| Rama `autonovel/bells` | No existe en el remoto (verificado con `git fetch --all` + `git ls-remote --heads origin`) |
-| Push | Al día hasta `40cfbd5`. El commit de la Tarea 7 puede estar sin pushear -- confirmar con `git log origin/framework/es-multilibro..HEAD --oneline` |
-| Working tree | Limpio |
-| `gh` CLI | No instalado en este entorno |
-| Incidentes de seguridad | **RESUELTO.** Cuatro tokens de GitHub distintos quedaron expuestos en el chat en una sesión anterior (pegados mal en la terminal, en varios intentos de push). **Los cuatro están revocados**, confirmado por el usuario -- sin verificación pendiente. |
-| Por qué falla `git push` con `!` | El prefijo `!` corre el comando sin TTY -- `git` no tiene dónde pedir usuario/token y aborta con "could not read Username ... No such device or address". No es un problema de que el token se vea; es que no hay terminal interactiva. Receta: `Ctrl+D` para salir de Claude Code (**misma terminal**, no otra máquina), `git push` ahí directo, pegar el token cuando lo pida, volver a entrar con `claude`. Con `credential.helper store` ya configurado, solo hace falta una vez -- después, hasta los `git push` corridos con `!` reusan la credencial guardada. |
-| Token vigente | Fine-grained, creado 2026-07-27, alcance solo a `suazoca/autonovel`, permiso `Contents: read/write` únicamente, **vence a los 30 días (~2026-08-26)**. Al vencer, el `git push` guardado va a fallar reusando la credencial vieja -- limpiarla con `git credential reject` (protocol=https, host=github.com) antes de autenticar con un token nuevo. |
+| Directorio | `/root/novela2` (worktree; confirmado con `git worktree list`) |
+| Rama | `novela2`, diverge de `framework/es-multilibro` en `7b81700` (Tarea 7) |
+| `.env` / `ANTHROPIC_API_KEY` | **Presente en este entorno** (a diferencia de `framework/es-multilibro`, donde nunca existió). `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
+| Push | `origin/novela2` quedó **4 commits atrás de `HEAD`** al cierre de esta sesión: `dde01c4`, `6f110dc`, `aa8efd1`, `84618e8` (los primeros tres no son de esta sesión; `84618e8` sí). Confirmar con `git log origin/novela2..HEAD --oneline`. |
+| Working tree | **No está limpio.** `canon.md` tiene cambios sin commitear, de antes de esta sesión -- no se tocaron. Hay un archivo sin trackear, `world.md.regenerado`, que parece una regeneración alternativa de `world.md` sin resolver -- tampoco se tocó ni se investigó a fondo. Ambos quedan para quien retome. |
+| Tests | `uv run python -m pytest tests/ -v` -- **144 tests, todos en verde.** No hace falta `.env` (todo mockeado). |
 
-## Commits de esta rama (los que no vinieron por `git pull`)
+## Fundación (completa, revisada)
 
-```
-7346d77 Tarea 0: línea base con fixtures en español
-214768e fix: IGNORECASE en calcos_detectados + corrección del test 6
-625fc7f Tarea 1c (A): flag --solo-mecanico en evaluate.py
-975ac18 Tarea 1c (B): integra deteccion_es.py en slop_score()
-49a5976 Tarea 1d: fixtures mínimos de voz y mundo en español
-76454a5 docs: ESTADO.md para retomar sin releer el historial
-04b6439 Tarea 2: descontamina draft_chapter.py y gen_brief.py
-4ad802c docs: ESTADO.md al día con el cierre de la Tarea 2
-5af3cb9 Tarea 3: campo de ambición por capítulo (pico | sosten | valle)
-d3c4c72 fix: palabras_objetivo_capitulo=2000 (era 3800, error de sesión anterior)
-506f435 Tarea 4: alcance de siembra para series (libro | serie)
-df7b06c docs: suma gen_outline_part2.py a Tarea 2b, documenta libros_completos
-c513adf docs: ESTADO.md al día con el cierre de la Tarea 4
-5a78c52 Tarea 2b: descontamina gen_outline.py y gen_outline_part2.py
-648b0c3 docs: ESTADO.md al día con el cierre de la Tarea 2b
-2b31156 docs: TRASPASO.md -- estado real para retomar sin releer ESTADO.md completo
-b18ca4a docs: corrige el conteo de tokens expuestos (cuatro, no dos)
-48395a8 docs: mueve AUDITORIA_Y_PLAN.md a docs/                       (del usuario, no de esta conversación)
-bb4c7ce Tarea 6: persistencia en la fase de fundación
-4ad70b7 Tarea 2c: descontamina gen_world.py, gen_characters.py, gen_canon.py
-40cfbd5 docs: incidente de tokens pasa a RESUELTO, anota vencimiento del token vigente
-```
+| Archivo | Estado |
+|---|---|
+| `voice.md` | Completo (Parte 1 + Parte 2 generada desde la semilla, commit `61aeee4`) |
+| `world.md` | Completo, revisado (último cierre: commit `dde01c4`, "Implicaciones sociales") |
+| `characters.md` | Completo salvo tres fichas: **Ledda, Ansermet y Ceruti quedan marcadas "ficha pendiente de generación"** -- no tienen ficha completa (commit `6f110dc`) |
+| `outline.md` | **46 capítulos**, completo (commit `c85b90f`). Se le sacaron dos fragmentos residuales de un empalme roto por `max_tokens` (Ch 23 y Ch 42 -- commits `b0147a1` y `84618e8`, este último de hoy) |
+| `canon.md` | Generado y poblado, pero **con cambios sin commitear ahora mismo** (ver fila de Working tree arriba) -- no confundir "existe y tiene contenido" con "el working tree está limpio" |
 
-El commit de la Tarea 7 (`gen_voice.py`) se hace a continuación de este
-documento -- correr `git log -1 --oneline` para ver su hash real.
+## Redacción
 
-`3ded223` (auditoría + plan + `deteccion_es.py`) es el commit base de todo
-esto y llegó por `git pull`, no se generó en esta sesión.
+`chapters/ch_01.md` ("Intervalo") escrito y **aprobado tras lectura** --
+la voz se sostiene, el diálogo distingue personajes sin etiquetas.
+Commiteado (`aa8efd1`).
 
-## Tests
+**Ojo:** `state.json` sigue en `chapters_drafted: 0` -- no se está
+orquestando con `run_pipeline.py`, así que ese contador no refleja la
+realidad. No confiar en `state.json` para saber cuántos capítulos hay
+escritos; mirar `chapters/` directamente.
+
+## Bugs de compatibilidad con Fable 5 (arreglados hoy, todos commiteados en esta rama)
+
+Ninguno de estos era un problema conocido en `framework/es-multilibro`
+porque esa rama nunca corrió contra la API real. Se fueron encontrando
+en orden al ejecutar la fundación real por primera vez:
+
+| # | Bug | Commit |
+|---|---|---|
+| 1 | `temperature` en el payload -- deprecado en Fable 5, tira 400 | `c8f7b99` |
+| 2 | `resp.json()["content"][0]["text"]` asumía que el primer bloque de la respuesta era texto. Fable 5 manda un bloque `thinking` primero, así que esto rompía (bloque equivocado / sin `"text"`) en los ~19 scripts que llamaban a la API directo, antes de que existiera `api_comun.py` | `7b66805` |
+| 3 | La plantilla de `voice.md` ("Part 2: Voice Identity...") tenía prosa de ejemplo **fuera** de comentario HTML. La guardia de idempotencia de `gen_voice.py` (línea ~186: saca los `<!-- ... -->` y si queda algo no vacío, asume "ya tiene contenido real, no tocar") confundía esa prosa de plantilla con contenido ya generado y no regeneraba nada -- **en silencio**, sin error. Se corrigió envolviendo esa prosa en un comentario HTML | `7b66805` (mismo commit que el #2) |
+| 4 | Tarea 8: streaming centralizado en `api_comun.py` (reemplaza las ~19 copias casi idénticas de `call_writer()`/`call_judge()`/etc.) | `d03e879` |
+| 5 | Tarea 9: continuación automática cuando la respuesta se corta por `stop_reason == "max_tokens"` | `b63a32b` |
+| 6 | **Tarea 9b:** el mecanismo de la Tarea 9 usaba *prefill* (terminar la conversación en un turno `assistant`, sin turno de usuario después). Confirmado contra la API real que Fable 5 lo rechaza con 400: *"This model does not support assistant message prefill. The conversation must end with a user message."* Corregido: el texto parcial sigue como turno `assistant`, pero ahora seguido de un turno `user` explícito pidiendo continuar, con recorte de solapamiento sufijo/prefijo en la juntura (`_recortar_solapamiento()`) por si el modelo repite texto al ya no ser prefill literal. Probado contra la API real. De paso se encontró y arregló que `stop_reason == "refusal"` no se manejaba -- el loop lo trataba como `end_turn` y devolvía el texto truncado como si fuera la respuesta completa, sin aviso | `9f28e5f` |
+
+Los fragmentos residuales de `outline.md` (Ch 23, Ch 42 -- ver tabla de
+Fundación arriba) son consecuencia directa del bug #6 *antes* de
+corregirse: `outline.md` se generó con el prefill viejo.
+
+## Pendiente (no bloqueante)
+
+- **Tarea 10:** acumulación de canon durante la redacción (que cada
+  capítulo escrito alimente `canon.md` con lo que efectivamente quedó
+  fijado en la página, no solo lo planeado en el esquema).
+- **Tarea 11:** punto de aprobación manual por capítulo antes de seguir
+  al siguiente (la aprobación del Cap. 1 fue manual/informal, leyendo el
+  archivo -- no hay automatización todavía).
+- Fichas completas de **Ledda, Ansermet y Ceruti** en `characters.md`.
+- Mergear las Tareas 8, 9 y 9b hacia `framework/es-multilibro` cuando
+  convenga -- son mejoras al framework en sí (`api_comun.py` no es
+  específico de esta novela), y esa rama todavía tiene el bug de prefill
+  sin corregir si algún día corre contra Fable 5.
+- Resolver qué hacer con `world.md.regenerado` y con los cambios sin
+  commitear en `canon.md` (ninguno de los dos se investigó a fondo en
+  esta sesión).
+
+## Próximo paso
+
+Seguir escribiendo capítulos con:
 
 ```bash
-uv run python -m pytest tests/ -v
+uv run python draft_chapter.py N
 ```
 
-**113 tests, todos en verde, ninguno requiere `.env`.**
+**Ojo:** el número de capítulo va **posicional**
+(`chapter_num = int(sys.argv[1])` en `draft_chapter.py`) -- **no** hay
+flag `--chapter`.
 
-| Archivo | Qué cubre |
-|---|---|
-| `tests/test_deteccion_es.py` | Detección mecánica de slop en español (Tarea 0/1c) |
-| `tests/test_draft_chapter.py` | Prompt de `draft_chapter.py` (Tarea 2) |
-| `tests/test_gen_brief.py` | `extract_voice_rules()` de `gen_brief.py` (Tarea 2) |
-| `tests/test_ambicion.py` | Umbrales por ambición y validación de diversidad de picos (Tarea 3) |
-| `tests/test_siembras.py` | Validador de alcance de siembra (Tarea 4) |
-| `tests/test_gen_outline.py` | Prompts de `gen_outline.py`/`gen_outline_part2.py` (Tarea 2b) |
-| `tests/test_fundacion.py` | `fundacion_comun.py` + `gen_world.py`/`gen_characters.py`/`gen_canon.py` (Tarea 6) |
-| `tests/test_run_pipeline_fundacion.py` | `run_generator()` + `verificar_archivos_fundacion()`, incluyendo mtime (Tarea 6) y la excepción de `voz.md` (Tarea 7) |
-| `tests/test_descontaminacion_2c.py` | Ausencia de términos de *Bells* en `gen_world.py`/`gen_characters.py`/`gen_canon.py` (Tarea 2c) |
-| `tests/test_gen_voice.py` | `gen_voice.py`: idempotencia, Parte 1 intacta, resolución bilingüe, parseo/llenado de secciones (Tarea 7) |
-
-## Tareas cerradas
-
-| Tarea | Commit | Qué hace |
-|---|---|---|
-| 0 | `7346d77` | Línea base con 2 fixtures en español (sin `autonovel/bells`, no existe) |
-| 1c | `625fc7f` + `975ac18` | `--solo-mecanico` en `evaluate.py`; `slop_score()` usa `deteccion_es.py` (ES) en vez de listas en inglés |
-| 1d | `49a5976` | Fixtures mínimos de voz/mundo en español (creados, no conectados a una corrida real) |
-| 2 | `04b6439` | `draft_chapter.py`/`gen_brief.py` descontaminados de *Bells*, prompt en español, nomenclatura bilingüe |
-| 3 | `5af3cb9` | Ambición por capítulo (pico/sosten/valle), umbral por defecto "sosten" (no el más laxo) |
-| 4 | `506f435` | Alcance de siembra libro/serie, validadores sobre dicts, regla de regresión sin `siembras_serie.md` |
-| 2b | `5a78c52` | `gen_outline.py`/`gen_outline_part2.py` descontaminados, ya no leen de `/tmp`, ahora se guardan a sí mismos |
-| 6 | `bb4c7ce` | `gen_world.py`/`gen_characters.py`/`gen_canon.py` se guardan a sí mismos; `gen_outline_part2.py` pasa a usar `fundacion_comun.py` (sin cambio de comportamiento); `run_pipeline.py` aborta y guarda `state` si un generador falla; verifica archivos antes de evaluar (por mtime, no solo "no vacío"). **No descontamina prompts** -- eso es la Tarea 2c. |
-| 2c | `4ad70b7` | `gen_world.py`/`gen_characters.py`/`gen_canon.py` descontaminados de *Bells*: reparto fijo reemplazado por requisito estructural, secciones genéricas, género y sistema de magia condicionados a la semilla, prompts traducidos al español. |
-| 7 | (pendiente de commitear) | `gen_voice.py` nuevo: genera la Parte 2 de `voz.md`/`voice.md` una sola vez (idempotente, no regenera si ya hay contenido real); `run_pipeline.py` lo corre como paso 0 de `run_foundation()`, antes que el resto; `verificar_archivos_fundacion()` chequea la voz por contenido, no por mtime (se congela a propósito). |
-
-Además, `214768e` y `d3c4c72` son fixes puntuales (bug de `calcos_detectados()`,
-y el valor correcto de `palabras_objetivo_capitulo`).
-
-## Pendiente
-
-Ninguna tarea numerada está formalmente asignada sin bloquear por `.env`,
-pero hay dos frentes donde **sí se puede escribir y testear código ya**
-(mismo patrón de mocks que toda esta sesión) -- lo que no se puede hacer
-sin `.env` es correr contra el modelo real y juzgar calidad.
-
-### Se puede escribir código sin `.env` (validar calidad sí necesita API)
-
-- **Acumulación de canon en la fase de redacción**: no hay script que
-  devuelva al canon los hechos que los capítulos establecen (nombres,
-  edades, objetos mencionados al pasar). `evaluate_chapter()` ya devuelve
-  `new_canon_entries`, pero nada lo consume. Depende de fijar el formato
-  estructurado de `canon.md` primero -- decisión de diseño, no de API.
-- **Parser del Foreshadowing Ledger / `libros_completos`** (hallazgos de
-  la Tarea 4): los validadores de siembra funcionan sobre dicts, no hay
-  parser que los extraiga de la tabla real, y `libros_completos` no tiene
-  fuente de datos (`estado_serie.json`, Clase B, no existe todavía).
-- **`craft` (CRAFT.md) no se usa realmente** en `gen_world.py` (se carga
-  pero nunca se interpola en el prompt) ni en `gen_characters.py` (ni se
-  carga). Encontrado al reescribir los prompts en la Tarea 2c, no
-  corregido -- decisión de diseño (resumen manual vs. interpolar el
-  archivo completo), no un fix mecánico.
-
-### Bloqueado por `.env` / `ANTHROPIC_API_KEY` (correr contra el modelo real)
-
-- **1a**: flag `--idioma es|en` en `evaluate.py` (opcional según el
-  encargo; se priorizó español).
-- **1b**: traducir los prompts del juez LLM (`evaluate.py`,
-  `adversarial_edit.py`, `reader_panel.py`, `review.py`,
-  `compare_chapters.py`) + bloque de advertencias sobre normas castellanas.
-- **1d, parte final**: conectar `voz_minima_es.md`/`mundo_minimo_es.md` a
-  una corrida real de `evaluate_chapter()` (rutas hardcodeadas al
-  directorio raíz en `load_layer_files()`).
-- Completar el `overall_score` de los dos fixtures de la Tarea 0 en
-  `docs/BASELINE.md` (hoy solo tiene los números mecánicos).
-
-## Hallazgos abiertos (`docs/HALLAZGOS.md`)
-
-1. `dividir_oraciones()` descarta oraciones de ≤2 palabras por diseño,
-   sesga `cv_longitud_oracion()` hacia arriba. No corregido a pedido
-   explícito.
-2. `CALIBRACION["umbral_cv_oracion"]` (0.32) no discriminó nada contra los
-   2 fixtures de prueba -- falta corpus real para recalibrar. No corregido
-   a pedido explícito.
-3. Los validadores de siembra (`validar_siembra()`) operan sobre dicts
-   estructurados, no hay parser todavía que los extraiga de la tabla real
-   del Foreshadowing Ledger. Decisión de diseño confirmada, no un bug.
-4. `libros_completos` (regla 4 de siembras) no tiene fuente de datos
-   todavía -- depende de `estado_serie.json` (Clase B), que no existe en
-   este repo.
-5. **RESUELTO** -- `gen_world.py`/`gen_characters.py`/`gen_canon.py`
-   contaminados con *Bells*: era la Tarea 2c, ya completa.
-6. No hay script que acumule al canon los hechos establecidos durante la
-   redacción -- ver "Pendiente" arriba.
-7. **RESUELTO** -- Nada generaba la Parte 2 de `voice.md`/`voz.md`: era
-   la Tarea 7, ya completa (`gen_voice.py`, generación única e idempotente).
+Leer cada capítulo generado antes de avanzar al siguiente (como se hizo
+con el Cap. 1) -- no hay automatización de aprobación todavía (Tarea 11
+pendiente).
 
 ## Cómo retomar
 
-1. `git status` y `git log origin/framework/es-multilibro..HEAD --oneline`
-   para confirmar que seguimos al día (deberían estar vacíos si nadie más
-   tocó la rama).
-2. Si no hay `.env` todavía, un frente para escribir código: avanzar el
-   diseño del formato de `canon.md`/Foreshadowing Ledger (acumulación de
-   canon en la fase de redacción).
-3. Si ya hay `.env` con `ANTHROPIC_API_KEY`:
-   a. Correr `evaluate.py --chapter` (sin `--solo-mecanico`) sobre los
-      fixtures de `tests/fixtures/` para completar `docs/BASELINE.md`.
-   b. Arrancar la Tarea 1b.
-   c. Con la Tarea 6 ya resuelta, se puede intentar
-      `run_pipeline.py --phase foundation` de punta a punta por primera
-      vez (con un `seed.txt`/`semilla.txt` real).
+1. `git status` -- confirmar si `canon.md` y `world.md.regenerado`
+   siguen igual o si alguien ya los resolvió.
+2. `git log origin/novela2..HEAD --oneline` -- confirmar qué falta
+   pushear.
+3. `uv run python -m pytest tests/ -v` -- confirmar 144 en verde antes
+   de tocar nada.
+4. `uv run python draft_chapter.py 2` -- seguir con el Cap. 2, leerlo
+   antes de avanzar.
