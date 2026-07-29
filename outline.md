@@ -750,4 +750,3 @@
 | 24 | "En algún punto todos eligen" (la frase de la directora) | 2 | 33 | 46 (diálogo espejo: Vidal la acepta y la responde) | libro | dialogue |
 | 25 | La muletilla "consecuencias" de Ferrero | 7 | 25, 28, 30 | 38 (precio elegido), 43 (factura pagada: el retiro) | libro | dialogue |
 
-**Notas de verificación:** Todos los hilos son de alcance "libro" (esta rama no tiene siembras_serie.md). Distancia mínima siembra→pago cumplida en todos los casos (mínimo 3 capítulos; el más corto: hilo #22, Cap. 35→43, ocho capítulos... y hilo #21, Cap. 24→40, dieciséis). Capítulos quietos en la segunda mitad: 30, 34 y 45. La excepción Yes-and se mantiene única (Cap. 17). Cierre MICE en orden inverso confirmado: EVENT (39–40) → INQUIRY/CHARACTER (42–45) → MILIEU (46).
