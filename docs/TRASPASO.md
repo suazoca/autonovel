@@ -36,6 +36,9 @@ capítulos, canon), Cap. 1 escrito y aprobado, y el cliente de API
 choques con reglas específicas de Fable 5 que `framework/es-multilibro`
 nunca conoció -- esa rama nunca corrió contra la API real. Falta decidir
 cuánto automatizar (Tarea 10, Tarea 11) antes de seguir redactando.
+Además, la Tarea 12 encontró que los prompts de juez (y seis
+generadores más) seguían en inglés/calibrados contra fantasía pese a que
+la Tarea 1 se leía como cerrada -- ver "Tarea 12" abajo.
 
 ## Estado del repositorio
 
@@ -46,7 +49,7 @@ cuánto automatizar (Tarea 10, Tarea 11) antes de seguir redactando.
 | `.env` / `ANTHROPIC_API_KEY` | **Presente en este entorno** (a diferencia de `framework/es-multilibro`, donde nunca existió). `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
 | Push | Al día con `origin/novela2` una vez fusionado y pusheado este commit. |
 | Working tree | Limpio. `canon.md` está commiteado; `world.md.regenerado` (una regeneración fallida, ver Fundación abajo) se borró -- nunca estuvo trackeado. |
-| Tests | `uv run python -m pytest tests/ -v` -- **144 tests, todos en verde.** No hace falta `.env` (todo mockeado). |
+| Tests | `uv run python -m pytest tests/ -v` -- **217 tests, todos en verde, + 40 xfail esperados** (13 género / 20 idioma / 7 normas del castellano -- Tarea 12: deuda de prompts registrada a propósito, no fallas -- ver "Tarea 12" abajo). No hace falta `.env` (todo mockeado). |
 | Token de GitHub | Fine-grained, creado 2026-07-27, alcance `suazoca/autonovel`, permiso `Contents: read/write`, **vence ~2026-08-26**. Al vencer, limpiar la credencial guardada con `git credential reject` (protocol=https, host=github.com) antes de autenticar con uno nuevo. |
 
 ## Fundación (completa, aprobada)
@@ -90,6 +93,41 @@ regeneración fallida de `world.md` (Lascaris/Betser) son consecuencia
 directa del bug #6 *antes* de corregirse: ambos se generaron con el
 prefill viejo.
 
+## Tarea 12 -- guardia de contaminación en los prompts (COMPLETA)
+
+Hallazgo: la Tarea 1 se leía como cerrada porque 1a/1c/1d lo estaban,
+pero **1b -- traducir los prompts de juez -- seguía abierta**, y nadie
+lo notó porque el encargo agrupa las cuatro bajo un único encabezado. Al
+auditar con un chequeo automático en vez de memoria humana, aparecieron
+además **seis archivos más** (no jueces) con el mismo problema --
+incluidos `gen_outline.py`/`gen_outline_part2.py`, que la Tarea 2b había
+declarado cerrados por chequear solo nombres propios de *Bells*, nunca
+idioma en general. Detalle completo, con qué se salvó y qué no
+(`outline.md` se midió contra el detector mecánico y dio 0 calcos --
+no se regenera) en `docs/HALLAZGOS.md`.
+
+**Se agregó `tests/test_guardia_prompts.py`**: descubre automáticamente
+(vía `ast`, sin imports ni regex) todo literal de string largo en los
+`.py` de la raíz, chequea género (fantasía) e idioma (inglés) sobre todos
+esos literales, y exige el bloque de normas del castellano solo en los 7
+literales de juez que son la constante `*_PROMPT` con la rúbrica de
+evaluación (no en las personas ni en los system prompts sueltos de una
+frase, para no incentivar contaminarlos con la frase ancla nada más que
+para pasar el guardia). Entre los once archivos afectados quedan 40
+literales registrados como deuda conocida con xfail estricto (13 género
+/ 20 idioma / 7 normas), clave = hash del contenido, no línea, para que
+sobreviva a que un prompt traducido corra las líneas siguientes.
+
+**`tests/test_guardia_prompts.py::DEUDA_CONOCIDA` (y los tres sets de
+hashes que la acompañan) es ahora la fuente de verdad de qué prompts
+siguen contaminados y qué tarea los arregla -- ya no las notas sueltas
+sobre "falta 1b" que había en este documento y en `ESTADO.md`.** No
+duplicar ese detalle acá: si un prompt se traduce y alguien olvida
+borrar su entrada del registro, el xfail se convierte en XPASS y el
+suite se rompe solo -- una nota en prosa en este documento no tiene esa
+propiedad, se queda obsoleta en silencio (que es exactamente lo que pasó
+con "falta 1b" durante toda esta sesión).
+
 ## Pendiente (no bloqueante)
 
 Ordenado por lo que cuesta más si se posterga, no por número de tarea.
@@ -104,6 +142,12 @@ Ordenado por lo que cuesta más si se posterga, no por número de tarea.
 - **Tarea 11** -- punto de aprobación manual por capítulo en
   `run_pipeline.py` (hoy la aprobación del Cap. 1 fue manual/informal,
   leyendo el archivo).
+- **Tareas 1b, 1b-bis y 13 -- traducir los prompts contaminados que
+  encontró la Tarea 12.** `gen_revision.py` (Tarea 13) es la más urgente
+  del grupo: corre en la primera revisión de capítulo real, todavía no
+  ejecutada, y sí calibra contra fantasía. El resto del detalle
+  (archivo por archivo, qué chequeo falla, qué tarea lo arregla) vive en
+  `tests/test_guardia_prompts.py::DEUDA_CONOCIDA` -- no repetirlo acá.
 - **Fichas completas** de Ledda, Ansermet y Ceruti en `characters.md`.
   Si aparecen en capítulos redactados antes de tener ficha, el modelo
   les inventa rasgos, y sin la Tarea 10 esos rasgos no vuelven a ninguna
@@ -150,7 +194,7 @@ completo en `docs/ESTADO.md` y `docs/HALLAZGOS.md`.
 1. `git status` -- confirmar que el working tree sigue limpio.
 2. `git log origin/novela2..HEAD --oneline` -- confirmar que no quedó
    nada sin pushear.
-3. `uv run python -m pytest tests/ -v` -- confirmar 144 en verde antes
-   de tocar nada.
+3. `uv run python -m pytest tests/ -v` -- confirmar 217 en verde y 40
+   xfail esperados (ninguno inesperado) antes de tocar nada.
 4. Decidir Tarea 10 / Tarea 11 / seguir a mano (ver "Próximo paso") y,
    si es lo último, `uv run python draft_chapter.py 2`.

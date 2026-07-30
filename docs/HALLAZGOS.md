@@ -594,3 +594,139 @@ real todavía. No bloqueante -- si el prefill no empalmara bien en la
 práctica, el síntoma sería visible a simple vista en el archivo
 resultante (palabra partida o repetida en la juntura), no un fallo
 silencioso.
+
+---
+
+## Los prompts de juez seguían en inglés y calibrados contra fantasía (Tarea 12)
+
+**Dónde:** `evaluate.py`, `reader_panel.py`, `adversarial_edit.py`,
+`compare_chapters.py`, `review.py` -- los cinco scripts que llaman al
+juez LLM. Además, auditar con el mismo criterio encontró el mismo
+problema en seis scripts más que no son de juez: `gen_outline.py`,
+`gen_outline_part2.py`, `gen_revision.py`, `seed.py`,
+`gen_art_directions.py`, `gen_audiobook_script.py`.
+
+**Qué pasaba:** ninguno de los cinco prompts de juez estaba traducido, y
+cuatro de ellos (todos menos `review.py`) calibran explícitamente contra
+fantasía -- "Evaluate these fantasy novel planning documents",
+"Are there gaps in the magic system", "Among the best chapters you've
+read in published fantasy", las cuatro personas de `reader_panel.py`
+("an avid fantasy reader", "a published fantasy author"), etc. Evaluar
+capítulos de *La ostensión* -- ni fantasía ni con sistema de magia --
+contra un juez calibrado para otro género produce comentarios que no
+aplican (huecos de "magic system" que no existen porque no hay magia) y,
+más grave, un juicio de prosa sesgado hacia un registro de fantasía en
+inglés, exactamente lo que la Tarea 1b existía para evitar.
+
+**Por qué se pasó:** `ENCARGO_CLAUDE_CODE.md` agrupa 1a/1b/1c/1d bajo un
+único encabezado, "TAREA 1". 1a (integrar `deteccion_es.py` en
+`evaluate.py`), 1c (flag `--solo-mecanico`) y 1d (fixtures de voz/mundo
+en español) se cerraron y testearon; 1b -- traducir los prompts de juez
+en sí -- quedó abierta pero, al no tener su propio encabezado de nivel
+superior ni su propio checklist en el estado del proyecto, la Tarea 1
+completa empezó a leerse como cerrada. Nadie volvió a auditar
+específicamente "¿los prompts de juez están en español?" porque nada en
+el flujo de trabajo lo pedía por separado -- dependía de que alguien
+recordara qué letra específica de la Tarea 1 había quedado pendiente.
+
+**Los seis archivos extra (no son jueces) tienen el mismo blindspot, dos
+veces:** al auditar con un chequeo automático en vez de memoria humana,
+aparecieron `gen_outline.py`, `gen_outline_part2.py`, `gen_revision.py`,
+`seed.py`, `gen_art_directions.py` y `gen_audiobook_script.py` con el
+mismo problema. De estos, `gen_outline.py` y `gen_outline_part2.py`
+importan particularmente porque la Tarea 2b los declaró "descontaminados
+y cerrados" -- pero esa tarea solo grepeó nombres propios de *Bells*
+(`cass|bell|bronze|under-note|perin|maret|torvald|lenne|tonal`), nunca
+chequeó idioma ni calibración de género en general. Es el mismo error
+estructural que dejó abierta la Tarea 1b: un criterio de aceptación
+angosto (nombres propios de una novela puntual) se leyó como "prompt
+limpio" en sentido amplio. Que apareciera dos veces, en dos tareas
+distintas, es lo que justifica un guardia automático en vez de otro
+checklist manual.
+
+**Importante, para no leer esto más grave de lo que es:**
+- `gen_outline.py` y `gen_outline_part2.py` **no tienen** calibración de
+  género -- la Tarea 2b sí sacó "Bells"/nombres propios/"Tonal Law"
+  correctamente. Lo que falta ahí es solo idioma: el prompt sigue en
+  inglés, pero no le pide al modelo escribir sobre fantasía.
+- El daño de ese problema de idioma sobre el producto ya generado se
+  midió, no se asumió: `outline.md` (15.911 palabras, generado con ese
+  prompt en inglés) se corrió contra el detector mecánico de
+  `deteccion_es.py` y dio **0 calcos, 0 clichés** -- igual que
+  `world.md` y `characters.md`, que sí se generaron con prompts en
+  español. El prompt en inglés no contaminó la prosa resultante en este
+  caso puntual. **`outline.md` no se regenera.** El hallazgo sigue
+  siendo real (el prompt debería estar en español, y un modelo distinto
+  o una corrida distinta sí podría inducir calcos) pero no hay evidencia
+  de daño retroactivo que justifique rehacer un artefacto ya aprobado.
+- `gen_revision.py` es el más urgente de los seis extra: corre en la
+  primera revisión de capítulo real (todavía no ejecutada) y sí tiene
+  calibración de género explícita ("You are rewriting a fantasy novel
+  chapter").
+
+**Cómo se previene ahora:** `tests/test_guardia_prompts.py` (Tarea 12).
+Descubre automáticamente, vía `ast` (no imports -- varios de estos
+módulos hacen `load_dotenv()` al importarse -- ni regex sobre texto, que
+no distingue código de literal ni sabe qué es un docstring), todo
+literal de string de más de 200 caracteres en los `.py` de la raíz del
+repo, y verifica que ninguno calibre contra fantasía (`fantasy`,
+`magic system`, `wizard`, `dragon`) ni tenga prosa en inglés (3 o más
+palabras función de una lista fija -- `the`, `you`, `your`, `with`,
+`which`, `does`, `should`, `would` -- elegidas para no disparar con las
+claves de los esquemas JSON del juez, que van a seguir en inglés para
+siempre). Para los cinco archivos de juez, además verifica por una frase
+ancla que el prompt que lleva la rúbrica de evaluación contiene el
+bloque de normas del castellano de la sección 1b del encargo -- 7
+literales (`FOUNDATION_PROMPT`/`CHAPTER_PROMPT`/`FULL_NOVEL_PROMPT` de
+`evaluate.py`, `READER_PROMPT`, `EDIT_PROMPT`, `COMPARE_PROMPT`,
+`REVIEW_PROMPT`), no los 13 literales largos que hay en total en esos
+cinco archivos.
+
+Ese recorte del chequeo de ancla es deliberado, no un descuido: las
+otras 6 (las cuatro personas de `reader_panel.py` y los system prompts
+sueltos de `adversarial_edit.py`/`compare_chapters.py`) son frases de
+una o dos líneas, no la rúbrica -- exigirles el bloque de normas ahí
+generaría un incentivo perverso. Cuando la Tarea 1b traduzca
+`reader_panel.py`, el hash de cada persona cambia con la traducción; si
+esas 4 entradas estuvieran en el registro de ancla, quedarían huérfanas
+y el propio test de huérfanas (ver abajo) mandaría borrarlas -- y a
+partir de ahí esas personas, ya traducidas, seguirían exigiendo el
+bloque de normas dentro de una frase de una línea. El único arreglo
+posible sería pegar "más largo que el inglés" dentro de la definición de
+una persona: eso no traduce nada, contamina el prompt solo para hacer
+pasar al guardia. Esos 6 literales siguen cubiertos por los chequeos de
+género e idioma -- no quedan sin auditar, solo no se les exige la
+rúbrica.
+
+Los once archivos hoy contaminados quedan registrados en
+`DEUDA_CONOCIDA` dentro del test, con xfail estricto por literal: 40
+entradas en total (13 de género, 20 de idioma, 7 de la rúbrica),
+identificadas por hash del contenido, no por línea, para que sobrevivan
+al corrimiento de línea cuando un prompt se traduce y sale 15-20% más
+largo. **Esa tabla es ahora la fuente de verdad de qué prompts siguen
+contaminados y en qué archivo -- ya no las notas dispersas de
+`docs/ESTADO.md`/`docs/TRASPASO.md` sobre "falta 1b".** Si alguien
+traduce un prompt sin borrar su entrada del registro, el xfail se
+convierte en XPASS y el suite se rompe a propósito. Si aparece
+contaminación nueva en un archivo no registrado, el test falla en rojo
+de inmediato en vez de quedar en silencio como pasó acá. Además, un test
+dedicado (`test_registro_sin_entradas_huerfanas`) verifica que toda
+entrada del registro siga apuntando a un literal real: si el contenido
+de un literal cambia (por ejemplo, se traduce), su hash deja de existir
+en el repo y el test falla explícito -- "entrada huérfana -- el literal
+cambió (probablemente se tradujo): borrala del registro" -- en vez de
+quedar como un xfail que ya no protege nada.
+
+**Limitación conocida del propio guardia:** el chequeo de idioma exige 3
+palabras función distintas para no disparar con vocabulario legítimo
+corto. Dos literales de los once (`gen_revision.py` línea 26, `seed.py`
+línea 86) tienen calibración de género pero solo llegan a 2 palabras
+función ("the", "you") -- el chequeo de idioma no los detecta, solo el
+de género los agarra. Un prompt corto en inglés sin ninguna de las
+cuatro palabras de género pasaría este guardia sin ser detectado. No es
+un bug del test: es el costo de un umbral que evita falsos positivos
+contra las claves JSON, documentado en el docstring del propio archivo.
+
+**Estado:** guardia implementado y en verde (217 tests, 40 xfail
+esperados, 0 inesperados). Traducción real de los prompts NO empezó --
+queda para las Tareas 1b, 10 y 13 según el registro.

@@ -160,11 +160,34 @@ capítulos quedaba con el fragmento roto visible.
 
 ### Tests
 
-`uv run python -m pytest tests/ -v` -- **144 tests, todos en verde**
-(eran 113 al cerrar la Tarea 7; los 31 nuevos son sobre todo
-`tests/test_api_comun.py`, que pasó de no existir a cubrir streaming,
-continuación por `max_tokens`, recorte de solapamiento y manejo de
-`refusal`). Sigue sin necesitar `.env` -- todo mockeado.
+`uv run python -m pytest tests/ -v` -- **217 tests pasando + 40 xfail
+esperados** (eran 144 en verde tras la Tarea 9b; los 73 nuevos son
+`tests/test_guardia_prompts.py`, Tarea 12 -- ver abajo. De los 40 xfail,
+13 son de género, 20 de idioma y 7 del bloque de normas del castellano.
+Son deuda de prompts registrada a propósito, no fallas: si alguno pasa a
+XPASS sin que se haya borrado su entrada del registro, el suite se
+rompe). Sigue sin necesitar `.env` -- todo mockeado.
+
+### Tarea 12 -- guardia de contaminación en los prompts (COMPLETA)
+
+La Tarea 1 se leía como cerrada (1a/1c/1d lo estaban) pero **1b --
+traducir los prompts de juez a español -- seguía abierta**, sin que nada
+lo señalara. Auditar con un chequeo automático (no memoria humana)
+encontró además el mismo problema en seis archivos no-juez, incluidos
+dos que la Tarea 2b había dado por cerrados (`gen_outline.py`,
+`gen_outline_part2.py` -- esa tarea solo chequeó nombres propios de
+*Bells*, nunca idioma en general). Detalle completo en
+`docs/HALLAZGOS.md`.
+
+`tests/test_guardia_prompts.py` descubre los prompts vía `ast` (no
+imports -- estos módulos hacen `load_dotenv()` al importarse -- ni
+regex) y chequea género/idioma/normas del castellano automáticamente.
+**Su `DEUDA_CONOCIDA` (y los sets de hashes que la acompañan) es ahora
+la fuente de verdad de qué prompts siguen contaminados y qué tarea los
+arregla -- no lo repitas en prosa acá ni en `TRASPASO.md`.** Una nota
+suelta como "falta 1b" puede quedar desactualizada en silencio (pasó
+durante toda esta sesión); una entrada de xfail estricto no puede: si el
+prompt se traduce y la entrada no se borra, el suite se rompe solo.
 
 ### Qué sigue
 
@@ -174,6 +197,12 @@ continuación por `max_tokens`, recorte de solapamiento y manejo de
 - **Tarea 11** (pendiente, no bloqueante): punto de aprobación manual
   por capítulo antes de seguir al siguiente (hoy es informal, leyendo el
   archivo).
+- **Tareas 1b, 1b-bis y 13** (pendiente, no bloqueante): traducir los
+  once literales que dejó registrados la Tarea 12 -- ver
+  `tests/test_guardia_prompts.py::DEUDA_CONOCIDA` para el detalle exacto
+  y `docs/HALLAZGOS.md` para el porqué. `gen_revision.py` (Tarea 13) es
+  la más urgente: corre en la primera revisión de capítulo real,
+  todavía no ejecutada.
 - Fichas completas de Ledda, Ansermet y Ceruti en `characters.md`.
 - Mergear las Tareas 8, 9 y 9b hacia `framework/es-multilibro` cuando
   convenga -- son mejoras al cliente de API en sí, no específicas de
