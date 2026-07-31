@@ -730,3 +730,68 @@ contra las claves JSON, documentado en el docstring del propio archivo.
 **Estado:** guardia implementado y en verde (217 tests, 40 xfail
 esperados, 0 inesperados). Traducción real de los prompts NO empezó --
 queda para las Tareas 1b, 10 y 13 según el registro.
+
+---
+
+## `draft_chapter.py::build_prompt()` cargaba `canon.md` y nunca lo metía en el prompt
+
+**Dónde:** `draft_chapter.py`, `build_prompt()`. Confirmado con
+`git diff draft_chapter.py` contra el estado antes de esta sesión: la
+función recibía `canon` como parámetro, pero el f-string que arma el
+prompt de redacción no tenía ningún `{canon}` -- saltaba directo de
+"REGISTRO DE PERSONAJES" a "INSTRUCCIONES DE ESCRITURA". El parámetro
+llegaba, se guardaba en una variable local, y se descartaba sin usar.
+
+**Desde cuándo:** no es un bug introducido por ninguna tarea de esta
+rama. Está desde el primerísimo commit del repo,
+`4f8f880` ("autonovel: autonomous novel-writing pipeline" -- la
+importación del framework *Bells* original en inglés). En esa versión
+`canon = load_file(BASE_DIR / "canon.md")` ya existía en `main()` como
+variable local muerta: ni siquiera se pasaba a la construcción del
+prompt (que en ese commit era un f-string inline en `main()`, no una
+función aparte). La Tarea 2 (`04b6439`, "descontamina draft_chapter.py
+y gen_brief.py") extrajo `build_prompt()` como función y agregó `canon`
+a su firma -- moviendo el parámetro un nivel más adentro, pero sin
+notar que nunca se interpolaba en el cuerpo. Confirmado con
+`git show 4f8f880:draft_chapter.py` y `git show 04b6439:draft_chapter.py`:
+ninguna de las dos versiones tiene `{canon}` en el texto del prompt.
+
+**Qué capítulos se redactaron sin canon:** hoy, `chapters/` solo tiene
+`ch_01.md` (1.667 palabras) -- se escribió con `canon.md` (3.358
+palabras de hechos duros: geografía, cronología, personajes, política,
+cultura, eventos ya establecidos) cargado en memoria y completamente
+ausente del prompt real que vio el modelo. El Cap. 1 quedó aprobado
+igual (lectura humana, commit `aa8efd1`), pero eso fue suerte de que un
+capítulo de apertura tiene pocos hechos previos que contradecir, no
+evidencia de que el mecanismo funcionaba. Cualquier capítulo posterior
+que dependiera de un hecho fijado en `canon.md` y no repetido en su
+entrada de `outline.md` se habría escrito a ciegas respecto de ese
+hecho.
+
+**Por qué ningún test lo agarró, siendo que `tests/test_draft_chapter.py`
+ya existe y prueba `build_prompt()` extensamente:** las 20 pruebas de
+ese archivo (antes de esta sesión) cubren POV, título, vocabulario,
+reglas específicas de capítulo, últimos finales, ruta bilingüe y el
+objetivo de palabras -- pero ninguna hace una aserción positiva sobre
+`canon`. Peor: **las tres llamadas a `build_prompt()` en ese archivo
+pasan `""` como valor de `canon`** (`_build()`, y las dos funciones de
+título en español/inglés). Con canon vacío, que la plantilla lo
+interpole o no produce el mismo resultado observable: una plantilla
+rota y una plantilla sana generan idéntico prompt cuando el argumento
+es la cadena vacía. El bug era invisible al suite no porque el chequeo
+fuera débil, sino porque no existía ningún fixture no trivial de canon
+contra el cual afirmar "esto tiene que aparecer en el prompt" -- el
+mismo punto ciego, en espejo, que llevó a escribir
+`test_build_prompt_no_referencia_novela_anterior()` para voz/personajes
+pero no para canon.
+
+**Estado:** corregido en la Tarea 10 (`draft_chapter.py::build_prompt()`
+ahora tiene un bloque `CANON (hechos duros de fundación...)` explícito,
+además del nuevo `CANON EMERGENTE`). `tests/test_draft_chapter.py` tiene
+ahora
+`test_build_prompt_incluye_canon_y_canon_emergente_con_encabezados_distintos()`,
+que pasa fixtures no triviales para `canon` y `canon_emergente` y
+afirma que ambos aparecen en el prompt -- cierra el punto ciego
+descrito arriba. No se re-redactó el Cap. 1 retroactivamente: queda a
+criterio del usuario si vale la pena, dado que ya está aprobado por
+lectura humana.

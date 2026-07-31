@@ -160,7 +160,6 @@ DEUDA_CONOCIDA = {
 # vista; no los lee el test.
 _DEUDA_GENERO_HASHES = {
     ("evaluate.py", "b4d3cbf7"),  # línea 455 FOUNDATION_PROMPT
-    ("evaluate.py", "f645f997"),  # línea 637 CHAPTER_PROMPT
     ("evaluate.py", "9396bbad"),  # línea 834 FULL_NOVEL_PROMPT
     ("reader_panel.py", "74923ed3"),  # línea 43, persona genre_reader
     ("reader_panel.py", "6f428bd7"),  # línea 56, persona writer
@@ -175,7 +174,6 @@ _DEUDA_GENERO_HASHES = {
 }
 _DEUDA_IDIOMA_HASHES = {
     ("evaluate.py", "b4d3cbf7"),  # línea 455
-    ("evaluate.py", "f645f997"),  # línea 637
     ("evaluate.py", "9396bbad"),  # línea 834
     ("reader_panel.py", "032b3561"),  # línea 30, persona editor
     ("reader_panel.py", "74923ed3"),  # línea 43
@@ -215,7 +213,6 @@ _DEUDA_IDIOMA_HASHES = {
 # solo no se les exige la rúbrica.
 _DEUDA_ANCLA_HASHES = {
     ("evaluate.py", "b4d3cbf7"),  # línea 455, FOUNDATION_PROMPT
-    ("evaluate.py", "f645f997"),  # línea 637, CHAPTER_PROMPT
     ("evaluate.py", "9396bbad"),  # línea 834, FULL_NOVEL_PROMPT
     ("reader_panel.py", "07b8c41c"),  # línea 81, READER_PROMPT
     ("adversarial_edit.py", "59f8cbbf"),  # línea 84, EDIT_PROMPT

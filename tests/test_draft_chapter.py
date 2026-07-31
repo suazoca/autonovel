@@ -64,6 +64,26 @@ def _build(chapter_num=1):
     )
 
 
+def test_build_prompt_incluye_canon_y_canon_emergente_con_encabezados_distintos():
+    prompt = dc.build_prompt(
+        1, STATE_INVENTADO, VOZ_INVENTADA, "", PERSONAJES_INVENTADOS,
+        OUTLINE_INVENTADO, "HECHO-DE-FUNDACION", "HECHO-EMERGENTE-CAP-ANTERIOR",
+    )
+    assert "HECHO-DE-FUNDACION" in prompt
+    assert "HECHO-EMERGENTE-CAP-ANTERIOR" in prompt
+    assert prompt.index("CANON EMERGENTE") > prompt.index("CANON (hechos duros de fundación")
+
+
+def test_build_prompt_canon_emergente_default_vacio():
+    # Compatibilidad: llamadas viejas con 7 argumentos posicionales
+    # (sin canon_emergente) no deben romper.
+    prompt = dc.build_prompt(
+        1, STATE_INVENTADO, VOZ_INVENTADA, "", PERSONAJES_INVENTADOS,
+        OUTLINE_INVENTADO, "HECHO-DE-FUNDACION",
+    )
+    assert "HECHO-DE-FUNDACION" in prompt
+
+
 def test_build_prompt_no_referencia_novela_anterior():
     prompt_lower = _build().lower()
     for termino in PROHIBIDO:

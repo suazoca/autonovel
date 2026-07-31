@@ -467,6 +467,7 @@ def run_drafting(state: dict) -> dict:
 
             # Evaluate
             eval_result = uv_run(f"evaluate.py --chapter={ch}", timeout=300)
+            uv_run(f"actualizar_canon.py {ch}", timeout=60)
             score = parse_score(eval_result.stdout, "overall_score")
             # Umbral por ambición del capítulo (Tarea 3), no una constante
             # global -- evaluate.py lo calcula y lo imprime. Si no aparece
@@ -641,6 +642,7 @@ def run_revision(state: dict, max_cycles: int = MAX_REVISION_CYCLES) -> dict:
 
             # Snapshot the current chapter score for comparison
             pre_eval = uv_run(f"evaluate.py --chapter={ch_num}", timeout=300)
+            uv_run(f"actualizar_canon.py {ch_num}", timeout=60)
             pre_score = parse_score(pre_eval.stdout, "overall_score")
 
             # Generate revision brief
@@ -677,6 +679,7 @@ def run_revision(state: dict, max_cycles: int = MAX_REVISION_CYCLES) -> dict:
 
             # Evaluate revised chapter
             post_eval = uv_run(f"evaluate.py --chapter={ch_num}", timeout=300)
+            uv_run(f"actualizar_canon.py {ch_num}", timeout=60)
             post_score = parse_score(post_eval.stdout, "overall_score")
 
             ch_file = CHAPTERS_DIR / f"ch_{ch_num:02d}.md"

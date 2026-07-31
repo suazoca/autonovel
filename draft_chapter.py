@@ -185,7 +185,8 @@ def ultimos_finales(n=3):
     return finales
 
 
-def build_prompt(chapter_num, state, voice, world, characters, outline, canon):
+def build_prompt(chapter_num, state, voice, world, characters, outline, canon,
+                  canon_emergente=""):
     titulo = (state.get("titulo") or state.get("title") or "").strip()
     pov_nombre = extraer_pov(characters)
     persona_tiempo = extraer_persona_tiempo(voice)
@@ -308,6 +309,13 @@ BIBLIA DE MUNDO (referencia para detalles de ambientación):
 REGISTRO DE PERSONAJES (referencia para patrones de habla y comportamiento):
 {characters}
 
+CANON (hechos duros de fundación -- no los contradigas):
+{canon}
+
+CANON EMERGENTE (hechos establecidos en capítulos anteriores durante la
+redacción -- misma fuerza que el canon de arriba, no los contradigas):
+{canon_emergente}
+
 INSTRUCCIONES DE ESCRITURA:
 {instrucciones_texto}
 
@@ -327,8 +335,10 @@ def main():
     characters = load_file_bilingue("personajes.md", "characters.md")
     outline = load_file_bilingue("esquema.md", "outline.md")
     canon = load_file(BASE_DIR / "canon.md")
+    canon_emergente = load_file(BASE_DIR / "canon_emergente.md")
 
-    prompt = build_prompt(chapter_num, state, voice, world, characters, outline, canon)
+    prompt = build_prompt(chapter_num, state, voice, world, characters, outline, canon,
+                           canon_emergente)
 
     print(f"Drafting Chapter {chapter_num}...", file=sys.stderr)
     result = call_writer(prompt)

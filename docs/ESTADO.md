@@ -160,11 +160,16 @@ capítulos quedaba con el fragmento roto visible.
 
 ### Tests
 
-`uv run python -m pytest tests/ -v` -- **217 tests pasando + 40 xfail
-esperados** (eran 144 en verde tras la Tarea 9b; los 73 nuevos son
-`tests/test_guardia_prompts.py`, Tarea 12 -- ver abajo. De los 40 xfail,
-13 son de género, 20 de idioma y 7 del bloque de normas del castellano.
-Son deuda de prompts registrada a propósito, no fallas: si alguno pasa a
+`uv run python -m pytest tests/ -v` -- **237 tests pasando + 37 xfail
+esperados** (eran 217+40 al cierre de la Tarea 12 -- ver abajo. La
+Tarea 10 agregó 17 tests nuevos: 15 en `tests/test_actualizar_canon.py`,
+2 en `tests/test_draft_chapter.py`. Además, al traducir `CHAPTER_PROMPT`
+se borraron del registro de `test_guardia_prompts.py` las tres entradas
+`("evaluate.py", "f645f997")` -- una por cada uno de los tres sets
+(género/idioma/normas del castellano) -- que pasaron de xfail a passed:
+217+17+3=237 passed, 40-3=37 xfail. De los 37 xfail que quedan, 12 son
+de género, 19 de idioma y 6 del bloque de normas del castellano. Son
+deuda de prompts registrada a propósito, no fallas: si alguno pasa a
 XPASS sin que se haya borrado su entrada del registro, el suite se
 rompe). Sigue sin necesitar `.env` -- todo mockeado.
 
@@ -189,11 +194,62 @@ suelta como "falta 1b" puede quedar desactualizada en silencio (pasó
 durante toda esta sesión); una entrada de xfail estricto no puede: si el
 prompt se traduce y la entrada no se borra, el suite se rompe solo.
 
+### Tarea 10 -- acumulación de canon durante la redacción (COMPLETA)
+
+Hasta esta tarea, `evaluate.py` reportaba `new_canon_entries` por
+capítulo y se tiraban: un hecho inventado en el Cap. 7 no existía para
+el juez ni para el redactor del Cap. 30. Tres decisiones de diseño (ya
+tomadas antes de empezar):
+
+1. **Dos archivos de canon.** `canon.md` sigue siendo función pura de
+   semilla+mundo+personajes -- lo pisa `gen_canon.py`, sin tocar. Los
+   hechos de redacción van a `canon_emergente.md` (nuevo, formato
+   `## Cap. NN` con entradas `[C07-01] (categoría) hecho`), que
+   `gen_canon.py` no lee ni escribe nunca -- así se puede regenerar la
+   fundación sin perder lo acumulado. Todavía no existe en el
+   working tree: lo crea `actualizar_canon.py` la primera vez que corre.
+2. **`new_canon_entries` pasa a objetos** `{categoria, hecho,
+   contradice}` en `CHAPTER_PROMPT` (`evaluate.py`). La detección de
+   contradicciones la sigue haciendo el juez (ya tiene todo el canon --
+   fundación y emergente -- en contexto); no se agregó ninguna llamada
+   extra a la API.
+3. **`actualizar_canon.py`** (nuevo, standalone, sin red): `uv run
+   actualizar_canon.py N` busca el eval_log más reciente de ese
+   capítulo, reemplaza (no anexa) su sección en `canon_emergente.md` --
+   para que re-evaluar un capítulo no duplique entradas -- y anota los
+   `CONFLICTO` en `state.json::debts` sin frenar la ejecución: el juez
+   a veces marca como contradicción una elipsis o el mismo hecho dicho
+   distinto, y frenar duro por falsos positivos sería peor que anotarlo
+   para revisión manual.
+
+De paso, `CHAPTER_PROMPT` se tradujo entero al español, se descontaminó
+de calibración de fantasía (ahora calibra contra thriller literario
+publicado) y se le agregó el bloque de normas del castellano de la
+sección 1b del encargo -- ver el diff en `docs/TRASPASO.md` o
+directamente `evaluate.py`.
+
+`draft_chapter.py::build_prompt()` recibe y usa ahora `canon_emergente`
+además de `canon`. De paso se encontró y corrigió un bug preexistente
+en ese mismo archivo (heredado del primer commit del repo, no
+introducido por ninguna tarea de esta rama): `canon` se cargaba pero
+nunca se insertaba en el prompt de redacción real -- detalle completo,
+incluyendo qué capítulos se redactaron sin canon y por qué el suite no
+lo agarró, en `docs/HALLAZGOS.md`.
+
+`run_pipeline.py` invoca `actualizar_canon.py` después de cada
+evaluación de capítulo (líneas ~469, ~643, ~679) -- es secundario, el
+camino real de uso hoy sigue siendo el standalone.
+
+**Pendiente de decisión, no bloqueante:** `ch_01.md` se escribió con el
+bug de `canon.md` activo (ver arriba) y **no se re-redactó
+retroactivamente**. Falta decidir si conviene releerlo/rehacerlo contra
+`canon.md` antes de avanzar al Cap. 2, o si el capítulo se sostiene tal
+como está (ya está aprobado por lectura humana) y se sigue para
+adelante confiando en que el Cap. 2 en más sí va a tener el canon
+completo disponible.
+
 ### Qué sigue
 
-- **Tarea 10** (pendiente, no bloqueante): acumulación de canon durante
-  la redacción -- que cada capítulo escrito alimente `canon.md` con lo
-  que efectivamente quedó fijado en la página.
 - **Tarea 11** (pendiente, no bloqueante): punto de aprobación manual
   por capítulo antes de seguir al siguiente (hoy es informal, leyendo el
   archivo).

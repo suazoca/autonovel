@@ -376,6 +376,13 @@ def load_layer_files():
         "characters": load_file(BASE_DIR / "characters.md"),
         "outline": load_file(BASE_DIR / "outline.md"),
         "canon": load_file(BASE_DIR / "canon.md"),
+        # Hechos establecidos durante la redacción (Tarea 10) -- los
+        # escribe actualizar_canon.py a partir de new_canon_entries.
+        # canon.md sigue siendo función pura de semilla+mundo+personajes
+        # (lo pisa gen_canon.py); este es el otro archivo, nunca tocado
+        # por gen_canon.py, para que uno se pueda regenerar sin perder
+        # el otro.
+        "canon_emergente": load_file(BASE_DIR / "canon_emergente.md"),
     }
 
 
@@ -634,149 +641,181 @@ def evaluate_foundation():
 
 # --- Chapter Evaluation ---
 
-CHAPTER_PROMPT = """Evaluate this fantasy novel chapter against the planning docs.
+CHAPTER_PROMPT = """Evaluá este capítulo de novela contra los documentos de planificación.
 
-SCORING CALIBRATION:
-  9-10: Among the best chapters you've read in published fantasy. Name
-        a specific published chapter it competes with, or don't give 9+.
-  7-8:  Strong, publishable with editorial polish. Specific flaws exist
-        but don't break the reading experience.
-  5-6:  Functional but flat. A competent draft that needs substantial revision.
-        Generic where it should be specific. Safe where it should risk.
-  3-4:  Significant problems. Voice breaks, beats missed, prose generic.
-  1-2:  Not usable. Rewrite from scratch.
+El texto está en español. Antes de juzgar, tené en cuenta:
+- El diálogo se marca con raya (—), no con comillas. Es correcto.
+- La subordinación larga y la coordinación con «y» son recursos legítimos
+  del castellano, no verbosidad.
+- El sujeto pronominal se omite por defecto. Su ausencia es correcta;
+  su presencia repetida es un calco del inglés y sí es un defecto.
+- El español corre entre 15% y 20% más largo que el inglés para el mismo
+  contenido. No penalices por extensión comparándolo con prosa inglesa.
 
-  The MEDIAN score for a competent AI-generated chapter should be 6.
-  A 7 means it does something a generic AI draft wouldn't.
-  An 8 means a human editor would keep it with minor notes.
-  Most dimensions should score 6-7. Reserve 8+ for genuine excellence.
+CALIBRACIÓN DE PUNTAJE:
+  9-10: Entre los mejores capítulos que hayas leído en un thriller
+        literario publicado. Nombrá un capítulo publicado específico
+        con el que compite, o no des 9+.
+  7-8:  Sólido, publicable con pulido editorial. Existen fallas
+        puntuales pero no rompen la experiencia de lectura.
+  5-6:  Funcional pero chato. Un borrador competente que necesita
+        revisión sustancial. Genérico donde debería ser específico.
+        Prudente donde debería arriesgar.
+  3-4:  Problemas significativos. Se rompe la voz, faltan beats,
+        prosa genérica.
+  1-2:  No usable. Reescribir desde cero.
 
-MANDATORY: For each dimension, you must identify:
-  (a) The single WEAKEST MOMENT -- quote the specific sentence or passage
-  (b) What would make it better -- a concrete revision, not a vague note
-  If every sentence is perfect, you're not reading carefully enough.
+  El puntaje MEDIANO para un capítulo competente generado por IA debe
+  ser 6. Un 7 significa que hace algo que un borrador de IA genérico
+  no haría. Un 8 significa que un editor humano lo dejaría con notas
+  menores. La mayoría de las dimensiones deberían puntuar 6-7.
+  Reservá 8+ para excelencia genuina.
 
-VOICE DEFINITION:
+OBLIGATORIO: para cada dimensión tenés que identificar:
+  (a) El MOMENTO MÁS DÉBIL -- citá la oración o el pasaje específico
+  (b) Qué lo mejoraría -- una revisión concreta, no una nota vaga
+  Si cada oración te parece perfecta, no estás leyendo con suficiente
+  atención.
+
+DEFINICIÓN DE VOZ:
 {voice}
 
-WORLD BIBLE (summary):
+BIBLIA DE MUNDO (resumen):
 {world}
 
-CHARACTER REGISTRY:
+REGISTRO DE PERSONAJES:
 {characters}
 
-CANON (established hard facts -- violations are bugs):
+CANON (hechos duros establecidos -- las violaciones son bugs):
 {canon}
 
-CHAPTER OUTLINE ENTRY:
+CANON EMERGENTE (hechos establecidos durante la redacción de capítulos
+anteriores -- misma fuerza que el canon de arriba; un hecho inventado
+en un capítulo previo no puede contradecirse acá):
+{canon_emergente}
+
+ENTRADA DEL ESQUEMA PARA ESTE CAPÍTULO:
 {chapter_outline}
 
-PREVIOUS CHAPTER (last 1500 words):
+CAPÍTULO ANTERIOR (últimas 1500 palabras):
 {prev_chapter_tail}
 
-THE CHAPTER TO EVALUATE:
+EL CAPÍTULO A EVALUAR:
 {chapter_text}
 
-CROSS-CHECKS (perform before scoring):
-1. QUOTE TEST: Find the 3 best sentences and 3 weakest sentences.
-   If you can't find 3 weak ones, lower your standards -- every
-   chapter has weak moments. Look for: generic phrasing where
-   specificity was possible, rhythmic monotony in any paragraph,
-   metaphors that don't come from the character's experience,
-   emotional moments that tell instead of show, transitions that
-   summarize instead of dramatize.
-2. DIALOGUE REALISM: Read all dialogue aloud (mentally). Does it
-   sound like speech or like written prose? Do characters say things
-   a 14-year-old / 60-year-old / etc. would actually say?
-3. SCENE VS SUMMARY: How much of the chapter is in-scene (moment
-   by moment, with dialogue and action) vs summary (narrator
-   compressing time)? Chapters heavy on summary score lower on
-   engagement regardless of prose quality.
-4. AI PATTERN CHECK: Look for these common AI writing patterns:
-   - Every paragraph the same length
-   - Observations always in threes (X, Y, and Z)
-   - Emotional beats that arrive on schedule rather than surprising
-   - Characters who never say the wrong thing or talk past each other
-   - Description that catalogs instead of selecting (listing 5 sensory
-     details when 2 specific ones would be sharper)
-   - Internal monologue explaining what the scene already showed
-5. EARNED VS GIVEN: Is tension earned through scene work or handed to
-   the reader through the narrator's assertions? Is mystery maintained
-   through genuine withholding or through the character conveniently
-   not thinking about things they'd think about?
+CHEQUEOS CRUZADOS (hacé esto antes de puntuar):
+1. PRUEBA DE CITA: Encontrá las 3 mejores oraciones y las 3 más
+   débiles. Si no podés encontrar 3 débiles, estás bajando el
+   estándar -- todo capítulo tiene momentos flojos. Buscá: frases
+   genéricas donde había lugar para ser específico, monotonía rítmica
+   en algún párrafo, metáforas que no salen de la experiencia del
+   personaje, momentos emocionales que se cuentan en vez de mostrarse,
+   transiciones que resumen en vez de dramatizar.
+2. REALISMO DEL DIÁLOGO: Leé todo el diálogo en voz alta (mentalmente).
+   ¿Suena a habla o a prosa escrita? ¿Los personajes dicen cosas que
+   dirían de verdad, dada su edad y trasfondo?
+3. ESCENA VS RESUMEN: ¿Cuánto del capítulo está en escena (momento a
+   momento, con diálogo y acción) vs en resumen (el narrador
+   comprimiendo tiempo)? Los capítulos cargados de resumen puntúan más
+   bajo en enganche sin importar la calidad de la prosa.
+4. CHEQUEO DE PATRONES DE IA: Buscá estos patrones comunes de
+   escritura de IA:
+   - Todos los párrafos de la misma longitud
+   - Observaciones siempre de a tres (X, Y y Z)
+   - Beats emocionales que llegan justo cuando se los espera, en vez de sorprender
+   - Personajes que nunca dicen algo equivocado ni hablan cruzado
+   - Descripción que cataloga en vez de seleccionar (cinco detalles
+     sensoriales listados cuando dos específicos serían más filosos)
+   - Monólogo interior que explica lo que la escena ya mostró
+5. GANADO VS REGALADO: ¿La tensión se gana con trabajo de escena o se
+   le entrega al lector a través de las afirmaciones del narrador? ¿El
+   misterio se sostiene con una omisión genuina, o porque el personaje
+   convenientemente no piensa en cosas que pensaría?
 
-Score these dimensions:
+Puntuá estas dimensiones:
 
-- voice_adherence: Does the prose match voice.md Part 2? Check: sentence
-  rhythm variation, vocabulary wells, body-before-emotion principle,
-  the specific tone described. Quote the strongest voice moment AND
-  the weakest. Does ANY passage sound like generic fantasy prose that
-  could appear in any novel? If yes, score 7 max.
+- voice_adherence: ¿La prosa coincide con voz.md Parte 2? Chequeá:
+  variación del ritmo de las oraciones, pozos léxicos, el principio de
+  cuerpo-antes-que-emoción, el tono específico descrito. Citá el mejor
+  momento de voz Y el más débil. ¿Algún pasaje suena a prosa genérica
+  que podría aparecer en cualquier novela? Si sí, puntaje máximo 7.
 
-- beat_coverage: Did it hit every beat from the outline? Were beats
-  dramatized or merely mentioned? A beat that's summarized in a sentence
-  instead of lived in a scene counts as half-hit. Score reflects
-  QUALITY of beat execution, not just presence.
+- beat_coverage: ¿Cumplió cada beat del esquema? ¿Los beats se
+  dramatizaron o solo se mencionaron? Un beat resumido en una oración
+  en vez de vivido en una escena cuenta como medio cumplido. El
+  puntaje refleja la CALIDAD de la ejecución del beat, no solo su
+  presencia.
 
-- character_voice: Remove all dialogue tags mentally. Can you tell who's
-  speaking? Do characters ever sound alike? Does dialogue read as speech
-  or as written prose? Does Cass sound like a specific 14-year-old, or
-  like "young protagonist"? Does anyone say something surprising -- not
-  just the right thing, but a REAL thing? Characters who never stumble,
-  hesitate, or say something slightly wrong are AI-pattern characters.
+- character_voice: Sacá mentalmente todas las acotaciones de diálogo.
+  ¿Podés distinguir quién habla? ¿Algún personaje suena como otro? ¿El
+  diálogo se lee como habla o como prosa escrita? ¿El personaje POV
+  suena a una persona específica con su edad y trasfondo reales, o a
+  "protagonista genérico"? ¿Alguien dice algo sorprendente -- no solo
+  lo correcto, sino algo REAL? Los personajes que nunca se traban,
+  dudan o dicen algo levemente equivocado son personajes con patrón de
+  IA.
 
-- plants_seeded: Were foreshadowing elements placed naturally? A plant
-  that's obvious is worse than a plant that's invisible. Score based on
-  HOW WELL they're integrated, not just whether they're present.
+- plants_seeded: ¿Los elementos de anticipación se ubicaron con
+  naturalidad? Una siembra obvia es peor que una siembra invisible. El
+  puntaje se basa en QUÉ TAN BIEN están integrados, no solo en si
+  están presentes.
 
-- prose_quality: Sentence variety (measure: do 3+ consecutive sentences
-  start the same way?). Specificity (concrete nouns > abstract).
-  Metaphors from Cass's experience, not from a thesaurus. Show-don't-tell
-  at emotional peaks. QUOTE the weakest sentence and explain why. Also
-  check for: repeated phrases, leaned-on constructions, paragraphs that
-  could be cut without loss.
+- prose_quality: Variedad de oraciones (medida: ¿3 o más oraciones
+  consecutivas empiezan igual?). Especificidad (sustantivos concretos
+  por sobre abstractos). Metáforas que salen de la experiencia del
+  personaje, no de un diccionario de sinónimos. Mostrar-no-contar en
+  los picos emocionales. CITÁ la oración más débil y explicá por qué.
+  Chequeá también: frases repetidas, construcciones muy usadas,
+  párrafos que se podrían cortar sin pérdida.
 
-- continuity: Does it follow logically from the previous chapter? Emotional
-  continuity as well as plot continuity. Does the character's state of
-  mind track?
+- continuity: ¿Sigue lógicamente del capítulo anterior? Continuidad
+  emocional además de continuidad de trama. ¿El estado de ánimo del
+  personaje se sostiene?
 
-- canon_compliance: Check ALL facts against canon. List violations.
-  One major violation caps score at 6. Check: character names, locations,
-  magic system rules, timeline, established events, physical descriptions.
+- canon_compliance: Chequeá TODOS los hechos contra el canon (el de
+  fundación y el emergente, arriba). Listá violaciones. Una violación
+  mayor limita el puntaje a 6 como máximo. Chequeá: nombres de
+  personajes, lugares, reglas establecidas del mundo, cronología,
+  eventos ya establecidos, descripciones físicas. Si un hecho nuevo de
+  este capítulo contradice algo del canon o del canon emergente,
+  repórtalo tanto acá como en new_canon_entries (con "contradice"
+  apuntando a la entrada de canon que contradice).
 
-- lore_integration: Does the world do WORK in this chapter, or is it
-  set dressing? A scene that could happen in any fantasy city with
-  find-and-replace on proper nouns scores 5 max.
+- lore_integration: ¿El mundo hace TRABAJO en este capítulo, o es
+  decorado? Una escena que podría pasar en cualquier ciudad con
+  buscar-y-reemplazar en los nombres propios saca 5 como máximo.
 
-- engagement: Would a reader turn the page? Where does tension come from --
-  plot, character, mystery, prose? Is there a moment that SURPRISES?
-  Predictable excellence is still predictable. Score 8+ only if the
-  chapter does something unexpected.
+- engagement: ¿Un lector pasaría la página? ¿De dónde viene la tensión
+  -- trama, personaje, misterio, prosa? ¿Hay un momento que SORPRENDA?
+  La excelencia predecible sigue siendo predecible. Puntaje 8+ solo si
+  el capítulo hace algo inesperado.
 
-Respond with JSON:
+Respondé con JSON:
 {{
-  "voice_adherence": {{"score": N, "weakest_moment": "quote the specific weak passage", "fix": "how to improve it", "note": "..."}},
+  "voice_adherence": {{"score": N, "weakest_moment": "cita del pasaje débil específico", "fix": "cómo mejorarlo", "note": "..."}},
   "beat_coverage": {{"score": N, "weakest_moment": "...", "fix": "...", "note": "..."}},
   "character_voice": {{"score": N, "weakest_moment": "...", "fix": "...", "note": "..."}},
   "plants_seeded": {{"score": N, "weakest_moment": "...", "fix": "...", "note": "..."}},
-  "prose_quality": {{"score": N, "weakest_sentence": "quote it", "fix": "rewrite suggestion", "strongest_sentence": "quote it", "note": "..."}},
+  "prose_quality": {{"score": N, "weakest_sentence": "cítala", "fix": "sugerencia de reescritura", "strongest_sentence": "cítala", "note": "..."}},
   "continuity": {{"score": N, "note": "..."}},
-  "canon_compliance": {{"score": N, "violations": ["list any found"], "note": "..."}},
+  "canon_compliance": {{"score": N, "violations": ["listá las encontradas"], "note": "..."}},
   "lore_integration": {{"score": N, "weakest_moment": "...", "fix": "...", "note": "..."}},
   "engagement": {{"score": N, "weakest_moment": "...", "fix": "...", "note": "..."}},
-  "three_weakest_sentences": ["quote 1", "quote 2", "quote 3"],
-  "three_strongest_sentences": ["quote 1", "quote 2", "quote 3"],
-  "ai_patterns_detected": ["list any AI writing patterns found"],
+  "three_weakest_sentences": ["cita 1", "cita 2", "cita 3"],
+  "three_strongest_sentences": ["cita 1", "cita 2", "cita 3"],
+  "ai_patterns_detected": ["listá los patrones de escritura de IA encontrados"],
   "overall_score": N,
   "weakest_dimension": "...",
-  "top_3_revisions": ["specific, actionable revision 1", "revision 2", "revision 3"],
-  "new_canon_entries": ["any new facts established in this chapter"]
+  "top_3_revisions": ["revisión concreta y accionable 1", "revisión 2", "revisión 3"],
+  "new_canon_entries": [
+    {{"categoria": "una de: Geografía, Cronología, Reglas excepcionales del mundo, Hechos de personajes, Político / faccional, Cultural, Establecido en la historia", "hecho": "el hecho nuevo, corto y verificable", "contradice": "texto exacto de la entrada de canon.md o canon_emergente.md que contradice, o null si no hay contradicción"}}
+  ]
 }}
 
-FINAL CHECK: If your overall_score is above 7, re-read your weakest_moment
-quotes. If any of them describe a problem that an editor would flag, your
-score is too high. The median AI chapter is a 6. An 8 is exceptional. A 9
-is rare. A 10 does not exist for a first draft.
+CHEQUEO FINAL: Si tu overall_score es mayor a 7, releé tus citas de
+weakest_moment. Si alguna describe un problema que un editor marcaría,
+tu puntaje es demasiado alto. El capítulo mediano de IA es un 6. Un 8
+es excepcional. Un 9 es raro. Un 10 no existe para un primer borrador.
 """
 
 
@@ -802,6 +841,7 @@ def evaluate_chapter(chapter_num):
         world=layers["world"][:4000],  # truncate world bible
         characters=layers["characters"],
         canon=layers["canon"],
+        canon_emergente=layers["canon_emergente"] or "(sin hechos emergentes todavía)",
         chapter_outline=chapter_outline,
         prev_chapter_tail=prev_tail,
         chapter_text=chapter_text,
