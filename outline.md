@@ -91,27 +91,27 @@
 - **Ambición:** **pico**
 - **Emotional arc:** curiosidad clasificatoria → desconcierto que no logra nombrar
 - **Try-fail cycle:** No-and
-- **Beats:** (1) Entra al Sepulcro como quien inspecciona un yacimiento. Cuenta la fila: cuarenta y una personas, un metro cada tres minutos, y adentro no hay nada. (2) Intenta ubicar el fenómeno en una categoría conocida: evidencia negativa, sesgo de peregrinación, valor simbólico. Ninguna cierra el dato de la fila. (3) Observa a una mujer que sale del edículo: no parece haber cometido un error de método. Eso es lo que no cierra. (4) Se queda veinte minutos más de lo planeado. Esa noche anota la visita en la columna de "tiempo perdido" y no vuelve a abrir la planilla — pero tampoco la borra. (5) En el vuelo, busca "resurrección — evidencia" y se avergüenza de la búsqueda antes de leer el primer resultado. Lee igual.
+- **Beats:** (1) Entra al Sepulcro como quien inspecciona un yacimiento. Cuenta la fila: cuarenta y una personas, un metro cada tres minutos, y adentro no hay nada. (2) Intenta ubicar el fenómeno en una categoría conocida: evidencia negativa, sesgo de peregrinación, valor simbólico. Ninguna cierra el dato de la fila. (3) Observa a una mujer que sale del edículo: no parece haber cometido un error de método. Eso es lo que no cierra. (4) Se queda veinte minutos más de lo planeado. Esa noche anota la visita en la columna de "tiempo perdido" y no vuelve a abrir la planilla — pero tampoco la borra.
 - **Plants:** La planilla "tiempo perdido", único archivo suyo sin respaldo en la nube (hilo #1). La fila como imagen madre del libro (hilo #2).
 - **Payoffs:** —
 - **Character movement:** Se le instala la pregunta que no soporta sin responder. Nunca la llamará fe: la llamará anomalía.
 - **The lie:** Primer choque frontal: cuarenta y una personas creen sin mecanismo y no parecen estar equivocándose. La mentira no tiene casilla para eso.
-- **~Word count target:** 2100
+- **~Word count target:** 1600
 
 ### Ch 6: Bibliografía hostil
 - **POV:** Vidal
-- **Location:** Zúrich, su estudio
+- **Location:** Avión (apertura) → Zúrich, su estudio
 - **Save the Cat beat:** Debate
 - **% mark:** 13%
 - **Ambición:** sosten
 - **Emotional arc:** escepticismo cómodo → frustración de instrumentista
 - **Try-fail cycle:** No-and
-- **Beats:** (1) Empieza por el arma de los escépticos: el memorial de d'Arcis, 1389, el artista que confesó. Le parece suficiente. Sigue leyendo igual. (2) 1988: tres laboratorios, 1260–1390, caso cerrado. Luego el negativo de Secondo Pia, 1898; el STURP y sus 120 horas: "no es pintura, mecanismo desconocido". La frase "mecanismo desconocido" en un informe oficial lo ofende como una falta de ortografía. (3) Alimenta a Tamiz con todo lo publicado: fotos, espectros de 1978, la datación. El modelo devuelve lo obvio: datos insuficientes, corpus incompatible, se necesita acceso físico. (4) Descubre que lleva tres semanas trabajando de noche en algo que no factura.
+- **Beats:** (1) A mitad de vuelo, ya con la búsqueda "resurrección — evidencia" abierta y la vergüenza de estar buscándola: encuentra el memorial de d'Arcis (1389, el artista que confesó) y el resultado radiocarbónico de 1988 (tres laboratorios, 1260–1390, caso cerrado). Le parece suficiente. Sigue leyendo igual -- descarga el memorial y lo abre ahí mismo, sobre el mar. (2) Ya en Zúrich, en su estudio, sigue con lo que falta: el negativo de Secondo Pia, 1898; el STURP y sus 120 horas: "no es pintura, mecanismo desconocido". La frase "mecanismo desconocido" en un informe oficial lo ofende como una falta de ortografía. (3) Alimenta a Tamiz con todo lo publicado: fotos, espectros de 1978, la datación. El modelo devuelve lo obvio: datos insuficientes, corpus incompatible, se necesita acceso físico. (4) Descubre que lleva tres semanas trabajando de noche en algo que no factura.
 - **Plants:** El silencio de trece siglos como mejor argumento contra la autenticidad (lo usará el propio Vidal en su informe final). Las 120 horas del STURP como vara de todos los sindonólogos vivos.
 - **Payoffs:** —
 - **Character movement:** La pregunta pasó de intrusa a proyecto. Aún se lo niega: lo llama "evaluación de viabilidad".
 - **The lie:** Reforzada: si el problema persiste es porque nadie lo midió bien. Él medirá bien.
-- **~Word count target:** 2000
+- **~Word count target:** 2450
 
 ### Ch 7: La ciudad de la tela
 - **POV:** Vidal
