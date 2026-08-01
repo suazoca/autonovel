@@ -76,7 +76,7 @@ ver `libros/01-piloto/semilla.md` y `art/STYLE_BIBLE.md`.
 
 | # | Ciudad | Significado elegido (provisional) | Estado |
 |---|--------|-------------------------------------|--------|
-| 1 | **Yamaranguila** (Intibucá) | Agua de la pirámide (*Zabalanquíra*) | álbum medio ~48; texto ok; arte clave 7 imgs; falta resto + maqueta |
+| 1 | **Yamaranguila** (Intibucá) | Agua de la pirámide (*Zabalanquíra*) | álbum medio ~48; texto ok; **48 ilustraciones** en `art/pages/`; falta maqueta PDF |
 | 2 | | | |
 | 3 | | | |
 

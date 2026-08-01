@@ -9,7 +9,8 @@
 - **Trama:** híbrido C — camping → susto breve → mapa Emilia → 3 pruebas (roca-Y, voz del cerro, dos manijas)
 - **Formato:** **álbum medio** — **~48 páginas** (antes plan de 70; fusionado sin cortar la trama)
 - **Estilo:** `art/STYLE_BIBLE.md`
-- **Estado:** texto v2.1 (voz) re-paginado a álbum medio v3. Arte clave sigue en `art/`.
+- **Estado:** texto v2.1 + álbum medio v3 + **arte completo** en `art/pages/p01`…`p48`.
+- **Ver arte:** `art/index-paginas.html` o carpeta `art/pages/`.
 
 **Prompt base de serie** (prefijo de cada prompt de página):
 

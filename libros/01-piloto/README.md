@@ -3,8 +3,8 @@
 **Título definitivo:** Yamaranguila  
 **Subtítulo / eco:** El agua de la pirámide
 
-Estado: **texto v2.1 + título + arte clave + re-paginado a álbum medio
-(~48 págs.).** Ver `art/` y `paginas.md`.
+Estado: **texto v2.1 + título + álbum medio ~48 + ilustraciones
+completas (48 JPG en `art/pages/`).**
 
 - **Formato:** álbum medio **~48 páginas** (no 70)
 - **Ciudad:** Yamaranguila, Intibucá

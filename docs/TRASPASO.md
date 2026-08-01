@@ -66,7 +66,8 @@ creativa limpia + docs de serie infantil. Storytelling primario:
 7. ~~Título definitivo: **Yamaranguila**.~~ Subtítulo/eco: *El agua de la pirámide*.
 8. ~~Primera ronda de arte~~ ✓ `libros/01-piloto/art/` (hoja + 6 claves).
 9. ~~Formato álbum medio~~ ✓ **~48 páginas** (re-paginado desde plan de 70).
-10. Completar arte de las ~48 · maqueta PDF; retocar si hace falta.
+10. ~~Ilustraciones ~48~~ ✓ `libros/01-piloto/art/pages/`
+11. Maqueta PDF; retocar páginas flojas si hace falta.
 
 ## Pendiente técnico (después del piloto en papel)
 
