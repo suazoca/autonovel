@@ -9,22 +9,5 @@
   "chapters_total": 0,
   "novel_score": 0.0,
   "revision_cycle": 0,
-  "debts": [
-    {
-      "id": "C03-07",
-      "capitulo": 3,
-      "categoria": "Hechos de personajes",
-      "hecho": "Ruti tiene una abuela que, según ella, daría por buena la atribución davídica con menos letras de las que hay; es la primera vez en dos semanas que Ruti pregunta por un resultado, tras cotejar ciento cuarenta números de serie sin comentar ningún dato.",
-      "contradice": "Ruti es la técnica local del laboratorio provisional de Jerusalén; coteja números de serie contra el manifiesto y no comenta resultados.",
-      "resuelta": false
-    },
-    {
-      "id": "C04-06",
-      "capitulo": 4,
-      "categoria": "Hechos de personajes",
-      "hecho": "La planilla de asignaci\u00f3n de tiempo de Vidal replica cada noche al servidor de Z\u00farich; desde 2029 cada bloque de su tiempo tiene c\u00f3digo, y el viernes de 14:00 a 20:00 es la primera celda vac\u00eda desde entonces.",
-      "contradice": "Guarda la planilla de \"tiempo perdido\" donde anot\u00f3 la visita al Sepulcro. Nunca la borr\u00f3. Es el \u00fanico archivo suyo sin respaldo en la nube.",
-      "resuelta": false
-    }
-  ]
+  "debts": []
 }
