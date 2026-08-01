@@ -795,3 +795,37 @@ afirma que ambos aparecen en el prompt -- cierra el punto ciego
 descrito arriba. No se re-redactó el Cap. 1 retroactivamente: queda a
 criterio del usuario si vale la pena, dado que ya está aprobado por
 lectura humana.
+
+---
+
+## `MIN_LITERAL_LEN=200` de `test_guardia_prompts.py` puede ocultar literales cortos contaminados
+
+**Dónde:** `tests/test_guardia_prompts.py`, `MIN_LITERAL_LEN = 200`.
+
+**Qué pasó:** al arreglar (Tarea 10) que la respuesta del juez podía
+traer comillas/saltos de línea sin escapar y romper el JSON, se le
+agregó una instrucción al `system=` de `call_judge()` en `evaluate.py`
+(línea 409). Ese literal siempre estuvo en inglés -- nunca se tradujo,
+nadie lo notó -- pero con 169 caracteres quedaba por debajo del umbral
+de 200 y el guardia de la Tarea 12 nunca lo veía: no aparecía ni en
+`LITERALES_JUEZ` ni en ningún set de deuda. Al agregarle la instrucción
+de escapado pasó a 302 caracteres y el guardia lo descubrió en la
+siguiente corrida -- `test_hay_archivos_para_auditar` saltó de 13 a 14 y
+`test_sin_prosa_en_ingles` falló en rojo, sin marca, por contaminación
+genuina y no registrada.
+
+**Por qué importa:** esto es la prueba de que el guardia funciona --
+avisó fuerte en vez de dejarlo pasar en silencio -- pero también expone
+que el umbral de 200 caracteres no es "todo lo contaminado, detectado":
+es "todo lo contaminado que además es lo bastante largo". Puede haber
+otros literales cortos, hoy invisibles al guardia, con el mismo
+problema, esperando a que alguien los alargue por un motivo no
+relacionado con traducirlos (como pasó acá) para recién entonces
+aparecer.
+
+**Estado:** NO corregido ahora, a pedido explícito. El literal puntual
+(`evaluate.py:409`) se registró en `DEUDA_CONOCIDA`/`_DEUDA_IDIOMA_HASHES`
+apuntando a la Tarea 1b. Queda pendiente revisar si bajar
+`MIN_LITERAL_LEN` (con el costo de que empiece a auditar literales cortos
+legítimos, como las claves de esquemas JSON) es parte de esa tarea o de
+una posterior.

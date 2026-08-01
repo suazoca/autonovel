@@ -407,7 +407,10 @@ def call_judge(prompt, max_tokens=2000):
         model=JUDGE_MODEL,
         max_tokens=max_tokens,
         system="You are a literary critic and novel editor. "
-               "You evaluate fiction with precision. Always respond with valid JSON. "
+               "You evaluate fiction with precision. Return valid JSON only. "
+               "Escape double quotes and newlines within any string value, "
+               "including verbatim quotes from canon.md, canon_emergente.md, "
+               "or the chapter text. "
                "No markdown fences, no preamble -- just the JSON object.",
         beta=ANTHROPIC_BETA,
         api_key=ANTHROPIC_API_KEY,
@@ -847,7 +850,17 @@ def evaluate_chapter(chapter_num):
         chapter_text=chapter_text,
     )
     raw = call_judge(prompt, max_tokens=8000)
-    result = parse_json_response(raw)
+    try:
+        result = parse_json_response(raw)
+    except (ValueError, json.JSONDecodeError) as e:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        raw_path = EVAL_LOG_DIR / f"{timestamp}_ch{chapter_num:02d}_RAW_FALLIDO.txt"
+        raw_path.write_text(raw, encoding="utf-8")
+        sys.exit(
+            f"ERROR: la respuesta del juez para el Cap. {chapter_num} no es "
+            f"JSON válido ({e}). La llamada ya se pagó -- se guardó sin "
+            f"parsear en {raw_path} para inspección, en vez de perderse."
+        )
 
     # Mechanical slop check -- adjusts score independently of judge
     slop = slop_score(chapter_text)

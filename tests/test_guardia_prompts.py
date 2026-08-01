@@ -131,7 +131,11 @@ ANCLA_NORMAS_CASTELLANO = "más largo que el inglés"
 # empieza a fallar, es contaminación nueva y el suite debe avisar de
 # inmediato, no quedar en silencio como pasó con la Tarea 1b.
 DEUDA_CONOCIDA = {
-    "evaluate.py": "Tarea 10 (CHAPTER_PROMPT) + 1b (los otros dos)",
+    "evaluate.py": "Tarea 10 (CHAPTER_PROMPT, ya traducido) + 1b "
+                   "(FOUNDATION_PROMPT, FULL_NOVEL_PROMPT, y el system= "
+                   "de call_judge -- este último recién cruzó el umbral "
+                   "de 200 caracteres al agregarle la instrucción de "
+                   "escapado de JSON en la Tarea 10, ver HALLAZGOS.md)",
     "reader_panel.py": "Tarea 1b",
     "adversarial_edit.py": "Tarea 1b",
     "compare_chapters.py": "Tarea 1b",
@@ -192,6 +196,13 @@ _DEUDA_IDIOMA_HASHES = {
     ("gen_outline_part2.py", "70c91cfe"),  # línea 48, continuación del esquema
     ("gen_art_directions.py", "b3ca68df"),  # línea 45, task de portadas
     ("gen_audiobook_script.py", "af6b9f28"),  # línea 98, RULES del guion
+    ("evaluate.py", "942a279a"),  # línea 409, system de call_judge --
+    # literal nuevo en este registro: siempre estuvo en inglés (169
+    # caracteres), pero por debajo de MIN_LITERAL_LEN=200 el guardia no
+    # lo veía. La Tarea 10 le agregó la instrucción de escapado de JSON
+    # (nada que ver con traducir), quedó en 302 caracteres, y recién ahí
+    # el guardia lo descubrió. Sin género (no menciona fantasía). Ver
+    # docs/HALLAZGOS.md para el hallazgo sobre el umbral en sí.
     # seed.py:86 (RIFF_PROMPT) y gen_revision.py:26 tienen género pero
     # solo 2 palabras función ("the", "you") -- no cruzan el umbral de 3,
     # no entran acá. Ver limitación conocida en el docstring del módulo.
@@ -361,7 +372,17 @@ def test_hay_archivos_para_auditar():
     assert not any(n.startswith("tests/") for n in NOMBRES_RELATIVOS)
     assert not any(n.startswith("landing/") for n in NOMBRES_RELATIVOS)
     assert not any(n.startswith("typeset/") for n in NOMBRES_RELATIVOS)
-    assert len(LITERALES_JUEZ) == 13, (
+    # Subió de 13 a 14 a propósito: el system= de call_judge en
+    # evaluate.py (línea 409) siempre estuvo contaminado en inglés, pero
+    # con 169 caracteres quedaba por debajo de MIN_LITERAL_LEN=200 y el
+    # guardia no lo veía. La Tarea 10 le agregó la instrucción de
+    # escapado de comillas/saltos de línea para JSON (nada que ver con
+    # traducir prompts) y quedó en 302 caracteres -- recién ahí cruzó el
+    # umbral y el guardia lo descubrió por primera vez. Ver
+    # docs/HALLAZGOS.md: el umbral de 200 puede estar ocultando otros
+    # literales cortos contaminados que todavía no crecieron lo
+    # suficiente como para ser vistos.
+    assert len(LITERALES_JUEZ) == 14, (
         "cambió la cantidad de prompts largos en los archivos de juez -- "
         "revisar si DEUDA_CONOCIDA y los sets de hashes siguen alineados"
     )
