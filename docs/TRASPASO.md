@@ -31,17 +31,21 @@ vuelta**.
 ## En una línea
 
 Fundación completa y aprobada (voz, mundo, personajes, esquema de 46
-capítulos, canon), Cap. 1 escrito y aprobado, y el cliente de API
-(`api_comun.py`) reparado y probado contra la API real tras varios
-choques con reglas específicas de Fable 5 que `framework/es-multilibro`
-nunca conoció -- esa rama nunca corrió contra la API real. La Tarea 12
-encontró que los prompts de juez (y seis generadores más) seguían en
-inglés/calibrados contra fantasía pese a que la Tarea 1 se leía como
-cerrada -- ver "Tarea 12" abajo. **La Tarea 10 (memoria de canon
-durante la redacción) ya está completa** -- ver esa sección. Falta
-decidir la Tarea 11 (aprobación por capítulo) antes de seguir
-redactando, y de paso quedó una decisión abierta sobre si releer/rehacer
-`ch_01.md` (ver "Pendiente" abajo).
+capítulos, canon), Cap. 1 y Cap. 2 escritos y aceptados (7.0/6.5 los
+dos), y el cliente de API (`api_comun.py`) reparado y probado contra la
+API real tras varios choques con reglas específicas de Fable 5 que
+`framework/es-multilibro` nunca conoció -- esa rama nunca corrió contra
+la API real. La Tarea 12 encontró que los prompts de juez (y seis
+generadores más) seguían en inglés/calibrados contra fantasía pese a
+que la Tarea 1 se leía como cerrada -- ver "Tarea 12" abajo. **La Tarea
+10 (memoria de canon durante la redacción) ya está completa y probada
+de punta a punta contra la API real** -- el Cap. 2 es la primera corrida
+limpia del pipeline completo (`draft_chapter.py` → `evaluate.py` →
+`actualizar_canon.py`), ver "Tarea 10" y "Redacción" abajo. Lo que
+queda **no es técnico, es creativo**: dos decisiones de continuidad que
+dejó abiertas el Cap. 2 (ver "Pendiente" abajo), más la decisión ya
+conocida sobre `ch_01.md` y si hacer la Tarea 11 antes de seguir con el
+Cap. 3.
 
 ## Estado del repositorio
 
@@ -50,9 +54,9 @@ redactando, y de paso quedó una decisión abierta sobre si releer/rehacer
 | Directorio | `/root/novela2` (worktree; confirmado con `git worktree list`) |
 | Rama | `novela2`, diverge de `framework/es-multilibro` en `7b81700` (Tarea 7) |
 | `.env` / `ANTHROPIC_API_KEY` | **Presente en este entorno** (a diferencia de `framework/es-multilibro`, donde nunca existió). `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
-| Push | Al día con `origin/novela2` una vez fusionado y pusheado este commit. |
-| Working tree | Los cambios de la Tarea 10 (ver esa sección abajo) están armados pero **todavía sin commitear** al cierre de esta sesión -- confirmar con `git status` antes de asumir que ya se pusheó. `canon.md` sigue commiteado sin cambios; `world.md.regenerado` (una regeneración fallida, ver Fundación abajo) se borró en la sesión de la Tarea 12 -- nunca estuvo trackeado. |
-| Tests | `uv run python -m pytest tests/ -v` -- **237 tests, todos en verde, + 37 xfail esperados** (12 género / 19 idioma / 6 normas del castellano -- Tarea 12: deuda de prompts registrada a propósito, no fallas -- ver "Tarea 12" abajo). Bajó de 40 a 37 xfail porque la Tarea 10 tradujo `CHAPTER_PROMPT` y borró sus tres entradas del registro. No hace falta `.env` (todo mockeado). |
+| Push | La Tarea 10 (`fc2a155`, `60d158a`) y el Cap. 2 quedan **sin pushear** al cierre de esta sesión -- confirmar con `git log origin/novela2..HEAD --oneline` antes de asumir que ya subió. |
+| Working tree | Debería quedar limpio tras los commits del Cap. 2 y de este mismo `TRASPASO.md` -- confirmar con `git status`. `canon.md` sigue commiteado sin cambios; `world.md.regenerado` (una regeneración fallida, ver Fundación abajo) se borró en la sesión de la Tarea 12 -- nunca estuvo trackeado. |
+| Tests | `uv run python -m pytest tests/ -v` -- **238 tests, todos en verde, + 38 xfail esperados** (12 género / 19 idioma / 6 normas del castellano + 1 nuevo: el `system=` de `call_judge` en `evaluate.py` cruzó `MIN_LITERAL_LEN=200` al agregarle la instrucción de escapado de JSON -- ver `docs/HALLAZGOS.md` -- Tarea 12: deuda de prompts registrada a propósito, no fallas). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
 | Token de GitHub | Fine-grained, creado 2026-07-27, alcance `suazoca/autonovel`, permiso `Contents: read/write`, **vence ~2026-08-26**. Al vencer, limpiar la credencial guardada con `git credential reject` (protocol=https, host=github.com) antes de autenticar con uno nuevo. |
 
 ## Fundación (completa, aprobada)
@@ -69,12 +73,29 @@ redactando, y de paso quedó una decisión abierta sobre si releer/rehacer
 
 `chapters/ch_01.md` ("Intervalo") escrito y **aprobado tras lectura** --
 la voz se sostiene, el diálogo distingue personajes sin etiquetas, a la
-altura del esquema. Commiteado (`aa8efd1`).
+altura del esquema. Commiteado (`aa8efd1`). Redactado **antes** del fix
+de la Tarea 10: se escribió sin `canon.md` disponible en el prompt real
+(ver `docs/HALLAZGOS.md`). Sigue sin re-redactarse -- ver "Pendiente".
+
+`chapters/ch_02.md` ("reunión de comisiones") escrito y **aceptado por
+el juez** (`overall_score: 7.0`, umbral 6.5 para ambición "sostén") --
+primer capítulo redactado con `canon.md` y `canon_emergente.md` los dos
+disponibles de principio a fin. Corrida real, de punta a punta, del
+pipeline completo de la Tarea 10: `draft_chapter.py 2` →
+`evaluate.py --chapter=2` → `actualizar_canon.py 2`. Volcó 7 hechos
+nuevos a `canon_emergente.md` (sección `## Cap. 02`), **uno marcado
+`CONFLICTO`** y anotado en `state.json::debts` sin resolver. Detalle de
+las dos decisiones creativas que dejó abiertas (el conflicto de fecha y
+el hilo de Halevi) en "Pendiente" abajo -- **no son bugs, son deuda
+narrativa**: el juez marca contradicciones y hebras nuevas, no las
+resuelve; eso lo decide el usuario leyendo el capítulo.
 
 **Ojo:** `state.json` sigue en `chapters_drafted: 0` -- no se está
 orquestando con `run_pipeline.py`, así que ese contador no refleja la
 realidad. No confiar en `state.json` para saber cuántos capítulos hay
-escritos; mirar `chapters/` directamente.
+escritos; mirar `chapters/` directamente. `state.json::debts` sí está
+al día (lo mantiene `actualizar_canon.py`) -- hoy tiene una entrada,
+`C02-06`, sin resolver.
 
 ## Bugs de compatibilidad con Fable 5 (arreglados hoy, todos commiteados en esta rama)
 
@@ -194,14 +215,35 @@ se sigue redactando con el standalone (`draft_chapter.py` directo, sin
 ## Pendiente (no bloqueante)
 
 Ordenado por lo que cuesta más si se posterga, no por número de tarea.
+**Las dos primeras son decisiones creativas del usuario, no técnicas --
+el pipeline ya hizo su parte (detectar y anotar), nada de esto es un
+bug a arreglar en código.**
 
+- **Conflicto de fecha, Cap. 2 (`state.json::debts`, id `C02-06`,
+  categoría Cronología).** El Cap. 2 hace que Vidal se comprometa a
+  entregar el preliminar "pasado mañana"; el Cap. 1 termina con Vidal
+  diciendo "mañana a mediodía". El juez lo marcó `CONFLICTO` en
+  `canon_emergente.md` y quedó sin resolver. Dos lecturas posibles, sin
+  decidir: (a) error de continuidad, se corrige el Cap. 2 para que diga
+  "mañana"; (b) corrimiento deliberado -- Vidal pide más tiempo bajo
+  presión política de las dos comisiones, y el corrimiento debería
+  quedar explícito en la prosa del Cap. 2 en vez de implícito. Leer
+  ambos capítulos antes de decidir.
+- **Hilo de Halevi sin resolver (`canon_emergente.md`, `C02-03`,
+  Hechos de personajes).** El Cap. 2 introduce que Halevi "alude en
+  público al escándalo de los bronces etruscos de Vidal sin nombrarlo
+  del todo" -- un hilo narrativo nuevo, no en el esquema original.
+  Decidir: ¿se desarrolla en un capítulo futuro (y entonces hay que
+  anotarlo en el esquema/Foreshadowing Ledger para no perderlo), o se
+  corta del Cap. 2 por no ser parte del plan? No descartado todavía.
 - **Decidir qué hacer con `ch_01.md`.** Se redactó con el bug de
   `canon.md` de arriba activo -- el prompt real no tenía ningún hecho
   duro de canon, aunque sí está aprobado por lectura humana. No se
-  re-redactó automáticamente. Opciones: dejarlo como está y confiar en
-  que el Cap. 2 en adelante ya tiene canon completo (el capítulo de
-  apertura tiene poco que contradecir), o releerlo/rehacerlo contra
-  `canon.md` antes de escribir el Cap. 2. Sin decidir todavía.
+  re-redactó automáticamente. El Cap. 2 ya confirma que el pipeline con
+  canon completo funciona (7.0, sin violaciones de canon detectadas),
+  así que la pregunta ya no es "¿funciona?" sino si vale la pena
+  releer/rehacer específicamente `ch_01.md` contra `canon.md` en
+  retrospectiva. Sin decidir todavía.
 - **Tarea 11** -- punto de aprobación manual por capítulo en
   `run_pipeline.py` (hoy la aprobación del Cap. 1 fue manual/informal,
   leyendo el archivo).
@@ -224,19 +266,27 @@ Ordenado por lo que cuesta más si se posterga, no por número de tarea.
 
 ## Próximo paso
 
-Con la Tarea 10 ya completa, lo que queda por decidir es: qué hacer con
-`ch_01.md` (ver "Pendiente" arriba), si hacer la Tarea 11 antes de
-seguir (supervisión liviana), o directamente seguir redactando a mano
-capítulo por capítulo con el standalone. Si es esto último:
+**Antes de escribir el Cap. 3, resolver las dos decisiones creativas del
+Cap. 2** (conflicto de fecha `C02-06` y el hilo de Halevi -- ver
+"Pendiente" arriba): si el Cap. 3 arranca sin resolverlas, hereda la
+fecha que haya quedado y puede profundizar un hilo que todavía no se
+decidió si existe. Aparte de eso, qué hacer con `ch_01.md`, si hacer la
+Tarea 11 antes de seguir (supervisión liviana), o directamente seguir
+redactando a mano capítulo por capítulo con el standalone -- que ya
+probó funcionar de punta a punta con el Cap. 2:
 
 ```bash
 uv run python draft_chapter.py N
+uv run python evaluate.py --chapter=N
+uv run python actualizar_canon.py N
 ```
 
 **Ojo:** el número de capítulo va **posicional**
 (`chapter_num = int(sys.argv[1])` en `draft_chapter.py`) -- **no** hay
-flag `--chapter`. Leer cada capítulo antes de avanzar al siguiente, como
-se hizo con el Cap. 1.
+flag `--chapter` para ese script (sí lo tiene `evaluate.py`). Leer cada
+capítulo antes de avanzar al siguiente, como se hizo con el Cap. 1 y el
+Cap. 2, y revisar `canon_emergente.md`/`state.json::debts` por si el
+juez marcó algo -- no se resuelve solo.
 
 **Advertencia sobre probar capítulos fuera de orden** (p.ej. uno de Fun
 and Games y uno del Acto III, para chequear que la voz aguanta otro
@@ -260,9 +310,12 @@ completo en `docs/ESTADO.md` y `docs/HALLAZGOS.md`.
 1. `git status` -- confirmar que el working tree sigue limpio.
 2. `git log origin/novela2..HEAD --oneline` -- confirmar que no quedó
    nada sin pushear.
-3. `uv run python -m pytest tests/ -v` -- confirmar 237 en verde y 37
+3. `uv run python -m pytest tests/ -v` -- confirmar 238 en verde y 38
    xfail esperados (ninguno inesperado) antes de tocar nada.
-4. Decidir qué hacer con `ch_01.md` / Tarea 11 / seguir a mano (ver
-   "Próximo paso") y, si es lo último,
-   `uv run python draft_chapter.py 2` seguido de
-   `uv run python actualizar_canon.py 2` una vez evaluado.
+4. `cat state.json` -- ver si `debts` sigue teniendo la entrada
+   `C02-06` sin resolver, o si ya se decidió y se limpió a mano.
+5. Resolver las dos decisiones creativas del Cap. 2 (ver "Pendiente" y
+   "Próximo paso" arriba) antes de tocar el Cap. 3. Después, decidir
+   `ch_01.md` / Tarea 11 / seguir a mano y, si es lo último,
+   `uv run python draft_chapter.py 3` → `evaluate.py --chapter=3` →
+   `actualizar_canon.py 3`.
