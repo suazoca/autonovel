@@ -9,5 +9,14 @@
   "chapters_total": 0,
   "novel_score": 0.0,
   "revision_cycle": 0,
-  "debts": []
+  "debts": [
+    {
+      "id": "C03-07",
+      "capitulo": 3,
+      "categoria": "Hechos de personajes",
+      "hecho": "Ruti tiene una abuela que, seg\u00fan ella, dar\u00eda por buena la atribuci\u00f3n dav\u00eddica con menos letras de las que hay; es la primera vez en dos semanas que Ruti pregunta por un resultado, tras cotejar ciento cuarenta n\u00fameros de serie sin comentar ning\u00fan dato.",
+      "contradice": "Ruti es la t\u00e9cnica local del laboratorio provisional de Jerusal\u00e9n; coteja n\u00fameros de serie contra el manifiesto y no comenta resultados.",
+      "resuelta": false
+    }
+  ]
 }
