@@ -1,0 +1,87 @@
+# Biblia de la serie — Ciudades de Honduras (título de trabajo)
+
+Serie de cuentos ilustrados para **niños y niñas de 4 a 7 años**.
+Cada libro (~**70 páginas**) parte del **nombre de una ciudad de Honduras**,
+su origen posible y su **significado**, y de ahí nace la aventura.
+
+Base de código: rama `ciudades-hn` (fork de `novela2` / framework autonovel).
+Base de storytelling: **no** es la craft de novela adulta de `novela2` —
+ver `CRAFT_INFANTIL.md`.
+
+## Público y uso
+
+- Edad: 4–7 años.
+- Lectura ideal: **en voz alta** (adulto + niño) o lector inicial acompañado.
+- Emoción: calidez, curiosidad, humor suave, pertenencia. Sin terror, sin
+  violencia gráfica, sin moralina pesada.
+- Duración de lectura: un libro en una o varias sesiones cortas.
+
+## Motor de cada libro
+
+1. Llegan (o viven) en una **ciudad real de Honduras**.
+2. Alguien nombra el lugar; el nombre **significa algo** (lectura poética
+   declarada en la semilla del libro).
+3. Ese significado se vuelve **magia suave / misterio / ayuda concreta**
+   (no sistema de magia de fantasía épica).
+4. Hay un **problema del tamaño de un niño** (perderse un poco, un amigo
+   triste, un árbol en peligro, no entender a los mayores, etc.).
+5. Los protagonistas **hacen algo** (no solo reciben el regalo de un adulto).
+6. Cierre cálido + eco del nombre +, si aplica, plant del siguiente libro.
+
+### Etimología (regla de honestidad)
+
+Muchos topónimos tienen varias teorías (lenguas indígenas, español, leyenda).
+En cada libro:
+
+- Elegir **una lectura** para la historia.
+- Declararla en la semilla: *“En este libro decimos que X significa Y.”*
+- Opcional: nota breve para adultos al final (otras teorías / fuentes).
+
+No presentar una etimología dudosa como verdad académica en el cuerpo del cuento.
+
+## Continuidad de la serie (por definir en la semilla piloto)
+
+Pendiente de decisión creativa:
+
+- [ ] ¿Mismos héroes en cada ciudad, o cuento independiente por ciudad?
+- [ ] ¿Viaje que recorre Honduras, o un libro = un hogar?
+- [ ] ¿Mascota / objeto / “escucha-nombres” recurrente?
+
+Hasta decidirlo, el Libro 1 fija el precedente.
+
+## Catálogo (borrador — rellenar)
+
+| # | Ciudad | Significado elegido (provisional) | Estado |
+|---|--------|-------------------------------------|--------|
+| 1 | *por elegir* | | semilla pendiente |
+| 2 | | | |
+| 3 | | | |
+
+## Formato de página (~70 págs)
+
+Cada libro se planifica por **página o doble página**, no por “capítulo de novela”.
+
+Archivo canónico por libro: `libros/NN-slug/paginas.md`
+
+Columnas mínimas:
+
+| pág | texto (voz alta) | brief de ilustración | prompt de imagen | page-turn / notas |
+
+Ver plantilla en `libros/_plantilla/paginas.md`.
+
+## Arte
+
+- Biblia visual de la serie: `art/STYLE_BIBLE.md`
+- Prompts: base de serie + prompt por página (sin contradecir la bible)
+- El dibujo cuenta lo que el texto no dice.
+
+## Relación con el framework autonovel
+
+| Capa | Qué usar |
+|------|----------|
+| API, scripts, tests | heredados de `novela2` |
+| Semilla / fundación | adaptar a infantil; no reusar *La ostensión* |
+| Outline 46 caps / Save the Cat denso | **no** para estos libros |
+| CRAFT.md adulto | solo referencia; primario = `CRAFT_INFANTIL.md` |
+| Revisión / juez | rúbrica infantil (pendiente cablear en evaluate) |
+| Canon | útil entre libros de la serie (`canon.md` de serie + emergente) |

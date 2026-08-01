@@ -1,98 +1,26 @@
-# Semilla — Libro 1
+# Semilla — Serie Ciudades de Honduras (Libro 1, piloto)
 
-## Premisa
+Estado: **plantilla**. Completar cuando se elija la ciudad del Libro 1.
+Ver `BIBLIA_SERIE.md`, `CRAFT_INFANTIL.md` y `libros/_plantilla/semilla.md`.
 
-Un científico especializado en inteligencia artificial aplicada a la
-arqueología viaja a Israel para autenticar una inscripción atribuida al
-rey David. Allí, por curiosidad y no por trabajo, visita el Santo
-Sepulcro y no entiende lo que ve: gente que peregrina a una tumba vacía.
-Nunca había considerado la resurrección como una pregunta abierta.
-Empieza a leer. La evidencia que más lo perturba es la Sábana Santa de
-Turín. Pide acceso formal para analizarla y se lo niegan. Un particular
-con recursos enormes se entera de lo que quiere y le ofrece lo que
-ninguna institución le dará: la reliquia, y su tecnología aplicada sobre
-ella. El plan es sustituirla por una réplica durante la manipulación
-previa a la ostensión de 2033, analizar el original y devolverlo antes
-de que nadie lo advierta.
+## Serie
 
-## Cuándo y dónde
+Cuentos ilustrados para niños de 4 a 7 años. Cada libro (~70 páginas)
+parte del nombre de una ciudad de Honduras, su origen posible y su
+significado (una lectura poética declarada), y de ahí nace la aventura.
+Texto e imagen se planifican juntos (`libros/.../paginas.md`).
 
-Los meses previos a la ostensión de la Sábana Santa prevista para 2033
-—la primera en dieciocho años—, entre Israel y Turín. El mundo es el
-nuestro, unos años adelante: la tecnología avanzó, la política se
-endureció, nada es todavía apocalíptico.
+## Libro 1 — por definir
 
-## El protagonista
+- **Ciudad:**
+- **En este libro decimos que el nombre significa:**
+- **Premisa:**
+- **Protagonista(s):**
+- **Problema (tamaño niño):**
+- **Cómo el significado mueve la acción:**
+- **Cierre:**
 
-Ateo, no militante: nunca le pareció una pregunta que valiera el tiempo.
-Su prestigio viene de un modelo propio que autentica objetos
-arqueológicos con una precisión que incomoda a los especialistas
-tradicionales. Es riguroso, algo arrogante, y su virtud y su defecto son
-el mismo: no acepta un resultado sin mecanismo. Lo que lo mueve no es la
-fe ni el dinero: es no soportar una pregunta sin responder.
+## Notas de tono
 
-## El equipo
-
-Lo arma el tercero, no él. Tres personas, de las cuales al menos una:
-
-- Cree desde el principio, y el protagonista la trata con
-  condescendencia intelectual. Desconfía del financista sin poder
-  explicar por qué.
-- Se opone al análisis por motivos religiosos: si el resultado es
-  adverso, se destruye algo que sostiene a millones.
-- Está por oficio, sin interés en la pregunta. Conservación,
-  seguridad o falsificación.
-
-Uno de ellos lo entrega, y sus motivos son buenos.
-
-## El tercero
-
-Un particular. El protagonista tarda mucho en saber para quién trabaja:
-intermediarios, una fundación, un abogado. Acepta no saberlo porque el
-acceso que le ofrecen es irresistible, y esa aceptación es su primera
-concesión moral, muy anterior al robo.
-
-No quiere el objeto ni quiere destruirlo. Quiere el análisis definitivo
-antes que nadie, para decidir qué se hace público y cuándo. No le
-importa si es auténtico: le importa ser dueño de la respuesta.
-
-Es persuasivo, culto, y con frecuencia tiene razón. Nada en el libro 1
-lo señala como algo más que un hombre con recursos.
-
-## Qué encuentra el modelo
-
-Tres resultados y una anomalía:
-
-- El lino es del siglo I y compatible con Jerusalén.
-- La formación de la imagen no corresponde a ningún proceso conocido:
-  el modelo descarta todas las hipótesis sin proponer ninguna.
-- Una certeza alta que el sistema no sabe explicar y él no puede
-  auditar ni reproducir.
-- Y una traza que juega en contra, que un colega honesto usaría para
-  decir que esto no prueba nada, y que él no logra descartar.
-
-La evidencia no alcanza. Él lo sabe mejor que nadie. Cree igual.
-
-## El arco
-
-Termina donde empezó: sin prueba. Toda la operación le entrega evidencia
-insuficiente, y la conversión ocurre a pesar del resultado, no gracias a
-él. Es una elección, no una conclusión. Se lleva la fe; el tercero se
-lleva el archivo.
-
-## Tono
-
-Thriller de procedimiento, narrado desde un solo punto de vista, en
-tercera persona cercana. La tensión viene del rigor técnico y de la
-presión del calendario, no de la acción. La conversión no se declara ni
-se explica: se muestra en decisiones.
-
-## Prohibido
-
-- Que ocurra un milagro, una señal o una manifestación sobrenatural.
-- Que la ciencia confirme la resurrección.
-- Que el financista sea reconocible como maligno.
-- Que el creyente del equipo sea ingenuo o el escéptico sea cínico.
-- Que el protagonista sea tonto: es engañado por alguien inteligente,
-  no por un monstruo.
-- Sermones. Nadie explica el sentido de lo que pasa.
+Lectura en voz alta. Calidez, curiosidad, humor suave, pertenencia local.
+Sin terror, sin moralina, sin estructura de novela adulta.
