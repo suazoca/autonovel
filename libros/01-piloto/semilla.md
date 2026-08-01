@@ -1,9 +1,13 @@
 # Semilla — Libro 1: *Yamaranguila*
 
 **Formato:** álbum medio **~48 páginas** (no 70).  
+**Publicación:** ebook (Kindle fixed layout) + **Amazon KDP Print**  
+trim **11" × 8.5" horizontal**.  
+**Autor:** Chris Suazo.  
 **Versión de trama:** híbrido C (aventura suave + magia del lugar).  
 Basada en la idea original del autor (camping, mapa de Emilia, tres
-pruebas, abuelo Dale a distancia) + craft 4–7 (`CRAFT_INFANTIL.md`).
+pruebas, abuelo Dale a distancia) + craft 4–7 (`CRAFT_INFANTIL.md`).  
+Detalle KDP: `docs/PUBLICACION_KDP.md`.
 
 ## Ciudad y nombre
 

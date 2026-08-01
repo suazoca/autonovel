@@ -5,6 +5,10 @@
 > bíblico ni religioso.
 
 Serie de cuentos ilustrados para **niños y niñas de 4 a 7 años**.
+**Autor de la serie:** Chris Suazo.  
+**Publicación:** ebook + Amazon KDP (print); trim de serie del piloto:
+**11" × 8.5" horizontal** — ver `docs/PUBLICACION_KDP.md`.
+
 Cada libro (formato de serie: **álbum medio ~40–48 páginas**; el piloto
 *Yamaranguila* va a **~48**) parte del **nombre de una ciudad de Honduras**,
 su origen posible y su **significado**, y de ahí nace la aventura.
@@ -76,7 +80,7 @@ ver `libros/01-piloto/semilla.md` y `art/STYLE_BIBLE.md`.
 
 | # | Ciudad | Significado elegido (provisional) | Estado |
 |---|--------|-------------------------------------|--------|
-| 1 | **Yamaranguila** (Intibucá) | Agua de la pirámide (*Zabalanquíra*) | álbum ~48; texto+arte; **maqueta PDF** en `libros/01-piloto/maqueta/` |
+| 1 | **Yamaranguila** (Intibucá) | Agua de la pirámide (*Zabalanquíra*) | autor **Chris Suazo**; ebook+KDP **11×8.5"**; álbum ~48; maqueta en `libros/01-piloto/maqueta/` |
 | 2 | | | |
 | 3 | | | |
 

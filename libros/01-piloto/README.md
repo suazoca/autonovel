@@ -1,10 +1,13 @@
 # Libro 1 — *Yamaranguila*
 
 **Título definitivo:** Yamaranguila  
-**Subtítulo / eco:** El agua de la pirámide
+**Subtítulo / eco:** El agua de la pirámide  
+**Autor:** Chris Suazo  
+**Publicación:** ebook + Amazon KDP Print · trim **11" × 8.5" horizontal**  
+(ver `docs/PUBLICACION_KDP.md`)
 
 Estado: **texto v2.1 + título + álbum medio ~48 + ilustraciones
-completas (48 JPG en `art/pages/`).**
+completas (48 JPG en `art/pages/`) + maqueta de trabajo.**
 
 - **Formato:** álbum medio **~48 páginas** (no 70)
 - **Ciudad:** Yamaranguila, Intibucá

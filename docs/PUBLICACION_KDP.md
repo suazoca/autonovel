@@ -24,24 +24,28 @@ no el archivo final de KDP.
 
 ---
 
-## Decisiones a fijar (antes de archivos finales)
+## Decisiones de serie (cerradas)
 
-Marcar en la semilla del libro cuando se cierren:
+| Campo | Valor |
+|-------|--------|
+| **Canales** | **Ambos:** Kindle (ebook) + KDP Print (rústica; tapa dura opcional después) |
+| **Trim (print)** | **11" × 8.5" horizontal** (álbum landscape) — ancho × alto |
+| **Orientación arte** | Landscape (coincide con maqueta de trabajo y con Imagine 4:3 / 16:9 recortable) |
+| **Idioma** | Español |
+| **Edad ficha** | 4–7 años |
+| **Autor** | **Chris Suazo** |
+| **Ilustración** | Generada/editada con IA (xAI Imagine) + dirección de arte del autor; **declarar IA en KDP** |
+| **Portadas** | Archivos aparte: cover ebook ≠ cubierta print (frente + lomo + dorso) |
 
-1. **Tamaño de impresión (trim)** — ejemplos habituales infantiles KDP:
-   - `8.5" × 8.5"` (cuadrado)
-   - `8.5" × 11"` vertical
-   - `11" × 8.5"` horizontal (cerca de nuestra maqueta landscape)
-   - `10" × 8"` u otros del catálogo KDP
-2. **Solo ebook / solo print / ambos** (mismo arte, exports distintos).
-3. **Idioma de publicación:** español (mercados ES / US latam / etc.).
-4. **Rango de edad en ficha:** 4–7 (como craft de serie).
-5. **Portada:** archivo aparte (ebook cover ≠ cubierta con lomo de print).
+### Trim 11" × 8.5" — notas técnicas
 
-**Recomendación de serie (provisional):**  
-trim **horizontal 11" × 8.5"** o **10" × 8"** para coincidir con álbum landscape;
-si se prefiere estantería clásica infantil, **8.5" × 8.5"** y re-exportar arte
-a cuadrado. **Decidir antes** de regenerar a 300 DPI masivo.
+- Catálogo típico KDP para libro ilustrado apaisado.
+- **Sangrado (bleed):** 0.125" por lado si el color/ilustración llega al filo  
+  → área con bleed ≈ **11.25" × 8.75"** (confirmar plantilla KDP del momento).
+- **Zona segura de texto:** ~0.5" dentro del borde de recorte.
+- **Interiores a 300 DPI:** lado largo ~ **3300 px** (11" × 300); lado corto ~ **2550 px** (8.5" × 300).  
+  Los maestros actuales (~1280×720) se upscalean o regeneran **después** de aprobar consistencia.
+- **Ebook fixed layout:** misma composición apaisada; cover ebook orientativo 2560×1600 (ratio ~1.6:1), sin lomo.
 
 ---
 
@@ -123,15 +127,17 @@ de producción.
 
 ---
 
-## Metadatos (borrador Libro 1)
+## Metadatos (Libro 1 — ficha)
 
-| Campo | Valor provisional |
-|-------|-------------------|
+| Campo | Valor |
+|-------|--------|
 | Título | Yamaranguila |
 | Subtítulo | El agua de la pirámide |
-| Serie | Ciudades de Honduras (título de serie por fijar en ficha) |
-| Autores / ilustración | Por definir en ficha legal |
+| Serie | Ciudades de Honduras (nombre comercial de serie por pulir en ficha) |
+| **Autor** | **Chris Suazo** |
+| Ilustración | Dirección de arte: Chris Suazo; imágenes con asistencia de IA (declarar en KDP) |
 | Idioma | Español |
+| Formatos | Kindle ebook (fixed layout) + paperback KDP 11" × 8.5" |
 | Categorías | Infantil · geografía/cultura · aventura suave |
 | Edad | 4–7 años |
 | Keywords | Honduras, Yamaranguila, cuento infantil, pirámide, agua, Intibucá, … |
@@ -170,13 +176,13 @@ de producción.
 1. Lista de correcciones de arte (consistencia)
 2. Retocar pages en art/pages/ (res actual + ancla de personajes)
 3. Aprobar set en maqueta de trabajo
-4. Decidir trim KDP + export alta resolución
-5. PDF print + paquete ebook
-6. Portadas
-7. Subida KDP + declaración IA + preview
+4. Export alta resolución (~3300×2550 @ 11×8.5" 300 DPI) + bleed si aplica
+5. PDF print KDP + paquete ebook fixed layout
+6. Portadas (ebook + print wrap) — autor: Chris Suazo
+7. Subida KDP (ambos) + declaración IA + preview Kindle + preflight print
 ```
 
-No saltar del paso 2 al 5 sin aprobación visual: el coste de rehacer
+No saltar del paso 2 al 4 sin aprobación visual: el coste de rehacer
 48 páginas a 300 DPI es alto.
 
 ---

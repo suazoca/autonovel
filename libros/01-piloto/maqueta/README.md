@@ -13,7 +13,9 @@
 - Texto: v2.1 de `../paginas.md`
 - Imágenes: `../art/pages/p01`…`p48`
 - Formato: horizontal (letter landscape), imagen arriba, texto abajo
-- **Maqueta de trabajo**, no maqueta de imprenta final
+- **Maqueta de trabajo**, no el PDF final de KDP
+- **Publicación prevista:** ebook + KDP Print · trim **11" × 8.5" horizontal**
+- **Autor:** Chris Suazo · ver `docs/PUBLICACION_KDP.md`
 
 ## Cómo abrir
 

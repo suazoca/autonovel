@@ -75,8 +75,11 @@ def main() -> None:
     margin = 0.45 * inch
     c = canvas.Canvas(str(OUT), pagesize=(page_w, page_h))
     c.setTitle("Yamaranguila — maqueta álbum medio")
-    c.setAuthor("Serie Ciudades de Honduras")
-    c.setSubject("Maqueta de trabajo — texto v2.1 + arte Imagine")
+    c.setAuthor("Chris Suazo")
+    c.setSubject(
+        "Maqueta de trabajo — texto v2.1 + arte Imagine — "
+        "ebook + KDP Print 11x8.5 in landscape"
+    )
 
     # cover
     c.setFillColorRGB(0.96, 0.94, 0.88)
@@ -95,7 +98,13 @@ def main() -> None:
     c.drawCentredString(
         page_w / 2,
         page_h / 2 - 58,
-        "Serie Ciudades de Honduras · Noha, Ivana y el abuelo Dale",
+        "Chris Suazo · Serie Ciudades de Honduras · Noha, Ivana y el abuelo Dale",
+    )
+    c.setFont("Helvetica", 10)
+    c.drawCentredString(
+        page_w / 2,
+        page_h / 2 - 78,
+        "Ebook + Amazon KDP · trim 11\" × 8.5\" horizontal",
     )
     c.setFont("Helvetica", 9)
     c.drawCentredString(

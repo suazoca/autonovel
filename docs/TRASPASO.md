@@ -78,10 +78,16 @@ creativa limpia + docs de serie infantil. Storytelling primario:
 
 ## Publicación (fijado)
 
-El Libro 1 se publicará como **ebook** y en **Amazon KDP**. Reglas y
-checklist: `docs/PUBLICACION_KDP.md`. Implica: corregir consistencia de
-arte antes del export final; alta resolución (300 DPI) al cerrar;
-declarar contenido IA en KDP; maqueta actual = trabajo, no archivo final.
+| Campo | Valor |
+|-------|--------|
+| Canales | **Ebook (Kindle) + KDP Print** |
+| Trim | **11" × 8.5" horizontal** (álbum) |
+| Autor | **Chris Suazo** |
+| Guía | `docs/PUBLICACION_KDP.md` |
+
+Implica: corregir consistencia de arte antes del export final; alta
+resolución (~300 DPI) al cerrar; declarar contenido IA en KDP; maqueta
+actual = trabajo, no archivo final.
 
 ## Próximo paso
 
