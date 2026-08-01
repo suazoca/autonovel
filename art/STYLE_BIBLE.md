@@ -17,8 +17,10 @@ para no romper continuidad.
 - Proporciones: niños con cabezas un poco grandes, manos expresivas;
   no “anime” extremo ni realismo adulto.
 - Fondos con **lugar reconocible de Honduras** cuando el libro lo pida
-  (árbol, costa, montaña, mercado, iglesia de pueblo, etc.) sin
+  (árbol, costa, montaña, mercado, plaza, casa de adobe, etc.) sin
   convertirse en foto turística fría.
+- La serie **no es bíblica**: un templo o fiesta solo como paisaje cultural
+  si el libro lo pide, nunca como mensaje de fe.
 
 ## Paleta (provisional)
 

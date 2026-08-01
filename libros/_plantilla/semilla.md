@@ -14,6 +14,7 @@
 ## Público y tono
 
 4–7 años. Lectura en voz alta. Calidez / curiosidad / humor suave.
+Serie **no bíblica / no religiosa**: el motor es el lugar y el nombre.
 
 ## Protagonista(s)
 

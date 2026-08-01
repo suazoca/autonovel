@@ -1,5 +1,9 @@
 # Biblia de la serie — Ciudades de Honduras (título de trabajo)
 
+> **Nombre del archivo:** “biblia de serie” = documento de continuidad de
+> producción (premisa, reglas, catálogo). **No** significa contenido
+> bíblico ni religioso.
+
 Serie de cuentos ilustrados para **niños y niñas de 4 a 7 años**.
 Cada libro (~**70 páginas**) parte del **nombre de una ciudad de Honduras**,
 su origen posible y su **significado**, y de ahí nace la aventura.
@@ -8,12 +12,26 @@ Base de código: rama `ciudades-hn` (fork de `novela2` / framework autonovel).
 Base de storytelling: **no** es la craft de novela adulta de `novela2` —
 ver `CRAFT_INFANTIL.md`.
 
+## Qué es y qué no es esta serie
+
+| Sí | No |
+|----|-----|
+| Cultura local, geografía, naturaleza, comunidad | Serie **bíblica** o de enseñanza religiosa |
+| Topónimos, lenguas, leyendas de lugar (laicas) | Alegoría de fe, milagros doctrinales, evangelización |
+| Magia suave / misterio del **nombre del lugar** | Trama de conversión, reliquias, escritura sagrada como motor |
+| Pertenencia a Honduras | Continuación temática de *La ostensión* u otras novelas de fe del repo |
+
+Si un templo, fiesta o costumbre aparece, es **paisaje cultural** (como un
+mercado o un árbol), no el mensaje del libro. El corazón de cada título es
+el **significado del nombre de la ciudad** y un problema del tamaño de un
+niño, no una lección de catecismo.
+
 ## Público y uso
 
 - Edad: 4–7 años.
 - Lectura ideal: **en voz alta** (adulto + niño) o lector inicial acompañado.
 - Emoción: calidez, curiosidad, humor suave, pertenencia. Sin terror, sin
-  violencia gráfica, sin moralina pesada.
+  violencia gráfica, sin moralina pesada (ni moralina religiosa).
 - Duración de lectura: un libro en una o varias sesiones cortas.
 
 ## Motor de cada libro

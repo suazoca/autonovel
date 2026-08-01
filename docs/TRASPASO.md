@@ -11,6 +11,8 @@ mundo, personajes, outline, canon y capítulos de esa novela.
 Proyecto creativo: **serie de cuentos infantiles (4–7 años)** basados en
 nombres y significados de **ciudades de Honduras**, ~70 páginas por
 libro, con plan de **ilustración + prompts por página**.
+**No es serie bíblica ni religiosa** (cultura local y topónimos; ver
+`BIBLIA_SERIE.md` § “Qué es y qué no es”).
 
 ## Worktrees (no mezclar)
 

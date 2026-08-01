@@ -24,3 +24,5 @@ Texto e imagen se planifican juntos (`libros/.../paginas.md`).
 
 Lectura en voz alta. Calidez, curiosidad, humor suave, pertenencia local.
 Sin terror, sin moralina, sin estructura de novela adulta.
+**No es serie bíblica ni religiosa:** la maravilla es el lugar, el nombre
+de la ciudad y la vida cotidiana en Honduras.

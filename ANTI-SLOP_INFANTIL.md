@@ -9,6 +9,9 @@ Tachar en revisión.
 - [ ] Narrador que regaña o explica demasiado
 - [ ] Dulzura vacía sin conflicto real (aunque sea chico)
 - [ ] Ternura forzada (“sonrió con los ojitos llenos de…” en cada página)
+- [ ] Giro bíblico / religioso (parábola, milagro de fe, oración como
+      resolución mágica, “Dios quiso…”, allegoría de escritura sagrada)
+- [ ] Usar la serie para catequesis o valores confesionales
 
 ## Estructura
 

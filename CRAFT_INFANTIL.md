@@ -32,6 +32,11 @@ esta serie no es la guía de estructura ni de revisión**.
    de Honduras — no “un pueblo genérico tropical”.
 10. **Texto e imagen son pareja.** Lo que se ve no es solo decorado del
     párrafo; ver plan de `paginas.md`.
+11. **No es serie bíblica.** Ni allegoría de fe, ni “enseñanza de valores
+    religiosos”, ni milagro doctrinal. La maravilla sale del **lugar y su
+    nombre**, de la naturaleza y de la comunidad, no de un marco de
+    escritura sagrada. (El archivo `BIBLIA_SERIE.md` es solo el documento
+    de producción de la serie.)
 
 ## Estructura de un libro (~70 páginas ilustradas)
 
