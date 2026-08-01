@@ -78,8 +78,9 @@ creativa limpia + docs de serie infantil. Storytelling primario:
 
 ## Próximo paso
 
-Maqueta PDF (texto de `paginas.md` + `art/pages/`), o retocar
-ilustraciones flojas. Ver `art/index-paginas.html`.
+Leer la maqueta `libros/01-piloto/maqueta/Yamaranguila-maqueta.pdf`
+y anotar páginas a retocar; regenerar con
+`uv run python scripts/maqueta_yamaranguila.py`.
 
 ```bash
 cd /root/ciudades-hn
