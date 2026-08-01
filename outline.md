@@ -85,18 +85,18 @@
 
 ### Ch 5: Cuarenta y una personas
 - **POV:** Vidal
-- **Location:** Basílica del Santo Sepulcro, Jerusalén
+- **Location:** Basílica del Santo Sepulcro, Jerusalén (edículo incluido)
 - **Save the Cat beat:** Catalyst
 - **% mark:** 10.9%
 - **Ambición:** **pico**
 - **Emotional arc:** curiosidad clasificatoria → desconcierto que no logra nombrar
 - **Try-fail cycle:** No-and
-- **Beats:** (1) Entra al Sepulcro como quien inspecciona un yacimiento. Cuenta la fila: cuarenta y una personas, un metro cada tres minutos, y adentro no hay nada. (2) Intenta ubicar el fenómeno en una categoría conocida: evidencia negativa, sesgo de peregrinación, valor simbólico. Ninguna cierra el dato de la fila. (3) Observa a una mujer que sale del edículo: no parece haber cometido un error de método. Eso es lo que no cierra. (4) Se queda veinte minutos más de lo planeado. Esa noche anota la visita en la columna de "tiempo perdido" y no vuelve a abrir la planilla — pero tampoco la borra.
-- **Plants:** La planilla "tiempo perdido", único archivo suyo sin respaldo en la nube (hilo #1). La fila como imagen madre del libro (hilo #2).
+- **Beats:** (1) Entra a la basílica como quien inspecciona un yacimiento. Cuenta la fila: cuarenta y una personas, un metro cada tres minutos, y adentro no hay nada. (2) Intenta ubicar el fenómeno en una categoría conocida: evidencia negativa, sesgo de peregrinación, valor simbólico. Ninguna cierra el dato de la fila. (3) Observa a una mujer que sale del edículo: no parece haber cometido un error de método. Es lo que no puede clasificar -- y lo que no puede clasificar, lo verifica en persona. (4) Entra al edículo -- decisión suya, no cumplimiento de itinerario: un perito verifica en persona lo que no cierra en la observación ajena. Adentro, dos minutos: no pasa nada. Sale sin poder registrar qué midió. (5) Esa noche anota la visita en la columna de "tiempo perdido" y no vuelve a abrir la planilla — pero tampoco la borra.
+- **Plants:** La planilla "tiempo perdido", único archivo suyo sin respaldo en la nube (hilo #1). La fila como imagen madre del libro (hilo #2). La primera entrada al edículo, que el Cap. 46 espeja ("adentro no hay nada, exactamente como la primera vez").
 - **Payoffs:** —
 - **Character movement:** Se le instala la pregunta que no soporta sin responder. Nunca la llamará fe: la llamará anomalía.
-- **The lie:** Primer choque frontal: cuarenta y una personas creen sin mecanismo y no parecen estar equivocándose. La mentira no tiene casilla para eso.
-- **~Word count target:** 1600
+- **The lie:** Primer choque frontal: cuarenta y una personas creen sin mecanismo y no parecen estar equivocándose, y verificar en persona no cambia nada. La mentira no tiene casilla para eso.
+- **~Word count target:** 1900
 
 ### Ch 6: Bibliografía hostil
 - **POV:** Vidal
