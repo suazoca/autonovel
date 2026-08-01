@@ -17,3 +17,14 @@
 - [C01-10] (Reglas excepcionales del mundo) Para cerámica judaíta del siglo X a.C. el corpus de referencia de Tamiz es denso: cuatrocientas doce muestras con estratigrafía publicada y procedencias limpias (Qeiyafa, Laquis, Tell es-Safi).
 - [C01-11] (Político / faccional) Existe un discurso redactado en la oficina del primer ministro israelí con un espacio en blanco para la fecha del óstracon.
 - [C01-12] (Cronología) En octubre de 2032, durante la campaña de Horvat Adullam, Vidal viste la tercera de las cinco camisas grises que llevó al campo; el polvo del sitio le cambió el tono a las dos primeras.
+
+## Cap. 02
+
+- [C02-01] (Establecido en la historia) El diseño del peritaje del óstracon que Vidal expone incluye controles ciegos intercalados en la cola de procesamiento, de modo que ni él sabe en qué posición corre la muestra, y el compromiso de publicar los datos crudos completos junto con el informe.
+- [C02-02] (Establecido en la historia) Vidal se niega en la reunión a emitir un resultado preliminar de uso interno separado del definitivo: el preliminar se publica con el definitivo, en el mismo archivo, con las diferencias visibles línea por línea.
+- [C02-03] (Hechos de personajes) Halevi es epigrafista de unos sesenta y cinco años, del bando de Be'eri, con cuarenta años de atribuciones por ojo y oficio; usa chaqueta de tweed y alude en público al escándalo de los bronces etruscos de Vidal sin nombrarlo del todo.
+- [C02-04] (Reglas excepcionales del mundo) Los pesos de Tamiz residen en hardware propio, sin réplica en la nube, con acceso de una sola persona: Vidal.
+- [C02-05] (Político / faccional) El modelo certificador de Basilea era propiedad corporativa, con ciento cuarenta empleados y tres centros de datos contratados; treinta ídolos cicládicos se entrenaron contra él hasta pasar, y entre los damnificados hubo museos y dos fondos soberanos. Seis años después no hay ninguna imputación ni literatura conocida sobre el vector de extracción de los pesos.
+- [C02-06] CONFLICTO (Cronología) La reunión con las dos comisiones en la sede de la Autoridad, en Jerusalén, va de las 10:04 a las 12:40; Vidal se compromete a entregar el preliminar a la Autoridad pasado mañana, por el canal que fije la dirección, y Ashkenazi fija que todo pasa por ella.
+  <!-- contradice: "Primera pasada limpia. Convergencia esta noche. Mañana a mediodía tengo intervalos preliminares, con la reserva de siempre.". Sin resolver. -->
+- [C02-07] (Hechos de personajes) El registro de jornada de Vidal usa columnas con etiquetas (entre ellas 'asunto abierto' y 'tiempo perdido') y un signo marginal —un círculo pequeño— para las entradas que no requieren acción.

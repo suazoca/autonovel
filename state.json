@@ -9,5 +9,14 @@
   "chapters_total": 0,
   "novel_score": 0.0,
   "revision_cycle": 0,
-  "debts": []
+  "debts": [
+    {
+      "id": "C02-06",
+      "capitulo": 2,
+      "categoria": "Cronolog\u00eda",
+      "hecho": "La reuni\u00f3n con las dos comisiones en la sede de la Autoridad, en Jerusal\u00e9n, va de las 10:04 a las 12:40; Vidal se compromete a entregar el preliminar a la Autoridad pasado ma\u00f1ana, por el canal que fije la direcci\u00f3n, y Ashkenazi fija que todo pasa por ella.",
+      "contradice": "Primera pasada limpia. Convergencia esta noche. Ma\u00f1ana a mediod\u00eda tengo intervalos preliminares, con la reserva de siempre.",
+      "resuelta": false
+    }
+  ]
 }
