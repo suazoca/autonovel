@@ -29,7 +29,8 @@ completas (48 JPG en `art/pages/`).**
 9. ~~Primera ronda de ilustración~~ ✓ hoja + 6 claves en `art/`
 10. ~~Ilustraciones de las ~48~~ ✓ `art/pages/p01`…`p48`
 11. ~~Maqueta PDF~~ ✓ `maqueta/Yamaranguila-maqueta.pdf`
-12. Retocar ilustraciones flojas · regenerar maqueta · pasada craft fina opcional.
+12. Retocar ilustraciones (consistencia) con vista a **ebook + Amazon KDP**
+    (`docs/PUBLICACION_KDP.md`) · regenerar maqueta · luego export alta res.
 
 ## Archivos esperados aquí
 

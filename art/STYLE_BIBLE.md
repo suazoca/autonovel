@@ -75,6 +75,17 @@ weapon focus, dark grim atmosphere, chaotic composition, extra fingers,
 deformed hands, adult romance, brand names
 ```
 
+## Publicación (ebook + KDP)
+
+Ver `docs/PUBLICACION_KDP.md`. Resumen para quien genera arte:
+
+- Texto del cuento **no** va pintado en la imagen (capa aparte en maqueta/KDP).
+- Misma relación de aspecto en todo el libro.
+- Consistencia de héroes/objetos > detalle de fondo.
+- Los JPG actuales son **maestros de trabajo**; el print final pedirá
+  ~300 DPI al tamaño de recorte (upscale o regeneración al cerrar).
+- Contenido de imagen con IA: se declara al publicar en Amazon.
+
 ## Por página
 
 1. Respetar esta bible.

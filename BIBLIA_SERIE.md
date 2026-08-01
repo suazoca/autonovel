@@ -99,6 +99,9 @@ Ver plantilla en `libros/_plantilla/paginas.md`.
 - Biblia visual de la serie: `art/STYLE_BIBLE.md`
 - Prompts: base de serie + prompt por página (sin contradecir la bible)
 - El dibujo cuenta lo que el texto no dice.
+- **Publicación:** ebook + Amazon KDP — ver `docs/PUBLICACION_KDP.md`
+  (fixed layout, 300 DPI final, declaración de contenido IA, sin texto
+  legible en la ilustración).
 
 ## Relación con el framework autonovel
 

@@ -76,11 +76,18 @@ creativa limpia + docs de serie infantil. Storytelling primario:
 - Decidir si `chapters/` del framework se usa o solo `libros/.../paginas.md`.
 - Generación de imágenes con bible + prompts.
 
+## Publicación (fijado)
+
+El Libro 1 se publicará como **ebook** y en **Amazon KDP**. Reglas y
+checklist: `docs/PUBLICACION_KDP.md`. Implica: corregir consistencia de
+arte antes del export final; alta resolución (300 DPI) al cerrar;
+declarar contenido IA en KDP; maqueta actual = trabajo, no archivo final.
+
 ## Próximo paso
 
-Leer la maqueta `libros/01-piloto/maqueta/Yamaranguila-maqueta.pdf`
-y anotar páginas a retocar; regenerar con
-`uv run python scripts/maqueta_yamaranguila.py`.
+1. Lista de correcciones de arte (consistencia) con KDP en mente.
+2. Retocar `art/pages/`; regenerar maqueta de trabajo.
+3. Más adelante: trim size KDP + export alta res + portadas + subida.
 
 ```bash
 cd /root/ciudades-hn
