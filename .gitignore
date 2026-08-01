@@ -9,3 +9,7 @@ typeset/*.pdf
 typeset/chapters_content.tex
 *.pdf
 *.log
+
+# maqueta piloto (permitir PDF de trabajo)
+!libros/01-piloto/maqueta/*.pdf
+!libros/01-piloto/maqueta/**

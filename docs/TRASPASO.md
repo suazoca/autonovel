@@ -67,7 +67,8 @@ creativa limpia + docs de serie infantil. Storytelling primario:
 8. ~~Primera ronda de arte~~ ✓ `libros/01-piloto/art/` (hoja + 6 claves).
 9. ~~Formato álbum medio~~ ✓ **~48 páginas** (re-paginado desde plan de 70).
 10. ~~Ilustraciones ~48~~ ✓ `libros/01-piloto/art/pages/`
-11. Maqueta PDF; retocar páginas flojas si hace falta.
+11. ~~Maqueta PDF~~ ✓ `libros/01-piloto/maqueta/Yamaranguila-maqueta.pdf`
+12. Retocar ilustraciones flojas y re-generar maqueta si hace falta.
 
 ## Pendiente técnico (después del piloto en papel)
 

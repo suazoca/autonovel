@@ -28,7 +28,8 @@ completas (48 JPG en `art/pages/`).**
 8. ~~Título definitivo~~ ✓ *Yamaranguila*
 9. ~~Primera ronda de ilustración~~ ✓ hoja + 6 claves en `art/`
 10. ~~Ilustraciones de las ~48~~ ✓ `art/pages/p01`…`p48`
-11. Maqueta PDF · retocar páginas flojas · pasada craft fina opcional.
+11. ~~Maqueta PDF~~ ✓ `maqueta/Yamaranguila-maqueta.pdf`
+12. Retocar ilustraciones flojas · regenerar maqueta · pasada craft fina opcional.
 
 ## Archivos esperados aquí
 
