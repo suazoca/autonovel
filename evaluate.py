@@ -807,7 +807,6 @@ Respondé con JSON:
   "three_weakest_sentences": ["cita 1", "cita 2", "cita 3"],
   "three_strongest_sentences": ["cita 1", "cita 2", "cita 3"],
   "ai_patterns_detected": ["listá los patrones de escritura de IA encontrados"],
-  "overall_score": N,
   "weakest_dimension": "...",
   "top_3_revisions": ["revisión concreta y accionable 1", "revisión 2", "revisión 3"],
   "new_canon_entries": [
@@ -820,6 +819,30 @@ weakest_moment. Si alguna describe un problema que un editor marcaría,
 tu puntaje es demasiado alto. El capítulo mediano de IA es un 6. Un 8
 es excepcional. Un 9 es raro. Un 10 no existe para un primer borrador.
 """
+
+
+def extraer_dimensiones(result):
+    """Puntajes de dimensión del JSON del juez: cualquier valor que sea un
+    dict con una clave "score" numérica. No asume un conjunto fijo de 9 --
+    si CHAPTER_PROMPT gana o pierde una dimensión, esto se ajusta solo."""
+    return {
+        clave: valor["score"]
+        for clave, valor in result.items()
+        if isinstance(valor, dict) and isinstance(valor.get("score"), (int, float))
+    }
+
+
+def calcular_overall(dimensiones):
+    """overall_score ya no lo inventa el juez como campo suelto -- anclaba
+    en 7.0 sin importar cómo puntuaran las dimensiones individuales (ver
+    docs/HALLAZGOS.md: Cap. 1/2/3 dieron 7.0 con medias de dimensión de
+    7.33/7.00/7.56). Se agrega acá: 70% la media, 30% el mínimo, para que
+    una sola dimensión floja pese en el resultado en vez de diluirse entre
+    las demás."""
+    valores = list(dimensiones.values())
+    media = sum(valores) / len(valores)
+    minimo = min(valores)
+    return round(0.7 * media + 0.3 * minimo, 2)
 
 
 def evaluate_chapter(chapter_num):
@@ -861,6 +884,10 @@ def evaluate_chapter(chapter_num):
             f"JSON válido ({e}). La llamada ya se pagó -- se guardó sin "
             f"parsear en {raw_path} para inspección, en vez de perderse."
         )
+
+    dimensiones = extraer_dimensiones(result)
+    if dimensiones:
+        result["overall_score"] = calcular_overall(dimensiones)
 
     # Mechanical slop check -- adjusts score independently of judge
     slop = slop_score(chapter_text)
