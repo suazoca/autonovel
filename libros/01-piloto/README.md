@@ -35,4 +35,5 @@ completas (48 JPG en `art/pages/`).**
 
 - `semilla.md` — premisa del libro (híbrido C)
 - `paginas.md` — texto + brief + prompt por página + texto corrido
-- `art/` — hoja de personajes + escenas clave (ver `art/README.md`)
+- `art/` — 48 ilustraciones en `art/pages/` (ver `art/README.md`)
+- `maqueta/Yamaranguila-maqueta.pdf` — maqueta de trabajo (texto + imagen)
