@@ -1,6 +1,7 @@
 # Arte — Libro 1: *Yamaranguila*
 
-Primera ronda de ilustración (ancla de serie + 6 escenas clave).
+**Formato del libro:** álbum medio **~48 páginas** (ver `../paginas.md`).  
+Primera ronda: ancla de serie + 6 escenas clave (cubren beats, no las 48).  
 Base de consistencia: `../../art/personajes/hoja-serie.jpg` (copia aquí:
 `00-hoja-personajes.jpg`).
 

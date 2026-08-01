@@ -3,9 +3,10 @@
 **Título definitivo:** Yamaranguila  
 **Subtítulo / eco:** El agua de la pirámide
 
-Estado: **texto v2.1 aprobado + título fijado + primera ronda de arte
-(hoja + 6 escenas clave).** Ver `art/`.
+Estado: **texto v2.1 + título + arte clave + re-paginado a álbum medio
+(~48 págs.).** Ver `art/` y `paginas.md`.
 
+- **Formato:** álbum medio **~48 páginas** (no 70)
 - **Ciudad:** Yamaranguila, Intibucá
 - **Lectura del nombre:** Agua de la pirámide (*Zabalanquíra*)
 - **Héroes de serie:** Noha, Ivana; abuelo **Dale** (en este libro, lejos / teléfono)
@@ -20,14 +21,13 @@ Estado: **texto v2.1 aprobado + título fijado + primera ronda de arte
 1. ~~Elegir ciudad y lectura del nombre~~ ✓
 2. ~~Cerrar protagonistas + problema + continuidad de serie~~ ✓
 3. ~~Nombres definitivos~~ ✓ Noha, Ivana, abuelo Dale (+ Emilia en recuerdo)
-4. ~~Esbozar `paginas.md` (~70)~~ ✓
-5. ~~Trama híbrida C~~ ✓ (idea del autor + craft 4–7)
-6. ~~Fijar personajes en `art/STYLE_BIBLE.md`~~ (borrador ✓; pulir al ilustrar)
+4. ~~Esbozar mapa de páginas~~ ✓ (pasó de ~70 a **~48 álbum medio**)
+5. ~~Trama híbrida C~~ ✓
+6. ~~Fijar personajes en `art/STYLE_BIBLE.md`~~ ✓
 7. ~~Segunda lectura en voz alta~~ ✓ v2.1
 8. ~~Título definitivo~~ ✓ *Yamaranguila*
-9. Revisar con `CRAFT_INFANTIL.md` + `ANTI-SLOP_INFANTIL.md` (pasada fina opcional).
-10. ~~Primera ronda de ilustración~~ ✓ hoja + 6 claves en `art/`
-11. Aprobar/retocar arte; completar páginas restantes o maqueta PDF.
+9. ~~Primera ronda de ilustración~~ ✓ hoja + 6 claves en `art/`
+10. Completar arte de las ~48 · maqueta PDF · pasada craft fina opcional.
 
 ## Archivos esperados aquí
 

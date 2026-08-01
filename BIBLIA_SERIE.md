@@ -5,7 +5,8 @@
 > bíblico ni religioso.
 
 Serie de cuentos ilustrados para **niños y niñas de 4 a 7 años**.
-Cada libro (~**70 páginas**) parte del **nombre de una ciudad de Honduras**,
+Cada libro (formato de serie: **álbum medio ~40–48 páginas**; el piloto
+*Yamaranguila* va a **~48**) parte del **nombre de una ciudad de Honduras**,
 su origen posible y su **significado**, y de ahí nace la aventura.
 
 Base de código: rama `ciudades-hn` (fork de `novela2` / framework autonovel).
@@ -75,13 +76,15 @@ ver `libros/01-piloto/semilla.md` y `art/STYLE_BIBLE.md`.
 
 | # | Ciudad | Significado elegido (provisional) | Estado |
 |---|--------|-------------------------------------|--------|
-| 1 | **Yamaranguila** (Intibucá) | Agua de la pirámide (*Zabalanquíra*) | título fijo; texto v2.1 aprobado; falta arte |
+| 1 | **Yamaranguila** (Intibucá) | Agua de la pirámide (*Zabalanquíra*) | álbum medio ~48; texto ok; arte clave 7 imgs; falta resto + maqueta |
 | 2 | | | |
 | 3 | | | |
 
-## Formato de página (~70 págs)
+## Formato de página (álbum medio ~40–48)
 
 Cada libro se planifica por **página o doble página**, no por “capítulo de novela”.
+Meta de serie: **álbum medio** (cómodo a 4–7 en una o dos lecturas). Evitar
+inflar a 70 solo por relleno.
 
 Archivo canónico por libro: `libros/NN-slug/paginas.md`
 

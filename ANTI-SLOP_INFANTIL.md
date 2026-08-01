@@ -15,7 +15,7 @@ Tachar en revisión.
 
 ## Estructura
 
-- [ ] Relleno para inflar a 70 páginas sin beats nuevos
+- [ ] Relleno para inflar páginas (p. ej. hacia 70) sin beats nuevos
 - [ ] Tres problemas distintos que no se tocan
 - [ ] Final que resuelve un adulto mientras el niño mira
 - [ ] Secuelas de novela (traición, corte, cliffhanger angustioso)

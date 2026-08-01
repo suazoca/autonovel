@@ -9,8 +9,9 @@ Worktree `/root/ciudades-hn`, rama `ciudades-hn`, creada desde
 mundo, personajes, outline, canon y capítulos de esa novela.
 
 Proyecto creativo: **serie de cuentos infantiles (4–7 años)** basados en
-nombres y significados de **ciudades de Honduras**, ~70 páginas por
-libro, con plan de **ilustración + prompts por página**.
+nombres y significados de **ciudades de Honduras**, álbum medio
+(~40–48 páginas; piloto ~48), con plan de **ilustración + prompts por
+página**.
 **No es serie bíblica ni religiosa** (cultura local y topónimos; ver
 `BIBLIA_SERIE.md` § “Qué es y qué no es”).
 
@@ -60,12 +61,12 @@ creativa limpia + docs de serie infantil. Storytelling primario:
    - pueblo confía en los niños;
    - **3 pruebas:** roca de la Y (atardecer) · voz del cerro (dos voces, sin morse) · dos manijas del ojo de agua;
    - agua vuelve; eco del nombre; plant libro 2.
-5. ~~`semilla.md` + `paginas.md` (~70) + texto corrido.~~
+5. ~~`semilla.md` + `paginas.md` + texto corrido.~~
 6. ~~Segunda lectura en voz alta (v2.1).~~ Texto aprobado.
 7. ~~Título definitivo: **Yamaranguila**.~~ Subtítulo/eco: *El agua de la pirámide*.
-8. ~~Primera ronda de arte~~ ✓ `libros/01-piloto/art/` (hoja + 6 claves);
-   ancla de serie en `art/personajes/hoja-serie.jpg`.
-9. Completar resto de páginas / maqueta PDF; retocar si hace falta.
+8. ~~Primera ronda de arte~~ ✓ `libros/01-piloto/art/` (hoja + 6 claves).
+9. ~~Formato álbum medio~~ ✓ **~48 páginas** (re-paginado desde plan de 70).
+10. Completar arte de las ~48 · maqueta PDF; retocar si hace falta.
 
 ## Pendiente técnico (después del piloto en papel)
 
@@ -75,8 +76,8 @@ creativa limpia + docs de serie infantil. Storytelling primario:
 
 ## Próximo paso
 
-Revisar y aprobar la primera ronda de arte en
-`libros/01-piloto/art/`, o generar más páginas / maqueta PDF.
+Completar ilustraciones del álbum medio (~48) con ancla
+`art/personajes/hoja-serie.jpg`, o armar maqueta PDF con texto + arte clave.
 
 ```bash
 cd /root/ciudades-hn

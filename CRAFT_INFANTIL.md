@@ -38,24 +38,24 @@ esta serie no es la guía de estructura ni de revisión**.
     escritura sagrada. (El archivo `BIBLIA_SERIE.md` es solo el documento
     de producción de la serie.)
 
-## Estructura de un libro (~70 páginas ilustradas)
+## Estructura de un libro (álbum medio ~40–48)
 
-No usar el outline de 46 capítulos de novela.
+No usar el outline de 46 capítulos de novela.  
+**Meta de serie:** álbum medio (no inflar a 70 por relleno).  
+Álbum clásico 32–40 es válido si la trama lo permite.
 
-Esquema orientativo (ajustar al piloto):
+Esquema orientativo (**álbum medio ~48**, como el piloto *Yamaranguila*):
 
 | Bloque | Págs aprox. | Función |
 |--------|-------------|---------|
-| Apertura / hogar o llegada | 1–8 | Quiénes son; tono; gancho sensorial |
-| El nombre | 9–18 | Se nombra la ciudad; se planta el significado |
-| Problema | 19–30 | El conflicto del tamaño del niño |
-| Intentos (regla de tres) | 31–50 | Explorar el significado en acción |
-| Giro suave | 51–58 | Entienden / se atreven / piden ayuda bien |
-| Cierre | 59–66 | Resolución cálida + eco del nombre |
-| Coda / próximo viaje | 67–70 | Plant opcional; nota de adulto opcional |
+| Apertura | 1–6 | Quiénes son; tono; gancho sensorial |
+| Problema + nombre | 7–23 | Susto/conflicto suave; se nombra; mapa/significado |
+| Comunidad + plan | 24–27 | Pueblo / ayuda; se plantan las pruebas |
+| Intentos (regla de tres) | 28–44 | Tres pruebas del significado en acción |
+| Cierre + plant | 45–48 | Resolución, eco del nombre, próximo viaje |
 
-Si el formato es más álbum clásico (menos texto/página), bajar densidad
-de palabras y subir peso de la imagen; el arco emocional se mantiene.
+Si el formato es más álbum clásico (32–40), comprimir puentes y subir
+peso de la imagen; el arco emocional se mantiene.
 
 ## Lenguaje
 

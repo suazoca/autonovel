@@ -2,7 +2,7 @@
 
 - Ciudad:
 - Significado declarado en este libro:
-- ~Páginas objetivo: 70
+- ~Páginas objetivo: 40–48 (álbum medio)
 - Estilo: ver `art/STYLE_BIBLE.md`
 - Prompt base de serie: (copiar desde STYLE_BIBLE)
 
@@ -27,7 +27,7 @@
 | 8 | | | | |
 | 9 | | | | |
 | 10 | | | | |
-| … | | | | seguir hasta ~70 |
+| … | | | | seguir hasta ~40–48 |
 
 ## Coda para adultos (opcional, últimas páginas)
 

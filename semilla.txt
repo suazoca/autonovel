@@ -7,9 +7,10 @@ Ver `BIBLIA_SERIE.md`, `CRAFT_INFANTIL.md` y `libros/01-piloto/`.
 
 ## Serie
 
-Cuentos ilustrados para niños de 4 a 7 años. Cada libro (~70 páginas)
-parte del nombre de una ciudad de Honduras, su origen posible y su
-significado (una lectura poética declarada), y de ahí nace la aventura.
+Cuentos ilustrados para niños de 4 a 7 años. Cada libro (álbum medio
+~40–48 páginas; piloto *Yamaranguila* ~48) parte del nombre de una
+ciudad de Honduras, su origen posible y su significado (una lectura
+poética declarada), y de ahí nace la aventura.
 Texto e imagen se planifican juntos (`libros/.../paginas.md`).
 
 **Continuidad:** mismos héroes en cada ciudad (no antología suelta).
