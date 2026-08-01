@@ -77,8 +77,8 @@ creativa limpia + docs de serie infantil. Storytelling primario:
 
 ## Próximo paso
 
-Completar ilustraciones del álbum medio (~48) con ancla
-`art/personajes/hoja-serie.jpg`, o armar maqueta PDF con texto + arte clave.
+Maqueta PDF (texto de `paginas.md` + `art/pages/`), o retocar
+ilustraciones flojas. Ver `art/index-paginas.html`.
 
 ```bash
 cd /root/ciudades-hn

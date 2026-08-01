@@ -27,7 +27,8 @@ completas (48 JPG en `art/pages/`).**
 7. ~~Segunda lectura en voz alta~~ ✓ v2.1
 8. ~~Título definitivo~~ ✓ *Yamaranguila*
 9. ~~Primera ronda de ilustración~~ ✓ hoja + 6 claves en `art/`
-10. Completar arte de las ~48 · maqueta PDF · pasada craft fina opcional.
+10. ~~Ilustraciones de las ~48~~ ✓ `art/pages/p01`…`p48`
+11. Maqueta PDF · retocar páginas flojas · pasada craft fina opcional.
 
 ## Archivos esperados aquí
 
