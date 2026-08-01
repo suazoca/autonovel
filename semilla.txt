@@ -1,7 +1,9 @@
 # Semilla — Serie Ciudades de Honduras (Libro 1, piloto)
 
-Estado: **plantilla**. Completar cuando se elija la ciudad del Libro 1.
-Ver `BIBLIA_SERIE.md`, `CRAFT_INFANTIL.md` y `libros/_plantilla/semilla.md`.
+Estado: **Libro 1 *Yamaranguila*** — semilla + páginas v2.1 aprobadas +
+título fijado (`libros/01-piloto/paginas.md`). Falta: ilustración.
+
+Ver `BIBLIA_SERIE.md`, `CRAFT_INFANTIL.md` y `libros/01-piloto/`.
 
 ## Serie
 
@@ -10,19 +12,54 @@ parte del nombre de una ciudad de Honduras, su origen posible y su
 significado (una lectura poética declarada), y de ahí nace la aventura.
 Texto e imagen se planifican juntos (`libros/.../paginas.md`).
 
-## Libro 1 — por definir
+**Continuidad:** mismos héroes en cada ciudad (no antología suelta).
+**Noha** e **Ivana**; el **abuelo Dale** ayuda y nombra, pero **no
+resuelve el núcleo** del problema: eso lo hacen los niños. Objetos:
+**jarrito**; en el Libro 1 también el **mapa de la bisabuela Emilia**.
 
-- **Ciudad:**
-- **En este libro decimos que el nombre significa:**
-- **Premisa:**
-- **Protagonista(s):**
-- **Problema (tamaño niño):**
-- **Cómo el significado mueve la acción:**
-- **Cierre:**
+## Libro 1 — *Yamaranguila* (trama híbrida C)
+
+- **Título definitivo:** Yamaranguila  
+- **Subtítulo / eco:** El agua de la pirámide
+
+- **Ciudad:** Yamaranguila (Intibucá, Honduras). Altiplano frío y verde;
+  uno de los municipios más altos del país. Cultura lenca viva; aire de
+  pino, niebla suave, barro blanco, cerros que se apilan como escalones.
+- **En este libro decimos que el nombre significa:** «Agua de la pirámide»
+  (del nombre antiguo *Zabalanquíra* / *Zabalanquira*). Lectura de *este*
+  cuento, no tesis académica.
+- **Otras teorías / nota de adulto (coda):** fuentes locales repiten esa
+  etimología; el Ballet Folklórico Zabalanquira honra el nombre antiguo.
+- **Premisa:** Noha e Ivana acampan en la naturaleza. Hay un susto
+  nocturno breve (la tierra tiembla un poquito; se apaga la lámpara).
+  En la mañana el río se oye menos; el pueblo tendrá sed. Llaman al
+  abuelo Dale (vive lejos): les guía a su caja de herramientas y al
+  **mapa de la bisabuela Emilia**. El mapa nombra Yamaranguila —*agua
+  de la pirámide*— y marca **tres puntos**. El pueblo confía en los
+  niños. Pruebas: (1) roca con Y, sombra a las 5, dos palancas a la vez,
+  se devela la pirámide del cerro; (2) dos voces al cerro (eco del
+  “mensaje en dos partes”, sin morse técnico); (3) dos manijas del ojo
+  de agua, a la vez. El agua vuelve; el pueblo celebra; eco del nombre;
+  plant del próximo viaje.
+- **Protagonista(s):** **Noha** e **Ivana**. Actúan ellos.
+- **Ayuda:** el **abuelo Dale** (teléfono / consejo) + herencia de
+  **Emilia** (mapa). Dale no trae el agua él solo al final.
+- **Problema (tamaño niño):** no había agua.
+- **Cierre:** agua otra vez; “Yamaranguila… agua de la pirámide”;
+  jarrito lleno; plant suave al próximo nombre de ciudad.
 
 ## Notas de tono
 
-Lectura en voz alta. Calidez, curiosidad, humor suave, pertenencia local.
-Sin terror, sin moralina, sin estructura de novela adulta.
-**No es serie bíblica ni religiosa:** la maravilla es el lugar, el nombre
-de la ciudad y la vida cotidiana en Honduras.
+Lectura en voz alta. Calidez, curiosidad, humor suave, aventura segura,
+pertenencia local. Sin terror, sin moralina, sin estructura de novela
+adulta. **No es serie bíblica ni religiosa:** la maravilla es el lugar,
+el nombre de la ciudad y la comunidad.
+
+## Imagen sensorial del lugar
+
+- Frío de altura, chamarra, vapor de la boca al hablar de mañana.
+- Pinos, niebla baja, verdes profundos, cerros escalonados (pirámide suave).
+- Atardecer dorado a las 5 (prueba de la sombra en la roca).
+- Barro / arcilla blanca (detalle local, no lección).
+- Sonidos: viento, gallos, silencio del río bajo → canto del agua al final.
+- Noche solo si es segura (luna, lámpara, susto breve contenido).

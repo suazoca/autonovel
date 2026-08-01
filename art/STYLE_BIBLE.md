@@ -31,11 +31,30 @@ para no romper continuidad.
 
 ## Personajes de serie
 
-*Por rellenar cuando exista semilla del piloto.*
+Héroes fijos en todos los libros (nombres de trabajo del piloto;
+cambiar en semilla y aquí a la vez).
 
 | Personaje | Edad aparente | Rasgos fijos (pelo, ropa, objeto) | No hacer |
 |-----------|---------------|-------------------------------------|----------|
-| | | | |
+| **Noha** | ~6–7 | Pelo oscuro corto; **suéter coral/rojo** + **chaqueta oliva**; pantalón gris; zapatos café; a veces jarrito | No adultizar; no “elegido/a” con brillo mágico |
+| **Ivana** | ~4–5 | Más baja; **dos moños/coletas con lazos mostaza**; camisa **mostaza** + chaqueta **lila**; pantalón morado; tenis rojos; mochila café | No solo cómica/torpe; ella también resuelve |
+| **Abuelo Dale** | mayor, cálido | **Gorra gris** suave; chaqueta **azul** (parche en codo ok); bastón de apoyo; cara amable | No resuelve él solo el final; no caricatura de viejo frágil o gruñón |
+
+**Ancla visual de serie:** `art/personajes/hoja-serie.jpg`  
+(usar como referencia en `image_edit` para no romper caras/ropa).
+
+**Objeto de serie:** jarrito de barro naranja con flores azules suaves.
+En Yamaranguila empieza vacío y al final lleva agua.
+
+**Libro 1 — objetos extra:** mapa viejo de la bisabuela Emilia (papel
+doblado, dibujos suaves, sin texto legible en imagen); caja de herramientas
+de madera del abuelo; carpa de camping; roca con Y en relieve; dos palancas;
+dos manijas del ojo de agua. **Dale** en este libro suele verse en
+llamada/recuerdo (vive lejos); silueta fija cuando aparece.
+
+**Libro 1 (Yamaranguila) — clima de vestuario:** capas, chamarras, mejillas
+rosas por el frío de altura; ropa de camping/camino; no ropa de playa.
+Atardecer dorado en la prueba de la roca (≈ las 5).
 
 ## Prompt base de serie (plantilla)
 

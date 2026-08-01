@@ -57,21 +57,25 @@ En cada libro:
 
 No presentar una etimología dudosa como verdad académica en el cuerpo del cuento.
 
-## Continuidad de la serie (por definir en la semilla piloto)
+## Continuidad de la serie (fijada en el piloto)
 
-Pendiente de decisión creativa:
+- [x] **Mismos héroes** en cada ciudad: dos hermanos + su abuelo.
+- [x] **Viaje / visitas** (con el abuelo o con su consejo): cada libro =
+  una ciudad de Honduras. En el piloto Dale está **lejos** y ayuda por
+  teléfono; en otros títulos puede ir con ellos.
+- [x] Recurrente: el abuelo **nombra** (lectura poética del topónimo);
+  objeto de viaje (**jarrito** u similar). Libro 1 añade el **mapa de
+  Emilia**. El abuelo ayuda y calma; **los niños resuelven el núcleo**
+  del problema.
 
-- [ ] ¿Mismos héroes en cada ciudad, o cuento independiente por ciudad?
-- [ ] ¿Viaje que recorre Honduras, o un libro = un hogar?
-- [ ] ¿Mascota / objeto / “escucha-nombres” recurrente?
-
-Hasta decidirlo, el Libro 1 fija el precedente.
+Héroes fijos: **Noha** e **Ivana** (hermanos) y el **abuelo Dale** —
+ver `libros/01-piloto/semilla.md` y `art/STYLE_BIBLE.md`.
 
 ## Catálogo (borrador — rellenar)
 
 | # | Ciudad | Significado elegido (provisional) | Estado |
 |---|--------|-------------------------------------|--------|
-| 1 | *por elegir* | | semilla pendiente |
+| 1 | **Yamaranguila** (Intibucá) | Agua de la pirámide (*Zabalanquíra*) | título fijo; texto v2.1 aprobado; falta arte |
 | 2 | | | |
 | 3 | | | |
 
