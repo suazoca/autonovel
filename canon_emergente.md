@@ -42,3 +42,16 @@
   <!-- contradice: "Ruti es la técnica local del laboratorio provisional de Jerusalén; coteja números de serie contra el manifiesto y no comenta resultados.". Sin resolver. -->
 - [C03-08] (Cronología) El procesamiento del óstracon cierra a las 21:56 tras catorce horas de cómputo; Vidal termina el informe preliminar a la una menos veinte de la madrugada en su hotel de la calle Jaffa y programa el envío para las 11:50 por el canal de Ashkenazi.
 - [C03-09] (Cultural) En los informes de Vidal, 'el objeto' queda fijado como sustantivo de base para la síntesis: la palabra que designa una cosa cuya existencia es cierta y cuyo significado está por debajo del umbral.
+
+## Cap. 04
+
+- [C04-01] (Establecido en la historia) En la presentación oficial del peritaje del óstracon, Be'eri exige que el intervalo arrastre la atribución y Segev sostiene que 0,61 no es una lectura; Ashkenazi recuerda en acta que ambas comisiones firmaron el umbral de 0,90.
+- [C04-02] (Político / faccional) Ashkenazi advierte a Vidal que el informe lo leerán doce personas y el intervalo lo leerá el mundo: el gobierno dirá 'la época del rey David' y técnicamente tendrá razón.
+- [C04-03] (Hechos de personajes) Halevi reconoce en público que la dalet está bien leída y que la máquina de Vidal lee mejor de lo que atribuye.
+- [C04-04] (Cronología) El vuelo de salida de Vidal desde Jerusalén es el sábado a las 6:40; el viernes 12:20 queda firmada la cadena de custodia de los tres racks y el laboratorio provisional se desmonta.
+- [C04-05] (Hechos de personajes) El catálogo de códigos de la planilla de Vidal incluye 'reconocimiento urbano' —caminata con registro de observaciones, sin entregable—, creado tras perder un día por una huelga en un congreso en Atenas.
+- [C04-06] CONFLICTO (Hechos de personajes) La planilla de asignación de tiempo de Vidal replica cada noche al servidor de Zúrich; desde 2029 cada bloque de su tiempo tiene código, y el viernes de 14:00 a 20:00 es la primera celda vacía desde entonces.
+  <!-- contradice: "Guarda la planilla de "tiempo perdido" donde anotó la visita al Sepulcro. Nunca la borró. Es el único archivo suyo sin respaldo en la nube.". Sin resolver. -->
+- [C04-07] (Geografía) Vidal marca en el mapa de su teléfono la basílica del Santo Sepulcro en 31,7785 N / 35,2296 E; el punto cae sobre un techo gris entre dos cúpulas y queda en su lista de observaciones sin descripción.
+- [C04-08] (Cultural) En la cornisa del Santo Sepulcro hay una escalera de madera apoyada desde el siglo XVIII porque moverla exige el acuerdo de las seis confesiones que comparten el edificio; Vidal la lee como un registro de cambios congelado doscientos setenta años.
+- [C04-09] (Establecido en la historia) El jueves anterior al vuelo, Vidal recorre la ciudad vieja de Jerusalén y vuelca veintiséis entradas de observaciones —cotas, hiladas, tiempos de marcha—; la última es el punto del Sepulcro, sin descripción.
