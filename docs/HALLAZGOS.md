@@ -829,3 +829,40 @@ apuntando a la Tarea 1b. Queda pendiente revisar si bajar
 `MIN_LITERAL_LEN` (con el costo de que empiece a auditar literales cortos
 legítimos, como las claves de esquemas JSON) es parte de esa tarea o de
 una posterior.
+
+---
+
+## El Acto I entero (Cap. 1-11) transcurre en "octubre de 2032" sin calendario de días fijado
+
+**Dónde:** `outline.md`, tabla de actos ("Acto I | 1–11 | 0–23% |
+Jerusalén, octubre 2032..."), y las referencias relativas de día ya
+escritas en `ch_03.md`, `ch_04.md` y `ch_05.md` ("el jueves anterior al
+vuelo", "la celda del viernes", "el sábado a las 6:40").
+
+**Qué pasó:** al resolver la cronología del Sepulcro entre el Cap. 3, el
+4 y el 5 (ver `[C03-10]`, `[C04-10]` y la resolución de `[C05-02]` en
+`canon_emergente.md`) se confirmó que todo el Acto I ocurre dentro del
+mismo octubre de 2032 -- la fundación (`canon.md`/`world.md`) ya lo decía
+en una sola línea compacta, y el outline no la contradice, solo la
+reparte en capítulos. Pero ningún documento fija qué día exacto de
+octubre corresponde a cada capítulo: los capítulos acumulan referencias
+relativas ("el jueves", "el viernes", "el sábado") sin ancla a una fecha
+de calendario real.
+
+**Por qué importa:** con un mes de margen y ya tres días de la semana
+nombrados en tres capítulos consecutivos, la próxima referencia relativa
+("la semana que viene", "dentro de diez días") no tiene contra qué
+cotejarse -- no hay un almanaque de octubre de 2032 que el juez, el
+redactor o un lector atento puedan usar para verificar que "jueves" y
+"viernes" son consecutivos, o que el resto del Acto I cabe antes de que
+termine el mes. El mismo tipo de problema que esta sesión resolvió a
+mano tres veces (fecha del preliminar en el Cap. 2, cronología del
+Sepulcro entre Cap. 3/4/5) puede repetirse capítulo a capítulo si nadie
+fija los días concretos de una vez.
+
+**Estado:** NO corregido, a pedido explícito ("no lo resolvemos ahora").
+Cuando se aborde, la opción más simple es fijar una fecha real de
+octubre de 2032 para el Cap. 1 (por ejemplo, un lunes) y derivar el
+resto del Acto I por los días de semana ya mencionados en el texto --
+no hace falta reescribir prosa, solo tener una referencia fija contra la
+cual validar futuras menciones relativas.
