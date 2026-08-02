@@ -1,15 +1,23 @@
 # TRASPASO — rama `novela2` (worktree de `framework/es-multilibro`)
 
-Estado real al cierre de esta sesión (2026-08-01). Este documento
+Estado real al cierre de esta sesión (2026-08-02). Este documento
 reemplaza la necesidad de releer `ESTADO.md` completo o el historial de
 commits para retomar el trabajo -- es la foto actual, no la bitácora
-(para eso está `ESTADO.md`, que sí es narrativo y ahora tiene una
-sección nueva para esta rama).
+(para eso está `ESTADO.md`, que sí es narrativo y tiene una sección
+nueva para esta rama).
 
-**Actualización 2026-08-01:** se cerraron las dos decisiones creativas
-que había dejado abiertas el Cap. 2 (fecha `C02-06` y hilo de Halevi) y
-se pusheó a `origin/novela2` (`31af6a5`). La foto de abajo refleja eso;
-el texto histórico de bugs/tareas de la sesión 2026-07-29 se mantiene.
+**Actualización 2026-08-02:** sesión larga con dos ejes. (1) Se
+encontró y corrigió un bug de anclaje en `evaluate.py`: `overall_score`
+lo inventaba el juez como campo suelto, sin relación con las 9
+dimensiones que sí puntuaba, y el propio prompt lo empujaba a 7.0 con
+un ancla repetida. Ahora se calcula en código: `0.7 * media + 0.3 *
+mínimo` de las dimensiones presentes (sin asumir un número fijo).
+(2) Se escribieron, evaluaron y aceptaron los capítulos 3, 4 y 5 --
+este último tuvo que reescribirse entero porque el Catalyst, tal como
+salió la primera vez, no cumplía lo que el propio outline necesita para
+cerrar el libro en el Cap. 46. Las dos decisiones de canon que quedaron
+abiertas del Cap. 3/4 (Ruti, cronología del Sepulcro/Zúrich) están
+resueltas.
 
 ## Qué es esta rama
 
@@ -29,18 +37,17 @@ vuelta**.
 
 ## En una línea
 
-Fundación completa y aprobada (voz, mundo, personajes, esquema de 46
-capítulos, canon), Cap. 1 y Cap. 2 escritos y aceptados (Cap. 2 a 7.0
-con umbral 6.5), y el cliente de API (`api_comun.py`) reparado y
-probado contra la API real (Fable 5). **Tarea 10 completa** (pipeline
-`draft_chapter.py` → `evaluate.py` → `actualizar_canon.py` corrido de
-punta a punta con el Cap. 2). **Tarea 12 completa** (guardia de
-contaminación de prompts; deuda restante en xfail). **Las dos
-decisiones creativas del Cap. 2 ya están resueltas** (fecha alineada
-con Cap. 1; Halevi aceptado como plant del hilo #8). Listo para Cap. 3
-con el standalone. Pendientes no bloqueantes: qué hacer con `ch_01.md`,
-Tarea 11, traducir prompts contaminados, fichas de Ledda/Ansermet/
-Ceruti, merge de 8/9/9b a `framework/es-multilibro`.
+Fundación completa y aprobada. **Cap. 1 a 5 escritos, evaluados y
+aceptados.** `evaluate.py` reparado dos veces esta rama: primero la
+compatibilidad con Fable 5 (sesión anterior), ahora un bug de
+agregación de puntaje que hacía que todo capítulo diera 7.0 sin
+importar la calidad real (ver sección dedicada abajo). El Cap. 5 se
+reescribió entero a mitad de sesión al descubrir que el Cap. 46 (Final
+Image) depende de una escena que la primera versión no tenía. Tres
+deudas de canon abiertas durante la sesión (Ruti, cronología del
+Sepulcro, planilla de Zúrich) están resueltas a mano. `state.json::debts`
+vacío. Listo para Cap. 6, que ya tiene material de apertura preparado
+en `briefs/cap06_apertura.md` (ver "Próximo paso").
 
 ## Estado del repositorio
 
@@ -48,260 +55,254 @@ Ceruti, merge de 8/9/9b a `framework/es-multilibro`.
 |---|---|
 | Directorio | `/root/novela2` (worktree; confirmado con `git worktree list`) |
 | Rama | `novela2`, diverge de `framework/es-multilibro` en `7b81700` (Tarea 7) |
-| `.env` / `ANTHROPIC_API_KEY` | **Presente en este entorno** (a diferencia de `framework/es-multilibro`, donde nunca existió). `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
-| Push | Al día con `origin/novela2` tras `31af6a5` (continuidad Cap. 2) y este `TRASPASO.md`. Confirmar con `git log origin/novela2..HEAD --oneline` (vacío = pusheado). |
-| Working tree | Limpio tras los commits de continuidad y de este `TRASPASO.md` -- confirmar con `git status`. |
-| Tests | `uv run python -m pytest tests/ -v` -- **238 tests, todos en verde, + 38 xfail esperados** (12 género / 19 idioma / 6 normas del castellano + 1 nuevo: el `system=` de `call_judge` en `evaluate.py` cruzó `MIN_LITERAL_LEN=200` al agregarle la instrucción de escapado de JSON -- ver `docs/HALLAZGOS.md` -- Tarea 12: deuda de prompts registrada a propósito, no fallas). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
+| `.env` / `ANTHROPIC_API_KEY` | Presente en este entorno. `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
+| Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: `45cc0f1`. |
+| Working tree | Limpio -- confirmar con `git status`. |
+| Tests | `uv run python -m pytest tests/ -v` -- **246 tests, todos en verde, + 38 xfail esperados** (subió de 238: se agregó `tests/test_evaluate.py`, 8 tests nuevos, para la agregación de `overall_score`). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
 | Token de GitHub | Fine-grained, creado 2026-07-27, alcance `suazoca/autonovel`, permiso `Contents: read/write`, **vence ~2026-08-26**. Al vencer, limpiar la credencial guardada con `git credential reject` (protocol=https, host=github.com) antes de autenticar con uno nuevo. |
 
-## Fundación (completa, aprobada)
+## Fundación (completa, aprobada -- sin cambios esta sesión)
 
 | Archivo | Estado |
 |---|---|
 | `voice.md` | Completo (Parte 1 + Parte 2 generada desde la semilla, commit `61aeee4`) |
-| `world.md` | Completo, revisado (último cierre: commit `dde01c4`, "Implicaciones sociales"). **Historia:** una regeneración anterior falló y trajo nombres incorrectos e inconsistentes con el resto de la fundación (`Fondazione Lascaris`/`Horvat Betser`/`Perrin` en vez de `Fondation Cassiodore`/`Horvat Adullam`/`Maître Ansermet`) -- el bueno se recuperó de git a tiempo y quedó commiteado; el archivo suelto de esa regeneración (`world.md.regenerado`) quedó tirado sin trackear hasta que se borró en esta sesión |
-| `characters.md` | Vidal, Sandoz, Chiara y Ferrero completos. **Ledda, Ansermet y Ceruti quedan marcados "ficha pendiente de generación"** -- existen en el esquema por función, no tienen ficha propia (commit `6f110dc`) |
-| `outline.md` | **46 capítulos**, Save the Cat + MICE anidado, completo (commit `c85b90f`). Se le sacaron dos fragmentos residuales de un empalme roto por `max_tokens` (Ch 23 y Ch 42 -- commits `b0147a1` y `84618e8`) |
+| `world.md` | Completo, revisado (último cierre: commit `dde01c4`) |
+| `characters.md` | Vidal, Sandoz, Chiara y Ferrero completos. **Ledda, Ansermet y Ceruti siguen "ficha pendiente de generación"** -- sin cambios (commit `6f110dc`) |
+| `outline.md` | 46 capítulos, Save the Cat + MICE anidado (commit `c85b90f`). **Modificado esta sesión**: Cap. 5 y Cap. 6 reestructurados -- ver "Redacción" abajo |
 | `canon.md` | Regenerado sobre los documentos completos, commiteado (`e2233bc`) |
+
+## evaluate.py: `overall_score` ya no lo inventa el juez (bug de anclaje corregido)
+
+**Diagnóstico:** los Cap. 1, 2 y 3 dieron `overall_score` **7.0 exacto**
+pese a que sus 9 dimensiones individuales variaban con sentido (medias
+de 7.33 / 7.00 / 7.56 respectivamente). `overall_score` era un campo
+suelto en el JSON que el juez armaba, sin ninguna fórmula que lo atara
+a las dimensiones que sí puntuaba, y el propio `CHAPTER_PROMPT` lo
+anclaba con "el capítulo mediano de IA es un 6, un 8 es excepcional"
+repetido dos veces más un `CHEQUEO FINAL` que solo corrige hacia abajo.
+Detalle completo del diagnóstico (simulación contra los 3 eval_logs
+reales, comparación de fórmulas) en el historial de esta sesión; no se
+repite acá.
+
+**Arreglo (commit `b5ac02d`):** se sacó `overall_score` del JSON pedido
+al juez. Ahora se calcula en `evaluate_chapter()`:
+`extraer_dimensiones(result)` toma cualquier valor con `"score"`
+numérico (no asume un set fijo de 9 -- sobrevive a que `CHAPTER_PROMPT`
+gane o pierda dimensiones), y `calcular_overall()` aplica
+`0.7 * media + 0.3 * mínimo`, para que una sola dimensión floja pese en
+vez de diluirse. El `slop_penalty` mecánico se sigue restando después,
+igual que antes. `CHEQUEO FINAL` y `CALIBRACIÓN DE PUNTAJE` del prompt
+quedaron intactos a propósito -- se evalúan por separado, no se tocaron
+esta vez. Umbral de aceptación sin cambios (6.5/7.5/6.0 por ambición).
+
+**Validación:** control negativo con `ch_02.md` degradado a mano
+(calcos del inglés, adverbios en acotaciones, tríadas sensoriales,
+explicar-tras-mostrar) dio `overall_score` 0.52 contra 6.7 del
+original, con las 9 dimensiones y el `slop_penalty` mecánico
+coincidiendo en la degradación. Cubierto por `tests/test_evaluate.py`
+(incluye regresión contra los valores reales de Cap. 2 y Cap. 3).
+
+**Nota importante para leer eval_logs viejos:** los Cap. 1, 2 y 3 se
+evaluaron **antes** de este fix -- sus `eval_logs/*.json` tienen el
+`overall_score` viejo (7.0 plano), no el recalculado. No se
+re-evaluaron retroactivamente. El Cap. 4 es el primer capítulo
+evaluado con la agregación nueva.
 
 ## Redacción
 
-`chapters/ch_01.md` ("Intervalo") escrito y **aprobado tras lectura** --
-la voz se sostiene, el diálogo distingue personajes sin etiquetas, a la
-altura del esquema. Commiteado (`aa8efd1`). Redactado **antes** del fix
-de la Tarea 10: se escribió sin `canon.md` disponible en el prompt real
-(ver `docs/HALLAZGOS.md`). Sigue sin re-redactarse -- ver "Pendiente".
+`chapters/ch_01.md` ("Intervalo") -- sin cambios esta sesión. Escrito
+**antes** del fix de la Tarea 10 (canon.md no llegaba al prompt real).
+Sigue sin re-redactarse -- pregunta abierta, ver "Pendiente".
 
-`chapters/ch_02.md` ("reunión de comisiones") escrito y **aceptado por
-el juez** (`overall_score: 7.0`, umbral 6.5 para ambición "sostén") --
-primer capítulo redactado con `canon.md` y `canon_emergente.md` los dos
-disponibles de principio a fin. Corrida real, de punta a punta, del
-pipeline completo de la Tarea 10: `draft_chapter.py 2` →
-`evaluate.py --chapter=2` → `actualizar_canon.py 2`. Volcó 7 hechos
-nuevos a `canon_emergente.md` (sección `## Cap. 02`). El juez marcó
-`C02-06` como `CONFLICTO` (fecha del preliminar) y dejó abierto el hilo
-de Halevi (`C02-03`); **ambas decisiones se resolvieron a mano** en el
-commit `31af6a5` (ver "Decisiones del Cap. 2" abajo).
+`chapters/ch_02.md` ("La unidad de medida") -- sin cambios esta sesión.
+Aceptado (`overall_score` 7.0 con la fórmula vieja; umbral 6.5). Las
+dos decisiones creativas que había dejado abiertas (fecha `C02-06`,
+hilo de Halevi) siguen resueltas desde la sesión anterior.
 
-**Ojo:** `state.json` sigue en `chapters_drafted: 0` -- no se está
-orquestando con `run_pipeline.py`, así que ese contador no refleja la
-realidad. No confiar en `state.json` para saber cuántos capítulos hay
-escritos; mirar `chapters/` directamente. `state.json::debts` sí está
-al día (lo mantiene `actualizar_canon.py` y se limpia a mano cuando se
-resuelve) -- **hoy está vacío** (`[]`).
+`chapters/ch_03.md` ("Ruido") -- escrito y aceptado esta sesión
+(`overall_score` 7.0, fórmula vieja -- se evaluó antes del fix). El
+juez marcó `CONFLICTO` [C03-07]: Ruti le pregunta un resultado a Vidal
+tras dos semanas de no comentar nada, en tensión con [C01-08] ("no
+comenta resultados"). **Resuelto**: no es contradicción, es ruptura
+deliberada de un patrón -- se ajustó [C01-08] en `canon_emergente.md`
+para que declare el patrón "como norma" en vez de regla absoluta, y se
+registra la pregunta como la excepción que lo confirma. No se tocó la
+prosa de `ch_03.md` (se conservó el párrafo de la abuela/directora/fila
+de octubre completo, contra la sugerencia de recorte del juez). Sí se
+le sacó el número "cuarenta y una personas" a la línea de la fila de
+octubre (quedó "una fila frente a una tumba sin nada adentro") porque
+ese número le pertenece al Cap. 5 como Catalyst.
 
-## Decisiones del Cap. 2 (resueltas, 2026-08-01)
+`chapters/ch_04.md` ("Día sin datos") -- escrito y aceptado esta sesión.
+**Primer capítulo evaluado con la agregación nueva de `evaluate.py`**:
+`overall_score` 6.48 (agregado 6.78, `slop_penalty` 0.3), umbral 6.0
+(ambición "valle") -- ya no cae en el 7.0 plano de antes. El juez marcó
+`CONFLICTO` [C04-06]: el capítulo decía que la planilla entera replica
+a Zúrich, en tensión con el Secreto 2 de Vidal (`characters.md`: la
+planilla de "tiempo perdido" es su único archivo sin respaldo).
+**Resuelto**: gana la fundación -- se borró de `ch_04.md` la frase que
+generalizaba el respaldo a "todo lo suyo"; no se reemplazó por una
+admisión explícita de la excepción, para no convertir el plant del
+hilo #1 en anuncio antes de tiempo. También se corrigió a mano (fuera
+de un `CONFLICTO` formal, señalado solo en la nota de `continuity` del
+eval) un choque de cronología: el Cap. 4 hacía que Vidal reconociera la
+fachada del Sepulcro "desde octubre" en la misma frase que ya lo hacía
+la primera vez -- se dejó como reconocimiento, no descubrimiento.
 
-Commit `31af6a5`, pusheado a `origin/novela2`.
+`chapters/ch_05.md` ("Cuarenta y una personas", Catalyst) -- **se
+reescribió entero**, no en parches, después de dos rechazos. Ver
+sección dedicada abajo.
 
-1. **Fecha `C02-06` (Cronología).** Se eligió continuidad con el Cap. 1,
-   no corrimiento deliberado: en `ch_02.md` Vidal entrega el preliminar
-   **mañana a mediodía** (antes decía "pasado mañana"). Se actualizó
-   `canon_emergente.md` (sin marca `CONFLICTO`) y se vació
-   `state.json::debts`.
-2. **Hilo de Halevi `C02-03`.** Aceptado: es la cara pública del plant
-   del hilo #8 (Foreshadowing Ledger). No se corta del Cap. 2. Payoff
-   explícito en Cap. 45 (carta pidiendo explicaciones tras el addendum
-   de Amberes). No requiere ficha completa de personaje -- voz hostil
-   recurrente del fantasma, no arco propio. Anotado en
-   `canon_emergente.md` y reflejado en `outline.md` (beats Cap. 2 y 45
-   + fila del ledger).
+## Cap. 5: por qué se reescribió entero
 
-## Bugs de compatibilidad con Fable 5 (arreglados hoy, todos commiteados en esta rama)
+El primer borrador dejaba a Vidal midiendo la fila del Sepulcro desde
+afuera, observando salir a una mujer, sin entrar nunca al edículo. Pasó
+tres rondas de revisión quirúrgica (fecha, repeticiones, categorías
+desiguales, densidad de rayas parentéticas) y quedó rechazado dos
+veces: 7.17 y 7.31 contra el umbral de 7.5 (ambición "pico").
 
-Ninguno de estos era un problema conocido en `framework/es-multilibro`
-porque esa rama nunca corrió contra la API real. Se fueron encontrando
-en orden al ejecutar la fundación real por primera vez:
+Antes de una cuarta ronda de pulido, se revisó el outline completo
+(Cap. 6 a 46) para chequear si algo dependía de que Vidal se hubiera
+quedado afuera. Encontró lo contrario: **el Cap. 46 ("La fila", Final
+Image) depende de una primera entrada al edículo que el Cap. 5 nunca
+había dramatizado** -- "Entra al edículo. Adentro no hay nada,
+exactamente como la primera vez" no tiene con qué reflejarse si esa
+primera vez no ocurrió en la página. El techo de engagement que tres
+rondas de pulido no movieron no era un problema de prosa: era que al
+beat le faltaba la mitad de la acción que el libro necesita.
 
-| # | Bug | Commit |
-|---|---|---|
-| 1 | `temperature` en el payload -- deprecado en Fable 5, tira 400. Quitado de los ~19 scripts | `c8f7b99` |
-| 2 | `resp.json()["content"][0]["text"]` asumía que el primer bloque de la respuesta era texto. Fable 5 manda un bloque `thinking` primero, así que esto rompía (bloque equivocado / sin `"text"`) en los ~19 scripts que llamaban a la API directo, antes de que existiera `api_comun.py` | `7b66805` |
-| 3 | La plantilla de `voice.md` ("Part 2: Voice Identity...") tenía prosa de ejemplo **fuera** de comentario HTML. La guardia de idempotencia de `gen_voice.py` (línea ~186: saca los `<!-- ... -->` y si queda algo no vacío, asume "ya tiene contenido real, no tocar") confundía esa prosa de plantilla con contenido ya generado y no regeneraba nada -- **en silencio**, sin error. Se corrigió envolviendo esa prosa en un comentario HTML | `7b66805` (mismo commit que el #2) |
-| 4 | Tarea 8: streaming centralizado en `api_comun.py` (reemplaza las ~19 copias casi idénticas de `call_writer()`/`call_judge()`/etc. y el timeout fijo bloqueante) | `d03e879` |
-| 5 | Tarea 9: continuación automática cuando la respuesta se corta por `stop_reason == "max_tokens"` | `b63a32b` |
-| 6 | **Tarea 9b:** el mecanismo de la Tarea 9 usaba *prefill* (terminar la conversación en un turno `assistant`, sin turno de usuario después). Confirmado contra la API real que Fable 5 lo rechaza con 400: *"This model does not support assistant message prefill. The conversation must end with a user message."* Corregido: el texto parcial sigue como turno `assistant`, pero ahora seguido de un turno `user` explícito pidiendo continuar, con recorte de solapamiento sufijo/prefijo en la juntura (`_recortar_solapamiento()`) por si el modelo repite texto al ya no ser prefill literal. Probado contra la API real. De paso se encontró y arregló que `stop_reason == "refusal"` no se manejaba -- el loop lo trataba como `end_turn` y devolvía el texto truncado como si fuera la respuesta completa, sin aviso | `9f28e5f` |
+Se actualizó `outline.md` (commit `52be40f`) -- Cap. 5 gana un beat
+nuevo (entra al edículo, decisión suya, no itinerario; clímax en los
+dos minutos adentro) y sube su objetivo de palabras de 1600 a 1900; se
+restauró la frase exacta "error de método" en el beat de la mujer que
+sale, porque el Cap. 44 la cita casi textual, escalada a "dos millones
+de personas" -- vocabulario de perito con eco de arco, no genérico. Con
+el outline corregido, se redactó el capítulo de cero (commit `45cc0f1`).
 
-Los fragmentos residuales de `outline.md` (Ch 23, Ch 42) y la
-regeneración fallida de `world.md` (Lascaris/Betser) son consecuencia
-directa del bug #6 *antes* de corregirse: ambos se generaron con el
-prefill viejo.
+**Lo crítico de la escena nueva, por pedido explícito:** adentro del
+edículo no pasa nada -- sin emoción nombrada, sin epifanía, sin nada
+que se lea como experiencia religiosa. Lo único que falla es el propio
+conteo interno de Vidal (su tic anti-emoción), sin causa asignable. La
+formulación tuvo que ajustarse una vez más: "ninguna [causa] alcanzaba
+el rango de interrupción" certificaba ausencia de causa y cerraba la
+ambigüedad que es el compromiso central del libro; quedó "repasó las
+candidatas [...] no cerró en ninguna" -- un perito dice "no la tengo",
+no "no existe".
 
-## Tarea 12 -- guardia de contaminación en los prompts (COMPLETA)
+`overall_score` final: **7.54**, aceptado (umbral 7.5).
 
-Hallazgo: la Tarea 1 se leía como cerrada porque 1a/1c/1d lo estaban,
-pero **1b -- traducir los prompts de juez -- seguía abierta**, y nadie
-lo notó porque el encargo agrupa las cuatro bajo un único encabezado. Al
-auditar con un chequeo automático en vez de memoria humana, aparecieron
-además **seis archivos más** (no jueces) con el mismo problema --
-incluidos `gen_outline.py`/`gen_outline_part2.py`, que la Tarea 2b había
-declarado cerrados por chequear solo nombres propios de *Bells*, nunca
-idioma en general. Detalle completo, con qué se salvó y qué no
-(`outline.md` se midió contra el detector mecánico y dio 0 calcos --
-no se regenera) en `docs/HALLAZGOS.md`.
+El bloque que se cortó del borrador viejo (el vuelo, la búsqueda
+"resurrección — evidencia", el memorial de d'Arcis, la primera mención
+de la Sábana) no se descartó: quedó guardado en
+`briefs/cap06_apertura.md` para usarlo como apertura del Cap. 6 --
+fusionado con sus beats existentes, no pegado encima (ya cubría el
+memorial de d'Arcis y el resultado radiocarbónico de 1988 que el
+outline viejo de Cap. 6 iba a redactar de nuevo). El outline de Cap. 6
+ya está actualizado para reflejar la fusión (commit `1c5445b`): 2 beats
+en vez de 4, objetivo de palabras 2000 -> 2450.
 
-**Se agregó `tests/test_guardia_prompts.py`**: descubre automáticamente
-(vía `ast`, sin imports ni regex) todo literal de string largo en los
-`.py` de la raíz, chequea género (fantasía) e idioma (inglés) sobre todos
-esos literales, y exige el bloque de normas del castellano solo en los 7
-literales de juez que son la constante `*_PROMPT` con la rúbrica de
-evaluación (no en las personas ni en los system prompts sueltos de una
-frase, para no incentivar contaminarlos con la frase ancla nada más que
-para pasar el guardia). Entre los once archivos afectados quedan 40
-literales registrados como deuda conocida con xfail estricto (13 género
-/ 20 idioma / 7 normas), clave = hash del contenido, no línea, para que
-sobreviva a que un prompt traducido corra las líneas siguientes.
+Durante la resolución de canon del Cap. 5 se confirmó que **todo el
+Acto I (Cap. 1-11) transcurre en octubre de 2032** -- la fundación
+(`canon.md`/`world.md`) ya lo decía en una sola línea compacta, y el
+outline no la contradice, solo la reparte en capítulos con referencias
+relativas de día ("el jueves", "el viernes"). Ese hallazgo generó una
+entrada nueva, no bloqueante, en `docs/HALLAZGOS.md` -- ver "Pendiente".
 
-**`tests/test_guardia_prompts.py::DEUDA_CONOCIDA` (y los tres sets de
-hashes que la acompañan) es ahora la fuente de verdad de qué prompts
-siguen contaminados y qué tarea los arregla -- ya no las notas sueltas
-sobre "falta 1b" que había en este documento y en `ESTADO.md`.** No
-duplicar ese detalle acá: si un prompt se traduce y alguien olvida
-borrar su entrada del registro, el xfail se convierte en XPASS y el
-suite se rompe solo -- una nota en prosa en este documento no tiene esa
-propiedad, se queda obsoleta en silencio (que es exactamente lo que pasó
-con "falta 1b" durante toda esta sesión).
+## Bugs de compatibilidad con Fable 5 (sesión anterior, sin cambios)
 
-## Tarea 10 -- acumulación de canon durante la redacción (COMPLETA)
+Sin novedades esta sesión. Detalle completo en la versión anterior de
+este documento / `docs/ESTADO.md`.
 
-Hallazgo de partida: `evaluate.py` reportaba `new_canon_entries` por
-capítulo y se tiraban -- un hecho inventado en el Cap. 7 no existía para
-el juez ni para el redactor del Cap. 30. `canon.md` era la única
-memoria larga del sistema, y era estática (función pura de
-semilla+mundo+personajes).
+## Tarea 12 -- guardia de contaminación en los prompts (sin cambios)
 
-Tres decisiones de diseño, tomadas antes de implementar:
+Sigue completa. `tests/test_guardia_prompts.py::DEUDA_CONOCIDA` sigue
+siendo la fuente de verdad. Se verificó esta sesión que editar
+`CHAPTER_PROMPT` (para sacarle `"overall_score": N`) no rompió el
+registro de hashes -- no estaba en la lista de contaminados.
 
-1. **Dos archivos de canon.** `canon.md` sigue siendo función pura de
-   semilla+mundo+personajes -- lo pisa `gen_canon.py`, sin tocar. Los
-   hechos de redacción van a `canon_emergente.md` (nuevo, formato
-   `## Cap. NN` con entradas `[C07-01] (categoría) hecho`, y `CONFLICTO`
-   cuando el juez detecta una contradicción). `gen_canon.py` no lo lee
-   ni lo escribe nunca -- test dedicado que lo verifica. El archivo
-   todavía no existe en el working tree: lo crea `actualizar_canon.py`
-   la primera vez que corre (recién con la evaluación del próximo
-   capítulo).
-2. **`new_canon_entries` pasa a objetos** `{categoria, hecho,
-   contradice}` en `CHAPTER_PROMPT` (`evaluate.py`). La detección de
-   contradicciones la sigue haciendo el juez -- ya tiene `canon.md` y
-   `canon_emergente.md` completos en contexto -- sin ninguna llamada
-   extra a la API.
-3. **`actualizar_canon.py`** (nuevo, standalone, determinista, sin
-   red): `uv run actualizar_canon.py N` busca el eval_log más reciente
-   de ese capítulo, reemplaza (no anexa) su sección en
-   `canon_emergente.md` -- para que re-evaluar un capítulo (revisión, o
-   el bucle de descarte de `run_pipeline.py`) no duplique entradas -- y
-   anota los `CONFLICTO` en `state.json::debts` sin frenar la
-   ejecución: el juez a veces marca como contradicción una elipsis o el
-   mismo hecho dicho distinto, y frenar duro por falsos positivos sería
-   peor que anotarlo para revisión manual. Tolera eval_logs viejos con
-   `new_canon_entries` en formato de lista de strings (avisa y
-   saltea, no rompe).
+## Tarea 10 -- acumulación de canon durante la redacción (en producción real)
 
-De paso, `CHAPTER_PROMPT` se tradujo entero al español, se descontaminó
-de calibración de fantasía (ahora calibra contra thriller literario
-publicado, no contra fantasía) y se le agregó el bloque de normas del
-castellano de la sección 1b del encargo -- eso vació las tres entradas
-`("evaluate.py", "f645f997")` del registro de `test_guardia_prompts.py`
-(ver Tests, arriba).
-
-`draft_chapter.py::build_prompt()` recibe y usa ahora `canon_emergente`
-además de `canon`. **Hallazgo colateral importante:** al cablear
-`canon_emergente` se descubrió que `canon` (el parámetro ya existente)
-se cargaba en `main()` pero **nunca se insertaba en el prompt real** --
-bug heredado del primer commit del repo (`4f8f880`), no introducido por
-ninguna tarea de esta rama, e invisible a `test_draft_chapter.py`
-porque sus llamadas a `build_prompt()` pasaban `canon=""` en los tres
-casos. Detalle completo -- cómo se confirmó, en qué commit se originó,
-qué capítulos se redactaron a ciegas -- en `docs/HALLAZGOS.md`, entrada
-`draft_chapter.py::build_prompt() cargaba canon.md y nunca lo metía en
-el prompt`. Ya corregido; no repetir el detalle acá.
-
-`run_pipeline.py` invoca `actualizar_canon.py` después de cada
-evaluación de capítulo (líneas ~469, ~643, ~679) -- es secundario, hoy
-se sigue redactando con el standalone (`draft_chapter.py` directo, sin
-`run_pipeline.py`).
+El mecanismo (`canon_emergente.md` + `actualizar_canon.py`) ya tiene
+mileage real: 5 capítulos acumulados, con **cuatro** `CONFLICTO`
+detectados y resueltos a mano en esta sesión sola (Ruti, Zúrich,
+cronología del Sepulcro implícita en `continuity`, y la fundación
+compacta vs. outline granular del Cap. 5). El patrón de resolución que
+se consolidó: dejar el `CONFLICTO` en el archivo, cambiar la etiqueta
+por un comentario `<!-- Resuelto a mano: ... -->` con la razón, y
+vaciar la entrada correspondiente de `state.json::debts`. Nunca se editó
+a mano ninguna entrada que no estuviera marcada `CONFLICTO`, salvo
+[C01-08] (ajuste de redacción justificado por la resolución de
+[C03-07]).
 
 ## Pendiente (no bloqueante)
 
-Ordenado por lo que cuesta más si se posterga, no por número de tarea.
-Las decisiones creativas del Cap. 2 (fecha y Halevi) **ya no están
-acá** -- ver "Decisiones del Cap. 2" arriba.
-
-- **Decidir qué hacer con `ch_01.md`.** Se redactó con el bug de
-  `canon.md` de la Tarea 10 activo -- el prompt real no tenía ningún
-  hecho duro de canon, aunque sí está aprobado por lectura humana. No
-  se re-redactó automáticamente. El Cap. 2 ya confirma que el pipeline
-  con canon completo funciona (7.0, sin violaciones de canon
-  detectadas), así que la pregunta ya no es "¿funciona?" sino si vale
-  la pena releer/rehacer específicamente `ch_01.md` contra `canon.md`
-  en retrospectiva. Sin decidir todavía.
+- **Decidir qué hacer con `ch_01.md`.** Sin cambios desde la sesión
+  anterior -- se redactó con el bug de canon de la Tarea 10 activo.
+  Sigue sin decidirse si vale la pena releerlo/rehacerlo.
 - **Tarea 11** -- punto de aprobación manual por capítulo en
-  `run_pipeline.py` (hoy la aprobación del Cap. 1 fue manual/informal,
-  leyendo el archivo).
-- **Tareas 1b, 1b-bis y 13 -- traducir los prompts contaminados que
-  encontró la Tarea 12.** `gen_revision.py` (Tarea 13) es la más urgente
-  del grupo: corre en la primera revisión de capítulo real, todavía no
-  ejecutada, y sí calibra contra fantasía. El resto del detalle
-  (archivo por archivo, qué chequeo falla, qué tarea lo arregla) vive en
-  `tests/test_guardia_prompts.py::DEUDA_CONOCIDA` -- no repetirlo acá.
+  `run_pipeline.py`. Sin cambios; se sigue aprobando capítulo a
+  capítulo a mano, leyendo el archivo.
+- **Tareas 1b, 1b-bis y 13** -- traducir los prompts contaminados que
+  encontró la Tarea 12. Sin cambios; detalle en
+  `tests/test_guardia_prompts.py::DEUDA_CONOCIDA`.
 - **Fichas completas** de Ledda, Ansermet y Ceruti en `characters.md`.
-  Si aparecen en capítulos redactados antes de tener ficha, el modelo
-  les inventa rasgos -- con la Tarea 10 ya completa esos rasgos sí
-  quedan registrados en `canon_emergente.md` la próxima vez que se
-  evalúe ese capítulo, pero siguen siendo inventados, no lo que el
-  usuario habría decidido a mano.
-- **Merge de las Tareas 8, 9 y 9b** hacia `framework/es-multilibro` --
-  son mejoras al cliente de API en sí, no específicas de esta novela, y
-  esa rama todavía tiene el bug de prefill sin corregir si algún día
-  corre contra Fable 5.
+  Sin cambios.
+- **Merge de las Tareas 8, 9 y 9b** hacia `framework/es-multilibro`.
+  Sin cambios.
+- **Nueva: fijar un calendario de días concretos para el Acto I**
+  (Cap. 1-11, todo en octubre de 2032). Con tres días de la semana ya
+  nombrados en capítulos consecutivos (Cap. 3/4/5: jueves, viernes,
+  sábado) y ninguna fecha ancla, la próxima referencia relativa
+  ("la semana que viene", "dentro de diez días") no tiene con qué
+  cotejarse. Detalle y propuesta de arreglo en `docs/HALLAZGOS.md`,
+  última entrada. No se resuelve ahora, a pedido explícito.
+- **Nueva: revisar `CHEQUEO FINAL` y `CALIBRACIÓN DE PUNTAJE` de
+  `CHAPTER_PROMPT`** (`evaluate.py`). Se dejaron intactos a propósito
+  al arreglar la agregación de `overall_score` -- siguen instruyendo al
+  juez con el lenguaje que originó el ancla ("el capítulo mediano de IA
+  es un 6"), aunque ya no controlan el campo final. Evaluar si conviene
+  limpiarlos ahora que no hacen el daño que hacían antes, o si vale la
+  pena dejarlos como filtro adicional de calibración.
 
 ## Próximo paso
 
-**Escribir el Cap. 3** con el standalone (las decisiones de continuidad
-del Cap. 2 ya no bloquean). Opcional antes o en paralelo: decidir
-`ch_01.md` / Tarea 11.
+**Escribir el Cap. 6** ("Bibliografía hostil") con el standalone. El
+outline ya está actualizado (2 beats, objetivo 2450 palabras) y el
+material de apertura (el vuelo, d'Arcis, el resultado de 1988) está
+listo en `briefs/cap06_apertura.md` -- fusionarlo con el beat 2
+existente (Secondo Pia, STURP), no pegarlo encima del outline viejo.
 
 ```bash
-uv run python draft_chapter.py 3
-uv run python evaluate.py --chapter=3
-uv run python actualizar_canon.py 3
+uv run python draft_chapter.py 6
+uv run python evaluate.py --chapter=6
+uv run python actualizar_canon.py 6
 ```
 
-**Ojo:** el número de capítulo va **posicional**
-(`chapter_num = int(sys.argv[1])` en `draft_chapter.py`) -- **no** hay
-flag `--chapter` para ese script (sí lo tiene `evaluate.py`). Leer cada
-capítulo antes de avanzar al siguiente, como se hizo con el Cap. 1 y el
-Cap. 2, y revisar `canon_emergente.md`/`state.json::debts` por si el
-juez marcó algo -- no se resuelve solo.
+**Ojo:** el número de capítulo va posicional
+(`chapter_num = int(sys.argv[1])` en `draft_chapter.py`) -- no hay flag
+`--chapter` para ese script (sí lo tiene `evaluate.py`). Leer cada
+capítulo antes de avanzar al siguiente. Revisar `canon_emergente.md`/
+`state.json::debts` por si el juez marcó algo -- no se resuelve solo, y
+esta sesión mostró que puede haber más de un `CONFLICTO` por capítulo.
 
-**Advertencia sobre probar capítulos fuera de orden** (p.ej. uno de Fun
-and Games y uno del Acto III, para chequear que la voz aguanta otro
-registro antes de decidir): sacados sueltos, esos capítulos se redactan
-sin `prev_tail` (el capítulo anterior no existe todavía en esa corrida),
-así que no son representativos de la cadena real. Sirven para juzgar
-voz, no para juzgar continuidad.
-
-## Herencia del framework (`framework/es-multilibro`)
-
-Tareas 0, 1c, 1d, 2, 2b, 2c, 3, 4, 6 y 7 cerradas y testeadas (113 tests
-en verde al cierre de la Tarea 7, ninguno requiere `.env`). Hallazgos
-abiertos que siguen vigentes: sesgo de `dividir_oraciones()`,
-`umbral_cv_oracion` sin recalibrar, falta de parser del Foreshadowing
-Ledger, `libros_completos` sin fuente de datos, y `CRAFT.md` cargado
-pero no interpolado en `gen_world.py`/`gen_characters.py`. Detalle
-completo en `docs/ESTADO.md` y `docs/HALLAZGOS.md`.
+**Advertencia que ya costó una reescritura entera esta sesión:** antes
+de aceptar un capítulo con puntaje bajo el umbral tras varias rondas de
+pulido, revisar si el problema es de prosa o si el propio outline (en
+particular capítulos lejanos, como pasó con el Cap. 46 respecto del
+Cap. 5) exige un beat que el capítulo actual no tiene. Pulir prosa
+sobre una estructura incompleta no mueve el puntaje.
 
 ## Cómo retomar
 
 1. `git status` -- confirmar que el working tree sigue limpio.
 2. `git log origin/novela2..HEAD --oneline` -- confirmar que no quedó
    nada sin pushear.
-3. `uv run python -m pytest tests/ -v` -- confirmar 238 en verde y 38
+3. `uv run python -m pytest tests/ -v` -- confirmar 246 en verde y 38
    xfail esperados (ninguno inesperado) antes de tocar nada.
-4. `cat state.json` -- `debts` debería estar `[]`; si el juez del Cap. 3
-   (o posterior) anota algo, aparece acá.
-5. Redactar Cap. 3 a mano con el standalone:
-   `uv run python draft_chapter.py 3` → `evaluate.py --chapter=3` →
-   `actualizar_canon.py 3`. Leer el capítulo y el canon emergente antes
+4. `cat state.json` -- `debts` debería estar `[]`.
+5. Leer `briefs/cap06_apertura.md` y la entrada de Ch. 6 en
+   `outline.md` antes de redactar, para fusionar en vez de acumular.
+6. Redactar Cap. 6 a mano con el standalone:
+   `uv run python draft_chapter.py 6` → `evaluate.py --chapter=6` →
+   `actualizar_canon.py 6`. Leer el capítulo y el canon emergente antes
    de avanzar.

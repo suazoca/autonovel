@@ -1,4 +1,4 @@
-# ESTADO — rama `framework/es-multilibro` (+ sección `novela2`, 2026-07-29)
+# ESTADO — rama `framework/es-multilibro` (+ secciones `novela2`, 2026-07-29 y 2026-08-01/02)
 
 Última actualización de la parte original: 2026-07-27 (tras cerrar la
 Tarea 7 -- generador de voz). Escrito para retomar en otra sesión sin
@@ -271,6 +271,56 @@ completo disponible.
 
 Para el detalle completo con tablas y commits exactos, ver
 `docs/TRASPASO.md`.
+
+## Sesión `novela2`: Cap. 1 a 5, `overall_score` y canon (2026-08-01/02)
+
+Con `.env` y la fundación completas, esta sesión escribió y evaluó los
+capítulos 1 a 5 (Cap. 1 y 2 el 2026-08-01, Cap. 3 a 5 el 2026-08-02) y
+encontró dos problemas de fondo en el propio harness de evaluación, no
+en la novela.
+
+**`overall_score` anclaba en 7.0 sin importar la calidad real.** Los
+tres primeros capítulos evaluados dieron 7.0 exacto pese a que las 9
+dimensiones que el juez sí puntuaba variaban con sentido entre ellos.
+El campo era un número suelto que el juez inventaba en su propio JSON,
+sin fórmula que lo atara a esas dimensiones, y el prompt lo empujaba
+hacia abajo con un ancla repetida ("el capítulo mediano de IA es un
+6"). Se sacó el campo del JSON pedido al juez y se calcula ahora en
+código (`evaluate.py::calcular_overall`, `0.7 * media + 0.3 * mínimo`
+de las dimensiones presentes). Validado con un control negativo
+(`ch_02.md` degradado a mano dio 0.52 contra 6.7 del original) y con
+`tests/test_evaluate.py` (nuevo). El Cap. 4 fue el primer capítulo
+evaluado con la fórmula corregida.
+
+**El Cap. 5 (Catalyst) se reescribió entero.** El primer borrador dejaba
+a Vidal midiendo la fila del Sepulcro desde afuera; tres rondas de
+revisión quirúrgica no lo hicieron cruzar el umbral de 7.5. Revisando
+el outline completo se encontró que el Cap. 46 (Final Image, el cierre
+del libro) depende textualmente de una primera entrada al edículo que
+el Cap. 5 nunca dramatizaba -- el problema no era de prosa, era que al
+beat le faltaba la mitad de la acción que el libro necesita en el otro
+extremo. Se corrigió el outline y se redactó el capítulo de cero;
+quedó aceptado en 7.54. El material cortado del borrador viejo (la
+búsqueda "resurrección — evidencia", el memorial de d'Arcis) se
+conservó en `briefs/cap06_apertura.md` para fusionarlo, no pegarlo, en
+la apertura del Cap. 6.
+
+**Canon:** cuatro `CONFLICTO` detectados por `actualizar_canon.py` y
+resueltos a mano en esta sesión (Ruti/Cap. 3, planilla de
+Zúrich/Cap. 4, cronología del Sepulcro entre Cap. 3-4-5, y un choque
+contra la fundación compacta en el Cap. 5) -- todos siguiendo el mismo
+patrón: comentario `<!-- Resuelto a mano: ... -->` con la razón, nunca
+borrar el `CONFLICTO` sin dejar rastro de por qué.
+
+**Hallazgo nuevo, no bloqueante:** todo el Acto I (Cap. 1-11) transcurre
+en octubre de 2032 sin un calendario de días fijado -- con tres días de
+semana ya nombrados en capítulos consecutivos, la próxima referencia
+relativa no va a tener con qué cotejarse. Registrado en
+`docs/HALLAZGOS.md`, sin resolver a pedido explícito.
+
+Detalle completo -- tablas, commits exactos, texto de las resoluciones
+de canon -- en `docs/TRASPASO.md`, que es la foto de esta sesión; acá
+queda la bitácora narrativa.
 
 ## Punto de partida que sigue vigente
 
