@@ -866,3 +866,52 @@ octubre de 2032 para el Cap. 1 (por ejemplo, un lunes) y derivar el
 resto del Acto I por los días de semana ya mencionados en el texto --
 no hace falta reescribir prosa, solo tener una referencia fija contra la
 cual validar futuras menciones relativas.
+
+---
+
+## Tres patrones del Cap. 5 a vigilar en el Cap. 6 -- puede ser el modelo, no el capítulo
+
+**Dónde:** eval_log `eval_logs/20260802_012111_ch05.json` (evaluación
+final, aceptada, del Cap. 5 reescrito). `draft_chapter.py::call_writer()`
+es el prompt sospechoso si los tres reaparecen.
+
+**Qué pasó:** el juez marcó tres cosas en el Cap. 5 que, tomadas una
+por una, no bastan para bajarle el puntaje a una dimensión completa,
+pero que como conjunto valen la pena registrar antes de perderlas de
+vista en el próximo capítulo:
+
+1. **Tríadas.** Cuatro en un capítulo de menos de 2000 palabras:
+   "primero la planta, después la circulación, después la gente";
+   "Llanto, teatro, fotografía"; "Muestreo, expectativa, instrumento
+   contaminado"; "Tres categorías, tres residuos" (`ai_patterns_detected`,
+   ver también el mismo señalamiento -- "observaciones siempre de a
+   tres"-- en los eval_logs de Cap. 2, 3 y 4, nunca en esta cantidad).
+2. **Símil técnico de cierre de párrafo.** "como quien sale de un pozo
+   de sondeo", "como un sistema entrando en modo seguro", "con la
+   estabilidad de un proceso" -- tres en el mismo capítulo. El propio
+   juez lo describe como "voz correcta convertida en muletilla": no es
+   un error de calidad, es un tic de forma que suena bien la primera
+   vez y se repite exactamente igual la tercera.
+3. **Vidal no usa ninguna de sus muletillas canónicas** ("no
+   exactamente", "depende de qué llame...") en todo el capítulo. La
+   única línea con filo de habla real es de la peregrina ("Se nota"),
+   no de él. `character_voice` quedó en 7 (la dimensión más floja del
+   capítulo) parcialmente por esto.
+
+**Por qué importa:** un patrón que aparece una vez en un capítulo es
+estilo; el mismo patrón repetido capítulo tras capítulo, en un pipeline
+donde el mismo prompt de `draft_chapter.py` genera todos los
+capítulos, es una tendencia del modelo escritor que ningún pulido
+manual por capítulo va a corregir de raíz -- hay que atacarla en el
+prompt, no en la prosa. Pero un solo capítulo no alcanza para
+distinguir "tic del modelo" de "elección puntual de esta escena en
+particular" (el Cap. 5 es una escena de conteo y clasificación; parte
+de la tríada podría ser eco deliberado del método de Vidal, no
+patrón de IA).
+
+**Estado:** NO corregido ahora. Vigilar el Cap. 6: si los tres patrones
+reaparecen (tríadas, símil técnico de cierre, ausencia de muletillas de
+Vidal), agregar una instrucción explícita a `PATRONES_A_EVITAR` en
+`draft_chapter.py::build_prompt()` en vez de seguir puliendo capítulo
+por capítulo. Si no reaparecen, era del Cap. 5 y no hace falta tocar
+nada.
