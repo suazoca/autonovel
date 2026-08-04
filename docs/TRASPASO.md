@@ -6,21 +6,31 @@ commits para retomar el trabajo -- es la foto actual, no la bitácora
 (para eso está `ESTADO.md`, que sí es narrativo y tiene una sección
 nueva para esta rama).
 
-**Actualización 2026-08-04:** sesión corta, un capítulo. Se escribió,
-evaluó y aceptó el Cap. 6 ("Bibliografía hostil", Debate). Primera
-pasada rechazada (`overall_score` 6.04 contra umbral 6.5) por dos
-apariciones de la locución prohibida "testimonio de" que activaron el
-detector mecánico de slop (`slop_penalty` 1.5 sobre un puntaje base del
-juez de 7.54). Se corrigieron esas dos frases, un choque de continuidad
-(la mujer del avión apoyada contra "la ventanilla del pasillo", que
+**Actualización 2026-08-04 (tarde):** se sumó el Cap. 7 ("La ciudad de
+la tela", Debate) a lo ya cerrado del Cap. 6 esta misma sesión. Igual
+patrón que el Cap. 6: primera evaluación aceptada de movida
+(`overall_score` 7.04, sin `slop_penalty` relevante salvo una pasiva
+calcada), pero con dos problemas reales señalados por el juez que se
+corrigieron igual -- una intrusión omnisciente que rompe la tercera
+persona limitada y, el más importante, que el hábito de "anotar a
+lápiz en los márgenes" que se le había dado a Ferrero **es la marca de
+identificación de Sandoz** (hilo #9 del Foreshadowing Ledger, se paga
+en el Cap. 12) y no debía reusarse. Cambiado a "tinta roja" en Ferrero.
+Reevaluado: `overall_score` 7.54, aceptado, sin conflictos de canon.
+Ambos capítulos (6 y 7) comiteados y pusheados en esta sesión -- ver
+tabla "Estado del repositorio" para el hash exacto del cierre.
+
+**Actualización 2026-08-04 (anterior, Cap. 6):** se escribió, evaluó y
+aceptó el Cap. 6 ("Bibliografía hostil", Debate). Primera pasada
+rechazada (`overall_score` 6.04 contra umbral 6.5) por dos apariciones
+de la locución prohibida "testimonio de" que activaron el detector
+mecánico de slop (`slop_penalty` 1.5 sobre un puntaje base del juez de
+7.54). Se corrigieron esas dos frases, un choque de continuidad (la
+mujer del avión apoyada contra "la ventanilla del pasillo", que
 contradice el asiento 11A -- ventanilla -- de Vidal establecido tres
 párrafos antes) y, ya con el capítulo aceptado, tres deslices de
-aritmética que el juez marcó como caracterización involuntaria (Vidal
-calculaba "cuarenta y cinco años" desde 1988 y "cincuenta años" desde
-1978 estando en noviembre de 2032 -- corresponden 44 y 54). Segunda
-evaluación: `overall_score` 7.54, aceptado. `actualizar_canon.py` corrió
-sin conflictos (8 entradas nuevas). Commit `aecd17e`, pusheado a
-`origin/novela2`.
+aritmética que el juez marcó como caracterización involuntaria. Segunda
+evaluación: `overall_score` 7.54, aceptado. Commit `aecd17e`.
 
 ## Qué es esta rama
 
@@ -40,14 +50,15 @@ vuelta**.
 
 ## En una línea
 
-Fundación completa y aprobada. **Cap. 1 a 6 escritos, evaluados y
-aceptados.** El Cap. 6 pasó en la segunda pasada tras limpiar dos
-locuciones prohibidas que penalizaban el `overall_score` mecánicamente
-y un error de continuidad de asiento/ventanilla; quedó en 7.54 contra
-umbral 6.5. `state.json::debts` vacío, sin `CONFLICTO` de canon abiertos.
-Working tree limpio, al día con `origin/novela2` (commit `aecd17e`).
-Listo para Cap. 7 ("La ciudad de la tela"), Vidal en Turín con Ferrero
--- ver "Próximo paso".
+Fundación completa y aprobada. **Cap. 1 a 7 escritos, evaluados y
+aceptados.** Cap. 6 y Cap. 7 se escribieron en la misma sesión
+(2026-08-04), los dos en 7.54 contra umbral 6.5, los dos tras una
+segunda pasada de correcciones -- en el Cap. 6 por un `slop_penalty`
+mecánico, en el Cap. 7 por un conflicto real de continuidad (un tic de
+personaje reusado por error). `state.json::debts` vacío, sin
+`CONFLICTO` de canon abiertos. Working tree limpio, pusheado a
+`origin/novela2`. Listo para Cap. 8 ("Denegado"), el punto bajo del
+Acto I -- ver "Próximo paso".
 
 ## Estado del repositorio
 
@@ -56,7 +67,7 @@ Listo para Cap. 7 ("La ciudad de la tela"), Vidal en Turín con Ferrero
 | Directorio | `/root/novela2` (worktree; confirmado con `git worktree list`) |
 | Rama | `novela2`, diverge de `framework/es-multilibro` en `7b81700` (Tarea 7) |
 | `.env` / `ANTHROPIC_API_KEY` | Presente en este entorno. `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
-| Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: `aecd17e`. |
+| Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: el de cierre de esta sesión (Cap. 7 + `docs/`) -- confirmar con `git log -1 --oneline`. |
 | Working tree | Limpio -- confirmar con `git status`. |
 | Tests | `uv run python -m pytest tests/ -v` -- **246 tests, todos en verde, + 38 xfail esperados** (sin cambios esta sesión, no se tocó código). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
 | Token de GitHub | Fine-grained, creado 2026-07-27, alcance `suazoca/autonovel`, permiso `Contents: read/write`, **vence ~2026-08-26**. Al vencer, limpiar la credencial guardada con `git credential reject` (protocol=https, host=github.com) antes de autenticar con uno nuevo. Usado sin problemas esta sesión (push directo, sin reingresar credencial). |
@@ -156,7 +167,59 @@ Palabras: 1839 (objetivo del outline: 2450 -- quedó corto, por encima
 del umbral mínimo de longitud del script pero sin llegar al target;
 no bloqueante, no se forzó a extender).
 
-Commit `aecd17e`, pusheado a `origin/novela2` en esta sesión.
+Commit `aecd17e`.
+
+`chapters/ch_07.md` ("La ciudad de la tela", Debate) -- **escrito y
+aceptado esta sesión.** Cinco beats: (1) Vidal llega temprano a la
+catedral de Turín, ve la caja sellada tapada por un paño y, a un
+costado, una reproducción fotográfica a la que la gente le reza en su
+lugar. (2) lo recibe Ottavio Ferrero -- química y liturgia en la misma
+frase, sin comillas. (3) Ferrero le explica la herida operativa de
+1988 en cuatro intercambios: "un intervalo puede ser verdadero y hacer
+daño", "¿quién administra ese resultado?". (4) menciona al pasar la
+teca nueva -- donación anónima de 2031, especificaciones de telemetría
+mejores de lo que la Comisión sabría pedir; Vidal se distrae con el
+dato técnico (acceso al histórico) y no con el dinero, que es
+exactamente la ironía dramática que pide el beat. (5) Ferrero promete
+elevar la solicitud con nota favorable en lo técnico; anticipa una
+carta de rechazo "con cosas ciertas en los considerandos".
+
+**Evaluación (primera pasada): aceptado, con reparos.** `overall_score`
+7.04 contra umbral 6.5, `slop_penalty` 0.5 por una única pasiva calcada
+("fue cuestionado por"). El juez señaló además, sin bloquear, dos
+problemas de oficio: una intrusión omnisciente que rompe la tercera
+persona limitada (el narrador juzgaba "clasificó mal" un gesto de
+Ferrero antes de que Vidal mismo lo descubriera) y una acotación de
+manual ("sonrió sin humor"). **El hallazgo importante:** el juez marcó
+como "nota de riesgo" que "leyó el protocolo... la segunda con lápiz" y
+"anotaciones a lápiz en los márgenes" en Ferrero **es el tic de
+identificación reservado a Sandoz** (`outline.md`, hilo #9 del
+Foreshadowing Ledger: se planta en el Cap. 11 -- "el libro anotado a
+lápiz, la primera aparición física de Sandoz, sin cuerpo" -- y se paga
+en el Cap. 12 cuando "Vidal reconoce el lápiz"). Dárselo también a
+Ferrero le habría restado unicidad a esa seña más adelante en el libro.
+
+**Arreglo:** se cambió el tic de Ferrero de lápiz a tinta roja (dos
+apariciones en diálogo + una en descripción), se reescribió la pasiva
+calcada en voz activa, se sacó la intrusión omnisciente ("tardó en
+clasificar y clasificó mal: le pareció cansancio" → "tardó en
+clasificar y archivó como cansancio"), se cortó el "sonrió sin humor" y
+una frase redundante sobre el paño que tapa la caja. También se
+encontró y corrigió, de nuevo, un error de aritmética de años (Ferrero
+decía "cuarenta y cinco años" desde el último instrumento serio que
+tocó la tela -- el STURP de 1978, canon `[C06 acceso científico con
+instrumentos, 1978]` -- corresponden 54, no 45).
+
+**Segunda evaluación: `overall_score` 7.54, aceptado, `slop_penalty` 0.**
+`canon_compliance` 9/9. `actualizar_canon.py 7` corrió sin conflictos:
+9 entradas nuevas (geografía de la catedral, cronología del viaje, el
+protocolo de 22 páginas, la resolución del instrumento hiperespectral,
+el circuito de la solicitud, la teca nueva, el pasado de Ferrero con
+Amberes, la evaluación descartada de 2020, la tira de 1988).
+`state.json::debts` sigue vacío. 2025 palabras (objetivo 2050 --
+prácticamente exacto).
+
+Commit incluido junto con esta actualización de `docs/`.
 
 ## Cap. 5: por qué se reescribió entero (sesión anterior, sin cambios)
 
@@ -177,12 +240,17 @@ siendo la fuente de verdad. Sin cambios esta sesión.
 
 ## Tarea 10 -- acumulación de canon durante la redacción (en producción real)
 
-El mecanismo (`canon_emergente.md` + `actualizar_canon.py`) suma un
-sexto capítulo sin `CONFLICTO`: el Cap. 6 no chocó con nada de la
-fundación ni del canon emergente previo. Total acumulado: 6 capítulos,
-cuatro `CONFLICTO` detectados y resueltos a mano en sesiones anteriores
-(Ruti, Zúrich, cronología del Sepulcro, fundación vs. outline del
-Cap. 5), ninguno nuevo esta sesión.
+El mecanismo (`canon_emergente.md` + `actualizar_canon.py`) suma dos
+capítulos más sin `CONFLICTO`: ni el Cap. 6 ni el Cap. 7 chocaron con
+la fundación ni con el canon emergente previo. Total acumulado: 7
+capítulos, cuatro `CONFLICTO` detectados y resueltos a mano en sesiones
+anteriores (Ruti, Zúrich, cronología del Sepulcro, fundación vs.
+outline del Cap. 5), ninguno nuevo desde entonces. El hallazgo del
+Cap. 7 (tic de lápiz reservado a Sandoz) no fue un `CONFLICTO` de
+`actualizar_canon.py` -- lo marcó el juez de `evaluate.py` como riesgo
+de `character_voice`, no el script de canon, que no tiene forma de
+saber que un tic está reservado para otro personaje que todavía no
+apareció.
 
 ## Pendiente (no bloqueante)
 
@@ -192,7 +260,9 @@ Cap. 5), ninguno nuevo esta sesión.
 - **Tarea 11** -- punto de aprobación manual por capítulo en
   `run_pipeline.py`. Sin cambios; se sigue aprobando capítulo a
   capítulo a mano, leyendo el archivo (esta sesión, además, se generó y
-  entregó un PDF del Cap. 6 para lectura fuera del entorno).
+  entregó PDF de los Cap. 6 y 7 para lectura fuera del entorno --
+  `md_to_tex.py` en el scratchpad de la sesión, no versionado en el
+  repo, compilado con `xelatex`).
 - **Tareas 1b, 1b-bis y 13** -- traducir los prompts contaminados que
   encontró la Tarea 12. Sin cambios; detalle en
   `tests/test_guardia_prompts.py::DEUDA_CONOCIDA`.
@@ -219,28 +289,42 @@ Cap. 5), ninguno nuevo esta sesión.
   "testimonio de oídas"/"testimonio de parte" como locuciones jurídicas
   fijas) en vez de reescribir cada vez que aparece. No se toca ahora --
   dos ocurrencias en seis capítulos no justifican tocar el detector.
+- **Nueva: tics de personaje únicos pueden filtrarse a personajes
+  secundarios sin que ningún mecanismo automático lo note.** El Cap. 7
+  le dio a Ferrero el hábito de anotar a lápiz en los márgenes -- tic
+  reservado a Sandoz en `outline.md` (hilo #9, Foreshadowing Ledger),
+  que Sandoz ni siquiera apareció todavía en la novela. Ni
+  `actualizar_canon.py` ni `evaluate.py::canon_compliance` lo cazan
+  porque ninguno de los dos cruza contra el Foreshadowing Ledger, solo
+  contra `canon.md`/`canon_emergente.md`; lo detectó el juez por
+  intuición de personaje (`character_voice`), no por regla. Se corrigió
+  a mano. No hay acción pendiente concreta -- es una clase de error que
+  puede repetirse con otros hilos del Ledger (la muñeca de Ferrero, el
+  tic de Chiara de enrollar cables) y conviene tenerlo presente al leer
+  cada capítulo nuevo, no solo confiar en el juez para cazarlo.
 
 ## Próximo paso
 
-**Escribir el Cap. 7** ("La ciudad de la tela", Debate, ambición
-"sostén", ~2050 palabras). Vidal viaja a Turín a presentar su solicitud
-de acceso en persona; conoce a Ottavio Ferrero (ya sembrado en el
-Cap. 6 como autor del corpus fotográfico y, sin que el lector lo supiera
-todavía, miembro de la Comisión de Conservación). Beats: la catedral y
-el crucero donde la Sábana yace desde 1997; la cortesía a la antigua de
-Ferrero, química y liturgia en la misma frase sin comillas; la lección
-de 1988 ("en el ochenta y ocho también había un intervalo estrecho,
-doctor -- lo que no había era nadie esperando del otro lado del
-anuncio"); la mención al pasar de la teca nueva, donación anónima que
-Vidal no registra pero el lector sí (plant del hilo #20); la promesa de
-elevar la solicitud que ambos saben cómo termina. Primer asomo de un
-plant nuevo: la muñeca izquierda de Ferrero, que se toca sin reloj
-(hilo #14).
+**Escribir el Cap. 8** ("Denegado", Debate -- punto bajo del Acto I,
+ambición "valle", ~1900 palabras). Zúrich. La denegación llega por
+carta: motivos técnicos (Tamiz es, ante el reglamento de 2029, un
+no-perito -- su resultado sería legalmente inexistente) y de fondo
+(1988, sin nombrarlo -- esta es la "carta muy bien redactada" que
+Ferrero anticipó al cierre del Cap. 7, "a veces ponemos cosas ciertas
+en los considerandos"). Beats: (1) la carta y sus dos motivos. (2) la
+ironía documentada -- Vidal relee el reglamento que lo excluye, ya de
+memoria, y lo relee igual: verificar en vez de sentir. (3) rechaza dos
+contratos lucrativos sin poder anotar la razón. (4) abre la planilla de
+"tiempo perdido" por primera vez desde Jerusalén, mira la entrada del
+Sepulcro, no la reclasifica, la cierra. Sin plants nuevos; paga el
+hilo #1 (la planilla). Es el capítulo bisagra del Acto I: "la puerta
+institucional está cerrada para siempre -- lo que sigue solo puede
+llegar por fuera de las instituciones, y él ya lo desea."
 
 ```bash
-uv run python draft_chapter.py 7
-uv run python evaluate.py --chapter=7
-uv run python actualizar_canon.py 7
+uv run python draft_chapter.py 8
+uv run python evaluate.py --chapter=8
+uv run python actualizar_canon.py 8
 ```
 
 **Ojo:** el número de capítulo va posicional
@@ -255,6 +339,16 @@ el `eval_log` completo -- si `raw_judge_score` y `overall_score`
 difieren mucho, el problema casi seguro es mecánico (`slop_penalty`:
 locuciones prohibidas, tríadas, rayas parentéticas), no de fondo, y se
 arregla más rápido que releer las nueve dimensiones buscando qué falló.
+
+**Lección del Cap. 7:** un capítulo aceptado en la primera pasada
+igual puede tener un problema real -- leer siempre `character_voice` y
+`continuity` del `eval_log` aunque el `overall_score` ya esté sobre el
+umbral, no solo cuando rechaza. El tic de lápiz de Ferrero pasó el
+umbral (7.04) y era, aun así, un error que iba a costar caro más
+adelante en el libro (Cap. 11/12, hilo #9). Antes de escribir un
+capítulo con un personaje secundario nuevo, conviene chequear rápido en
+`outline.md` si alguno de sus gestos ya está reservado a otro personaje
+del Foreshadowing Ledger.
 
 **Advertencia de la sesión del Cap. 5, sigue vigente:** antes de
 aceptar un capítulo con puntaje bajo el umbral tras varias rondas de
@@ -271,11 +365,11 @@ sobre una estructura incompleta no mueve el puntaje.
 3. `uv run python -m pytest tests/ -v` -- confirmar 246 en verde y 38
    xfail esperados (ninguno inesperado) antes de tocar nada.
 4. `cat state.json` -- `debts` debería estar `[]`.
-5. Leer la entrada de Cap. 7 en `outline.md` (línea ~116) antes de
+5. Leer la entrada de Cap. 8 en `outline.md` (línea ~131) antes de
    redactar.
-6. Redactar Cap. 7 a mano con el standalone:
-   `uv run python draft_chapter.py 7` → `evaluate.py --chapter=7` →
-   `actualizar_canon.py 7`. Leer el capítulo y el canon emergente antes
-   de avanzar. Si el `overall_score` queda bajo el umbral, revisar
-   primero el `eval_log` completo (`slop` dict) antes de asumir que es
-   un problema de prosa -- ver "Próximo paso".
+6. Redactar Cap. 8 a mano con el standalone:
+   `uv run python draft_chapter.py 8` → `evaluate.py --chapter=8` →
+   `actualizar_canon.py 8`. Leer el capítulo completo y el `eval_log`
+   entero (no solo el `overall_score`) antes de avanzar -- si rechaza,
+   ver "Lección del Cap. 6"; si acepta, revisar igual
+   `character_voice`/`continuity` -- ver "Lección del Cap. 7".

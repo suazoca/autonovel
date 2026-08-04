@@ -446,6 +446,50 @@ funcionando sin reautenticar.
 Detalle completo -- texto exacto de los cambios, beats del capítulo,
 próximo paso (Cap. 7) -- en `docs/TRASPASO.md`.
 
+## Sesión `novela2`: Cap. 7, y un tic de personaje prestado sin querer (2026-08-04, misma sesión)
+
+Continuación de la sesión del Cap. 6, mismo día. Se escribió y evaluó
+el Cap. 7 ("La ciudad de la tela", Debate): Vidal viaja a Turín,
+presenta su solicitud de acceso en persona y conoce a Ottavio Ferrero.
+
+**A diferencia del Cap. 6, este pasó la primera evaluación** --
+`overall_score` 7.04 contra umbral 6.5 -- pero el juez marcó, sin
+bloquear la aceptación, un problema más interesante que cualquier
+`slop_penalty`: el hábito que se le había dado a Ferrero de "leer los
+protocolos dos veces, la segunda a lápiz, con anotaciones densas en los
+márgenes" es, según `outline.md` (Foreshadowing Ledger, hilo #9), **la
+seña de identificación reservada a Emeric Sandoz** -- un personaje que
+todavía no aparece en la novela (entra recién en el Cap. 11) y cuya
+primera aparición física es justamente ese libro anotado a lápiz, sin
+nombre, que Vidal reconoce como suyo en el Cap. 12. Dárselo a Ferrero
+de paso, sin querer, le habría restado unicidad a esa seña varios
+capítulos antes de que cumpliera su función.
+
+**Ninguna herramienta automática lo cazó.** Ni `actualizar_canon.py`
+(compara contra `canon.md`/`canon_emergente.md`, no contra el
+Foreshadowing Ledger) ni el `canon_compliance` mecánico de
+`evaluate.py` tienen forma de saber que un gesto está reservado para un
+personaje que aún no existe en la prosa escrita. Lo notó el juez LLM
+por lectura de conjunto, en la dimensión `character_voice`, como "nota
+de riesgo" -- no como violación de canon. Se corrigió cambiando el tic
+de Ferrero a tinta roja y, de paso, se arreglaron una pasiva calcada
+del inglés, una intrusión omnisciente que rompía la tercera persona
+limitada, y el mismo tipo de error de aritmética de años que ya había
+aparecido en el Cap. 6 (cuarenta y cinco en vez de cincuenta y cuatro).
+Reevaluado: `overall_score` 7.54, aceptado, sin `slop_penalty`.
+`actualizar_canon.py` sin conflictos, séptimo capítulo consecutivo
+limpio.
+
+**Lección que queda para capítulos con personajes secundarios nuevos:**
+antes de escribirles un tic físico distintivo, un vistazo rápido al
+Foreshadowing Ledger de `outline.md` para confirmar que no está
+reservado a otro personaje que todavía no entró en escena. El juez lo
+va a cazar la mayoría de las veces, pero es más barato no escribirlo
+que confiar en que se note.
+
+Detalle completo -- beats, texto exacto de los cambios, próximo paso
+(Cap. 8) -- en `docs/TRASPASO.md`.
+
 ## Qué está hecho y probado
 
 - **`tests/fixtures/cap_dialogado_es.md`** (624 palabras) y
