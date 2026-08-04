@@ -1,4 +1,4 @@
-# ESTADO — rama `framework/es-multilibro` (+ secciones `novela2`, 2026-07-29 y 2026-08-01/02)
+# ESTADO — rama `framework/es-multilibro` (+ secciones `novela2`, 2026-07-29, 2026-08-01/02 y 2026-08-04)
 
 Última actualización de la parte original: 2026-07-27 (tras cerrar la
 Tarea 7 -- generador de voz). Escrito para retomar en otra sesión sin
@@ -391,6 +391,60 @@ bb4c7ce Tarea 6: persistencia en la fase de fundación
 `1c` y `1d` no estaban en el `ENCARGO_CLAUDE_CODE.md` original -- se
 agregaron sobre la marcha (documentadas ahí mismo) porque hacían falta
 para que los tests 1 y 2 de la Tarea 1 corrieran sin API.
+
+## Sesión `novela2`: Cap. 6, y el `slop_penalty` como falso rechazo (2026-08-04)
+
+Sesión corta: un capítulo, el Cap. 6 ("Bibliografía hostil", Debate).
+Primer intento de aprendizaje operativo sobre cómo leer un
+`overall_score` bajo umbral desde que la fórmula nueva de
+`calcular_overall()` está en producción.
+
+**El capítulo rechazó en la primera pasada por un motivo que no era de
+fondo.** El juez le dio 7.54 de base en las nueve dimensiones (todas
+entre 7 y 9, `canon_compliance` 9), pero el `overall_score` final salió
+6.04 -- por debajo del umbral 6.5. La diferencia entera era mecánica:
+`slop_penalty` 1.5, generado por dos apariciones de la locución
+prohibida `"testimonio de"` (`deteccion_es.py::NIVEL1_LOCUCIONES`).
+Las dos frases eran vocabulario forense legítimo de un perito hablando
+de pruebas ("testimonio de oídas", término jurídico real) -- el
+detector no distingue registro, solo caza el patrón. Se reescribieron
+ambas frases (una perdió la locución sin perder sentido, la otra de
+paso rompió una enumeración en tríada que el juez también había
+marcado). Se aprovechó la revisión para corregir un choque de
+continuidad real que el juez sí señaló con criterio -- una pasajera de
+avión apoyada contra "la ventanilla del pasillo", geometría imposible
+con el asiento de ventanilla de Vidal establecido tres párrafos antes
+-- y para cambiar una pregunta de diálogo genérica por una
+"trampa de precisión" característica del personaje, siguiendo la
+revisión sugerida del propio juez para la dimensión más floja
+(`character_voice`).
+
+Segunda evaluación: `overall_score` 7.54, aceptado, `slop_penalty` en
+0. Ya aceptado, el juez marcó -- sin bloquear -- un desliz de
+aritmética (Vidal, cuyo rasgo central es la exactitud, calculaba mal
+los años transcurridos desde 1988 y 1978 estando en noviembre de 2032).
+Se corrigió a mano sin re-evaluar, mismo criterio que ediciones
+menores de sesiones anteriores.
+
+**Lección para la próxima vez que un capítulo rechace:** mirar primero
+el `eval_log` completo y comparar `raw_judge_score` contra
+`overall_score`. Si difieren mucho, el problema case seguro está en
+`slop` (locuciones, tríadas, densidad de raya parentética), no en las
+nueve dimensiones -- y se arregla en minutos reescribiendo frases
+puntuales, no releyendo el capítulo entero buscando qué falló
+estructuralmente (esa búsqueda sí hizo falta para el Cap. 5, pero ahí
+el síntoma era otro: puntaje de juez bajo y estable pese al pulido).
+
+`actualizar_canon.py` corrió sin conflictos sobre el Cap. 6: sexto
+capítulo consecutivo sin `CONFLICTO`, después de los cuatro resueltos a
+mano en la sesión anterior. `state.json::debts` sigue vacío.
+
+Commit `aecd17e`, pusheado a `origin/novela2` sin incidentes -- el
+token fine-grained de `suazoca/autonovel` (vence ~2026-08-26) siguió
+funcionando sin reautenticar.
+
+Detalle completo -- texto exacto de los cambios, beats del capítulo,
+próximo paso (Cap. 7) -- en `docs/TRASPASO.md`.
 
 ## Qué está hecho y probado
 
