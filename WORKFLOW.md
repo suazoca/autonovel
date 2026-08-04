@@ -91,8 +91,20 @@ uv run python gen_audiobook.py --assemble       # Concatenate
 ```bash
 uv run python build_outline.py                  # Rebuild outline
 uv run python build_arc_summary.py              # Rebuild summaries
-python3 typeset/build_tex.py && cd typeset && tectonic novel.tex  # PDF
+python3 typeset/build_tex.py && cd typeset && tectonic novel.tex  # PDF del libro completo (Garamond, drop caps, tapa)
 ```
+
+### PDF de un capítulo (revisión de lectura fuera del entorno)
+```bash
+uv run python chapter_to_pdf.py 9 "Maître Ansermet"   # -> chapters/pdf/ch_09.pdf
+```
+Formato liviano, no el del export final: LaTeX clásico (Latin/Computer
+Modern), párrafo con sangría, sin espacio entre párrafos, quiebre de
+escena (`---` en el `.md`) como asterisco centrado. Requiere `xelatex` +
+`polyglossia` en el sistema (no es dependencia de `uv`). **Correr esto
+después de aceptar cada capítulo** (evaluate.py lo aceptó + actualizar_canon.py
+sin conflictos sin resolver) para poder leerlo fuera del entorno antes de
+seguir con el siguiente.
 
 ---
 

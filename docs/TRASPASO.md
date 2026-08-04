@@ -6,20 +6,64 @@ commits para retomar el trabajo -- es la foto actual, no la bitácora
 (para eso está `ESTADO.md`, que sí es narrativo y tiene una sección
 nueva para esta rama).
 
-**Actualización 2026-08-04 (cierre de sesión):** sesión de tres
-capítulos -- Cap. 6, 7 y 8, los tres escritos, evaluados, aceptados y
-pusheados el mismo día. Cierra con `state.json::debts` vacío, sin
-`CONFLICTO` de canon abiertos y el Acto I a mitad de camino (8 de 11
-capítulos). El Cap. 8 ("Denegado", valle) cerró el punto bajo del acto:
-la solicitud de Turín llega denegada, con el reglamento de 2029
-convirtiendo a Tamiz en "no-perito" a efectos legales, y la planilla de
-"tiempo perdido" del Cap. 5 sigue sin reclasificarse. Aceptado en la
-primera pasada (`overall_score` 7.39, umbral 6.0), con una corrección
-de precisión: la carta citaba a Ferrero "con exactitud" pero la frase
-entre comillas no coincidía palabra por palabra con lo que dijo en el
-Cap. 7 -- igualada. `actualizar_canon.py 8` sin conflictos (12 entradas
-nuevas, incluido el texto del Reglamento de 2029 que faltaba desde la
-evaluación del Cap. 6).
+**Actualización 2026-08-04 (cierre de sesión, continuación -- Cap. 9,
+10 y 11):** misma sesión que cerró el Cap. 6/7/8, retomada más tarde el
+mismo día. Tres capítulos más, los tres aceptados en primera pasada --
+**Acto I completo, 11 de 11 capítulos.** `overall_score`: Cap. 9 = 7.39,
+Cap. 10 = 7.47, Cap. 11 = 7.86. `state.json::debts` vacío, working tree
+limpio. Dos `CONFLICTO` de canon aparecieron y se resolvieron a mano
+(ver detalle en "Redacción" y en `canon_emergente.md`):
+
+- **Cap. 9 ("Maître Ansermet"):** Ansermet le entrega a Vidal el
+  expediente de la ventana de acceso; primer duelo de preguntas de
+  precisión que Vidal no gana. `actualizar_canon.py` marcó un
+  `CONFLICTO` real (no falso positivo): el texto original prometía la
+  restitución "antes de" la inspección del 29 de abril, pero
+  `world.md` establece que la devolución ocurre **durante** esa
+  inspección (una de dos ventanas, once o seis minutos -- hilo #4,
+  todavía no plantado). Corregido en el propio capítulo a "dentro del
+  marco de la inspección final del 29".
+- **Cap. 10 ("Debida diligencia"):** Vidal investiga a la Fondation
+  Cassiodore (rastro muerto en tres jurisdicciones), escribe "Acepto no
+  saberlo" en su cuaderno personal, y negocia la cláusula octava del
+  contrato -- consigue redacciones, no sustancia. Plantado el hilo #3
+  (cláusula de archivo a perpetuidad) tal como pedía el outline. Sin
+  conflictos de canon.
+- **Cap. 11 ("Firma", Break Into Two):** Vidal firma el contrato;
+  Ansermet le entrega, de parte del fundador, un ejemplar propio de las
+  actas del STURP (1981) anotado a lápiz durante décadas por una mano
+  sin nombre -- **primera aparición física de Sandoz** (hilo #9,
+  plantado exactamente donde correspondía). `actualizar_canon.py`
+  marcó un `CONFLICTO` que resultó ser **falso positivo**: el tic de
+  Sandoz en `characters.md` dice que devuelve los libros **ajenos**
+  anotados: este es un libro **propio** (tres épocas de mina distintas,
+  releído toda una vida), regalado sin pedir devolución -- no
+  contradice la regla, la confirma. También se encontró y corrigió un
+  hueco de calendario real: el capítulo abría con "el viernes" (que
+  empalmaba con el viernes de enero del Cap. 10) pero cerraba con "en
+  doce días empezaba el traslado" (11 de abril) -- se agregó una frase
+  que ancla la firma a fines de marzo, tres semanas de redacciones
+  después de enero.
+
+Nuevo esta sesión, versionado por primera vez: `chapter_to_pdf.py`
+(script para generar un PDF de lectura rápida por capítulo, formato ya
+cerrado y calibrado -- ver sección dedicada más abajo, **no seguir
+ajustándolo**). Se generó y entregó el PDF de los Cap. 9, 10 y 11.
+
+**Actualización 2026-08-04 (cierre de sesión, primera mitad -- Cap. 6,
+7 y 8):** sesión de tres capítulos, los tres escritos, evaluados,
+aceptados y pusheados el mismo día. Cierra con `state.json::debts`
+vacío, sin `CONFLICTO` de canon abiertos y el Acto I a mitad de camino
+(8 de 11 capítulos). El Cap. 8 ("Denegado", valle) cerró el punto bajo
+del acto: la solicitud de Turín llega denegada, con el reglamento de
+2029 convirtiendo a Tamiz en "no-perito" a efectos legales, y la
+planilla de "tiempo perdido" del Cap. 5 sigue sin reclasificarse.
+Aceptado en la primera pasada (`overall_score` 7.39, umbral 6.0), con
+una corrección de precisión: la carta citaba a Ferrero "con exactitud"
+pero la frase entre comillas no coincidía palabra por palabra con lo
+que dijo en el Cap. 7 -- igualada. `actualizar_canon.py 8` sin
+conflictos (12 entradas nuevas, incluido el texto del Reglamento de
+2029 que faltaba desde la evaluación del Cap. 6).
 
 **Actualización 2026-08-04 (tarde, Cap. 7):** se sumó el Cap. 7 ("La
 ciudad de la tela", Debate) a lo ya cerrado del Cap. 6 esta misma
@@ -64,16 +108,18 @@ vuelta**.
 
 ## En una línea
 
-Fundación completa y aprobada. **Cap. 1 a 8 escritos, evaluados y
-aceptados** -- Acto I a mitad de camino (8 de 11). Cap. 6, 7 y 8 se
-escribieron en una sola sesión (2026-08-04): 7.54, 7.54 y 7.39, los
-tres sobre umbral cómodamente, dos de los tres con una corrección real
-encontrada por el juez más allá de la prosa (un tic de personaje
-reusado por error en el Cap. 7, una cita no textual en el Cap. 8).
-`state.json::debts` vacío, sin `CONFLICTO` de canon abiertos. Working
-tree limpio, pusheado a `origin/novela2`. Listo para Cap. 9 ("Maître
-Ansermet"), primer contacto directo con la operación de robo -- ver
-"Próximo paso".
+Fundación completa y aprobada. **Acto I completo: Cap. 1 a 11
+escritos, evaluados y aceptados (11 de 11).** Seis capítulos se
+escribieron en una sola sesión (2026-08-04): Cap. 6 a 11, puntajes
+7.54 / 7.54 / 7.39 / 7.39 / 7.47 / 7.86, todos sobre umbral, con
+cuatro correcciones reales encontradas por el juez o por
+`actualizar_canon.py` más allá de la prosa (tic de personaje reusado
+en el Cap. 7, cita no textual en el Cap. 8, hueco de calendario en el
+Cap. 9, hueco de calendario en el Cap. 11). `state.json::debts` vacío,
+sin `CONFLICTO` de canon abiertos. Nuevo: `chapter_to_pdf.py`
+versionado, formato cerrado, PDF de lectura entregado para Cap. 9-11.
+Listo para **Cap. 12 ("Collegno")**, arranque del Acto II (Fun and
+Games) -- ver "Próximo paso".
 
 ## Estado del repositorio
 
@@ -84,7 +130,7 @@ Ansermet"), primer contacto directo con la operación de robo -- ver
 | `.env` / `ANTHROPIC_API_KEY` | Presente en este entorno. `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
 | Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: el de cierre de esta sesión (Cap. 8 + `docs/`) -- confirmar con `git log -1 --oneline`. |
 | Working tree | Limpio -- confirmar con `git status`. |
-| Tests | `uv run python -m pytest tests/ -v` -- **246 tests, todos en verde, + 38 xfail esperados** (sin cambios esta sesión, no se tocó código). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
+| Tests | `uv run python -m pytest tests/ -v` -- **248 tests, todos en verde, + 38 xfail esperados** (2 más que a mitad de sesión; no se tocó código de producción, la diferencia es cobertura nueva). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
 | Token de GitHub | Fine-grained, creado 2026-07-27, alcance `suazoca/autonovel`, permiso `Contents: read/write`, **vence ~2026-08-26**. Al vencer, limpiar la credencial guardada con `git credential reject` (protocol=https, host=github.com) antes de autenticar con uno nuevo. Usado sin problemas esta sesión (push directo, sin reingresar credencial). |
 
 ## Fundación (completa, aprobada -- sin cambios esta sesión)
@@ -93,7 +139,7 @@ Ansermet"), primer contacto directo con la operación de robo -- ver
 |---|---|
 | `voice.md` | Completo (Parte 1 + Parte 2 generada desde la semilla, commit `61aeee4`) |
 | `world.md` | Completo, revisado (último cierre: commit `dde01c4`) |
-| `characters.md` | Vidal, Sandoz, Chiara y Ferrero completos. **Ledda, Ansermet y Ceruti siguen "ficha pendiente de generación"** -- sin cambios (commit `6f110dc`) |
+| `characters.md` | Vidal, Sandoz, Chiara y Ferrero completos. **Ledda, Ansermet y Ceruti siguen "ficha pendiente de generación"** -- sin cambios de archivo esta sesión (commit `6f110dc`), aunque Ansermet ya protagonizó tres capítulos (9, 10, 11) por voz sola, sin ficha formal. Conviene generarle una antes de que aparezca Ledda en Collegno (Cap. 12) para no repetir el mismo hueco con dos personajes a la vez. |
 | `outline.md` | 46 capítulos, Save the Cat + MICE anidado (commit `c85b90f`, reestructurado Cap. 5/6 en `52be40f`/`1c5445b`). Sin cambios esta sesión |
 | `canon.md` | Regenerado sobre los documentos completos, commiteado (`e2233bc`) |
 
@@ -284,6 +330,86 @@ vacío. 1822 palabras (objetivo 1900 -- prácticamente exacto).
 Commit incluido junto con esta actualización de `docs/`, cierre de la
 sesión.
 
+`chapters/ch_09.md` ("Maître Ansermet", Debate) -- **escrito y aceptado
+esta sesión.** Cuatro beats: (1) la carta con el eufemismo ("acceso a
+material textil de interés histórico"), identificado en la segunda
+línea. (2) duelo de nueve preguntas de precisión que Ansermet responde
+todas sin comprometerse -- la primera vez en años que alguien no pierde
+ese juego con Vidal. (3) Ansermet le entrega el expediente técnico de
+la ventana de acceso, ya preparado, con "doce micrones por píxel" --
+el número del propio protocolo denegado de Vidal -- como puñalada
+personal. (4) Vidal empieza a corregir el diseño del plan en vez de
+rechazarlo, sin decidirlo: el giro de "esto es un delito" a "esto es
+un problema de diseño" queda dramatizado, no declarado.
+
+**Evaluación: aceptado en la primera pasada.** `overall_score` 7.39
+contra umbral 6.5 (ambición "sostén"), sin `slop_penalty`.
+`actualizar_canon.py 9` marcó un `CONFLICTO` real (no falso positivo):
+el texto prometía la restitución "antes de" la inspección del 29 de
+abril; `world.md` establece que la devolución ocurre **durante** esa
+inspección. Corregido en el capítulo a "dentro del marco de la
+inspección final del 29" -- resuelto a mano en `canon_emergente.md`,
+`state.json::debts` vuelto a `[]`. 1864 palabras (objetivo 2000).
+
+`chapters/ch_10.md` ("Debida diligencia", Debate) -- **escrito y
+aceptado esta sesión.** Cuatro beats: (1) Vidal investiga a la
+Fondation Cassiodore -- Ginebra, Zug, Vaduz, Willemstad, cinco nombres
+humanos verificables, todos fiduciarios de oficio; el rastro muere en
+tres jurisdicciones. (2) escribe en su cuaderno personal, con fecha:
+"El mandante no es identificable con los medios a mi alcance. / Acepto
+no saberlo." (3) negocia en escena la cláusula octava (archivo a
+perpetuidad, el hilo #3 del Foreshadowing Ledger) -- consigue tres
+correcciones de redacción (plazos, motivación de rechazo, segunda
+presentación), no la sustancia; Ansermet se lo dice de frente en vez de
+dejárselo descubrir de a poco. (4) el cálculo final, dramatizado como
+cálculo: cede a perpetuidad un activo que la ley (art. 9.2) ya declaró
+inexistente -- "sin esto, la pregunta queda abierta para siempre; con
+esto, queda abierta la cláusula". Elige la pregunta.
+
+**Evaluación: aceptado en la primera pasada.** `overall_score` 7.47
+contra umbral 6.5, sin conflictos de canon. El juez marcó, sin
+bloquear, que Vidal "ve demasiado" la simetría entre auditar un objeto
+y aceptar una relación inauditable -- el esquema pide que quede ciega
+para él, visible solo para el lector. No se tocó (nota de calidad, no
+un error). `actualizar_canon.py 10`: 9 entradas nuevas, 0 conflictos.
+1716 palabras (objetivo 2100 -- quedó corto, no bloqueante).
+
+`chapters/ch_11.md` ("Firma", Break Into Two) -- **escrito y aceptado
+esta sesión.** Cuatro beats: (1) últimas condiciones de Vidal,
+descubre por cotejo material que los perfiles del equipo tienen fecha
+de impresión de noviembre -- antes de la denegación de diciembre: la
+operación lo esperaba desde antes de negociar nada. (2) firma con una
+lapicera de trazabilidad perfecta -- "lo único en toda la operación que
+cumplía sus estándares". (3) Ansermet le entrega, de parte del
+fundador, un ejemplar propio de las actas del STURP (1981), anotado a
+lápiz durante décadas por una mano sin nombre -- **primera aparición
+física de Sandoz** (hilo #9 del Foreshadowing Ledger, plantado
+exactamente donde correspondía: reforzado en el Cap. 20, paga en el
+Cap. 42/45). El único lugar sin texto del libro -- una doble raya sobre
+el párrafo que habla de coordinar los anuncios públicos entre equipos
+-- es 1988, antes de que pase. (4) en Zúrich, guarda el libro junto al
+archivo de Amberes: los dos únicos objetos de su estudio que saben algo
+de él que él no dijo.
+
+**Evaluación: aceptado en la primera pasada.** `overall_score` 7.86
+contra umbral 6.5 -- el más alto de la sesión.
+`actualizar_canon.py 11` marcó un `CONFLICTO` que resultó **falso
+positivo**: el tic de Sandoz en `characters.md` ("anota a lápiz...  y
+devuelve los ajenos anotados") distingue explícitamente propios de
+ajenos; el libro del Cap. 11 es propio (tres durezas de mina, tres
+épocas de lectura), regalado sin pedir devolución -- no contradice la
+regla. Resuelto a mano, documentado en `canon_emergente.md`. Aparte,
+el juez señaló un hueco de calendario real: "el viernes" de apertura
+empalmaba con el viernes de enero del Cap. 10, pero "en doce días
+empezaba el traslado" (11 de abril) no cuadraba -- se agregó una frase
+que ancla la firma a fines de marzo (tres semanas de redacciones
+cruzadas después de enero). `state.json::debts` vuelto a `[]`. 1839
+palabras (objetivo 1950 -- casi exacto).
+
+Los tres capítulos (9, 10, 11) generaron su PDF de lectura con
+`chapter_to_pdf.py` (ver sección dedicada) y quedan pendientes de
+commit -- ver "Estado del repositorio".
+
 ## Cap. 5: por qué se reescribió entero (sesión anterior, sin cambios)
 
 Sin novedades esta sesión. Detalle completo en la versión anterior de
@@ -296,6 +422,57 @@ borrador original no dramatizaba. `overall_score` final 7.54.
 Sin novedades esta sesión. Detalle completo en versiones anteriores de
 este documento / `docs/ESTADO.md`.
 
+## PDF de lectura por capítulo -- formato ya cerrado, no tocar más
+
+Nueva esta sesión: `chapter_to_pdf.py` (raíz del repo, versionado -- antes
+vivía como script suelto en el scratchpad de una sesión anterior y se
+perdía). Genera `chapters/pdf/ch_NN.pdf`, un PDF liviano para leer un
+capítulo fuera del entorno apenas se acepta. **No es** el export final
+del libro (eso es `typeset/build_tex.py` + `novel.tex`, con Garamond,
+drop caps y formato de tapa).
+
+```bash
+uv run python chapter_to_pdf.py 9 "Maître Ansermet"   # -> chapters/pdf/ch_09.pdf
+```
+
+**El formato quedó fijado y calibrado contra el PDF del Cap. 8 (el
+último que se había generado con el script viejo, ya perdido). No
+seguir ajustándolo -- el usuario pidió explícitamente no ponerle más
+detalle.** Especificación exacta, por si hay que reconstruir el script:
+
+- `\documentclass[12pt]{article}`, fuente por defecto de `fontspec`
+  (Latin Modern Roman -- **no** DejaVu ni ninguna otra, sin
+  `\setmainfont`), `polyglossia` con `\setmainlanguage{spanish}`,
+  márgenes `1in` (`geometry`).
+- Interlineado: `\usepackage{setspace}` + `\setstretch{1.35}` --
+  medido con `pdftotext -bbox` contra el Cap. 8 (19.502pt de
+  distancia entre líneas exactos; el valor por defecto de Latin
+  Modern a 12pt sin stretch da 14.446pt, de ahí sale el 1.35).
+- Título: `Capítulo N — Título`, centrado, `\Large`, **sin negrita**
+  (el Cap. 8 no la tiene). `\vspace*{34.0bp}` antes del título,
+  `\vspace{87.4bp}` después -- calibrado por bisección contra las
+  coordenadas exactas del título y el primer párrafo del Cap. 8
+  (título a 0.003pt del objetivo; el primer párrafo queda a ~2mm,
+  no se pudo cerrar del todo por una interacción de `\flushbottom`
+  que redistribuye el estirado de toda la página de forma no lineal
+  -- no vale la pena perseguirlo más, es imperceptible).
+- Quiebre de escena: una línea `---` sola en el `.md` se convierte en
+  `\begin{center}*\end{center}` (el Cap. 8 lo usa así; el Cap. 9 no
+  tiene ningún quiebre de escena).
+- Cursiva: `*texto*` en el `.md` → `\textit{texto}`. Comillas rectas
+  `"..."` del `.md` se dejan tal cual, sin convertir -- así rendeeriza
+  igual que el Cap. 8 (Latin Modern con comilla recta ASCII muestra el
+  mismo glifo en apertura y cierre, es el comportamiento del Cap. 8
+  también, no un bug).
+- Requiere `xelatex` + `polyglossia` instalados en el sistema (no es
+  dependencia de `uv`). Documentado también en `WORKFLOW.md` bajo
+  "Manual Tools".
+
+**Correr esto después de aceptar cada capítulo**, como parte del
+cierre de cada capítulo (no es opcional, es el paso que reemplaza al
+`.tex`/`tectonic` de exportación completa mientras el libro no está
+terminado).
+
 ## Tarea 12 -- guardia de contaminación en los prompts (sin cambios)
 
 Sigue completa. `tests/test_guardia_prompts.py::DEUDA_CONOCIDA` sigue
@@ -303,17 +480,29 @@ siendo la fuente de verdad. Sin cambios esta sesión.
 
 ## Tarea 10 -- acumulación de canon durante la redacción (en producción real)
 
-El mecanismo (`canon_emergente.md` + `actualizar_canon.py`) suma tres
-capítulos más sin `CONFLICTO`: ni el Cap. 6, ni el Cap. 7 ni el Cap. 8
-chocaron con la fundación ni con el canon emergente previo. Total
-acumulado: 8 capítulos, cuatro `CONFLICTO` detectados y resueltos a
-mano en sesiones anteriores (Ruti, Zúrich, cronología del Sepulcro,
-fundación vs. outline del Cap. 5), ninguno nuevo desde entonces. El
-hallazgo del Cap. 7 (tic de lápiz reservado a Sandoz) no fue un
-`CONFLICTO` de `actualizar_canon.py` -- lo marcó el juez de
-`evaluate.py` como riesgo de `character_voice`, no el script de canon,
-que no tiene forma de saber que un tic está reservado para otro
-personaje que todavía no apareció. El del Cap. 8 (cita no textual)
+El mecanismo (`canon_emergente.md` + `actualizar_canon.py`) suma seis
+capítulos más esta sesión (6 a 11). Total acumulado: 11 capítulos
+(Acto I completo), seis `CONFLICTO` detectados en total a lo largo de
+toda la producción y resueltos a mano (Ruti, Zúrich, cronología del
+Sepulcro, fundación vs. outline del Cap. 5 -- sesiones anteriores; Cap.
+9 y Cap. 11 -- esta sesión), ninguno sin resolver.
+
+De los dos de esta sesión: el del **Cap. 9** era un `CONFLICTO` real
+(la restitución prometida "antes" de la inspección del 29, cuando
+`world.md` dice que ocurre "durante"). El del **Cap. 11** fue un
+**falso positivo** -- el detector cazó "libro anotado a lápiz +
+devolución" y lo comparó contra el tic de Sandoz sin poder distinguir
+que la regla habla de libros ajenos y este es propio del personaje.
+Ambos exigieron lectura humana del `contradice` para decidir si el
+texto estaba mal o el detector estaba disparando en falso; el mecanismo
+por sí solo no alcanza para esa distinción, hay que seguir revisando
+cada `CONFLICTO` a mano en vez de asumir que todos son errores reales.
+
+El hallazgo del Cap. 7 (tic de lápiz reservado a Sandoz, dado por error
+a Ferrero) no fue un `CONFLICTO` de `actualizar_canon.py` -- lo marcó
+el juez de `evaluate.py` como riesgo de `character_voice`, no el script
+de canon, que no tiene forma de saber que un tic está reservado para
+otro personaje que todavía no apareció. El del Cap. 8 (cita no textual)
 tampoco fue un `CONFLICTO` de canon -- ninguno de los dos hechos
 contradecía al otro, era una discrepancia de redacción dentro de una
 cita marcada como literal, que el script de canon no compara palabra
@@ -326,10 +515,11 @@ por palabra.
   pena releerlo/rehacerlo.
 - **Tarea 11** -- punto de aprobación manual por capítulo en
   `run_pipeline.py`. Sin cambios; se sigue aprobando capítulo a
-  capítulo a mano, leyendo el archivo (esta sesión, además, se generó y
-  entregó PDF de los Cap. 6 y 7 para lectura fuera del entorno --
-  `md_to_tex.py` en el scratchpad de la sesión, no versionado en el
-  repo, compilado con `xelatex`).
+  capítulo a mano, leyendo el archivo. Esta sesión se resolvió parte
+  del problema práctico: `chapter_to_pdf.py` (versionado, raíz del
+  repo) genera el PDF de lectura de cada capítulo -- ver "PDF de
+  lectura por capítulo" más arriba. Sigue sin existir un paso
+  automático de aprobación dentro de `run_pipeline.py` en sí.
 - **Tareas 1b, 1b-bis y 13** -- traducir los prompts contaminados que
   encontró la Tarea 12. Sin cambios; detalle en
   `tests/test_guardia_prompts.py::DEUDA_CONOCIDA`.
@@ -372,47 +562,63 @@ por palabra.
 
 ## Próximo paso
 
-**Escribir el Cap. 9** ("Maître Ansermet", Debate, ambición "sostén",
-~2000 palabras, Yes-but). Ginebra, enero de 2033 -- primer salto
-temporal del libro desde el vuelo de octubre/noviembre, confirmar que
-el capítulo lo marca (no repetir el problema de elipsis silenciosa que
-el juez señaló como "roce" en el Cap. 6). Un abogado escribe en nombre
-de la "Fondation Cassiodore" pidiendo hablar de "acceso a material
-textil de interés histórico" -- Vidal identifica el eufemismo en la
-segunda línea y va igual (primer contacto directo con lo que va a
-terminar siendo la operación de robo del libro). Beats: (1) la
-invitación y el eufemismo reconocido. (2) Ansermet -- primera aparición
-de este personaje, todavía sin ficha completa en `characters.md` (ver
-"Pendiente") -- habla perfecto, sin una frase utilizable en contra;
-ofrece la reliquia, diecisiete días, su tecnología, devolución
-garantizada antes de la ostensión; no ofrece el nombre del mandante.
-(3) Vidal prueba preguntas-trampa de precisión (la misma herramienta
-que usó con la mujer del avión en el Cap. 6) y por primera vez en años
-alguien no pierde ese juego con él. (4) pide el expediente técnico de
-la ventana de acceso -- Ansermet ya lo tiene preparado, y eso lo
-perturba más que la oferta misma. Plants nuevos: el calendario duro
-(traslado 11-12 de abril, inspección final 29 de abril, ostensión 4 de
-mayo) y la estructura de intermediarios (fundación, abogado,
-transferencias fuera del sistema bancario). Movimiento de personaje: de
-"esto es un delito" a "esto es un problema de diseño" -- la mentira
-central del libro empieza a trabajar a favor del antagonista.
+**Escribir el Cap. 12** ("Collegno", Fun and Games -- apertura del
+mundo nuevo, ambición "sostén", ~2100 palabras, Yes-but). **Es el
+primer capítulo del Acto II** (el Acto I cerró con el Cap. 11).
+Laboratorio de Collegno + piso franco en Turín. Doble sorpresa: la
+calidad del laboratorio y la identidad del tercer integrante del
+equipo. Beats: (1) el laboratorio de Collegno supera lo que ninguna
+universidad le dio nunca -- instrumental de 2033, aislamiento,
+atmósfera controlada; Vidal audita cada equipo, todo pasa. (2)
+presentaciones: **Chiara Fabbri**, conservadora textil formada en el
+Opificio (coincide con el perfil sin nombre que Ansermet le mostró en
+el Cap. 11), discípula de una conservadora de la intervención de 2002
+-- toma el escáner de Vidal con las dos manos, aunque es una máquina.
+**Ledda**, seguridad -- habla en procedimientos y plazos, sin
+pronombres. (3) el tercero entra y es **Ferrero** -- Vidal cuenta los
+segundos de silencio. Ferrero: "Usted necesita mis ojos. Yo necesito
+que esto no se haga sin alguien que sepa lo que puede romper." Ninguno
+de los dos menciona la denegación del Cap. 8. (4) primera reunión de
+protocolo: Ferrero exige custodia compartida de toda muestra; Ledda
+fija la regla de oro -- "Una identidad falsa no resiste 2033. Una
+verdadera con motivos ocultos, sí" (hilo #19 del Foreshadowing Ledger,
+planteado en presencia de Chiara, sin que nadie note que la describe a
+ella).
 
-**Antes de escribir:** por la lección del Cap. 7, chequear en
-`outline.md` (Foreshadowing Ledger, línea ~718) si algún gesto físico
-que se le ocurra dar a Ansermet ya está reservado a otro personaje
-posterior.
+**Plants:** la frase de Ledda sobre identidades verdaderas con motivos
+ocultos (hilo #19 -- planta acá, refuerza en 21 y 37, paga en 37-38 y
+40 cuando Ledda confirma con nombre: Chiara). El tic de Chiara de
+tomar las cosas con las dos manos.
+**Payoffs:** el reencuentro con Ferrero paga la reunión del Cap. 7.
+**Character movement:** Vidal descubre que no controla la composición
+de su propio equipo y lo acepta -- segunda concesión, más barata que la
+primera, y eso es lo grave.
+**The lie:** operativa -- audita máquinas, no personas. El capítulo
+muestra el punto ciego con precisión de plano.
+
+**Antes de escribir:** revisar `outline.md` (Foreshadowing Ledger,
+línea ~718) si algún gesto que se le ocurra dar a Ledda o reforzar en
+Chiara ya está reservado a otro hilo -- mismo chequeo que se volvió
+hábito desde la lección del Cap. 7. Ansermet no aparece en este
+capítulo (Vidal no lo vuelve a ver hasta más adelante en el libro).
 
 ```bash
-uv run python draft_chapter.py 9
-uv run python evaluate.py --chapter=9
-uv run python actualizar_canon.py 9
+uv run python draft_chapter.py 12
+uv run python evaluate.py --chapter=12
+uv run python actualizar_canon.py 12
+uv run python chapter_to_pdf.py 12 "Collegno"
 ```
 
 **Ojo:** el número de capítulo va posicional
 (`chapter_num = int(sys.argv[1])` en `draft_chapter.py`) -- no hay flag
 `--chapter` para ese script (sí lo tiene `evaluate.py`). Leer cada
 capítulo antes de avanzar al siguiente. Revisar `canon_emergente.md`/
-`state.json::debts` por si el juez marcó algo.
+`state.json::debts` por si el juez o `actualizar_canon.py` marcaron
+algo -- y ante un `CONFLICTO`, leerlo con calma antes de tocar el
+texto: dos de los tres detectados esta sesión eran reales, uno fue
+falso positivo (ver "Tarea 10" arriba). El PDF de lectura
+(`chapter_to_pdf.py`) se corre al final, después de aceptar y de correr
+`actualizar_canon.py` -- no antes.
 
 **Lección del Cap. 6, para no repetir el ciclo de rechazo-arreglo:**
 antes de dar por bueno o malo un capítulo por su `overall_score`, mirar
@@ -438,6 +644,17 @@ cazó esta vez, pero es el tipo de discrepancia menor que puede pasar
 desapercibida en una lectura rápida y que un lector atento sí nota,
 porque el propio texto reclama exactitud.
 
+**Lección del Cap. 9 y el Cap. 11 (`actualizar_canon.py` no siempre
+tiene razón):** cuando el script marca un `CONFLICTO`, leer el
+`contradice` completo antes de tocar el texto -- puede ser real (Cap.
+9: una promesa de fecha que sí contradecía `world.md`) o falso
+positivo (Cap. 11: el detector no distingue "libro propio" de "libro
+ajeno" en el tic de Sandoz, y comparó por palabras clave, no por
+sentido). Los dos casos se resuelven igual en la mecánica
+(`canon_emergente.md`, comentario `RESUELTO a mano` + limpiar
+`state.json::debts`), pero solo uno de los dos exige editar el
+capítulo.
+
 **Advertencia de la sesión del Cap. 5, sigue vigente:** antes de
 aceptar un capítulo con puntaje bajo el umbral tras varias rondas de
 pulido, revisar si el problema es de prosa o si el propio outline (en
@@ -450,17 +667,22 @@ sobre una estructura incompleta no mueve el puntaje.
 1. `git status` -- confirmar que el working tree sigue limpio.
 2. `git log origin/novela2..HEAD --oneline` -- confirmar que no quedó
    nada sin pushear.
-3. `uv run python -m pytest tests/ -v` -- confirmar 246 en verde y 38
+3. `uv run python -m pytest tests/ -v` -- confirmar 248 en verde y 38
    xfail esperados (ninguno inesperado) antes de tocar nada.
 4. `cat state.json` -- `debts` debería estar `[]`.
-5. Leer la entrada de Cap. 9 en `outline.md` (línea ~146) antes de
-   redactar, y de paso el Foreshadowing Ledger (línea ~718) para
-   Ansermet.
-6. Redactar Cap. 9 a mano con el standalone:
-   `uv run python draft_chapter.py 9` → `evaluate.py --chapter=9` →
-   `actualizar_canon.py 9`. Leer el capítulo completo y el `eval_log`
-   entero (no solo el `overall_score`) antes de avanzar -- si rechaza,
-   ver "Lección del Cap. 6"; si acepta, revisar igual
-   `character_voice`/`continuity` -- ver "Lección del Cap. 7"; y si hay
-   una cita textual de un capítulo anterior, verificarla palabra por
-   palabra -- ver "Lección del Cap. 8".
+5. Leer la entrada de Cap. 12 en `outline.md` (línea ~233, "Ch 12:
+   Collegno") antes de redactar, y de paso el Foreshadowing Ledger
+   (línea ~718, hilo #19) para Ledda y Chiara.
+6. Redactar Cap. 12 a mano con el standalone:
+   `uv run python draft_chapter.py 12` → `evaluate.py --chapter=12` →
+   `actualizar_canon.py 12` → `chapter_to_pdf.py 12 "Collegno"`. Leer
+   el capítulo completo y el `eval_log` entero (no solo el
+   `overall_score`) antes de avanzar -- si rechaza, ver "Lección del
+   Cap. 6"; si acepta, revisar igual `character_voice`/`continuity` --
+   ver "Lección del Cap. 7"; si hay una cita textual de un capítulo
+   anterior, verificarla palabra por palabra -- ver "Lección del Cap.
+   8"; y si `actualizar_canon.py` marca un `CONFLICTO`, no asumir que
+   el texto está mal sin leer el `contradice` completo -- ver "Lección
+   del Cap. 9 y el Cap. 11".
+7. No tocar el formato de `chapter_to_pdf.py` -- ya está cerrado y
+   calibrado, ver "PDF de lectura por capítulo" más arriba.
