@@ -490,6 +490,39 @@ que confiar en que se note.
 Detalle completo -- beats, texto exacto de los cambios, próximo paso
 (Cap. 8) -- en `docs/TRASPASO.md`.
 
+## Sesión `novela2`: Cap. 8, cierre del punto bajo del Acto I (2026-08-04, cierre de sesión)
+
+Tercer y último capítulo de la sesión del 2026-08-04. El Cap. 8
+("Denegado") es el punto bajo del Acto I -- ambición "valle", el más
+bajo de exigencia de los tres capítulos de hoy -- y fue también el más
+tranquilo de escribir: aceptado en la primera pasada, `overall_score`
+7.39 contra umbral 6.0, sin `slop_penalty`.
+
+La denegación de la solicitud de Turín llega por carta con cinco
+considerandos, y el capítulo hace un trabajo que veníamos debiendo
+desde la evaluación del Cap. 6: le da texto concreto al Reglamento
+europeo de peritaje algorítmico de 2029, la razón formal por la que
+Tamiz -- el mejor instrumento del campo -- es ante la ley un no-perito.
+El juez encontró un solo problema real, de precisión más que de
+prosa: el capítulo afirma que la carta cita a Ferrero "con exactitud",
+pero la frase entre comillas no coincidía palabra por palabra con lo
+que Ferrero dijo en el Cap. 7. Si un texto reclama literalidad, la cita
+tiene que serlo -- se corrigió a mano.
+
+Con este capítulo cierra la sesión: Cap. 6, 7 y 8 escritos, evaluados,
+aceptados y pusheados el mismo día, los tres sobre umbral con margen
+cómodo (7.54, 7.54, 7.39), el Acto I a mitad de camino (8 de 11
+capítulos) y `state.json::debts` vacío. El patrón que se repitió los
+tres capítulos: el `overall_score` solo no alcanza para dar un capítulo
+por bueno -- hace falta leer el `eval_log` completo, porque el juez
+sigue encontrando errores reales (mecánicos, de continuidad de
+personaje, de precisión de cita) que no bajan el puntaje bajo el umbral
+pero sí habrían costado caro más adelante en el libro si no se
+corregían.
+
+Detalle completo -- beats, texto exacto de los cambios, próximo paso
+(Cap. 9, "Maître Ansermet") -- en `docs/TRASPASO.md`.
+
 ## Qué está hecho y probado
 
 - **`tests/fixtures/cap_dialogado_es.md`** (624 palabras) y
