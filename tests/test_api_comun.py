@@ -497,6 +497,93 @@ def test_max_tokens_sin_texto_alguno_sale_con_sys_exit_sin_loopear(monkeypatch):
 # respuesta completa, sin ningún aviso.
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Cacheo de prompt: `prompt` como str (sin cambios) o como list[dict]
+# {"text", "cache"} -- se convierte a content blocks con cache_control en
+# los marcados cache=True. Ver api_comun._resolver_content() y el
+# docstring del módulo.
+# ---------------------------------------------------------------------------
+
+def test_resolver_content_string_pasa_sin_cambios():
+    assert api_comun._resolver_content("hola") == "hola"
+
+
+def test_resolver_content_lista_arma_content_blocks_con_cache_control():
+    resultado = api_comun._resolver_content([
+        {"text": "estable", "cache": True},
+        {"text": "volatil", "cache": False},
+    ])
+    assert resultado == [
+        {"type": "text", "text": "estable", "cache_control": {"type": "ephemeral"}},
+        {"type": "text", "text": "volatil"},
+    ]
+
+
+def test_resolver_content_lista_sin_cache_no_agrega_cache_control():
+    resultado = api_comun._resolver_content([{"text": "sin cachear", "cache": False}])
+    assert "cache_control" not in resultado[0]
+
+
+def test_payload_manda_content_blocks_cuando_prompt_es_lista(monkeypatch):
+    capturado = {}
+
+    @contextmanager
+    def _stream_captura(method, url, headers=None, json=None, timeout=None):
+        capturado["json"] = json
+
+        class _R:
+            status_code = 200
+
+            def iter_lines(self):
+                for linea in TEXTO_SIMPLE.split("\n"):
+                    yield linea
+
+        yield _R()
+
+    monkeypatch.setattr(api_comun.httpx, "stream", _stream_captura)
+    api_comun.llamar_api(
+        prompt=[{"text": "parte fija", "cache": True}, {"text": "parte que cambia", "cache": False}],
+        model="m", max_tokens=10, api_key="k", api_base="https://x",
+    )
+    content = capturado["json"]["messages"][0]["content"]
+    assert content == [
+        {"type": "text", "text": "parte fija", "cache_control": {"type": "ephemeral"}},
+        {"type": "text", "text": "parte que cambia"},
+    ]
+
+
+def test_continuacion_con_prompt_en_bloques_preserva_cache_control_en_reintento(monkeypatch):
+    # El primer turno de usuario se reconstruye igual en la continuación
+    # (ver mecanismo de Tarea 9b) -- confirmar que sigue siendo content
+    # blocks con cache_control, no que se pierda al re-armar `mensajes`.
+    primera_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "cami"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "max_tokens"}, "usage": {"output_tokens": 100}}',
+    )
+    segunda_llamada = _sse(
+        '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',
+        '{"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "no"}}',
+        '{"type": "content_block_stop", "index": 0}',
+        '{"type": "message_delta", "delta": {"stop_reason": "end_turn"}, "usage": {"output_tokens": 1}}',
+    )
+    capturas = []
+    monkeypatch.setattr(
+        api_comun.httpx, "stream",
+        _stream_secuencia([primera_llamada, segunda_llamada], capturas=capturas),
+    )
+    api_comun.llamar_api(
+        prompt=[{"text": "estable", "cache": True}, {"text": "volatil", "cache": False}],
+        model="m", max_tokens=10, api_key="k", api_base="https://x",
+    )
+    primer_turno_segunda_llamada = capturas[1]["messages"][0]["content"]
+    assert primer_turno_segunda_llamada == [
+        {"type": "text", "text": "estable", "cache_control": {"type": "ephemeral"}},
+        {"type": "text", "text": "volatil"},
+    ]
+
+
 def test_sale_con_sys_exit_si_stop_reason_es_refusal(monkeypatch):
     cuerpo = _sse(
         '{"type": "content_block_start", "index": 0, "content_block": {"type": "text"}}',

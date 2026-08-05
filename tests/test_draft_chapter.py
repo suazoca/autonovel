@@ -228,3 +228,83 @@ def test_capitulo_demasiado_corto_sin_objetivo_nunca_marca():
     # None u 0 -- sin nada contra qué comparar, no bloquea el guardado.
     assert dc.capitulo_demasiado_corto(50, None) is False
     assert dc.capitulo_demasiado_corto(50, 0) is False
+
+
+# ---------------------------------------------------------------------------
+# build_prompt_bloques() -- cacheo de prompt. Mismas piezas que
+# build_prompt(), reordenadas en bloques {"text", "cache"} para que
+# api_comun.llamar_api() arme content blocks con cache_control en el
+# prefijo estable. Ver docstring de la función para el porqué del orden.
+# ---------------------------------------------------------------------------
+
+MUNDO_INVENTADO = "MUNDO-DE-PRUEBA-XYZ"
+CANON_INVENTADO = "HECHO-DE-FUNDACION-XYZ"
+CANON_EMERGENTE_INVENTADO = "HECHO-EMERGENTE-XYZ"
+
+
+def _build_bloques(chapter_num=1):
+    return dc.build_prompt_bloques(
+        chapter_num, STATE_INVENTADO, VOZ_INVENTADA, MUNDO_INVENTADO,
+        PERSONAJES_INVENTADOS, OUTLINE_INVENTADO, CANON_INVENTADO,
+        CANON_EMERGENTE_INVENTADO,
+    )
+
+
+def test_build_prompt_bloques_devuelve_tres_bloques_con_cache_marcado():
+    bloques = _build_bloques()
+    assert len(bloques) == 3
+    assert [b["cache"] for b in bloques] == [True, True, False]
+
+
+def test_build_prompt_bloques_bloque_estable_tiene_voz_mundo_personajes_canon():
+    estable = _build_bloques()[0]["text"]
+    assert "Marina Fontán" in estable  # personajes
+    assert MUNDO_INVENTADO in estable
+    assert CANON_INVENTADO in estable
+    assert "Vocabulario portuario" in estable  # voz
+
+    # Lo que cambia por capítulo NO debe estar en el bloque cacheado --
+    # si estuviera, cada capítulo invalidaría el cache del bloque entero.
+    assert CANON_EMERGENTE_INVENTADO not in estable
+    assert "La primera guardia" not in estable  # esquema de este capítulo
+    assert "Capítulo 1" not in estable
+
+
+def test_build_prompt_bloques_bloque_canon_emergente_aislado():
+    creciente = _build_bloques()[1]["text"]
+    assert CANON_EMERGENTE_INVENTADO in creciente
+    assert MUNDO_INVENTADO not in creciente
+    assert "La primera guardia" not in creciente
+
+
+def test_build_prompt_bloques_bloque_volatil_tiene_lo_especifico_del_capitulo():
+    volatil = _build_bloques()[2]["text"]
+    assert "Capítulo 1" in volatil
+    assert "La primera guardia" in volatil  # esquema de este capítulo
+    assert MUNDO_INVENTADO not in volatil
+    assert CANON_INVENTADO not in volatil
+    assert CANON_EMERGENTE_INVENTADO not in volatil
+
+
+def test_build_prompt_bloques_capitulo_distinto_solo_cambia_bloque_volatil():
+    # El punto entero del cacheo: reordenar el número de capítulo no debe
+    # tocar ni una letra de los bloques 0 y 1.
+    b1 = _build_bloques(chapter_num=1)
+    b2 = _build_bloques(chapter_num=2)
+    assert b1[0]["text"] == b2[0]["text"]
+    assert b1[1]["text"] == b2[1]["text"]
+    assert b1[2]["text"] != b2[2]["text"]
+
+
+def test_build_prompt_bloques_concatenado_no_pierde_contenido_de_build_prompt():
+    # No es el mismo string (build_prompt_bloques reordena para cacheo),
+    # pero no debe faltar nada de lo que build_prompt() incluye.
+    prompt_plano = dc.build_prompt(
+        1, STATE_INVENTADO, VOZ_INVENTADA, MUNDO_INVENTADO, PERSONAJES_INVENTADOS,
+        OUTLINE_INVENTADO, CANON_INVENTADO, CANON_EMERGENTE_INVENTADO,
+    )
+    concatenado = "".join(b["text"] for b in _build_bloques())
+    for fragmento in [MUNDO_INVENTADO, CANON_INVENTADO, CANON_EMERGENTE_INVENTADO,
+                      "Marina Fontán", "La primera guardia", "Capítulo 1"]:
+        assert fragmento in prompt_plano
+        assert fragmento in concatenado

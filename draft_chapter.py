@@ -185,8 +185,13 @@ def ultimos_finales(n=3):
     return finales
 
 
-def build_prompt(chapter_num, state, voice, world, characters, outline, canon,
-                  canon_emergente=""):
+def _piezas_prompt(chapter_num, state, voice, world, characters, outline, canon,
+                    canon_emergente=""):
+    """Calcula todas las piezas de texto del prompt de redacción, sin
+    ensamblarlas todavía -- las usan tanto `build_prompt()` (un solo
+    string, orden legible para humanos, lo que siguen testeando los
+    tests existentes) como `build_prompt_bloques()` (mismas piezas,
+    reordenadas para cacheo de prompt: ver esa función)."""
     titulo = (state.get("titulo") or state.get("title") or "").strip()
     pov_nombre = extraer_pov(characters)
     persona_tiempo = extraer_persona_tiempo(voice)
@@ -289,41 +294,131 @@ def build_prompt(chapter_num, state, voice, world, characters, outline, canon,
         f"{i+1}. {t}" for i, t in enumerate(patrones_a_evitar, start=len(instrucciones))
     )
 
-    return f"""{encabezado}
+    return {
+        "encabezado": encabezado,
+        "voice": voice,
+        "chapter_outline": chapter_outline,
+        "next_chapter": next_chapter,
+        "prev_tail": prev_tail,
+        "world": world,
+        "characters": characters,
+        "canon": canon,
+        "canon_emergente": canon_emergente,
+        "instrucciones_texto": instrucciones_texto,
+        "patrones_texto": patrones_texto,
+    }
+
+
+def build_prompt(chapter_num, state, voice, world, characters, outline, canon,
+                  canon_emergente=""):
+    p = _piezas_prompt(chapter_num, state, voice, world, characters, outline,
+                        canon, canon_emergente)
+    return f"""{p['encabezado']}
 
 DEFINICIÓN DE VOZ (seguila exactamente):
-{voice}
+{p['voice']}
 
 ESQUEMA DE ESTE CAPÍTULO (cumplí cada beat):
-{chapter_outline}
+{p['chapter_outline']}
 
 ESQUEMA DEL PRÓXIMO CAPÍTULO (para la continuidad -- terminá este capítulo de forma que fluya hacia el siguiente):
-{next_chapter}
+{p['next_chapter']}
 
 FINAL DEL CAPÍTULO ANTERIOR (continuá desde acá):
-{prev_tail}
+{p['prev_tail']}
 
 BIBLIA DE MUNDO (referencia para detalles de ambientación):
-{world}
+{p['world']}
 
 REGISTRO DE PERSONAJES (referencia para patrones de habla y comportamiento):
-{characters}
+{p['characters']}
 
 CANON (hechos duros de fundación -- no los contradigas):
-{canon}
+{p['canon']}
 
 CANON EMERGENTE (hechos establecidos en capítulos anteriores durante la
 redacción -- misma fuerza que el canon de arriba, no los contradigas):
-{canon_emergente}
+{p['canon_emergente']}
 
 INSTRUCCIONES DE ESCRITURA:
-{instrucciones_texto}
+{p['instrucciones_texto']}
 
 PATRONES A EVITAR:
-{patrones_texto}
+{p['patrones_texto']}
 
 Escribí el capítulo ahora. Texto completo, de principio a fin.
 """
+
+
+def build_prompt_bloques(chapter_num, state, voice, world, characters, outline, canon,
+                          canon_emergente=""):
+    """Mismas piezas que build_prompt(), reordenadas y separadas en
+    bloques para cacheo de prompt (prefix match -- ver shared/prompt-
+    caching.md del skill claude-api). Lo estable (voz+mundo+personajes+
+    canon de fundación, idéntico en TODO el libro) va primero y cacheado;
+    el canon emergente (crece cada capítulo, pero es idéntico dentro de
+    los reintentos de UN mismo capítulo) va cacheado aparte; lo que
+    cambia siempre (número de capítulo, esquema de este capítulo,
+    cola del anterior, instrucciones) va al final, sin cachear.
+
+    El orden de LECTURA humana de build_prompt() (voz, esquema, mundo...)
+    no es el orden óptimo para cacheo -- acá se prioriza que el prefijo
+    estable sea items idénticos byte a byte entre llamadas, no la
+    narrativa de lectura. El modelo no depende del orden entre secciones
+    con encabezado propio, solo de que cada una esté clara.
+
+    Devuelve una lista de dicts `{"text": ..., "cache": bool}` --
+    `api_comun.llamar_api()` ya acepta `prompt` como lista (arma
+    content blocks con `cache_control` en los marcados `cache: True`) o
+    como string (comportamiento sin cambios); ver docstring del módulo."""
+    p = _piezas_prompt(chapter_num, state, voice, world, characters, outline,
+                        canon, canon_emergente)
+
+    bloque_estable = f"""DEFINICIÓN DE VOZ (seguila exactamente):
+{p['voice']}
+
+BIBLIA DE MUNDO (referencia para detalles de ambientación):
+{p['world']}
+
+REGISTRO DE PERSONAJES (referencia para patrones de habla y comportamiento):
+{p['characters']}
+
+CANON (hechos duros de fundación -- no los contradigas):
+{p['canon']}
+"""
+
+    bloque_canon_emergente = f"""
+CANON EMERGENTE (hechos establecidos en capítulos anteriores durante la
+redacción -- misma fuerza que el canon de arriba, no los contradigas):
+{p['canon_emergente']}
+"""
+
+    bloque_volatil = f"""
+{p['encabezado']}
+
+ESQUEMA DE ESTE CAPÍTULO (cumplí cada beat):
+{p['chapter_outline']}
+
+ESQUEMA DEL PRÓXIMO CAPÍTULO (para la continuidad -- terminá este capítulo de forma que fluya hacia el siguiente):
+{p['next_chapter']}
+
+FINAL DEL CAPÍTULO ANTERIOR (continuá desde acá):
+{p['prev_tail']}
+
+INSTRUCCIONES DE ESCRITURA:
+{p['instrucciones_texto']}
+
+PATRONES A EVITAR:
+{p['patrones_texto']}
+
+Escribí el capítulo ahora. Texto completo, de principio a fin.
+"""
+
+    return [
+        {"text": bloque_estable, "cache": True},
+        {"text": bloque_canon_emergente, "cache": True},
+        {"text": bloque_volatil, "cache": False},
+    ]
 
 
 def main():
@@ -337,8 +432,8 @@ def main():
     canon = load_file(BASE_DIR / "canon.md")
     canon_emergente = load_file(BASE_DIR / "canon_emergente.md")
 
-    prompt = build_prompt(chapter_num, state, voice, world, characters, outline, canon,
-                           canon_emergente)
+    prompt = build_prompt_bloques(chapter_num, state, voice, world, characters, outline, canon,
+                                   canon_emergente)
 
     print(f"Drafting Chapter {chapter_num}...", file=sys.stderr)
     result = call_writer(prompt)

@@ -10,6 +10,8 @@ en código a partir de las dimensiones que el juez sí puntuó: 70% la media
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
@@ -85,3 +87,73 @@ def test_chapter_prompt_ya_no_le_pide_overall_score_al_juez():
     """El juez puntúa dimensiones; overall_score lo agrega el código
     (evaluate_chapter), no lo inventa el LLM como campo suelto."""
     assert '"overall_score"' not in ev.CHAPTER_PROMPT
+
+
+# ---------------------------------------------------------------------------
+# _bloques_cache_chapter_prompt() -- cacheo de prompt. Parte el
+# CHAPTER_PROMPT ya formateado en bloques {"text", "cache"} sin tocar la
+# plantilla en sí (CHAPTER_PROMPT tiene su propio registro de contenido
+# exacto en test_guardia_prompts.py y en test_chapter_prompt_tiene_
+# frase_ancla_y_no_menciona_fantasy -- no se puede reescribir la
+# plantilla para esto).
+# ---------------------------------------------------------------------------
+
+def _chapter_prompt_de_prueba(canon_emergente="EMERGENTE-XYZ"):
+    return ev.CHAPTER_PROMPT.format(
+        voice="VOZ-XYZ", world="MUNDO-XYZ", characters="PERSONAJES-XYZ",
+        canon="CANON-XYZ", canon_emergente=canon_emergente,
+        chapter_outline="ESQUEMA-CAP-XYZ", prev_chapter_tail="COLA-ANTERIOR-XYZ",
+        chapter_text="TEXTO-DEL-CAPITULO-XYZ",
+    )
+
+
+def test_bloques_cache_chapter_prompt_devuelve_tres_bloques_con_cache_marcado():
+    bloques = ev._bloques_cache_chapter_prompt(_chapter_prompt_de_prueba())
+    assert len(bloques) == 3
+    assert [b["cache"] for b in bloques] == [True, True, False]
+
+
+def test_bloques_cache_chapter_prompt_bloque_estable_no_tiene_lo_variable():
+    estable = ev._bloques_cache_chapter_prompt(_chapter_prompt_de_prueba())[0]["text"]
+    assert "VOZ-XYZ" in estable
+    assert "MUNDO-XYZ" in estable
+    assert "PERSONAJES-XYZ" in estable
+    assert "CANON-XYZ" in estable
+    assert "EMERGENTE-XYZ" not in estable
+    assert "ESQUEMA-CAP-XYZ" not in estable
+    assert "TEXTO-DEL-CAPITULO-XYZ" not in estable
+
+
+def test_bloques_cache_chapter_prompt_bloque_emergente_aislado():
+    creciente = ev._bloques_cache_chapter_prompt(_chapter_prompt_de_prueba())[1]["text"]
+    assert "EMERGENTE-XYZ" in creciente
+    assert "MUNDO-XYZ" not in creciente
+    assert "TEXTO-DEL-CAPITULO-XYZ" not in creciente
+
+
+def test_bloques_cache_chapter_prompt_bloque_volatil_tiene_lo_del_capitulo():
+    volatil = ev._bloques_cache_chapter_prompt(_chapter_prompt_de_prueba())[2]["text"]
+    assert "ESQUEMA-CAP-XYZ" in volatil
+    assert "COLA-ANTERIOR-XYZ" in volatil
+    assert "TEXTO-DEL-CAPITULO-XYZ" in volatil
+    assert "MUNDO-XYZ" not in volatil
+
+
+def test_bloques_cache_chapter_prompt_solo_canon_emergente_distinto_no_toca_bloque_estable():
+    # El punto entero del cacheo: que crezca canon_emergente entre
+    # capítulos no debe tocar ni una letra del bloque estable.
+    b1 = ev._bloques_cache_chapter_prompt(_chapter_prompt_de_prueba("EMERGENTE-CORTO"))
+    b2 = ev._bloques_cache_chapter_prompt(_chapter_prompt_de_prueba("EMERGENTE-MUCHO-MAS-LARGO-CON-MAS-HECHOS"))
+    assert b1[0]["text"] == b2[0]["text"]
+    assert b1[1]["text"] != b2[1]["text"]
+
+
+def test_bloques_cache_chapter_prompt_concatenado_reproduce_el_original():
+    original = _chapter_prompt_de_prueba()
+    bloques = ev._bloques_cache_chapter_prompt(original)
+    assert "".join(b["text"] for b in bloques) == original
+
+
+def test_bloques_cache_chapter_prompt_revienta_si_no_encuentra_las_anclas():
+    with pytest.raises(ValueError):
+        ev._bloques_cache_chapter_prompt("un prompt cualquiera sin las secciones esperadas")

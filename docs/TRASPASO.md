@@ -1,10 +1,39 @@
 # TRASPASO — rama `novela2` (worktree de `framework/es-multilibro`)
 
-Estado real al cierre de esta sesión (2026-08-04). Este documento
+Estado real al cierre de esta sesión (2026-08-05). Este documento
 reemplaza la necesidad de releer `ESTADO.md` completo o el historial de
 commits para retomar el trabajo -- es la foto actual, no la bitácora
 (para eso está `ESTADO.md`, que sí es narrativo y tiene una sección
 nueva para esta rama).
+
+**Actualización 2026-08-05 (sesión nueva -- Cap. 12 a 19, cacheo de
+prompt):** ocho capítulos más, los ocho aceptados (dos con rechazo y
+reescritura en el medio: Cap. 19 rechazó una vez). `overall_score`:
+Cap. 12=7.23, 13=6.86, 14=7.39, 15=7.70, 16=6.93, 17=6.93, 18=6.70,
+19=6.78. **Acto II, parte 1, en curso -- 8 de 12 capítulos (Cap.
+12-23).** `state.json::debts` vacío, working tree limpio, 266 tests en
+verde (18 nuevos). Detalle completo de cada capítulo en "Redacción".
+
+Dos cosas de infraestructura nuevas esta sesión, ambas a pedido
+explícito del usuario:
+
+1. **Cacheo de prompt implementado y verificado contra la API real**
+   (`api_comun.py`, `draft_chapter.py::build_prompt_bloques()`,
+   `evaluate.py::_bloques_cache_chapter_prompt()`) -- ver sección
+   dedicada más abajo. Confirmado con una llamada real: primera
+   llamada `cache_creation_input_tokens=50085`, segunda llamada mismo
+   prefijo `cache_read_input_tokens=50085`. En producción desde el
+   Cap. 17.
+2. **Fable 5 rechaza contenido de vigilancia/evasión de seguridad con
+   `stop_reason=refusal`, categoría "cyber"** -- pasó en el Cap. 14 y
+   el Cap. 15 (ambos con contenido de arquitectura de vigilancia /
+   fabricación de la réplica), de forma repetible, no ruido aleatorio.
+   Workaround usado las dos veces: `AUTONOVEL_WRITER_MODEL=claude-opus-5`
+   solo para esa llamada, sin tocar `.env` ni ningún archivo. Opus 5
+   escribió esos dos capítulos sin que el juez marcara ningún problema
+   de voz atribuible al cambio de modelo. Ver "Fable 5: rechazos de
+   contenido" más abajo, sección renombrada y actualizada (antes
+   "Bugs de compatibilidad con Fable 5").
 
 **Actualización 2026-08-04 (cierre de sesión, continuación -- Cap. 9,
 10 y 11):** misma sesión que cerró el Cap. 6/7/8, retomada más tarde el
@@ -108,18 +137,16 @@ vuelta**.
 
 ## En una línea
 
-Fundación completa y aprobada. **Acto I completo: Cap. 1 a 11
-escritos, evaluados y aceptados (11 de 11).** Seis capítulos se
-escribieron en una sola sesión (2026-08-04): Cap. 6 a 11, puntajes
-7.54 / 7.54 / 7.39 / 7.39 / 7.47 / 7.86, todos sobre umbral, con
-cuatro correcciones reales encontradas por el juez o por
-`actualizar_canon.py` más allá de la prosa (tic de personaje reusado
-en el Cap. 7, cita no textual en el Cap. 8, hueco de calendario en el
-Cap. 9, hueco de calendario en el Cap. 11). `state.json::debts` vacío,
-sin `CONFLICTO` de canon abiertos. Nuevo: `chapter_to_pdf.py`
-versionado, formato cerrado, PDF de lectura entregado para Cap. 9-11.
-Listo para **Cap. 12 ("Collegno")**, arranque del Acto II (Fun and
-Games) -- ver "Próximo paso".
+Fundación completa y aprobada. **Acto I completo (Cap. 1-11). Acto II,
+parte 1, en curso: Cap. 12 a 19 escritos, evaluados y aceptados (8 de
+12 -- faltan 20-23 para llegar al Midpoint).** `state.json::debts`
+vacío, sin `CONFLICTO` de canon abiertos, 266 tests en verde. Cacheo de
+prompt implementado y confirmado contra la API real, en producción
+desde el Cap. 17. Fable 5 rechazó dos capítulos por contenido de
+vigilancia/fabricación (categoría "cyber", falso positivo) -- resuelto
+cambiando a Opus 5 solo para esas dos llamadas puntuales. Listo para
+**Cap. 20 ("Cologny")**, ambición **pico** -- primera aparición en
+persona de Sandoz -- ver "Próximo paso".
 
 ## Estado del repositorio
 
@@ -130,7 +157,7 @@ Games) -- ver "Próximo paso".
 | `.env` / `ANTHROPIC_API_KEY` | Presente en este entorno. `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
 | Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: el de cierre de esta sesión (Cap. 8 + `docs/`) -- confirmar con `git log -1 --oneline`. |
 | Working tree | Limpio -- confirmar con `git status`. |
-| Tests | `uv run python -m pytest tests/ -v` -- **248 tests, todos en verde, + 38 xfail esperados** (2 más que a mitad de sesión; no se tocó código de producción, la diferencia es cobertura nueva). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
+| Tests | `uv run python -m pytest tests/ -v` -- **266 tests, todos en verde, + 38 xfail esperados** (18 nuevos esta sesión: cacheo de prompt en `api_comun.py`/`draft_chapter.py`/`evaluate.py`). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
 | Token de GitHub | Fine-grained, creado 2026-07-27, alcance `suazoca/autonovel`, permiso `Contents: read/write`, **vence ~2026-08-26**. Al vencer, limpiar la credencial guardada con `git credential reject` (protocol=https, host=github.com) antes de autenticar con uno nuevo. Usado sin problemas esta sesión (push directo, sin reingresar credencial). |
 
 ## Fundación (completa, aprobada -- sin cambios esta sesión)
@@ -139,7 +166,7 @@ Games) -- ver "Próximo paso".
 |---|---|
 | `voice.md` | Completo (Parte 1 + Parte 2 generada desde la semilla, commit `61aeee4`) |
 | `world.md` | Completo, revisado (último cierre: commit `dde01c4`) |
-| `characters.md` | Vidal, Sandoz, Chiara y Ferrero completos. **Ledda, Ansermet y Ceruti siguen "ficha pendiente de generación"** -- sin cambios de archivo esta sesión (commit `6f110dc`), aunque Ansermet ya protagonizó tres capítulos (9, 10, 11) por voz sola, sin ficha formal. Conviene generarle una antes de que aparezca Ledda en Collegno (Cap. 12) para no repetir el mismo hueco con dos personajes a la vez. |
+| `characters.md` | Vidal, Sandoz, Chiara y Ferrero completos. **Ledda y Ceruti siguen "ficha pendiente de generación"** -- sin cambios de archivo (commit `6f110dc`), aunque Ledda ya protagonizó ocho capítulos (12-19) por voz sola: varón, tres vasos de agua, contesta con plazos, sin adjetivos ni pronombres emocionales. Ansermet tampoco tiene ficha formal pero ya está bien establecido por voz (seis capítulos). Ceruti no apareció todavía -- no urge. Sigue siendo deuda técnica, no bloqueante. |
 | `outline.md` | 46 capítulos, Save the Cat + MICE anidado (commit `c85b90f`, reestructurado Cap. 5/6 en `52be40f`/`1c5445b`). Sin cambios esta sesión |
 | `canon.md` | Regenerado sobre los documentos completos, commiteado (`e2233bc`) |
 
@@ -410,6 +437,184 @@ Los tres capítulos (9, 10, 11) generaron su PDF de lectura con
 `chapter_to_pdf.py` (ver sección dedicada) y quedan pendientes de
 commit -- ver "Estado del repositorio".
 
+`chapters/ch_12.md` ("Collegno", Fun and Games -- primer capítulo del
+**Acto II**) -- Vidal llega al laboratorio de Collegno, mejor que
+cualquier universidad o museo, y conoce al equipo que otro eligió por
+él: **Chiara Fabbri** (conservadora textil, detecta un defecto en su
+propio escáner con solo mirarlo), **Ledda** (seguridad, sin
+pronombres, fija la regla de oro -- "una identidad verdadera con
+motivos ocultos", hilo #19, plantado en presencia de Chiara sin que
+nadie note que la describe a ella) y **Ferrero** -- reencuentro que
+paga la reunión del Cap. 7, ninguno menciona la denegación. Cierra con
+la hoja de asistencia del piso franco sin columna de función: Vidal ya
+no sabe si dirige o asiste. `overall_score` 7.23, aceptado en primera
+pasada. 1943 palabras.
+
+`chapters/ch_13.md` ("Dos manos", B Story, valle) -- sesión de trabajo
+con lino de prueba: Chiara le enseña a Vidal, sin dar cátedra, lo que
+soporta una fibra. Nace el hilo #12 (tic de Chiara de enrollar cables
+antes de una pregunta difícil) y la pregunta que abre la historia B:
+"Te pregunto qué hacés vos. No qué hace el modelo." Chiara reza antes
+de comer y desarma con argumentos técnicos reales una hipótesis que a
+Vidal le parecía prometedora -- contraejemplo viviente de su propia
+mentira. `overall_score` 6.86, aceptado. **Conflicto real corregido:**
+el borrador nombraba a "Sandoz" en el pensamiento de Vidal, violando
+la tercera persona limitada (no lo conoce hasta el segundo tercio del
+libro) -- corregido a "el fundador, el mandante, la firma detrás de la
+firma". 2320 palabras.
+
+`chapters/ch_14.md` ("Ventanas", Fun and Games) -- Ledda presenta la
+arquitectura completa: sustitución en la ventana del traslado (11-12
+de abril), devolución en una de dos ventanas el 29 (once o seis
+minutos -- **hilo #4, plantado**). Recorrido del perímetro de la
+catedral, cámaras con reidentificación, extractos cruzados por los
+Carabinieri. Vidal entiende que la donación de la teca no compró la
+reliquia, compró la ventana en que se la manipula (refuerzo del hilo
+#20). **Fable 5 rechazó dos veces (`stop_reason=refusal`, categoría
+"cyber") sobre este contenido de vigilancia** -- se redactó con
+`AUTONOVEL_WRITER_MODEL=claude-opus-5` para esa sola llamada, sin
+tocar `.env`. `overall_score` 7.39, aceptado. Corregido un error
+aritmético real: "del once a las siete de la mañana al doce a la una"
+sin AM/PM leído como 18h en vez de las 30h de `world.md` -- corregido
+a "la una de la tarde". 2202 palabras.
+
+`chapters/ch_15.md` ("La gemela", Fun and Games) -- Chiara fabrica la
+réplica con una exactitud "reverente" (palabra que incomoda a Vidal).
+La gemela falla la primera prueba de peso hidratado -- Chiara pide que
+la discrepancia quede a su nombre. Ferrero negocia los miligramos de
+fibra con el mejor argumento moral del libro hasta ahora ("para usted
+es una muestra; para dos mil millones de personas es una herida en el
+cuerpo de otra persona") y Vidal cede un 20% sin poder explicar por
+qué -- primera derrota práctica de su mentira. Regla dura en acta: la
+gemela engaña vista/peso/sensores, no microscopio ni datación --
+**hilo #5, plantado** (mecanismo del Acto III). **Fable 5 rechazó de
+nuevo (misma categoría "cyber")** -- Opus 5 otra vez, sin problemas de
+voz. `overall_score` 7.70 -- el mejor puntaje de la novela hasta
+ahora. Sin conflictos de canon. 1835 palabras.
+
+`chapters/ch_16.md` ("Protocolo", Fun and Games) -- se firma el
+protocolo completo en 18 puntos con cronograma hora por hora. Chiara
+pregunta quién recibe los datos crudos -- Vidal rechaza su desconfianza
+con la frase que define su mentira: "Desconfiar sin mecanismo es
+superstición con vocabulario de prudencia" (va a volver). Chiara le
+pregunta a Ferrero por el inventario de 2002 disfrazada de necesidad
+técnica -- silencio de hielo medido en clics de caudalímetro (**hilos
+#7 y #13, plantados**). Ferrero impone veto sin causa sobre cualquier
+anuncio durante la operación, sobre un conjunto vacío -- lo firma
+igual. `overall_score` 6.93, aceptado. Tres correcciones reales:
+voseo accidental de Vidal (español de Zaragoza, tutea -- corregido a
+"Desconfías"/"Dime"/"tienes"), error de numeración de días en el
+cronograma (el 29 de abril era "Día diecisiete" cuando debía ser
+"dieciocho" para cerrar con los 17 días de `world.md`), e
+inconsistencia "una sola copia" vs. "copia de trabajo" de Chiara. 1856
+palabras.
+
+`chapters/ch_17.md` ("Cena en Turín", Fun and Games -- respiro, Yes-and
+deliberado, el único capítulo del libro donde nada empeora) -- cena del
+equipo la última noche antes del traslado. Ferrero cuenta el incendio
+de 1997 con humor fúnebre piamontés. Ledda contesta cada pregunta
+personal con un plazo. Ferrero habla de 1988 en pasiva y se toca la
+muñeca izquierda donde no hay reloj -- gesto ajustado a nada, sin
+nombrar al hermano (**hilo #14, profundizado**). Lavando los platos,
+la conversación más larga sin instrumentos del libro: Chiara le
+pregunta qué va a hacer *él*, no el modelo. Esa noche Vidal no revisa
+nada antes de dormir por primera vez en años -- registrado como
+omisión, no como paz. `overall_score` 6.93, aceptado. **Conflicto real
+de calendario corregido:** la cena estaba fechada "mañana" (11 de
+abril, el mismo día que arranca el traslado de 30h) en el Cap. 16 --
+corregida a la noche del propio 10 (la víspera real) en ambos
+capítulos. 1791 palabras.
+
+`chapters/ch_18.md` ("Listas cruzadas", Fun and Games -- complicación)
+-- los Carabinieri adelantan el cruce de contratistas por la visita
+papal, un proveedor de Collegno queda marcado, Ledda ejecuta el
+repliegue (corte, refacturación en efectivo, dos semanas de margen
+quemadas). El cronograma de la gemela ya no cierra: de tres pruebas
+completas contra sensores pasa a una. Ferrero usa la crisis para
+proponer reducir el alcance del análisis -- la mano izquierda
+saboteando lo que la derecha perfecciona, con la coartada de haberle
+regalado a Vidal una tabla de emisividad mejorada el mismo día
+(**patrón de sabotaje suave, plantado -- se paga en el Cap. 32**).
+Cierra con Vidal re-verificando de madrugada calibraciones que no lo
+necesitan -- "Nueve pitidos. Los contó." `overall_score` 6.70,
+aceptado. Dos correcciones reales: el capítulo abría el 28 de marzo,
+retrocediendo 13 días respecto del final del Cap. 17 sin ninguna señal
+-- se agregó un ancla temporal ("Trece días antes de la cena..."); y
+un conflicto de horario (7:10 vs. las 7:00 ya establecidas para el
+ingreso del equipamiento) -- corregido. 1770 palabras.
+
+`chapters/ch_19.md` ("Ensayo general", Fun and Games) -- ensayo
+completo de la sustitución sobre una maqueta con cinta azul, tres
+corridas, una con simulacro de intrusión de la Comisión. La gemela v2
+pasa la única prueba completa que le quedó al cronograma recortado.
+Ferrero, con los guantes puestos, repite la regla como quien reza:
+diecisiete días, ni uno más (**hilo #6, reforzado; hilo #5, tercera
+repetición antes del Midpoint**). Ansermet confirma que la ventana
+sigue en pie, Vidal firma "adelante" -- y Ansermet rompe su propio
+esquema de tres cosas con una cuarta: el fundador lo recibe en dos
+días, en Cologny. Cierra con "Entregable: identidad del mandante".
+**Único capítulo de la sesión rechazado en primera pasada** (`overall_score`
+6.02 contra 6.5) por un problema estructural real: el outline fija la
+reunión de Cologny "cuarenta y ocho horas antes del traslado", así que
+este capítulo (y el 20) transcurren *antes* del final del Cap. 18 --
+sin ninguna marca de retroceso, el lector quedaba desorientado, y
+además la fecha elegida para Cologny (9 de abril) chocaba con canon ya
+establecido desde el Cap. 12 (los racks de Tamiz llegan a Collegno ese
+mismo día). Reescrita la apertura para que sea Vidal mismo, en la
+madrugada del 11 (empalmando con la alarma del Cap. 18), releyendo su
+propio registro de la semana -- motiva el salto atrás en vez de un
+corte arbitrario -- y corridas todas las fechas a partir del 6 de
+abril para que Cologny caiga el 8, sin chocar con nada. Segunda
+evaluación: 6.78, aceptado. Ya aceptado, se encontró y corrigió además
+una contradicción física real (la gemela no podía estar en el falso
+fondo del ensayo y llevar 48h continuas en la celda de sensores a la
+vez). 1911 palabras.
+
+Los ocho capítulos (12-19) generaron su PDF de lectura con
+`chapter_to_pdf.py` y quedan pendientes de commit -- ver "Estado del
+repositorio".
+
+## Cacheo de prompt -- implementado y verificado (Cap. 17 en adelante)
+
+Pedido explícito del usuario tras ver que `evaluate.py` se quedaba sin
+`max_tokens` tras crecer `canon_emergente.md` (Cap. 16, ver más abajo).
+Antes de esto, `api_comun.py` documentaba el cacheo como pendiente y
+asumía (equivocadamente) que hacía falta un beta header sin verificar
+-- las dos cosas eran incorrectas: `cache_control: {"type":
+"ephemeral"}` es GA.
+
+**Diseño:** `llamar_api()` (`api_comun.py`) ahora acepta `prompt` como
+`str` (comportamiento de siempre, sin cambios -- los ~17 scripts que
+no adoptaron esto no se enteran) o como `list[dict]` con la forma
+`{"text": ..., "cache": bool}`, convertida por `_resolver_content()` a
+content blocks con `cache_control` en los marcados `cache: True`.
+`draft_chapter.py::build_prompt_bloques()` reordena el prompt (el de
+lectura humana, `build_prompt()`, queda intacto para no romper tests)
+para que lo 100% estable en todo el libro (voz + mundo + personajes +
+canon de fundación) sea el primer bloque cacheado, `canon_emergente`
+el segundo bloque cacheado aparte (crece cada capítulo pero es
+idéntico entre reintentos del mismo capítulo), y lo que cambia siempre
+(número de capítulo, esquema, cola del anterior) quede sin cachear.
+`evaluate.py::_bloques_cache_chapter_prompt()` hace lo mismo partiendo
+el `CHAPTER_PROMPT` ya formateado en los mismos tres puntos, sin tocar
+la plantilla en sí (el registro de `test_guardia_prompts.py` depende
+de su contenido exacto).
+
+**Verificado contra la API real** (no solo "debería andar"): con el
+bloque estable + canon emergente del Cap. 17 (~50.000 tokens), primera
+llamada `cache_creation_input_tokens=50085, cache_read_input_tokens=0`;
+segunda llamada con el mismo prefijo, `cache_creation_input_tokens=0,
+cache_read_input_tokens=50085`. Funciona. 18 tests nuevos cubren la
+conversión de bloques y que el bloque estable no cambie entre
+capítulos (`test_api_comun.py`, `test_draft_chapter.py`,
+`test_evaluate.py`).
+
+**En producción desde el Cap. 17** (primer capítulo redactado después
+de implementarlo). El ahorro crece capítulo a capítulo a medida que
+`canon_emergente.md` se agranda -- es la razón de ser del cambio, no
+solo costo: sin esto, `evaluate.py` se iba a seguir quedando sin
+`max_tokens` cada vez más seguido.
+
 ## Cap. 5: por qué se reescribió entero (sesión anterior, sin cambios)
 
 Sin novedades esta sesión. Detalle completo en la versión anterior de
@@ -417,10 +622,42 @@ este documento / `docs/ESTADO.md`: se reescribió entero porque el
 Cap. 46 (Final Image) depende de una primera entrada al edículo que el
 borrador original no dramatizaba. `overall_score` final 7.54.
 
-## Bugs de compatibilidad con Fable 5 (sesión anterior, sin cambios)
+## Fable 5: rechazos de contenido (antes "Bugs de compatibilidad", renombrada)
 
-Sin novedades esta sesión. Detalle completo en versiones anteriores de
-este documento / `docs/ESTADO.md`.
+`api_comun.py` ya documentaba (Tarea 9b, sesión anterior) que
+`stop_reason=refusal` existe y hay que manejarlo explícitamente --
+"pasa incluso con prompts inocuos, aparentemente un falso positivo".
+Esta sesión lo confirmó dos veces más, con un patrón: **categoría
+"cyber", sobre contenido de vigilancia/evasión de seguridad o
+fabricación de una réplica** -- Cap. 14 (arquitectura de vigilancia de
+la catedral, cámaras, cruces de la prefectura) y Cap. 15 (fabricación
+de la gemela, engañar sensores). Ficción de atraco, nada real -- casi
+seguro falso positivo del clasificador, no una señal de que el
+contenido sea problemático de verdad.
+
+**Workaround usado las dos veces, sin tocar ningún archivo:**
+```bash
+AUTONOVEL_WRITER_MODEL=claude-opus-5 uv run python draft_chapter.py 14
+```
+Opus 5 escribió los dos capítulos sin que el juez marcara ningún
+problema de voz atribuible al cambio de modelo -- ni una mención en
+`voice_adherence` ni en `character_voice` de ningún de los dos
+`eval_log`. Si vuelve a pasar en capítulos con contenido similar (el
+resto del atraco, Acto II parte 2 especialmente), el mismo workaround
+sirve: reintentar una vez por si no es determinístico (no lo fue
+ninguna de las dos veces, rechazó ambas), y si persiste, cambiar el
+modelo solo para esa llamada.
+
+**Nota de esta sesión, sigue vigente:** `evaluate.py`
+(`call_judge()`, línea ~875) tenía `max_tokens=8000` fijo para el juez
+por capítulo -- con `canon_emergente.md` ya en 15-16 capítulos, el
+*thinking* de Opus 5 se lo comió entero dos veces seguidas sin devolver
+texto (`ERROR: la respuesta se truncó por max_tokens sin producir
+ningún texto`). Subido a 16000 (mismo valor que ya usaba otro llamado
+del archivo). El cacheo de prompt (sección de arriba) no resuelve esto
+-- el modelo igual tiene que razonar sobre todo el contenido, cacheo
+solo abarata el costo de mandarlo, no el thinking sobre él. Si vuelve a
+pasar más adelante en el libro, subir de nuevo.
 
 ## PDF de lectura por capítulo -- formato ya cerrado, no tocar más
 
@@ -480,23 +717,31 @@ siendo la fuente de verdad. Sin cambios esta sesión.
 
 ## Tarea 10 -- acumulación de canon durante la redacción (en producción real)
 
-El mecanismo (`canon_emergente.md` + `actualizar_canon.py`) suma seis
-capítulos más esta sesión (6 a 11). Total acumulado: 11 capítulos
-(Acto I completo), seis `CONFLICTO` detectados en total a lo largo de
-toda la producción y resueltos a mano (Ruti, Zúrich, cronología del
-Sepulcro, fundación vs. outline del Cap. 5 -- sesiones anteriores; Cap.
-9 y Cap. 11 -- esta sesión), ninguno sin resolver.
+El mecanismo (`canon_emergente.md` + `actualizar_canon.py`) suma
+catorce capítulos más entre las dos sesiones de 2026-08-04/05 (6 a
+19). Total acumulado: 19 capítulos, **doce `CONFLICTO` detectados en
+total** a lo largo de toda la producción y resueltos a mano, ninguno
+sin resolver. De esta sesión (Cap. 12-19): seis `CONFLICTO`, todos
+reales salvo uno --
 
-De los dos de esta sesión: el del **Cap. 9** era un `CONFLICTO` real
-(la restitución prometida "antes" de la inspección del 29, cuando
-`world.md` dice que ocurre "durante"). El del **Cap. 11** fue un
-**falso positivo** -- el detector cazó "libro anotado a lápiz +
-devolución" y lo comparó contra el tic de Sandoz sin poder distinguir
-que la regla habla de libros ajenos y este es propio del personaje.
-Ambos exigieron lectura humana del `contradice` para decidir si el
-texto estaba mal o el detector estaba disparando en falso; el mecanismo
-por sí solo no alcanza para esa distinción, hay que seguir revisando
-cada `CONFLICTO` a mano en vez de asumir que todos son errores reales.
+- **Cap. 13**: real -- "Sandoz" nombrado antes de que Vidal lo conozca.
+- **Cap. 14**: real -- error de AM/PM en el horario del traslado.
+- **Cap. 16**: real -- numeración de días del cronograma off-by-one.
+- **Cap. 17**: real -- la cena fechada el mismo día del traslado.
+- **Cap. 18**: real -- 7:10 vs. 7:00 para el mismo evento.
+- **Cap. 19**: real -- la gemela en dos lugares a la vez (encontrado
+  después de aceptado, no vía `actualizar_canon.py` sino por lectura
+  del `eval_log` completo).
+
+Ninguno de los seis fue falso positivo esta sesión (a diferencia de la
+sesión anterior: Cap. 9 real, Cap. 11 falso positivo) -- el patrón que
+está emergiendo es que la mayoría de los `CONFLICTO` de esta etapa del
+libro son choques de calendario/aritmética genuinos, no ruido del
+detector. Con el cronograma del atraco ahora fijado con precisión de
+minutos (protocolo de 18 puntos, ventanas de 40/11/6 minutos, 30 horas
+exactas de traslado), cada capítulo nuevo tiene mucha más superficie
+donde un número puede no cerrar. Seguir el mismo hábito: ante un
+`CONFLICTO`, leer el `contradice` completo antes de tocar el texto.
 
 El hallazgo del Cap. 7 (tic de lápiz reservado a Sandoz, dado por error
 a Ferrero) no fue un `CONFLICTO` de `actualizar_canon.py` -- lo marcó
@@ -523,8 +768,11 @@ por palabra.
 - **Tareas 1b, 1b-bis y 13** -- traducir los prompts contaminados que
   encontró la Tarea 12. Sin cambios; detalle en
   `tests/test_guardia_prompts.py::DEUDA_CONOCIDA`.
-- **Fichas completas** de Ledda, Ansermet y Ceruti en `characters.md`.
-  Sin cambios. Ansermet aparece recién en el Cap. 9 -- no urge todavía.
+- **Fichas completas** de Ledda y Ceruti en `characters.md` (Ansermet
+  ya no está en esta lista -- sigue sin ficha formal, pero ya está bien
+  establecido por voz en seis capítulos; no urge escribirla). Ledda
+  lleva ocho capítulos por voz sola sin ficha -- va acumulando la misma
+  deuda que tuvo Ansermet. Ceruti no apareció todavía.
 - **Merge de las Tareas 8, 9 y 9b** hacia `framework/es-multilibro`.
   Sin cambios.
 - **Calendario de días concretos para el Acto I** (Cap. 1-11, octubre de
@@ -562,51 +810,59 @@ por palabra.
 
 ## Próximo paso
 
-**Escribir el Cap. 12** ("Collegno", Fun and Games -- apertura del
-mundo nuevo, ambición "sostén", ~2100 palabras, Yes-but). **Es el
-primer capítulo del Acto II** (el Acto I cerró con el Cap. 11).
-Laboratorio de Collegno + piso franco en Turín. Doble sorpresa: la
-calidad del laboratorio y la identidad del tercer integrante del
-equipo. Beats: (1) el laboratorio de Collegno supera lo que ninguna
-universidad le dio nunca -- instrumental de 2033, aislamiento,
-atmósfera controlada; Vidal audita cada equipo, todo pasa. (2)
-presentaciones: **Chiara Fabbri**, conservadora textil formada en el
-Opificio (coincide con el perfil sin nombre que Ansermet le mostró en
-el Cap. 11), discípula de una conservadora de la intervención de 2002
--- toma el escáner de Vidal con las dos manos, aunque es una máquina.
-**Ledda**, seguridad -- habla en procedimientos y plazos, sin
-pronombres. (3) el tercero entra y es **Ferrero** -- Vidal cuenta los
-segundos de silencio. Ferrero: "Usted necesita mis ojos. Yo necesito
-que esto no se haga sin alguien que sepa lo que puede romper." Ninguno
-de los dos menciona la denegación del Cap. 8. (4) primera reunión de
-protocolo: Ferrero exige custodia compartida de toda muestra; Ledda
-fija la regla de oro -- "Una identidad falsa no resiste 2033. Una
-verdadera con motivos ocultos, sí" (hilo #19 del Foreshadowing Ledger,
-planteado en presencia de Chiara, sin que nadie note que la describe a
-ella).
+**Escribir el Cap. 20** ("Cologny", Fun and Games -- revelación del
+antagonista, ambición **pico**, ~2200 palabras, No-but). Cologny,
+Ginebra: casa de Sandoz, jardín de invierno. **Es la reunión que el
+Cap. 19 dejó anunciada** -- según la cronología ya fijada en el
+Cap. 19 (ver su entrada en "Redacción"), esta escena ocurre el **8 de
+abril**, tres días antes del traslado. Abrir con esa fecha explícita
+(mismo hábito que ya se volvió necesario en el Cap. 18/19: anclar el
+día apenas empieza el capítulo) para no repetir el problema de
+calendario de los últimos capítulos.
 
-**Plants:** la frase de Ledda sobre identidades verdaderas con motivos
-ocultos (hilo #19 -- planta acá, refuerza en 21 y 37, paga en 37-38 y
-40 cuando Ledda confirma con nombre: Chiara). El tic de Chiara de
-tomar las cosas con las dos manos.
-**Payoffs:** el reencuentro con Ferrero paga la reunión del Cap. 7.
-**Character movement:** Vidal descubre que no controla la composición
-de su propio equipo y lo acepta -- segunda concesión, más barata que la
-primera, y eso es lo grave.
-**The lie:** operativa -- audita máquinas, no personas. El capítulo
-muestra el punto ciego con precisión de plano.
+**Beats:** (1) invitación sin explicación; Vidal va decidido a auditar
+por fin al mandante. Lo recibe **Emeric Sandoz** en persona: grande,
+lento, ropa que parece vieja y cuesta lo que un coche, manos de
+jardinero real. Sirve el té de Vidal; no se sirve a sí mismo (hilo
+#15). (2) Sandoz repite el mejor argumento de Vidal contra la
+operación, mejor formulado que el original -- la cláusula de archivo
+es una expropiación de la respuesta -- y recién después responde:
+"Usted sostiene que una certeza inauditable es un artefacto y se
+descarta. Es una buena regla. La aplicó toda su vida a los objetos de
+otros. Lo que le propongo es la ocasión de aplicársela a algo que le
+importe, y ver si la regla sobrevive." (3) Vidal reconoce el lápiz:
+los márgenes del libro del STURP (Cap. 11) son de esta mano -- **paga
+el hilo #9**. Sandoz cita las actas de memoria, a favor de los
+argumentos de Vidal. (4) Vidal pregunta por los motivos. Sandoz: "No
+le pido confianza, doctor. Le pido diecisiete días. Los motivos, si le
+sirven de algo, se los cuento cuando esto termine" (**planta el hilo
+#10**, "cuando esto termine"). (5) en el tren de vuelta, Vidal busca el
+mecanismo del hombre y no lo encuentra. Anota: "No dijo nada
+verificablemente falso." La frase le dura hasta el final del libro.
+
+**Plants:** "Cuando esto termine" (hilo #10). El tic de servir a otros
+y nunca a sí mismo (hilo #15). El jardín de invierno como escenario
+del clímax (Cap. 42).
+**Payoffs:** el libro anotado del Cap. 11 (hilo #9) -- el lápiz tiene
+dueño.
+**Character movement:** conoce al único hombre que no puede auditar y
+decide seguir igual. La decisión es suya; el diseño, del otro.
+**The lie:** usada en su contra con elegancia perfecta -- Sandoz la
+conoce mejor que él y se la devuelve como desafío.
 
 **Antes de escribir:** revisar `outline.md` (Foreshadowing Ledger,
-línea ~718) si algún gesto que se le ocurra dar a Ledda o reforzar en
-Chiara ya está reservado a otro hilo -- mismo chequeo que se volvió
-hábito desde la lección del Cap. 7. Ansermet no aparece en este
-capítulo (Vidal no lo vuelve a ver hasta más adelante en el libro).
+línea ~718) para los hilos #9, #10 y #15 -- confirmar que nada de lo
+que se le da a Sandoz acá ya esté usado en otro personaje (mismo
+chequeo desde la lección del Cap. 7). Es la primera vez que Vidal le ve
+la cara a Sandoz -- hasta ahora solo fue "el fundador, el mandante, la
+firma detrás de la firma" (Cap. 13, corregido para no nombrarlo). Este
+es el capítulo donde el nombre por fin se vuelve persona.
 
 ```bash
-uv run python draft_chapter.py 12
-uv run python evaluate.py --chapter=12
-uv run python actualizar_canon.py 12
-uv run python chapter_to_pdf.py 12 "Collegno"
+uv run python draft_chapter.py 20
+uv run python evaluate.py --chapter=20
+uv run python actualizar_canon.py 20
+uv run python chapter_to_pdf.py 20 "Cologny"
 ```
 
 **Ojo:** el número de capítulo va posicional
@@ -655,6 +911,29 @@ sentido). Los dos casos se resuelven igual en la mecánica
 `state.json::debts`), pero solo uno de los dos exige editar el
 capítulo.
 
+**Lección de esta sesión (Cap. 14-19, calendario del atraco):** a
+partir de que el cronograma quedó fijado con precisión de minutos
+(protocolo de 18 puntos, ventanas de 40/11/6 minutos, 30 horas exactas
+de traslado, hilo #4 con dos ventanas de devolución), casi todos los
+`CONFLICTO` que salieron fueron de aritmética/calendario real, no
+falsos positivos. **Antes de escribir un capítulo nuevo de esta parte
+del libro, anclar explícitamente la fecha en la primera línea o el
+primer párrafo** (como se volvió necesario en el Cap. 18, 19 y ahora
+el 20) -- no dejar que el modelo la infiera solo, porque con el margen
+de tiempo tan ajustado (17 días entre el traslado y la devolución, con
+capítulos que saltan adelante y atrás en esa ventana) un desliz de un
+día entero es fácil y el juez lo va a cazar.
+
+**Lección del Cap. 14 y el Cap. 15 (Fable 5 y contenido de
+vigilancia):** si `draft_chapter.py` sale con `stop_reason=refusal`
+categoría "cyber" sobre contenido de vigilancia/evasión de seguridad o
+fabricación de una falsificación (común en esta parte del libro, es
+una novela de atraco), reintentar una vez por las dudas y si persiste,
+`AUTONOVEL_WRITER_MODEL=claude-opus-5` para esa sola llamada, sin
+tocar `.env`. No fue ruido: rechazó dos veces de dos capítulos con este
+tipo de contenido, y Opus 5 lo escribió sin problemas de voz las dos
+veces.
+
 **Advertencia de la sesión del Cap. 5, sigue vigente:** antes de
 aceptar un capítulo con puntaje bajo el umbral tras varias rondas de
 pulido, revisar si el problema es de prosa o si el propio outline (en
@@ -667,22 +946,31 @@ sobre una estructura incompleta no mueve el puntaje.
 1. `git status` -- confirmar que el working tree sigue limpio.
 2. `git log origin/novela2..HEAD --oneline` -- confirmar que no quedó
    nada sin pushear.
-3. `uv run python -m pytest tests/ -v` -- confirmar 248 en verde y 38
+3. `uv run python -m pytest tests/ -v` -- confirmar 266 en verde y 38
    xfail esperados (ninguno inesperado) antes de tocar nada.
 4. `cat state.json` -- `debts` debería estar `[]`.
-5. Leer la entrada de Cap. 12 en `outline.md` (línea ~233, "Ch 12:
-   Collegno") antes de redactar, y de paso el Foreshadowing Ledger
-   (línea ~718, hilo #19) para Ledda y Chiara.
-6. Redactar Cap. 12 a mano con el standalone:
-   `uv run python draft_chapter.py 12` → `evaluate.py --chapter=12` →
-   `actualizar_canon.py 12` → `chapter_to_pdf.py 12 "Collegno"`. Leer
-   el capítulo completo y el `eval_log` entero (no solo el
+5. Leer la entrada de Cap. 20 en `outline.md` ("Ch 20: Cologny") antes
+   de redactar, y de paso el Foreshadowing Ledger (línea ~718, hilos
+   #9, #10, #15) para Sandoz.
+6. Redactar Cap. 20 a mano con el standalone:
+   `uv run python draft_chapter.py 20` → `evaluate.py --chapter=20` →
+   `actualizar_canon.py 20` → `chapter_to_pdf.py 20 "Cologny"`. Leer el
+   capítulo completo y el `eval_log` entero (no solo el
    `overall_score`) antes de avanzar -- si rechaza, ver "Lección del
    Cap. 6"; si acepta, revisar igual `character_voice`/`continuity` --
    ver "Lección del Cap. 7"; si hay una cita textual de un capítulo
    anterior, verificarla palabra por palabra -- ver "Lección del Cap.
-   8"; y si `actualizar_canon.py` marca un `CONFLICTO`, no asumir que
-   el texto está mal sin leer el `contradice` completo -- ver "Lección
-   del Cap. 9 y el Cap. 11".
+   8"; si `actualizar_canon.py` marca un `CONFLICTO`, no asumir que el
+   texto está mal sin leer el `contradice` completo -- ver "Lección del
+   Cap. 9 y el Cap. 11"; anclar la fecha explícitamente al abrir el
+   capítulo -- ver "Lección de esta sesión (Cap. 14-19, calendario del
+   atraco)"; y si `draft_chapter.py` rechaza con categoría "cyber",
+   ver "Lección del Cap. 14 y el Cap. 15".
 7. No tocar el formato de `chapter_to_pdf.py` -- ya está cerrado y
    calibrado, ver "PDF de lectura por capítulo" más arriba.
+8. No tocar el diseño del cacheo de prompt salvo que deje de andar --
+   ver "Cacheo de prompt" más arriba. Si `evaluate.py` vuelve a
+   quedarse sin `max_tokens` (thinking agotado sin texto), subir el
+   valor de `call_judge(prompt, max_tokens=...)` en la línea de
+   `evaluate_chapter()` -- ya se subió una vez esta sesión (8000 →
+   16000).

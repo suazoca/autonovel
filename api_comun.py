@@ -88,22 +88,24 @@ continuación no aporta uno propio.
 Costo: cada continuación reenvía el prompt original completo como
 input (la API no tiene sesiones -- no hay forma de decir "seguí donde
 estábamos" sin reenviar el contexto). Con `max_continuaciones` alto y
-prompts grandes (outline con mundo+personajes completos, capítulos con
-esquema+voz+mundo+personajes) esto multiplica el costo de entrada por
-cada vuelta. **No se implementó `cache_control` para la parte fija**
-(el `system` y el prompt inicial, idénticos en cada reintento, son
-candidatos obvios): el mecanismo es agregar `cache_control: {"type":
-"ephemeral"}` al bloque de contenido a cachear, pero no hay forma de
-verificar desde acá si el header beta que exige (y su compatibilidad
-con `anthropic-beta: context-1m-2025-08-07`, que varios scripts ya
-mandan) funciona con los modelos configurados en este entorno
-(`claude-fable-5`/`claude-opus-5`) sin poder probar contra la API real.
-Meter una beta sin verificar en un script que gasta plata de verdad es
-peor que no cachear. Si se implementa: marcar el bloque de `system`
-(cuando exista) y el prompt inicial con `cache_control`, confirmar con
-una llamada barata que `usage.cache_read_input_tokens` > 0 en la
-segunda vuelta antes de confiar en que está funcionando, y decidir qué
-pasa con los headers `anthropic-beta` combinados.
+prompts grandes esto multiplica el costo de entrada por cada vuelta.
+
+Cacheo de prompt (implementado y confirmado contra la API real -- antes
+decía acá que faltaba, y que hacía falta una beta sin verificar; las
+dos cosas eran incorrectas): `cache_control: {"type": "ephemeral"}` es
+GA, no beta -- no hace falta ningún header extra ni decidir nada sobre
+`anthropic-beta: context-1m-2025-08-07`. `llamar_api()` acepta `prompt`
+como `str` (como siempre, sin cambios de comportamiento) o como
+`list[dict]` con la forma `{"text": ..., "cache": bool}` -- ver
+`_resolver_content()` más abajo. `draft_chapter.py::
+build_prompt_bloques()` y `evaluate.py::_bloques_cache_chapter_prompt()`
+arman esa lista separando lo estable en todo el libro (voz, mundo,
+personajes, canon de fundación) de lo que cambia cada capítulo.
+Verificado con una llamada de `max_tokens=16` real (Cap. 17, bloque
+estable + canon emergente, ~50.000 tokens): primera llamada
+`cache_creation_input_tokens=50085, cache_read_input_tokens=0`; segunda
+llamada con el mismo prefijo, `cache_creation_input_tokens=0,
+cache_read_input_tokens=50085`. Funciona.
 """
 import json
 import sys
@@ -117,6 +119,44 @@ MENSAJE_CONTINUAR = (
     "saludos ni explicaciones -- seguí la prosa directamente desde el "
     "corte."
 )
+
+
+def _resolver_content(prompt):
+    """Convierte `prompt` al valor que va en `content` del turno de
+    usuario. Dos formas de entrada:
+
+    - `str` (comportamiento de siempre, sin cambios): se devuelve tal
+      cual, como texto plano. Es lo que mandan los scripts que todavía
+      no adoptaron cacheo de prompt.
+    - `list[dict]` con la forma `{"text": ..., "cache": bool}` (nueva,
+      Tarea de cacheo de prompt): se convierte a la lista de content
+      blocks que espera la API, con `cache_control: {"type":
+      "ephemeral"}` en los bloques marcados `cache: True`. Ver
+      shared/prompt-caching.md del skill claude-api -- el cacheo es un
+      *prefix match*: los bloques `cache: True` tienen que ir primero,
+      en el mismo orden y con el mismo contenido byte a byte en cada
+      llamada para pegarle al caché. `draft_chapter.py::
+      build_prompt_bloques()` y `evaluate.py::evaluate_chapter()` arman
+      esta lista poniendo primero lo que no cambia en todo el libro
+      (voz, mundo, personajes, canon de fundación) y al final lo que
+      cambia siempre (número de capítulo, esquema, texto del capítulo).
+
+    No hace falta beta header: el cacheo con `cache_control: {"type":
+    "ephemeral"}` es GA, no beta (a diferencia de lo que asumía una
+    versión anterior de este docstring, que por eso nunca lo había
+    implementado -- confirmado contra la documentación de la API, no
+    contra una llamada real todavía; ver el chequeo de
+    `cache_read_input_tokens` que hace `draft_chapter.py`/`evaluate.py`
+    en el primer capítulo que lo use)."""
+    if isinstance(prompt, str):
+        return prompt
+    bloques = []
+    for seg in prompt:
+        bloque = {"type": "text", "text": seg["text"]}
+        if seg.get("cache"):
+            bloque["cache_control"] = {"type": "ephemeral"}
+        bloques.append(bloque)
+    return bloques
 
 
 def llamar_api(prompt, *, model, max_tokens, api_key, api_base, system=None,
@@ -167,6 +207,7 @@ def llamar_api(prompt, *, model, max_tokens, api_key, api_base, system=None,
     if beta:
         headers["anthropic-beta"] = beta
 
+    prompt = _resolver_content(prompt)
     mensajes = [{"role": "user", "content": prompt}]
     texto_acumulado = ""
     continuaciones = 0

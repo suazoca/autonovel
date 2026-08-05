@@ -845,6 +845,55 @@ def calcular_overall(dimensiones):
     return round(0.7 * media + 0.3 * minimo, 2)
 
 
+def _bloques_cache_chapter_prompt(prompt_completo):
+    """Parte el CHAPTER_PROMPT ya formateado en tres bloques para cacheo
+    de prompt, sin tocar CHAPTER_PROMPT en sí (test_chapter_prompt_tiene_
+    frase_ancla_y_no_menciona_fantasy y el registro de
+    test_guardia_prompts.py dependen de su contenido exacto).
+
+    El orden del propio CHAPTER_PROMPT ya viene bien para esto (voz,
+    mundo, personajes, canon de fundación, DESPUÉS canon emergente,
+    DESPUÉS lo que cambia por capítulo) -- a diferencia de
+    build_prompt_bloques() en draft_chapter.py, acá no hace falta
+    reordenar nada, solo cortar en dos puntos:
+
+    1. Todo hasta el final de CANON (inclusive) -- idéntico en todo el
+       libro, se cachea.
+    2. CANON EMERGENTE -- crece cada capítulo, pero es idéntico entre
+       reintentos del MISMO capítulo (ej. si evaluate.py se corre dos
+       veces seguidas sobre el Cap. N porque la primera falló), se
+       cachea aparte.
+    3. El resto (esquema de este capítulo, cola del anterior, texto del
+       capítulo, chequeos cruzados, formato de salida) -- cambia
+       siempre, sin cachear.
+
+    Usa .partition() sobre el string ya formateado, no sobre la
+    plantilla -- si algún día se edita CHAPTER_PROMPT y estas anclas
+    dejan de existir, revienta con ValueError en vez de partir el
+    prompt en el lugar equivocado en silencio."""
+    ancla_emergente = "\nCANON EMERGENTE ("
+    ancla_esquema = "\nENTRADA DEL ESQUEMA PARA ESTE CAPÍTULO:"
+
+    estable, sep1, resto = prompt_completo.partition(ancla_emergente)
+    if not sep1:
+        raise ValueError(
+            f"No encontré {ancla_emergente!r} en CHAPTER_PROMPT formateado -- "
+            "revisá si cambió el texto de la sección de canon emergente."
+        )
+    creciente, sep2, volatil = resto.partition(ancla_esquema)
+    if not sep2:
+        raise ValueError(
+            f"No encontré {ancla_esquema!r} en CHAPTER_PROMPT formateado -- "
+            "revisá si cambió el texto de la sección de esquema del capítulo."
+        )
+
+    return [
+        {"text": estable, "cache": True},
+        {"text": ancla_emergente + creciente, "cache": True},
+        {"text": ancla_esquema + volatil, "cache": False},
+    ]
+
+
 def evaluate_chapter(chapter_num):
     layers = load_layer_files()
     chapter_text = load_chapter(chapter_num)
@@ -862,7 +911,7 @@ def evaluate_chapter(chapter_num):
     prev_text = load_chapter(chapter_num - 1) if chapter_num > 1 else "(first chapter)"
     prev_tail = prev_text[-3000:] if len(prev_text) > 3000 else prev_text
 
-    prompt = CHAPTER_PROMPT.format(
+    prompt_completo = CHAPTER_PROMPT.format(
         voice=layers["voice"],
         world=layers["world"][:4000],  # truncate world bible
         characters=layers["characters"],
@@ -872,7 +921,8 @@ def evaluate_chapter(chapter_num):
         prev_chapter_tail=prev_tail,
         chapter_text=chapter_text,
     )
-    raw = call_judge(prompt, max_tokens=8000)
+    prompt = _bloques_cache_chapter_prompt(prompt_completo)
+    raw = call_judge(prompt, max_tokens=16000)
     try:
         result = parse_json_response(raw)
     except (ValueError, json.JSONDecodeError) as e:
