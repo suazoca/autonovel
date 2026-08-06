@@ -1,10 +1,75 @@
 # TRASPASO — rama `novela2` (worktree de `framework/es-multilibro`)
 
-Estado real al cierre de esta sesión (2026-08-05). Este documento
+Estado real al cierre de esta sesión (2026-08-06). Este documento
 reemplaza la necesidad de releer `ESTADO.md` completo o el historial de
 commits para retomar el trabajo -- es la foto actual, no la bitácora
 (para eso está `ESTADO.md`, que sí es narrativo y tiene una sección
 nueva para esta rama).
+
+**Actualización 2026-08-06 (sesión nueva -- Cap. 20 y 21):** dos
+capítulos más. `overall_score`: Cap. 20 = 7.78 (rechazó una vez, 7.47
+contra umbral **pico** 7.5), Cap. 21 = 7.08 (reevaluado tras un
+recorte, ver abajo -- aceptó de movida contra umbral **sosten** 6.5).
+**Acto II, parte 1, en curso -- 10 de 12 capítulos (Cap. 12-23).**
+`state.json::debts` vacío, working tree limpio, mismos 266 tests en
+verde + 38 xfail (sin cambios de infraestructura esta sesión).
+
+- **Cap. 20 ("Cologny"):** primer encuentro cara a cara con **Emeric
+  Sandoz**, en su jardín de invierno de Ginebra. Paga el hilo #9 (el
+  lápiz de los márgenes del libro del Cap. 11 es suyo) y planta el
+  hilo #10 ("los motivos, si le sirven de algo, se los cuento cuando
+  esto termine"). Rechazado en primera pasada (7.47 < 7.5, el umbral
+  más alto del libro por ser ambición **pico**): Sandoz le atribuía a
+  la Iglesia el secreto del hallazgo desde 1978, pero `world.md` fija
+  1988 como el año canónico en que la institución aprendió esa
+  lección. Corregido siguiendo la revisión sugerida por el propio
+  juez ("en 1978 nadie era dueño de lo que se iba a encontrar, y diez
+  años después la institución aprendió el precio de eso en una
+  conferencia de prensa"); de paso, "seis siglos" → "casi siete
+  siglos" y se agregó el ancla de fecha faltante ("Ocho de abril, tres
+  días antes del traslado"). Segunda evaluación: 7.78, el puntaje más
+  alto de la novela hasta ahora. También se corrigió un desliz menor
+  de tuteo ("qué llames" → "qué llame"). Sin `CONFLICTO` de canon.
+- **Cap. 21 ("Treinta horas"):** las treinta horas del traslado
+  arrancan; Vidal, lejos de todo en el puesto remoto de Collegno, solo
+  puede contar segundos de latencia mientras Ledda absorbe una
+  contingencia (un conservador de la Comisión sin horario fijo) que le
+  cuesta horas de exposición a Chiara ("La tela no sabe cuántos
+  somos"). Aceptado en primera pasada, 7.39. **Encontrado después de
+  aceptado** (no por `actualizar_canon.py`, sino releyendo el
+  `eval_log` completo): el borrador original cerraba con Ledda
+  entregándole a Vidal un overol y una credencial falsa para entrar
+  como técnico a la 1:10 de la madrugada -- eso contradice el canon
+  fijo de "personal reducido de nueve personas" ([C14-10]) y, peor,
+  **es literalmente el beat 1 del Cap. 22** según su propia entrada en
+  `outline.md` ("Noche del 11 al 12... Vidal accede como técnico de la
+  empresa de la teca"). El capítulo se había adelantado a su propia
+  continuación. Se recortó la escena final (Ledda/overol/credencial) y
+  se reemplazó por un cierre que sostiene la misma mentira del
+  capítulo ("impotente: no hay nada que auditar salvo su propia
+  espera") sin mostrar la entrada. **Reevaluado** tras el recorte
+  (7.08, sigue aceptado) porque el cambio afectaba el final del
+  capítulo, no un detalle aislado -- y porque el `eval_log` viejo, que
+  es lo que lee `actualizar_canon.py`, habría vuelto a escribir la
+  escena eliminada en `canon_emergente.md` si no se regeneraba. La
+  entrada de canon vieja ([C21-08], la escena eliminada) quedó
+  referenciada por una entrada nueva del segundo `eval_log`
+  ([C21-01], el protocolo de un solo timbre de Ledda) como
+  `CONFLICTO` fantasma -- resuelta a mano como falso positivo (ver
+  `canon_emergente.md`, comentario `RESUELTO a mano` en Cap. 21).
+
+**Lección nueva de esta sesión, importante para el resto del libro:**
+`actualizar_canon.py` **no relee el capítulo** -- lee el `eval_log`
+más reciente (`new_canon_entries`), que a su vez lo generó
+`evaluate.py` sobre el texto que existía en ese momento. Si se edita
+un capítulo **después** de evaluarlo y aceptarlo (como pasó acá, para
+corregir un problema real), hay que **reevaluar** (`evaluate.py
+--chapter=N`) antes de correr `actualizar_canon.py N` de nuevo -- si
+no, el canon emergente se actualiza con hechos que ya no están en el
+texto. La convención de sesiones anteriores ("recortes menores no
+necesitan reevaluación") sigue valiendo para cambios chicos que no
+tocan `new_canon_entries` (una palabra, un tuteo/voseo), pero un
+recorte que borra una escena entera sí la necesita.
 
 **Actualización 2026-08-05 (sesión nueva -- Cap. 12 a 19, cacheo de
 prompt):** ocho capítulos más, los ocho aceptados (dos con rechazo y
@@ -155,9 +220,9 @@ persona de Sandoz -- ver "Próximo paso".
 | Directorio | `/root/novela2` (worktree; confirmado con `git worktree list`) |
 | Rama | `novela2`, diverge de `framework/es-multilibro` en `7b81700` (Tarea 7) |
 | `.env` / `ANTHROPIC_API_KEY` | Presente en este entorno. `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
-| Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: el de cierre de esta sesión (Cap. 8 + `docs/`) -- confirmar con `git log -1 --oneline`. |
+| Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: el de cierre de esta sesión (Cap. 20-21 + `docs/`) -- confirmar con `git log -1 --oneline`. |
 | Working tree | Limpio -- confirmar con `git status`. |
-| Tests | `uv run python -m pytest tests/ -v` -- **266 tests, todos en verde, + 38 xfail esperados** (18 nuevos esta sesión: cacheo de prompt en `api_comun.py`/`draft_chapter.py`/`evaluate.py`). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
+| Tests | `uv run python -m pytest tests/ -v` -- **266 tests, todos en verde, + 38 xfail esperados** (sin cambios de infraestructura desde la sesión del cacheo de prompt). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
 | Token de GitHub | Fine-grained, creado 2026-07-27, alcance `suazoca/autonovel`, permiso `Contents: read/write`, **vence ~2026-08-26**. Al vencer, limpiar la credencial guardada con `git credential reject` (protocol=https, host=github.com) antes de autenticar con uno nuevo. Usado sin problemas esta sesión (push directo, sin reingresar credencial). |
 
 ## Fundación (completa, aprobada -- sin cambios esta sesión)
@@ -571,6 +636,45 @@ fondo del ensayo y llevar 48h continuas en la celda de sensores a la
 vez). 1911 palabras.
 
 Los ocho capítulos (12-19) generaron su PDF de lectura con
+`chapter_to_pdf.py` -- ya commiteados y pusheados (commit `990a7d9`).
+
+`chapters/ch_20.md` ("Cologny", Fun and Games -- revelación del
+antagonista) -- primer encuentro cara a cara con Emeric Sandoz, en su
+jardín de invierno de Ginebra: manos de jardinero real, ropa gastada
+que cuesta lo que un coche, sirve el té de Vidal y no se sirve a sí
+mismo (hilo #15). Repite el mejor argumento de Vidal contra la
+operación, mejor formulado que el original, y recién después lo
+desafía a aplicarse su propia regla ("una certeza inauditable es un
+artefacto y se descarta") a algo que le importe. Vidal reconoce el
+lápiz de los márgenes del libro del STURP del Cap. 11 -- **paga el
+hilo #9**. Sandoz promete los motivos "cuando esto termine" (**planta
+el hilo #10**). Rechazado en primera pasada (7.47 contra el umbral
+**pico** 7.5): Sandoz databa el secreto eclesiástico en 1978, pero
+`world.md` fija 1988 como el año en que la institución "aprendió el
+precio" en una conferencia de prensa -- corregido siguiendo la
+revisión sugerida por el juez. Segunda evaluación: 7.78, el mejor
+puntaje de la novela hasta ahora. Sin conflictos de canon. 2081
+palabras.
+
+`chapters/ch_21.md` ("Treinta horas", Fun and Games → rampa al
+Midpoint) -- arranca el traslado: nueve personas en la sacristía por
+derecho propio (identidades verdaderas, motivos ocultos), Vidal en el
+puesto remoto de Collegno contando segundos de latencia. La Comisión
+suma un conservador sin horario fijo; Ledda recalcula el costo en
+horas de exposición para Chiara, que acepta sin dramatizar ("La tela
+no sabe cuántos somos"). Ferrero, junto al lienzo por primera vez en
+cuarenta años, tarda de más en soltar el borde. Aceptado en primera
+pasada, 7.39. **Encontrado después de aceptado**, releyendo el
+`eval_log` completo: el cierre original hacía entrar a Vidal como
+décimo participante físico con overol y credencial falsa -- contradice
+el canon fijo de nueve personas ([C14-10]) y es, además, el beat de
+apertura del Cap. 22 según su propia entrada en `outline.md`. Se
+recortó la escena, se reevaluó (7.08, sigue aceptado) y se resolvió a
+mano un `CONFLICTO` fantasma que quedó apuntando a la entrada de canon
+ya eliminada -- ver la lección nueva al principio de este documento.
+1766 palabras (tras el recorte).
+
+Los dos capítulos (20-21) generaron su PDF de lectura con
 `chapter_to_pdf.py` y quedan pendientes de commit -- ver "Estado del
 repositorio".
 
@@ -718,11 +822,11 @@ siendo la fuente de verdad. Sin cambios esta sesión.
 ## Tarea 10 -- acumulación de canon durante la redacción (en producción real)
 
 El mecanismo (`canon_emergente.md` + `actualizar_canon.py`) suma
-catorce capítulos más entre las dos sesiones de 2026-08-04/05 (6 a
-19). Total acumulado: 19 capítulos, **doce `CONFLICTO` detectados en
-total** a lo largo de toda la producción y resueltos a mano, ninguno
-sin resolver. De esta sesión (Cap. 12-19): seis `CONFLICTO`, todos
-reales salvo uno --
+dieciséis capítulos más entre las tres sesiones de 2026-08-04/05/06 (6
+a 21). Total acumulado: 21 capítulos, **catorce `CONFLICTO` detectados
+en total** a lo largo de toda la producción y resueltos a mano,
+ninguno sin resolver. De la sesión de Cap. 20-21: dos `CONFLICTO` más
+--
 
 - **Cap. 13**: real -- "Sandoz" nombrado antes de que Vidal lo conozca.
 - **Cap. 14**: real -- error de AM/PM en el horario del traslado.
@@ -732,16 +836,30 @@ reales salvo uno --
 - **Cap. 19**: real -- la gemela en dos lugares a la vez (encontrado
   después de aceptado, no vía `actualizar_canon.py` sino por lectura
   del `eval_log` completo).
+- **Cap. 20**: no fue un `CONFLICTO` de `actualizar_canon.py` -- fue el
+  motivo del rechazo en primera pasada del juez (año del secreto
+  eclesiástico, 1978 vs. 1988 de `world.md`). Real, corregido antes de
+  reevaluar.
+- **Cap. 21**: real -- Vidal entrando como décimo participante físico
+  al traslado, contra el canon fijo de nueve personas, y además un
+  beat que le pertenecía al Cap. 22. Encontrado después de aceptado,
+  releyendo el `eval_log` completo (mismo patrón que el Cap. 19). Al
+  recortar la escena y reevaluar, quedó además un `CONFLICTO`
+  **fantasma** (una entrada nueva de canon referenciando la entrada
+  vieja ya eliminada) -- falso positivo, resuelto a mano.
 
-Ninguno de los seis fue falso positivo esta sesión (a diferencia de la
-sesión anterior: Cap. 9 real, Cap. 11 falso positivo) -- el patrón que
-está emergiendo es que la mayoría de los `CONFLICTO` de esta etapa del
-libro son choques de calendario/aritmética genuinos, no ruido del
-detector. Con el cronograma del atraco ahora fijado con precisión de
-minutos (protocolo de 18 puntos, ventanas de 40/11/6 minutos, 30 horas
-exactas de traslado), cada capítulo nuevo tiene mucha más superficie
-donde un número puede no cerrar. Seguir el mismo hábito: ante un
-`CONFLICTO`, leer el `contradice` completo antes de tocar el texto.
+El patrón sigue siendo el mismo que el de la sesión anterior: la
+mayoría de los `CONFLICTO` de esta etapa del libro son choques de
+calendario/aritmética genuinos, no ruido del detector, salvo cuando el
+`CONFLICTO` es un artefacto de reevaluar un capítulo ya aceptado (Cap.
+21). Con el cronograma del atraco fijado con precisión de minutos
+(protocolo de 18 puntos, ventanas de 40/11/6 minutos, 30 horas exactas
+de traslado), cada capítulo nuevo tiene mucha más superficie donde un
+número puede no cerrar. Seguir el mismo hábito: ante un `CONFLICTO`,
+leer el `contradice` completo antes de tocar el texto -- y si el
+capítulo ya fue evaluado y aceptado antes de la edición, reevaluar
+antes de correr `actualizar_canon.py` de nuevo (ver la lección nueva
+al principio de este documento).
 
 El hallazgo del Cap. 7 (tic de lápiz reservado a Sandoz, dado por error
 a Ferrero) no fue un `CONFLICTO` de `actualizar_canon.py` -- lo marcó
@@ -810,59 +928,54 @@ por palabra.
 
 ## Próximo paso
 
-**Escribir el Cap. 20** ("Cologny", Fun and Games -- revelación del
-antagonista, ambición **pico**, ~2200 palabras, No-but). Cologny,
-Ginebra: casa de Sandoz, jardín de invierno. **Es la reunión que el
-Cap. 19 dejó anunciada** -- según la cronología ya fijada en el
-Cap. 19 (ver su entrada en "Redacción"), esta escena ocurre el **8 de
-abril**, tres días antes del traslado. Abrir con esa fecha explícita
-(mismo hábito que ya se volvió necesario en el Cap. 18/19: anclar el
-día apenas empieza el capítulo) para no repetir el problema de
-calendario de los últimos capítulos.
+**Escribir el Cap. 22** ("La sacristía", Midpoint -- preparación
+inmediata, ambición **sosten**, ~1900 palabras, Yes-but). Turín,
+sacristía (Vidal entra en la segunda noche) y Collegno. **Este es el
+capítulo que el Cap. 21 casi se robó** -- ver la entrada del Cap. 21
+en "Redacción": el borrador original de ese capítulo adelantaba la
+entrada de Vidal como técnico de la teca, y se recortó exactamente
+porque ese beat es del Cap. 22. Al escribir el Cap. 22, la entrada de
+Vidal (overol, credencial, orden de trabajo real de revisión de
+clima) es material nuevo de este capítulo, no una repetición -- pero
+sí conviene revisar el Cap. 21 recortado antes de escribir, para que
+el tono de la transición (de "impotente en el puesto remoto" a
+"adentro por fin") tenga el quiebre que le corresponde.
 
-**Beats:** (1) invitación sin explicación; Vidal va decidido a auditar
-por fin al mandante. Lo recibe **Emeric Sandoz** en persona: grande,
-lento, ropa que parece vieja y cuesta lo que un coche, manos de
-jardinero real. Sirve el té de Vidal; no se sirve a sí mismo (hilo
-#15). (2) Sandoz repite el mejor argumento de Vidal contra la
-operación, mejor formulado que el original -- la cláusula de archivo
-es una expropiación de la respuesta -- y recién después responde:
-"Usted sostiene que una certeza inauditable es un artefacto y se
-descarta. Es una buena regla. La aplicó toda su vida a los objetos de
-otros. Lo que le propongo es la ocasión de aplicársela a algo que le
-importe, y ver si la regla sobrevive." (3) Vidal reconoce el lápiz:
-los márgenes del libro del STURP (Cap. 11) son de esta mano -- **paga
-el hilo #9**. Sandoz cita las actas de memoria, a favor de los
-argumentos de Vidal. (4) Vidal pregunta por los motivos. Sandoz: "No
-le pido confianza, doctor. Le pido diecisiete días. Los motivos, si le
-sirven de algo, se los cuento cuando esto termine" (**planta el hilo
-#10**, "cuando esto termine"). (5) en el tren de vuelta, Vidal busca el
-mecanismo del hombre y no lo encuentra. Anota: "No dijo nada
-verificablemente falso." La frase le dura hasta el final del libro.
+**Beats:** (1) Noche del 11 al 12: la manipulación entra en fase de
+personal mínimo. Vidal accede como técnico de la empresa de la teca --
+historia limpia real, comprada dos años atrás por una donación que él
+no hizo. (2) Ve el lienzo por primera vez: la voz lo describe con
+sustantivos de inventario (quemaduras de 1532, parches, manchas de
+agua) y se detiene de más en el rostro en negativo -- la detención es
+el dato. (3) Repaso final de la secuencia de sustitución con Chiara,
+en susurros de taller: ella tomará "el objeto" -- Vidal usa la
+palabra; ella dice "la tela" -- con las dos manos. (4) Cierre en
+suspenso operativo: la ventana se abre en cuatro horas.
 
-**Plants:** "Cuando esto termine" (hilo #10). El tic de servir a otros
-y nunca a sí mismo (hilo #15). El jardín de invierno como escenario
-del clímax (Cap. 42).
-**Payoffs:** el libro anotado del Cap. 11 (hilo #9) -- el lápiz tiene
-dueño.
-**Character movement:** conoce al único hombre que no puede auditar y
-decide seguir igual. La decisión es suya; el diseño, del otro.
-**The lie:** usada en su contra con elegancia perfecta -- Sandoz la
-conoce mejor que él y se la devuelve como desafío.
+**Plants:** la fricción de vocabulario objeto/tela/lienzo en boca de
+ambos (refuerzo del hilo #17).
+**Payoffs:** -- (ninguno marcado en el outline para este capítulo).
+**Character movement:** el objeto de estudio adquiere presencia
+física. Su prosa interior empieza a fallarle: primera vez que un dato
+lo detiene sin producirle una hipótesis.
+**The lie:** desestabilizada por percepción pura -- mirar no es medir,
+y sin embargo algo quedó registrado.
 
 **Antes de escribir:** revisar `outline.md` (Foreshadowing Ledger,
-línea ~718) para los hilos #9, #10 y #15 -- confirmar que nada de lo
-que se le da a Sandoz acá ya esté usado en otro personaje (mismo
-chequeo desde la lección del Cap. 7). Es la primera vez que Vidal le ve
-la cara a Sandoz -- hasta ahora solo fue "el fundador, el mandante, la
-firma detrás de la firma" (Cap. 13, corregido para no nombrarlo). Este
-es el capítulo donde el nombre por fin se vuelve persona.
+línea ~718) para el hilo #17 (fricción objeto/tela/lienzo). Confirmar
+la hora de entrada de Vidal (1:10, según lo que decía la escena
+recortada del Cap. 21 -- reusable como dato, no como prosa) contra
+`personal reducido de nueve personas` de [C14-10]: con Vidal adentro
+"en fase de personal mínimo", el outline implica que el número de
+gente físicamente presente cambia respecto del pico de nueve del
+traslado -- conviene aclarar en el propio capítulo cuántos quedan dentro
+en ese momento para no generar un nuevo `CONFLICTO` de headcount.
 
 ```bash
-uv run python draft_chapter.py 20
-uv run python evaluate.py --chapter=20
-uv run python actualizar_canon.py 20
-uv run python chapter_to_pdf.py 20 "Cologny"
+uv run python draft_chapter.py 22
+uv run python evaluate.py --chapter=22
+uv run python actualizar_canon.py 22
+uv run python chapter_to_pdf.py 22 "La sacristía"
 ```
 
 **Ojo:** el número de capítulo va posicional
@@ -949,13 +1062,14 @@ sobre una estructura incompleta no mueve el puntaje.
 3. `uv run python -m pytest tests/ -v` -- confirmar 266 en verde y 38
    xfail esperados (ninguno inesperado) antes de tocar nada.
 4. `cat state.json` -- `debts` debería estar `[]`.
-5. Leer la entrada de Cap. 20 en `outline.md` ("Ch 20: Cologny") antes
-   de redactar, y de paso el Foreshadowing Ledger (línea ~718, hilos
-   #9, #10, #15) para Sandoz.
-6. Redactar Cap. 20 a mano con el standalone:
-   `uv run python draft_chapter.py 20` → `evaluate.py --chapter=20` →
-   `actualizar_canon.py 20` → `chapter_to_pdf.py 20 "Cologny"`. Leer el
-   capítulo completo y el `eval_log` entero (no solo el
+5. Leer la entrada de Cap. 22 en `outline.md` ("Ch 22: La sacristía")
+   antes de redactar, y de paso el Foreshadowing Ledger (línea ~718,
+   hilo #17) y la entrada del Cap. 21 en "Redacción" (qué se recortó y
+   por qué).
+6. Redactar Cap. 22 a mano con el standalone:
+   `uv run python draft_chapter.py 22` → `evaluate.py --chapter=22` →
+   `actualizar_canon.py 22` → `chapter_to_pdf.py 22 "La sacristía"`.
+   Leer el capítulo completo y el `eval_log` entero (no solo el
    `overall_score`) antes de avanzar -- si rechaza, ver "Lección del
    Cap. 6"; si acepta, revisar igual `character_voice`/`continuity` --
    ver "Lección del Cap. 7"; si hay una cita textual de un capítulo
@@ -964,8 +1078,11 @@ sobre una estructura incompleta no mueve el puntaje.
    texto está mal sin leer el `contradice` completo -- ver "Lección del
    Cap. 9 y el Cap. 11"; anclar la fecha explícitamente al abrir el
    capítulo -- ver "Lección de esta sesión (Cap. 14-19, calendario del
-   atraco)"; y si `draft_chapter.py` rechaza con categoría "cyber",
-   ver "Lección del Cap. 14 y el Cap. 15".
+   atraco)"; si `draft_chapter.py` rechaza con categoría "cyber", ver
+   "Lección del Cap. 14 y el Cap. 15"; y si se edita el capítulo
+   **después** de evaluarlo y aceptarlo, reevaluar antes de correr
+   `actualizar_canon.py` de nuevo -- ver la lección nueva de Cap. 21 al
+   principio de este documento.
 7. No tocar el formato de `chapter_to_pdf.py` -- ya está cerrado y
    calibrado, ver "PDF de lectura por capítulo" más arriba.
 8. No tocar el diseño del cacheo de prompt salvo que deje de andar --
