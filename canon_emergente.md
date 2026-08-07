@@ -456,3 +456,15 @@
 - [C36-08] (Establecido en la historia) Tercera prueba del peso hidratado de la gemela v2 contra los sensores replicados, cerrada durante el ensayo: cuatro células de carga estabilizadas en banda y masa en equilibrio a 52 % de humedad relativa con un gramo y una décima, dentro de la tolerancia de ±1,5 g.
 - [C36-09] (Hechos de personajes) Ledda declara que no entra al recinto el 29: «Yo soy la persona que si la ven, ya perdimos»; sostiene que un técnico con credencial y una conservadora tienen explicación y sus dieciocho años de historia limpia no.
 - [C36-10] (Establecido en la historia) Después de la celda de las 16:05 del veintinueve, el plan de once hojas tiene solo tres celdas más —cierre, desmonte y entrega de llaves— y ningún renglón previsto para el 30 de abril en caso de aborto.
+
+## Cap. 37
+
+- [C37-01] (Hechos de personajes) Bosio es el técnico de la empresa de la teca (treinta y tantos años) que ejecuta la revisión del sistema de clima del 29 de abril de 2033 con la Comisión mirando desde el otro lado de la barrera.
+- [C37-02] (Cronología) El 29 de abril de 2033 Bosio pide a la Comisión correr la revisión del clima al cierre del edificio por la carga de humedad del tránsito de personas; a las 16:22 la Comisión lo acepta y la revisión —y con ella la ventana de seis minutos— queda reprogramada de las 16:05 a las 21:40.
+- [C37-03] (Establecido en la historia) El lienzo entra a la catedral el 29 de abril dentro del carro de mantenimiento de clima: bastidor inferior cerrado con llave de cuadradillo, tubo de transporte sujeto con dos correas de velcro cosidas a medida por Chiara en Collegno, junto al contenedor rígido destinado a la gemela.
+- [C37-04] (Establecido en la historia) Tras la reprogramación, Vidal decide dejar la tela cinco horas y dieciocho minutos dentro del carro en el depósito de servicio en lugar de retirarla con el edificio lleno; Ledda registra que la decisión es suya.
+- [C37-05] (Cronología) El 29 de abril de 2033 a las 8:50 la temperatura exterior en Turín es de veintiséis grados; Ferrero ingresa a las nueve en punto por la puerta de la Comisión y Vidal y Chiara por el acceso de servicio como personal de Ambienti Controllati, con control de credencial de ocho segundos.
+- [C37-06] (Reglas excepcionales del mundo) El tubo con el lienzo llega a la catedral doce grados por debajo de la temperatura de la sacristía, diferencia que debe dejarse bajar antes de abrirlo.
+- [C37-07] (Hechos de personajes) Durante la espera del 29 de abril Vidal cuenta sin interrupción (doscientos cuarenta y un clics del relé, ochenta y siete pasos, tres ciclos de compresor) entre la una y las 16:05; la serie no se corta, a diferencia de la del edículo en octubre de 2032.
+- [C37-08] (Político / faccional) Una revisión de vigilancia sobre los registros de la catedral empieza el lunes posterior al 29 de abril de 2033.
+- [C37-09] (Geografía) Del depósito de servicio a la puerta de la sacristía hay ochenta y tres pasos hasta la curva del pasillo y treinta y uno más desde la curva; Vidal frena el carro en el paso veintidós de esos treinta y uno al ver luz bajo la puerta.
