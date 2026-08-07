@@ -502,3 +502,15 @@
 - [C40-06] (Reglas excepcionales del mundo) Regla de cierre de Ledda: 'historia verdadera, motivos ocultos' es la única combinación que resiste la vigilancia de 2033; y a las setenta y dos horas del desmonte la dirección de Collegno 'no existió'.
 - [C40-07] (Cronología) La mañana del 30 de abril de 2033 Vidal sale de Collegno hacia Turín a las 6:25 para tomar el tren de las 7:12 a Ginebra; el transporte del material del laboratorio pasa a las ocho.
 - [C40-08] (Geografía) En 2033 existe una línea de alta velocidad Turín–Ginebra, inaugurada el año anterior por un túnel nuevo.
+
+## Cap. 41
+
+- [C41-01] (Establecido en la historia) El informe final de Vidal tiene cuarenta y una páginas manuscritas con su letra de cadenas de custodia, índice con «Estados» en lugar de «Conclusiones», cuatro estados en media página, apartado histórico de tres páginas y apartado de anomalías con una sola entrada (el 0,97, rotulado «señal no auditable — no clasificada como ruido»); se cosió con hilo en Collegno la mañana del 30 de abril de 2033.
+- [C41-02] (Establecido en la historia) En el apartado histórico del informe final Vidal degrada el memorial de d'Arcis a indicio y escribe, contra la autenticidad, que ningún intervalo estrecho compensa trece siglos sin documento.
+- [C41-03] (Establecido en la historia) La última línea del informe dice «La tela fue restituida el 29 de abril a las 21:46, dentro de la ventana prevista, sin novedad»; es la primera vez que Vidal escribe «la tela» en un documento propio y, tras verlo, no lo corrige.
+- [C41-04] (Establecido en la historia) El 30 de abril de 2033, en el estudio de Ansermet en Ginebra, se ejecuta la cláusula octava en tres tramos elegidos por Vidal: cuatro discos entregados uno a uno con número de serie cantado y confirmado (nueve minutos), sobre lacrado con las frases de acceso al canal, al directorio 2033-04 y al consolidado, e informe; recibo en dos ejemplares, uno para cada parte.
+- [C41-05] (Establecido en la historia) Vidal declara en acta que retiene dos archivos ajenos al período 12-29 de abril: el contenedor cifrado 2029-03 y la planilla local de once kilobytes de octubre de 2032.
+- [C41-06] (Hechos de personajes) Ansermet tiene desde enero de 2033 una instrucción textual del fundador sobre ese punto —«lo que es suyo, es suyo»—, anterior a que se supiera que Vidal retendría algo y sin distinguir entre los dos archivos que él declara.
+- [C41-07] (Hechos de personajes) Al despedirse, Ansermet pronuncia por primera vez en cuatro reuniones una frase fuera del registro notarial: «Fueron cuatro meses de trabajar con usted, doctor. En mi oficio eso se dice al final, porque antes contamina.»
+- [C41-08] (Geografía) El 30 de abril de 2033 la grava rastrillada del patio de Cologny tiene una interrupción de medio metro cerca del sendero sur, sin volver a rastrillar; en la visita del 8 de abril el rastrillado estaba completo.
+- [C41-09] (Cultural) Antes de que Vidal entre al jardín de invierno de Cologny se oye servir agua en una sola taza, entre dos goteos del techo.
