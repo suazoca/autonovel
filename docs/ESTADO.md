@@ -569,6 +569,15 @@ epígrafe).
 Detalle completo del cierre -- incluida la nota actualizada sobre los
 rechazos de Fable 5 por categoría "cyber" -- en `docs/TRASPASO.md`.
 
+**Inventario de Fase 4 (portada/audiolibro) hecho el 2026-08-08:** los
+6 scripts (`gen_art.py`, `gen_cover_composite.py`, `gen_cover_print.py`,
+`gen_audiobook_script.py`, `gen_audiobook.py`, `gen_art_directions.py`)
+están presentes pero ninguno fue nunca corrido ni adaptado a esta
+novela -- `audiobook_voices.json` en particular sigue siendo el de la
+novela de referencia, sin reparto ni `voice_id` reales. Cero llamadas
+a FAL/ElevenLabs hechas. Detalle completo en la sección "Arte y
+audiolibro" de `docs/TRASPASO.md`.
+
 ## Qué está hecho y probado
 
 - **`tests/fixtures/cap_dialogado_es.md`** (624 palabras) y
@@ -1072,3 +1081,16 @@ generación real ni ver si el resultado tiene calidad.
    c. Con la Tarea 6 y la 7 ya resueltas, se puede intentar
       `run_pipeline.py --phase foundation` de punta a punta por primera
       vez (con un `seed.txt`/`semilla.txt` real).
+
+## Sesión `novela2`: verificación de Fase 3 sin correr nada (2026-08-08)
+
+Inventario de los seis scripts de revisión de conjunto
+(`adversarial_edit.py`, `reader_panel.py`, `gen_brief.py`,
+`gen_revision.py`, `compare_chapters.py`, `review.py`), nunca corridos
+para "La ostensión". Los seis siguen con prompts en inglés;
+`reader_panel.py` y `gen_revision.py` además tienen contenido
+hardcodeado de la novela de referencia ("Cass", Ch 22/24, "The Second
+Son of the House of Bells"), y `reader_panel.py` depende de
+`arc_summary.md`, que no existe. Detalle completo, tabla por script y
+orden de traducción recomendado en `docs/TRASPASO.md`, sección "Fase 3
+(revisión de conjunto): estado de adaptación (idioma + contenido)".

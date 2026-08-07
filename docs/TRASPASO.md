@@ -1395,6 +1395,88 @@ fallback de texto plano (`• ◦ •`) para los quiebres de escena. Si se
 quiere una tapa ilustrada, es trabajo aparte, no bloqueado por nada de
 lo de arriba.
 
+## Arte y audiolibro: alcance real vs. especificación del framework
+(inventario, cero llamadas a FAL/ElevenLabs -- 2026-08-08)
+
+`PIPELINE.md`/`README.md` del framework describen una Fase 4 (Export)
+que incluye portada/ornamentos y audiolibro multi-voz. Antes de
+planificar nada sobre eso, se verificó qué de eso existe realmente
+-- y funciona -- en esta rama, siguiendo el mismo criterio que reveló
+los bugs de `build_tex.py`: un archivo presente y nunca modificado en
+el historial de la rama es candidato fuerte a no haber sido nunca
+adaptado ni corrido para este libro.
+
+**Scripts -- los 6 están presentes, ninguno fue tocado ni corrido para
+"La ostensión":**
+
+| Script | Presente | Último commit que lo tocó | Adaptado a esta novela |
+|---|---|---|---|
+| `gen_art.py` | Sí | `d03e879` (Tarea 8, streaming genérico en los 19 scripts de API) | No |
+| `gen_art_directions.py` | Sí | `d03e879` (ídem) | No |
+| `gen_cover_composite.py` | Sí | `4f8f880` (import inicial del framework) | No |
+| `gen_cover_print.py` | Sí | `4f8f880` (ídem) | No |
+| `gen_audiobook_script.py` | Sí | `d03e879` (ídem) | No |
+| `gen_audiobook.py` | Sí | `4f8f880` (ídem) | No |
+
+Ninguno de los dos commits que aparecen es específico de esta novela:
+`d03e879` es un refactor de infraestructura aplicado por igual a los
+19 scripts que llaman a la API (streaming vía `api_comun.py`, ver
+"Tarea 8" más arriba), y `4f8f880` es el commit único de importación
+del framework de referencia completo. Ningún commit de este historial
+adapta contenido, nombres de personajes o configuración de estos 6
+scripts a "La ostensión" -- a diferencia de `chapters/`, `canon.md`,
+`characters.md`, etc., que sí tienen decenas de commits propios.
+
+**Rutas hardcodeadas de otro entorno (`/home/jeffq/...` o similar):
+ninguna encontrada** en estos 6 scripts (`grep -n "home/jeffq\|/home/"`
+vacío) -- a diferencia de `build_tex.py`, que sí las tenía y hubo que
+corregir. En eso están mejor que el pipeline de tipografía.
+
+**Pero sí hay contenido sin adaptar, que si bloquea:**
+- `gen_cover_composite.py` y `gen_cover_print.py` tienen el título de
+  la novela de referencia hardcodeado como valor por defecto del
+  argumento `--title` (`"The Second Son of the House of Bells"`, líneas
+  48/333 y 60/181 respectivamente). No es una ruta rota -- es un
+  default de CLI, se puede pisar con `--title "La ostensión"` al
+  invocar -- pero confirma que nunca se corrieron para este libro ni
+  con ese flag.
+- `audiobook_voices.json` -- **existe, pero es el archivo de la novela
+  de referencia sin adaptar, no una plantilla vacía.** Mapea voces de
+  ElevenLabs a personajes de "The Second Son of the House of Bells"
+  (`NARRATOR`, `CASS`, `EDDAN`, `PERIN`, `LENNE`, `TORVALD`...) --
+  ninguno de esos nombres existe en el reparto de "La ostensión"
+  (Vidal, Ledda, Sandoz, Ashkenazi, Ceruti...). Además, todos los
+  campos `voice_id` son literalmente el placeholder `"REPLACE_WITH_VOICE_ID"`
+  sin completar -- ni siquiera se llegó a elegir voces reales de
+  ElevenLabs para el proyecto de referencia, mucho menos para este
+  libro. `gen_audiobook.py` no puede correr de forma útil contra este
+  archivo tal como está: hace falta reescribirlo entero contra el
+  reparto real de la novela.
+
+**`art/`: sigue sin existir** (confirmado, sin cambios respecto a lo
+ya sabido en la sección anterior).
+
+**Variables de entorno: ambas presentes en `.env`** (solo se confirma
+presencia, no se imprimen valores):
+- `FAL_KEY`: presente.
+- `ELEVENLABS_API_KEY`: presente.
+
+**Conclusión:**
+
+| Frente | ¿Listo para correr tal cual? | Qué falta |
+|---|---|---|
+| Portada/ornamentos (`gen_art.py`, `gen_cover_*.py`) | No | Nunca se corrió para este libro; hace falta decidir dirección de arte para "La ostensión" y pasar `--title` correcto (o editar el default). Sin bugs de rutas, a diferencia de `build_tex.py`. |
+| Audiolibro (`gen_audiobook_script.py`, `gen_audiobook.py`) | No | `audiobook_voices.json` hay que reescribirlo entero contra el reparto real de "La ostensión" y completar `voice_id` con voces reales de ElevenLabs elegidas a propósito -- no es un ajuste menor, es trabajo de casting completo. |
+| Claves de API | Sí | `FAL_KEY` y `ELEVENLABS_API_KEY` ya están en `.env`. |
+
+A diferencia del pipeline de tipografía (`build_tex.py`/`novel.tex`),
+donde el trabajo pendiente eran bugs de código y contaminación de
+plantilla ya corregidos esta sesión, acá el trabajo pendiente es de
+contenido/decisión editorial (elegir dirección de arte, elegir voces
+de ElevenLabs para cada personaje) -- no hay bug que arreglar todavía
+porque no se llegó a intentar correr nada. No se hizo ninguna llamada
+a FAL ni a ElevenLabs en este inventario.
+
 ## Tarea 12 -- guardia de contaminación en los prompts (sin cambios)
 
 Sigue completa. `tests/test_guardia_prompts.py::DEUDA_CONOCIDA` sigue
@@ -1612,6 +1694,139 @@ no acá):
   tic de Chiara de enrollar cables) y conviene tenerlo presente al leer
   cada capítulo nuevo, no solo confiar en el juez para cazarlo.
 
+## Fase 3 (revisión de conjunto): estado de adaptación (idioma + contenido)
+
+Verificación de inventario (sin correr nada) de los seis scripts de
+Fase 3a/3b -- `adversarial_edit.py`, `reader_panel.py`, `gen_brief.py`,
+`gen_revision.py`, `compare_chapters.py`, `review.py`. Nunca se
+corrieron para "La ostensión": el libro se aceptó capítulo por
+capítulo (Fase 2) y pasó directo a Fase 4 (export). El framework se
+escribió originalmente para "The Second Son of the House of Bells"
+(novela de referencia en inglés) y, a diferencia de `draft_chapter.py`
+-- que ya tiene system prompt y prompt completo en español, registro
+"vos" (líneas 30-43 y `build_prompt()`/`build_prompt_bloques()`) --
+ninguno de los seis scripts de Fase 3 pasó por esa traducción. El
+único commit que los tocó desde que existen es `d03e879` ("Tarea 8:
+streaming en call_writer()/call_judge() vía api_comun.py"), que solo
+cambió el mecanismo de llamada a la API, no los prompts.
+
+**Idioma de cada prompt -- los seis están en inglés:**
+
+| Script | Prompt principal | System prompt |
+|---|---|---|
+| `review.py` | `REVIEW_PROMPT` (L36-38), inglés | -- (no usa system) |
+| `reader_panel.py` | `READER_PROMPT` (L81-113), inglés | 4 personas (Editor/Genre Reader/Writer/First Reader, L26-79), inglés, las cuatro terminan en "You respond with valid JSON only." |
+| `adversarial_edit.py` | `EDIT_PROMPT` (L84-125), inglés | L33-38, inglés |
+| `compare_chapters.py` | `COMPARE_PROMPT` (L71-101), inglés | L34-39, inglés |
+| `gen_revision.py` | prompt inline (L55-90), inglés | L25-30, inglés |
+| `gen_brief.py` | no llama a la API -- ver más abajo | -- |
+
+`gen_brief.py` no tiene prompt porque no invoca `llamar_api()`: es un
+agregador Python puro que arma el brief a partir de JSONs ya generados
+(reader panel, evals, cuts). Ya tiene algo de infraestructura en
+español (`_ruta_bilingue()` L25-30, comentarios de las funciones de
+extracción de voz) pero el TEXTO que compone -- encabezados `## PROBLEM`,
+`## WHAT TO KEEP`, `## WHAT TO CHANGE`, `## VOICE RULES`, `## TARGET`,
+y todas las frases armadas ("Panel disagreement flags for this
+chapter", "Adversarial edit found N cuttable words...", etc., a lo
+largo de `build_panel_brief()`/`build_eval_brief()`/`build_cuts_brief()`/
+`build_auto_brief()`) están hardcodeadas en inglés. Esto importa porque
+ese brief se inyecta textual en el prompt de `gen_revision.py` como
+"REVISION BRIEF (follow this exactly): {brief}" (`gen_revision.py`
+L57-58) -- es decir, aunque se tradujera `gen_revision.py`, seguiría
+recibiendo instrucciones en inglés incrustadas adentro, el mismo patrón
+de calco que motivó traducir `draft_chapter.py`.
+
+**Contenido hardcodeado de la novela de referencia -- confirmado en
+dos de los seis, y un bug de rango de capítulos en otros dos:**
+
+- `reader_panel.py` L83-84: `"The full novel is 72,422 words across
+  24 chapters."` -- palabras/capítulos de "The Second Son", no de "La
+  ostensión" (46 capítulos, ~92.000 palabras según `outline.md`).
+  L95: `"Does Cass's choice in Ch 22 land? Does the final image in Ch
+  24 mirror Ch 1..."` -- "Cass" no existe en este libro (protagonista
+  es Sebastián Vidal), y los capítulos 22/24 no son ni el clímax ni el
+  cierre de "La ostensión" (46 capítulos). Correr esto sin editar
+  produciría respuestas del panel lector sobre una novela que no es
+  esta.
+- `gen_revision.py` L55: `f'Rewrite Chapter {ch_num} of "The Second
+  Son of the House of Bells."'` -- título hardcodeado de la novela de
+  referencia, se inyecta en TODAS las reescrituras. Bug de contenido,
+  no solo de idioma: hay que corregirlo sí o sí antes de poder correr
+  el script, independientemente de si se traduce el resto del prompt.
+- `adversarial_edit.py` L149 y `compare_chapters.py` L189: ambos
+  hardcodean `chapters = list(range(1, 25))` en `main()` -- el rango
+  de capítulos de la novela de referencia (24), no los 46 reales. Sin
+  corregir esto, ambos scripts ignorarían en silencio los capítulos
+  25-46 en el modo `all`/tournament completo.
+- `review.py`: sin contenido hardcodeado. `get_title()` (L54-66) lee
+  la primera línea de `outline.md`, que hoy es "LA OSTENSIÓN --
+  Esquema completo (Libro 1)" -- funciona, devuelve el título correcto
+  (incluye el subtítulo del esquema como parte del string, cosmético,
+  no bloqueante).
+
+**`reader_panel.py` depende de un archivo que no existe:**
+`arc_summary.md` no está en `/root/novela2` (`ls`/`wc -l` confirman
+ausencia). `main()` lo lee sin chequeo en la primera línea (L181) --
+el script crashearía antes de llegar a cualquier problema de idioma o
+contenido. Ninguno de los generadores de fundación revisados lo
+produce; hace falta un paso previo (no cubierto por los seis scripts
+de esta verificación) que arme el resumen capítulo-por-capítulo de los
+46 capítulos reales antes de que `reader_panel.py` pueda correr.
+
+**Modelo configurado (`.env`):** `AUTONOVEL_REVIEW_MODEL=claude-opus-5`
+y `AUTONOVEL_JUDGE_MODEL=claude-opus-5` -- ambos Opus, correcto para
+`review.py`/`reader_panel.py`/`adversarial_edit.py`/`compare_chapters.py`.
+`gen_revision.py` usa `AUTONOVEL_WRITER_MODEL=claude-fable-5` -- el
+mismo modelo que ya mostró `stop_reason=refusal` dos veces durante la
+redacción (ver "Fable 5: rechazos de contenido" más arriba, L1193) --
+y hoy no tiene ninguna de las protecciones de idioma/registro que sí
+tiene `draft_chapter.py` para ese mismo modelo.
+
+**`deteccion_es.py` -- enganchado solo a `draft_chapter.py`:**
+`grep` confirma que `CALIBRACION` de `deteccion_es.py` solo se importa
+en `draft_chapter.py` (L13). Ninguno de los seis scripts de Fase 3 lo
+importa ni lo corre. Si se traducen los prompts, ni los briefs
+(`gen_brief.py`) ni las reescrituras (`gen_revision.py`) van a pasar
+por chequeo automático de calcos/slop salvo que se enganche a mano --
+`gen_revision.py` es el candidato obvio, porque es el único de los
+seis que produce prosa que termina en `chapters/`.
+
+**Recomendación -- qué traducir antes de correr nada, en qué orden:**
+
+1. **`gen_revision.py` primero.** Es el único que escribe prosa final
+   (los otros cinco son de solo lectura/análisis). Usa Fable 5 (mismo
+   riesgo de rechazo/calco que `draft_chapter.py` ya enfrentó) sin
+   ninguna de sus protecciones. Corregir el título hardcodeado (L55)
+   es obligatorio, no opcional -- y aprovechar para traducir todo el
+   prompt (incluidas las ANTI-PATTERN RULES, L78-88) siguiendo el
+   patrón ya probado de `draft_chapter.py::call_writer()`. Conectar
+   `deteccion_es.py` al resultado, igual que en `draft_chapter.py`.
+2. **`gen_brief.py` segundo.** No llama a la API, pero su output se
+   inyecta textual en el prompt de `gen_revision.py` -- si queda en
+   inglés, sigue induciendo calco aunque `gen_revision.py` ya esté en
+   español. Traducir las cadenas fijas (headers y frases armadas) es
+   mecánico, no toca la lógica de extracción del panel/evals/cuts.
+3. **`reader_panel.py` tercero, y es el más roto de los seis:** prompt
+   en inglés Y contenido hardcodeado de la novela de referencia (Cass,
+   Ch 22/24, conteo de palabras/capítulos) que daría respuestas sin
+   sentido sobre "La ostensión" tal como está. Además depende de
+   `arc_summary.md`, que no existe -- generarlo primero (con los 46
+   capítulos reales) es un prerrequisito, no parte de la traducción en
+   sí.
+4. **`adversarial_edit.py` y `compare_chapters.py` juntos.** Prompts en
+   inglés sin contenido hardcodeado de personajes/título, pero con el
+   rango de capítulos fijo en `range(1, 25)` -- corregir a `range(1,
+   47)` a la vez que se traduce, si no van a fallar en silencio sobre
+   los últimos 22 capítulos.
+5. **`review.py` último.** El menos roto: sin contenido hardcodeado,
+   `get_title()` ya funciona. Traducirlo igual por consistencia --
+   además de que un review en inglés sobre prosa en español puede
+   sesgar el análisis hacia criterios de crítica anglosajona que no
+   necesariamente aplican al registro de esta novela.
+
+No se ejecutó ningún script durante esta verificación.
+
 ## Próximo paso
 
 **No hay próximo capítulo: el libro está completo (46/46).** No queda
@@ -1641,8 +1856,16 @@ excluyentes entre sí, ninguna empezada todavía:
    de API en sí (streaming, continuación por `max_tokens`, manejo de
    `refusal`), no específicas de esta novela, y esa rama sigue con el
    bug de prefill sin corregir si algún día corre contra Fable 5.
+5. **Portada/ornamentos y/o audiolibro (Fase 4 del framework).**
+   Ninguno de los dos se corrió nunca para este libro -- ver "Arte y
+   audiolibro" más arriba para el inventario completo. La portada
+   necesita decidir dirección de arte y pasar el título correcto (sin
+   bugs de código de por medio); el audiolibro necesita reescribir
+   `audiobook_voices.json` entero contra el reparto real de "La
+   ostensión" y elegir voces reales de ElevenLabs -- son dos alcances
+   distintos, no un solo bloque de trabajo, y ninguno arrancó todavía.
 
-Si el usuario pide continuar, preguntar primero cuál de las cuatro (o
+Si el usuario pide continuar, preguntar primero cuál de las cinco (o
 si es otra cosa) -- no asumir.
 
 Lo que sigue de esta sección son lecciones acumuladas durante la
