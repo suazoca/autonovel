@@ -9,3 +9,8 @@ typeset/*.pdf
 typeset/chapters_content.tex
 *.pdf
 *.log
+typeset/novel.aux
+typeset/novel.out
+!typeset/novel.pdf
+!typeset/novel.log
+!typeset/chapters_content.tex
