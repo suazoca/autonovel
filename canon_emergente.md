@@ -536,3 +536,12 @@
 - [C43-06] (Hechos de personajes) Al despedirse en el playón del polígono, Ledda le dice a Vidal: «Si alguna vez necesita una operación limpia, no me llame. Que no la necesite es mi mejor trabajo»; es la primera vez que Vidal le oye reclamar algo como propio.
 - [C43-07] (Hechos de personajes) En el cuaderno de tapas naranjas, la noche del 2 de mayo de 2033, Vidal asienta: «Archivo: custodia perpetua, Ginebra. Estado: fuera de alcance de todo peritaje, incluido el mío. Clasificación: sin datos.» y debajo «El punto anterior no impide dormir.», con el círculo de no requiere acción al margen.
 - [C43-08] (Cronología) Dos días antes de la ostensión, en la piazza San Giovanni se montan luces y vallas; Vidal, desde la ventana de su hotel en Turín, ve el frente de la catedral barrido por una prueba de reflector y decide asistir el miércoles.
+
+## Cap. 44
+
+- [C44-01] (Cronología) El 4 de mayo de 2033 Vidal se suma a la fila de la ostensión a las 8:40 por el extremo abierto, detrás del Palazzo Reale, sin acreditación y con espera declarada de tres horas (tres horas y media al salir); la visita papal es por la tarde.
+- [C44-02] (Geografía) La fila de la ostensión de 2033 arranca detrás del Palazzo Reale y da dos vueltas antes de entrar a los jardines; el recorrido interior está marcado con cordones y desemboca en la nave por el costado, con salida lateral al atrio.
+- [C44-03] (Establecido en la historia) En la ostensión la teca queda elevada sobre el crucero, inclinada dieciocho grados, con cristal antirreflejo cuyo índice de refracción especificó la donación, e iluminación rasante a cuarenta grados.
+- [C44-04] (Hechos de personajes) El 4 de mayo de 2033, en su último acto público en el cargo, Ferrero cruza por delante de la teca sin guantes de ningún tipo y deja los dedos de la mano derecha a dos o tres centímetros del cristal durante seis segundos, sin tocarlo; no ve a Vidal entre el público.
+- [C44-05] (Hechos de personajes) Frente a la teca, en la fila, Vidal dice en voz alta «La tela cae bien»; Chiara tarda un segundo de más en contestar y no lo comenta.
+- [C44-06] (Hechos de personajes) Al salir de la ostensión Vidal descubre que no llevaba la cuenta de la fila y que el último conteo completo del día fue el de un chico de seis años que contaba vallas y estaba mal; siente el impulso de reiniciar desde uno y lo deja pasar.
