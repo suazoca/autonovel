@@ -523,6 +523,52 @@ corregían.
 Detalle completo -- beats, texto exacto de los cambios, próximo paso
 (Cap. 9, "Maître Ansermet") -- en `docs/TRASPASO.md`.
 
+## Sesión `novela2`: cierre del libro -- 46/46 capítulos aceptados (2026-08-07)
+
+**"La ostensión" (Libro 1) está completa.** Desde el Cap. 8 (arriba,
+2026-08-04) hasta acá se escribieron, evaluaron, aceptaron y comitearon
+los 38 capítulos restantes (Cap. 9 a 46) a lo largo de varias sesiones
+posteriores -- el detalle capítulo por capítulo (beats, correcciones de
+canon encontradas por el juez, rondas exactas de `evaluate.py`) vive en
+el mensaje de commit de cada capítulo y en las versiones sucesivas de
+`docs/TRASPASO.md`; no se repite acá en forma narrativa completa.
+
+**Estado final del libro:**
+
+| | |
+|---|---|
+| Capítulos | **46 de 46**, escritos, evaluados y aceptados |
+| Palabras totales | ~85.300 |
+| `overall_score` promedio | **7.31** (rango 6.48-7.86) sobre los 46 capítulos |
+| `state.json::debts` | vacío, sin `CONFLICTO` de canon abierto |
+| Tests | 266 en verde + 38 xfail esperados (sin cambios de infraestructura) |
+| Working tree / push | Limpio, al día con `origin/novela2` (`c4f72e4`) |
+
+**Acto III (Cap. 37-46)**, el tramo final, cerró con tres capítulos de
+ambición **pico** -- el umbral más exigente del libro (7.5 de
+`overall_score`): Cap. 38 ("Ceruti"), Cap. 42 ("El jardín de invierno",
+el Climax -- confesión de Sandoz sobre Basilea 2027 y su propia muerte)
+y Cap. 44 ("Ostensión"). Las rondas de `evaluate.py` necesarias para
+cruzar el umbral variaron de 1 a 7 según el capítulo: el Cap. 42 fue
+aceptado en la primera pasada, mientras que el Cap. 44 necesitó siete
+rondas de pulido de voz -- costo alto pero consistente con el
+precedente del libro (el Cap. 23, a mitad de la novela, había
+necesitado ocho). El Cap. 46 ("La fila") cierra el libro en espejo
+exacto del Cap. 1: mismo laboratorio de Jerusalén, misma fila del
+Sepulcro un año después, el tic de contar que se apaga donde nació la
+pregunta.
+
+**Export del manuscrito completo generado esta sesión**
+(`typeset/build_tex.py` + `novel.tex` → `typeset/novel.pdf`, 293
+páginas) -- ver la entrada dedicada en `docs/TRASPASO.md` para el
+detalle de los bugs reales que hizo falta corregir en el pipeline de
+tipografía (nunca se había corrido para este libro) y los placeholders
+que quedan pendientes de decisión editorial (nombre de autor,
+epígrafe).
+
+Detalle completo del cierre -- incluida la nota actualizada sobre los
+rechazos de Fable 5 por categoría "cyber" -- en `docs/TRASPASO.md`.
+
 ## Qué está hecho y probado
 
 - **`tests/fixtures/cap_dialogado_es.md`** (624 palabras) y

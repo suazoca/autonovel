@@ -3,8 +3,9 @@
 import re
 import os
 
-CHAPTERS_DIR = "/home/jeffq/autonovel/chapters"
-OUT_DIR = "/home/jeffq/autonovel/typeset"
+_BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CHAPTERS_DIR = os.path.join(_BASE_DIR, "chapters")
+OUT_DIR = os.path.join(_BASE_DIR, "typeset")
 
 def latex_escape(t):
     t = t.replace('&', '\\&')
@@ -90,22 +91,37 @@ def make_drop_cap(latex_body):
     drop = f"\\lettrine[lines=2, lhang=0.1, nindent=0.2em]{{{first_letter}}}{{{word_rest}}}{para_rest}"
     return drop + '\n\n' + rest
 
+# Chapter titles live in outline.md ("### Ch N: Title"), not in the
+# chapter files themselves -- draft_chapter.py never writes a heading
+# line into chapters/ch_NN.md, titles are only ever passed externally
+# (e.g. to chapter_to_pdf.py). Parse them from outline.md once.
+outline_path = os.path.join(_BASE_DIR, "outline.md")
+titles = {}
+with open(outline_path) as f:
+    for line in f:
+        m = re.match(r'^### Ch (\d+):\s*(.+?)\s*$', line)
+        if m:
+            titles[int(m.group(1))] = m.group(2)
+
 chapters_tex = []
-for n in range(1, 20):
+for n in range(1, 47):
     path = os.path.join(CHAPTERS_DIR, f"ch_{n:02d}.md")
     with open(path) as f:
         text = f.read()
-    
+
     lines = text.strip().split('\n')
-    title_line = lines[0].lstrip('# ').strip()
-    body = '\n'.join(lines[1:]).strip()
-    
-    if ': ' in title_line:
-        label, subtitle = title_line.split(': ', 1)
-    else:
-        label, subtitle = title_line, ""
-    
-    chapter_name = subtitle if subtitle else label
+    # Almost every chapter file starts directly with prose. ch_01.md
+    # carries its own "# Título" heading line, and ch_14.md has a
+    # stray leftover "# Capítulo 14\n\n## Ventanas" double-header --
+    # strip any number of leading markdown heading lines (and the
+    # blank lines between them), not just one.
+    i = 0
+    while i < len(lines) and (lines[i].lstrip().startswith('#') or not lines[i].strip()):
+        i += 1
+    body = '\n'.join(lines[i:]).strip() if i > 0 else text.strip()
+
+    title_line = titles.get(n, f"Capítulo {n}")
+    chapter_name = title_line
     latex_body = md_to_latex(body)
     latex_body = make_drop_cap(latex_body)
     

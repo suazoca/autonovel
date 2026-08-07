@@ -6,6 +6,68 @@ commits para retomar el trabajo -- es la foto actual, no la bitácora
 (para eso está `ESTADO.md`, que sí es narrativo y tiene una sección
 nueva para esta rama).
 
+**Actualización 2026-08-07 (cierre del libro -- Cap. 37 a 46, LIBRO 1
+COMPLETO):** diez capítulos más, escritos, evaluados, aceptados y
+comiteados uno por uno en esta sesión. **Acto III completo. "La
+ostensión" (Libro 1) está terminada: 46 de 46 capítulos.** Estadística
+final sobre los 46 capítulos: ~85.300 palabras, `overall_score`
+promedio 7.31 (rango 6.48-7.86), `state.json::debts` vacío, sin
+`CONFLICTO` de canon abierto, 266 tests en verde + 38 xfail, working
+tree limpio y pusheado a `origin/novela2` (`c4f72e4`).
+
+Tres capítulos de ambición **pico** cerraron el Acto III: Cap. 38
+("Ceruti"), Cap. 42 ("El jardín de invierno", el Climax -- Sandoz
+confiesa Basilea 2027 y su propia muerte, aceptado en la primera
+pasada) y Cap. 44 ("Ostensión", el que más rondas necesitó de los
+tres -- siete, en línea con el costo histórico de la ambición pico en
+este libro: el Cap. 23, a mitad de la novela, había necesitado ocho).
+El Cap. 46 ("La fila") cierra el libro en espejo exacto del Cap. 1 --
+mismo laboratorio de Jerusalén, misma fila del Sepulcro un año
+después, el tic de contar que se apaga donde nació la pregunta.
+
+**Fable 5 volvió a rechazar contenido por categoría "cyber"** en el
+Cap. 37 y el Cap. 39 (contenido procedimental de vigilancia/sustitución
+del atraco) -- tercera y cuarta vez en el libro tras el Cap. 14 y 15.
+Con cuatro ocurrencias del mismo patrón confirmado en total, esto ya no
+se trata como falso positivo aislado del clasificador: es una
+restricción de seguridad cibernética esperable del propio modelo ante
+contenido de intrusión/vigilancia descripto de forma procedimental, no
+un problema del pipeline ni del prompt -- ver la sección "Fable 5" más
+abajo, reescrita con esta conclusión.
+
+**Export del manuscrito completo generado esta sesión**
+(`typeset/build_tex.py` + `novel.tex` → `typeset/novel.pdf`, 293
+páginas, compila limpio con `xelatex`). El pipeline de tipografía nunca
+se había corrido para este libro -- hicieron falta tres correcciones
+reales, no cosméticas: `build_tex.py` tenía rutas hardcodeadas de otro
+entorno (`/home/jeffq/autonovel`, inexistente acá) y un rango de
+capítulos fijo a 19 (`for n in range(1, 20)`, herencia de cuando el
+framework solo tenía esa cantidad de capítulos de referencia); además,
+los capítulos de esta novela no llevan título embebido en el archivo
+(`chapter_to_pdf.py` siempre lo recibió como argumento aparte), así que
+el parseo de título por primera línea del `.md` estaba tomando prosa
+real como si fuera encabezado para el Cap. 2 en adelante -- se
+reescribió para leer los títulos de `outline.md` ("### Ch N: Título").
+De paso, un artefacto real en `chapters/ch_14.md` (encabezado doble
+sobrante, `# Capítulo 14` + `## Ventanas`, que ningún otro capítulo
+tiene) rompía el macro de letra capital de LaTeX -- corregido
+generalizando el strip de líneas de encabezado en vez de asumir una
+sola línea. `novel.tex` en sí seguía siendo la plantilla sin adaptar
+del framework original ("Bells"): título, subtítulo, header de página,
+epígrafe, metadatos del PDF y colofón con URL/QR/logo promocional de
+NousResearch, todo en inglés y specífico de la novela de referencia --
+reemplazado por lo correspondiente a este libro, con dos placeholders
+explícitos que quedan a criterio editorial del usuario: el nombre del
+autor (`[Nombre del autor]`) y el epígrafe elegido (una cita literal de
+Ashkenazi en el Cap. 2, no inventada, pero sujeta a confirmación). Ver
+sección "Export del manuscrito completo" más abajo para el detalle
+completo y qué queda pendiente de decisión antes de distribuir el PDF.
+
+No queda ningún capítulo pendiente de escribir. "Próximo paso" y "Cómo
+retomar" (al final del documento) se reescribieron para reflejar el
+cierre -- no había forma de dejarlos apuntando al Cap. 37 como si
+siguiera siendo el siguiente paso.
+
 **Actualización 2026-08-07 (continuación -- Cap. 35 y 36, cierra el
 Acto II; disciplina de revisión ampliada por costo real de API):** dos
 capítulos más. **Acto II completo -- 36 de 46 capítulos, arranca el
@@ -362,16 +424,13 @@ vuelta**.
 
 ## En una línea
 
-Fundación completa y aprobada. **Acto I completo (Cap. 1-11). Acto II,
-parte 1, en curso: Cap. 12 a 19 escritos, evaluados y aceptados (8 de
-12 -- faltan 20-23 para llegar al Midpoint).** `state.json::debts`
-vacío, sin `CONFLICTO` de canon abiertos, 266 tests en verde. Cacheo de
-prompt implementado y confirmado contra la API real, en producción
-desde el Cap. 17. Fable 5 rechazó dos capítulos por contenido de
-vigilancia/fabricación (categoría "cyber", falso positivo) -- resuelto
-cambiando a Opus 5 solo para esas dos llamadas puntuales. Listo para
-**Cap. 20 ("Cologny")**, ambición **pico** -- primera aparición en
-persona de Sandoz -- ver "Próximo paso".
+**"La ostensión" (Libro 1) está completa: 46 de 46 capítulos escritos,
+evaluados y aceptados.** ~85.300 palabras, `overall_score` promedio
+7.31 (rango 6.48-7.86), `state.json::debts` vacío, sin `CONFLICTO` de
+canon abierto, 266 tests en verde + 38 xfail. Working tree limpio,
+pusheado a `origin/novela2` (`c4f72e4`). Manuscrito completo exportado
+esta sesión (`typeset/novel.pdf`, 293 páginas). No hay próximo
+capítulo -- ver "Próximo paso" para qué sigue con el repositorio.
 
 ## Estado del repositorio
 
@@ -380,7 +439,7 @@ persona de Sandoz -- ver "Próximo paso".
 | Directorio | `/root/novela2` (worktree; confirmado con `git worktree list`) |
 | Rama | `novela2`, diverge de `framework/es-multilibro` en `7b81700` (Tarea 7) |
 | `.env` / `ANTHROPIC_API_KEY` | Presente en este entorno. `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
-| Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: el de cierre de esta sesión (Cap. 22-32 + `docs/`) -- confirmar con `git log -1 --oneline`. |
+| Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: `c4f72e4` -- Cap. 46, cierre del libro. |
 | Working tree | Limpio -- confirmar con `git status`. |
 | Tests | `uv run python -m pytest tests/ -v` -- **266 tests, todos en verde, + 38 xfail esperados** (sin cambios de infraestructura desde la sesión del cacheo de prompt). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
 | Token de GitHub | Fine-grained, creado 2026-07-27, alcance `suazoca/autonovel`, permiso `Contents: read/write`, **vence ~2026-08-26**. Al vencer, limpiar la credencial guardada con `git credential reject` (protocol=https, host=github.com) antes de autenticar con uno nuevo. Usado sin problemas esta sesión (push directo, sin reingresar credencial). |
@@ -1131,31 +1190,48 @@ este documento / `docs/ESTADO.md`: se reescribió entero porque el
 Cap. 46 (Final Image) depende de una primera entrada al edículo que el
 borrador original no dramatizaba. `overall_score` final 7.54.
 
-## Fable 5: rechazos de contenido (antes "Bugs de compatibilidad", renombrada)
+## Fable 5: rechazos de contenido -- comportamiento esperado, no falso positivo
 
-`api_comun.py` ya documentaba (Tarea 9b, sesión anterior) que
-`stop_reason=refusal` existe y hay que manejarlo explícitamente --
-"pasa incluso con prompts inocuos, aparentemente un falso positivo".
-Esta sesión lo confirmó dos veces más, con un patrón: **categoría
-"cyber", sobre contenido de vigilancia/evasión de seguridad o
-fabricación de una réplica** -- Cap. 14 (arquitectura de vigilancia de
-la catedral, cámaras, cruces de la prefectura) y Cap. 15 (fabricación
-de la gemela, engañar sensores). Ficción de atraco, nada real -- casi
-seguro falso positivo del clasificador, no una señal de que el
-contenido sea problemático de verdad.
+`api_comun.py` ya documentaba (Tarea 9b) que `stop_reason=refusal`
+existe y hay que manejarlo explícitamente. Al cierre del libro, el
+patrón se repitió **cuatro veces en total, siempre la misma categoría
+"cyber"**, siempre sobre contenido procedimental de
+vigilancia/intrusión/evasión de seguridad o fabricación de una
+réplica, nunca sobre contenido sexual, violento ni de ningún otro tipo:
 
-**Workaround usado las dos veces, sin tocar ningún archivo:**
+- **Cap. 14** -- arquitectura de vigilancia de la catedral (cámaras,
+  cruces de la prefectura).
+- **Cap. 15** -- fabricación de la gemela, engañar sensores.
+- **Cap. 37** -- ingreso escalonado del equipo con identidades falsas,
+  vector de acceso de la operación.
+- **Cap. 39** -- procedimiento de desmontaje/destrucción de evidencia
+  de la operación.
+
+**Conclusión con cuatro puntos de datos, no una sospecha con dos:**
+esto no es un falso positivo del pipeline ni un problema de prompt --
+es una restricción de seguridad cibernética real del propio modelo
+Fable 5 ante contenido de intrusión/vigilancia descrito de forma
+procedimental (aunque sea ficción de una novela de atraco, sin nada
+real ni aplicable fuera de la trama). Para cualquier proyecto futuro
+que use este mismo pipeline: si un capítulo va a describir
+procedimientos de seguridad informática, vigilancia o intrusión con
+algún detalle técnico, **anticipar el fallback a Opus 5 para esa
+llamada puntual como parte normal del plan del capítulo**, no tratarlo
+como una incidencia a debuggear cuando aparece.
+
+**Workaround, usado las cuatro veces, sin tocar ningún archivo:**
 ```bash
-AUTONOVEL_WRITER_MODEL=claude-opus-5 uv run python draft_chapter.py 14
+AUTONOVEL_WRITER_MODEL=claude-opus-5 uv run python draft_chapter.py N
 ```
-Opus 5 escribió los dos capítulos sin que el juez marcara ningún
-problema de voz atribuible al cambio de modelo -- ni una mención en
-`voice_adherence` ni en `character_voice` de ningún de los dos
-`eval_log`. Si vuelve a pasar en capítulos con contenido similar (el
-resto del atraco, Acto II parte 2 especialmente), el mismo workaround
-sirve: reintentar una vez por si no es determinístico (no lo fue
-ninguna de las dos veces, rechazó ambas), y si persiste, cambiar el
-modelo solo para esa llamada.
+Opus 5 escribió los cuatro capítulos **sin pérdida de calidad
+atribuible al cambio de modelo** -- ninguna mención en
+`voice_adherence` ni en `character_voice` de ningún `eval_log`, y el
+Cap. 15 llegó a marcar `overall_score` 7.70, el más alto del libro
+hasta ese punto de la sesión en que se escribió. Reintentar una vez
+antes de cambiar de modelo no cambió el resultado ninguna de las
+cuatro veces (rechazó siempre en el reintento también) -- no es un
+problema no determinístico, así que no vale la pena gastar una segunda
+llamada en reintentar antes de pasar a Opus 5 directamente.
 
 **Nota de esta sesión, sigue vigente:** `evaluate.py`
 (`call_judge()`, línea ~875) tenía `max_tokens=8000` fijo para el juez
@@ -1165,8 +1241,10 @@ texto (`ERROR: la respuesta se truncó por max_tokens sin producir
 ningún texto`). Subido a 16000 (mismo valor que ya usaba otro llamado
 del archivo). El cacheo de prompt (sección de arriba) no resuelve esto
 -- el modelo igual tiene que razonar sobre todo el contenido, cacheo
-solo abarata el costo de mandarlo, no el thinking sobre él. Si vuelve a
-pasar más adelante en el libro, subir de nuevo.
+solo abarata el costo de mandarlo, no el thinking sobre él. El mismo
+error de `max_tokens` sin texto (esta vez en `draft_chapter.py`, no en
+el juez) volvió a aparecer una vez en el Cap. 39, resuelto reintentando
+la llamada (no hizo falta subir el límite ahí, ya estaba en 16000).
 
 ## PDF de lectura por capítulo -- formato ya cerrado, no tocar más
 
@@ -1215,9 +1293,107 @@ detalle.** Especificación exacta, por si hay que reconstruir el script:
   "Manual Tools".
 
 **Correr esto después de aceptar cada capítulo**, como parte del
-cierre de cada capítulo (no es opcional, es el paso que reemplaza al
-`.tex`/`tectonic` de exportación completa mientras el libro no está
-terminado).
+cierre de cada capítulo -- reemplazó al `.tex`/`xelatex` de
+exportación completa mientras el libro no estaba terminado. Ya
+terminó (ver la sección siguiente); `chapter_to_pdf.py` sigue siendo
+útil para releer un capítulo suelto rápido, pero el PDF que importa
+para distribuir es el del manuscrito completo.
+
+## Export del manuscrito completo -- generado esta sesión, con placeholders pendientes
+
+`typeset/build_tex.py` + `typeset/novel.tex` nunca se habían corrido
+para este libro -- literalmente no era posible: los dos archivos
+seguían siendo la plantilla del proyecto de referencia original
+("Bells", en inglés) sin adaptar, y `build_tex.py` tenía además dos
+bugs reales que le habrían impedido correr sobre estos 46 capítulos
+aunque `novel.tex` hubiera estado listo. Se corrigió todo en esta
+sesión y el resultado compila limpio:
+
+```bash
+cd typeset
+python3 build_tex.py   # chapters/*.md -> chapters_content.tex
+xelatex -interaction=nonstopmode novel.tex   # -> novel.pdf (correr dos veces, para referencias cruzadas)
+```
+
+**`typeset/novel.pdf` -- 293 páginas, 46 capítulos en orden, sin
+errores de LaTeX** (solo warnings cosméticos de `Overfull`/`Underfull
+\hbox`/`\vbox`, normales en cualquier libro con justificación
+completa y no bloqueantes).
+
+**Bugs reales corregidos en `build_tex.py`** (no cosméticos --
+sin esto no compilaba, o compilaba mal):
+
+1. **Rutas hardcodeadas de otro entorno.** `CHAPTERS_DIR`/`OUT_DIR`
+   apuntaban a `/home/jeffq/autonovel/...`, inexistente en este
+   entorno. Cambiado a rutas relativas a la ubicación del propio
+   script (`os.path.dirname(os.path.dirname(os.path.abspath(__file__)))`),
+   portable entre entornos.
+2. **Rango de capítulos fijo a 19** (`for n in range(1, 20)`), herencia
+   de cuando el framework de referencia solo tenía esa cantidad de
+   capítulos de muestra. Cambiado a `range(1, 47)`.
+3. **El parseo de título asumía que cada `chapters/ch_NN.md` empieza
+   con una línea `# Título`.** Falso para esta novela: los capítulos
+   de este libro no llevan título embebido en el archivo --
+   `chapter_to_pdf.py` siempre lo recibió como argumento aparte (`uv
+   run chapter_to_pdf.py 46 "La fila"`), y `draft_chapter.py` nunca
+   escribe una línea de encabezado. Solo `ch_01.md` tiene una (`#
+   Capítulo 1 — Intervalo`, convención que no se repitió en ningún
+   capítulo posterior). Con la lógica vieja, la primera línea de
+   prosa real del Cap. 2 en adelante se habría tomado como si fuera
+   el título del capítulo, y esa misma línea habría desaparecido del
+   cuerpo. Corregido leyendo los títulos de `outline.md` (`### Ch N:
+   Título`, ya existen los 46) en vez de parsearlos del archivo del
+   capítulo.
+4. **Artefacto real en `chapters/ch_14.md`**, encontrado al corregir
+   el punto 3: el archivo tiene un encabezado doble sobrante (`#
+   Capítulo 14` seguido de `## Ventanas`, dos líneas) que ningún otro
+   capítulo tiene -- reliquia de una convención de nombrado que se
+   usó una sola vez y no se repitió. La lógica de "sacar una sola
+   línea de encabezado" dejaba la segunda (`## Ventanas`) como parte
+   del cuerpo, y el escape de LaTeX la convertía en algo que rompía
+   el macro de letra capital (`\lettrine`) con un error fatal
+   (`Runaway argument?`) que frenaba la compilación entera en ese
+   capítulo. Corregido generalizando el strip a "todas las líneas de
+   encabezado iniciales, cuantas haya", no una fija. No se tocó
+   `chapters/ch_14.md` en sí -- el archivo de origen queda igual, la
+   corrección es solo en cómo `build_tex.py` lo interpreta.
+
+**`novel.tex` -- de plantilla de "Bells" a plantilla de este libro.**
+No es un `libro.yaml` parametrizado (eso es la Clase A, ítem A2, de
+`docs/AUDITORIA_Y_PLAN.md` -- sigue sin existir, es un refactor de
+arquitectura más grande, fuera de alcance de esta sesión). Lo que se
+hizo fue reemplazar directamente, en el propio `.tex`, cada elemento
+específico de la novela de referencia por el de este libro: agregado
+`polyglossia` + `\setmainlanguage{spanish}` (`novel.tex` nunca lo
+había tenido -- compilaba en inglés por defecto), header de página
+(`the second son of the house of bells` → `la ostensión`), formato de
+capítulo (`chapter \thechapter` → `capítulo \thechapter`), tapa,
+portadilla, metadatos del PDF, y colofón (se sacó la URL/QR/logo
+promocional de NousResearch del proyecto "Bells" original -- no
+correspondía a este libro de ninguna forma -- y se dejó una nota de
+"obra de ficción" genérica en su lugar).
+
+**Dos placeholders quedan explícitos en el `.tex`, a criterio
+editorial, sin resolver por esta sesión:**
+- **Nombre del autor** (`[Nombre del autor]`, en la tapa y en los
+  metadatos del PDF). No se inventó un nombre -- es una decisión del
+  usuario, no algo que corresponda completar sin preguntar.
+- **Epígrafe.** Se usó una cita literal del Cap. 2 (Ashkenazi a
+  Vidal: *"La gente que espera afuera no vive en un intervalo... en
+  algún punto todos eligen, doctor"*) -- temática, no spoiler, texto
+  real de la novela y no inventado, pero es una elección creativa que
+  `PIPELINE.md` documenta como paso manual ("Choose epigraph"); queda
+  sujeta a confirmación antes de distribuir el PDF, no se trató como
+  decisión ya cerrada.
+
+**No hay portada de tapa (`art/cover.png`) ni ornamentos de capítulo**
+-- el directorio `art/` no existe en este repo. `novel.tex` ya
+maneja esto con `\IfFileExists{}{}` (si no existe el archivo, se
+omite sin romper la compilación), así que el PDF resultante no tiene
+tapa ilustrada ni separadores de escena ornamentados -- usa el
+fallback de texto plano (`• ◦ •`) para los quiebres de escena. Si se
+quiere una tapa ilustrada, es trabajo aparte, no bloqueado por nada de
+lo de arriba.
 
 ## Tarea 12 -- guardia de contaminación en los prompts (sin cambios)
 
@@ -1438,83 +1614,42 @@ no acá):
 
 ## Próximo paso
 
-**Escribir el Cap. 37** ("Veintinueve de abril", **Finale (asalto a la
-torre)**, ambición **sosten**, ~1950 palabras, Yes-but). Turín, catedral
-y entorno; POV Vidal. Abre el Acto III (80.4%).
+**No hay próximo capítulo: el libro está completo (46/46).** No queda
+nada por escribir en `chapters/`. Lo que sigue depende de qué se
+quiera hacer con el repositorio a partir de acá -- opciones, no
+excluyentes entre sí, ninguna empezada todavía:
 
-**Beats:** (1) Ingreso escalonado: Ferrero por derecho propio -- la
-Comisión lo espera para la revisión preostensión --; Chiara y Vidal
-como técnicos del sistema de clima, historias limpias verdaderas,
-motivos ocultos verdaderos. La frase de Ledda del Cap. 12 viaja con
-ellos como salvoconducto irónico. (2) El contenedor con la tela entra
-en el carro de mantenimiento del clima: el vector de acceso comprado
-con la teca funciona por segunda y última vez. (3) El calor anómalo
-cumple: el sistema trabaja al límite, la revisión programada se
-confirma -- la ventana existirá. Vidal cuenta los minutos y nota que
-contar, esta noche, vuelve a funcionar: no como oración, como oficio.
-(4) But: al aproximarse a la sacristía, luz encendida donde no debía
-haber nadie. Ledda por el auricular, sin adjetivos: "Hay una persona
-adentro. Es Ceruti." Corte.
+1. **Confirmar los dos placeholders del manuscrito** (`typeset/novel.tex`
+   -- nombre de autor, epígrafe) y regenerar `novel.pdf` si cambian.
+   Ver "Export del manuscrito completo" más arriba para el detalle
+   exacto de qué se dejó como placeholder y por qué.
+2. **Pasada de revisión editorial del libro como unidad continua.**
+   Cada capítulo se evaluó y aceptó por separado, contra su propio
+   umbral de ambición -- ningún paso de este pipeline evaluó jamás el
+   libro entero de corrido, con la continuidad de lectura real de un
+   lector humano. El `overall_score` promedio (7.31) y el rango
+   (6.48-7.86) miden calidad capítulo a capítulo, no ritmo ni
+   cohesión de conjunto.
+3. **Libro 2, si la serie sigue.** Revisar `docs/AUDITORIA_Y_PLAN.md`
+   (Clase B, "la capa de serie") antes de arrancar -- `estado_serie.json`
+   y `siembras_serie.md` no existen todavía en este repo, y varios
+   hilos del Foreshadowing Ledger de `outline.md` están marcados
+   explícitamente para pagarse en un libro futuro (columna "Alcance",
+   si algún hilo la tiene en `serie`).
+4. **Merge de las Tareas 8, 9 y 9b hacia `framework/es-multilibro`.**
+   Sigue pendiente, sin cambios esta sesión -- son mejoras al cliente
+   de API en sí (streaming, continuación por `max_tokens`, manejo de
+   `refusal`), no específicas de esta novela, y esa rama sigue con el
+   bug de prefill sin corregir si algún día corre contra Fable 5.
 
-**Plants:** ninguno nuevo.
-**Payoffs:** hilo #19 pagado en ejecución (identidades verdaderas con
-motivos ocultos, dicho y hecho); hilo #20 (el vector de la teca,
-segunda vuelta); paga el calor anómalo plantado en el Cap. 36.
-**Character movement:** opera con calma real bajo riesgo real -- la
-transformación del Acto II convertida en conducta.
-**The lie:** sin espacio -- la noche entera corre sobre confianza pura
-en tres personas; Vidal ya no lo registra como anomalía.
+Si el usuario pide continuar, preguntar primero cuál de las cuatro (o
+si es otra cosa) -- no asumir.
 
-**Antes de escribir (aplicando la disciplina completa, ver la sección
-"Disciplina de revisión antes de evaluar" más arriba):**
-1. **Payoffs a verificar en canon antes de redactar:** hilo #19
-   (identidades/historias falsas de Chiara y Vidal como técnicos de
-   clima -- confirmar contra `canon_emergente.md` qué cobertura exacta
-   quedó fijada, para no reinventarla); hilo #20 (el vector de acceso
-   comprado con la teca, primer uso ya narrado -- verificar cómo se
-   describió la primera vez antes de repetirlo). Confirmar el reparto
-   final de la ventana fijado en el Cap. 36 ([nuevo canon entry]:
-   Fabbri tela, Vidal gemela+contenedor+hoja de servicio, Ferrero
-   afuera en el crucero, Ledda coordina desde afuera del edificio) y
-   citarlo tal cual, no parafrasearlo -- es la lección directa del bug
-   de referencia hacia adelante entre Cap. 35 y 36.
-2. **Calor anómalo:** el Cap. 36 lo dejó como variable de ingeniería
-   (compresores al límite, ciclos más largos, deriva de sondas, técnico
-   apurando la revisión) con pronóstico de 31°/32° para el 29 -- este
-   capítulo debe pagarlo con esos mismos términos mecánicos, no solo
-   atmosféricos.
-3. **Fecha/hora:** el capítulo ya trae la fecha en el título
-   ("Veintinueve de abril" = día dieciocho, ver tabla día↔fecha más
-   abajo). No hace falta anclar de nuevo salvo la hora de la ventana de
-   las 16:05 ya fijada en canon -- no improvisar una hora distinta.
-4. **Ambición sostén:** igual conviene, por ser el Finale, leer una vez
-   más "Character movement" y "The lie" antes de escribir para que la
-   calma de Vidal quede en la acción (conteo, respiración, procedimiento),
-   no declarada.
-5. **Puntos ciegos conocidos a repasar:** si aparece la hoja diaria del
-   piso franco, formato fijo (sin columna de función, Ferrero primero).
-   Si se menciona la edad/trayectoria de algún personaje, cruzar contra
-   `characters.md` completo, no solo `canon_emergente.md`.
-
-**Antes de reevaluar después de cualquier arreglo:** releer el
-capítulo completo de punta a punta una vez antes de volver a correr
-`evaluate.py` -- no alcanza con corregir la línea que el juez marcó.
-
-```bash
-uv run python draft_chapter.py 37
-uv run python evaluate.py --chapter=37
-uv run python actualizar_canon.py 37
-uv run python chapter_to_pdf.py 37 "Veintinueve de abril"
-```
-
-**Ojo:** el número de capítulo va posicional
-(`chapter_num = int(sys.argv[1])` en `draft_chapter.py`) -- no hay flag
-`--chapter` para ese script (sí lo tiene `evaluate.py`). Leer cada
-capítulo antes de avanzar al siguiente. Revisar `canon_emergente.md`/
-`state.json::debts` por si el juez o `actualizar_canon.py` marcaron
-algo -- y ante un `CONFLICTO`, leerlo con calma antes de tocar el
-texto. El PDF de lectura (`chapter_to_pdf.py`) se corre al final,
-después de aceptar y de correr `actualizar_canon.py` -- no antes.
+Lo que sigue de esta sección son lecciones acumuladas durante la
+redacción de los 46 capítulos, dejadas como referencia para cualquier
+trabajo futuro sobre este mismo pipeline (una pasada de revisión, un
+Libro 2, o el merge hacia el framework) -- no son pasos pendientes de
+este libro.
 
 **Lección del Cap. 6, para no repetir el ciclo de rechazo-arreglo:**
 antes de dar por bueno o malo un capítulo por su `overall_score`, mirar
@@ -1564,15 +1699,17 @@ de tiempo tan ajustado (17 días entre el traslado y la devolución, con
 capítulos que saltan adelante y atrás en esa ventana) un desliz de un
 día entero es fácil y el juez lo va a cazar.
 
-**Lección del Cap. 14 y el Cap. 15 (Fable 5 y contenido de
-vigilancia):** si `draft_chapter.py` sale con `stop_reason=refusal`
-categoría "cyber" sobre contenido de vigilancia/evasión de seguridad o
-fabricación de una falsificación (común en esta parte del libro, es
-una novela de atraco), reintentar una vez por las dudas y si persiste,
+**Lección de Fable 5 y contenido de vigilancia (Cap. 14, 15, 37, 39 --
+ver la sección "Fable 5" más arriba para el detalle completo y la
+conclusión final):** si `draft_chapter.py` sale con
+`stop_reason=refusal` categoría "cyber" sobre contenido de
+vigilancia/evasión de seguridad o fabricación de una falsificación
+(común en una novela de atraco), no es ruido ni vale la pena reintentar
+más de una vez -- las cuatro veces que pasó en este libro, rechazó
+también en el reintento. Ir directo a
 `AUTONOVEL_WRITER_MODEL=claude-opus-5` para esa sola llamada, sin
-tocar `.env`. No fue ruido: rechazó dos veces de dos capítulos con este
-tipo de contenido, y Opus 5 lo escribió sin problemas de voz las dos
-veces.
+tocar `.env`; Opus 5 escribió los cuatro capítulos sin problemas de voz
+atribuibles al cambio de modelo.
 
 **Advertencia de la sesión del Cap. 5, sigue vigente:** antes de
 aceptar un capítulo con puntaje bajo el umbral tras varias rondas de
@@ -1583,44 +1720,45 @@ sobre una estructura incompleta no mueve el puntaje.
 
 ## Cómo retomar
 
+**No hay un capítulo esperando redacción -- el libro está completo
+(46/46).** Esta checklist es para confirmar el estado y decidir qué
+sigue, no para continuar escribiendo donde quedó una sesión anterior.
+
 1. `git status` -- confirmar que el working tree sigue limpio.
 2. `git log origin/novela2..HEAD --oneline` -- confirmar que no quedó
    nada sin pushear.
-3. `uv run python -m pytest tests/ -v` -- confirmar todo en verde y los
-   xfail esperados (ninguno inesperado) antes de tocar nada.
+3. `uv run python -m pytest tests/ -v` -- confirmar 266 tests en verde
+   + 38 xfail esperados (ninguno inesperado).
 4. `cat state.json` -- `debts` debería estar `[]`.
-5. Leer la entrada de Cap. 37 en `outline.md` ("Ch 37: Veintinueve de
-   abril") antes de redactar, y aplicar los puntos 1-5 de "Antes de
-   escribir" en "Próximo paso" (verificar hilos #19/#20 en canon, citar
-   el reparto de la ventana fijado en el Cap. 36 literalmente en vez de
-   parafrasearlo, y pagar el calor anómalo en términos mecánicos).
-6. Redactar Cap. 37 a mano con el standalone:
-   `uv run python draft_chapter.py 37` → `evaluate.py --chapter=37` →
-   `actualizar_canon.py 37` → `chapter_to_pdf.py 37 "Veintinueve de
-   abril"`.
-   Leer el capítulo completo y el `eval_log` entero (no solo el
-   `overall_score`) antes de avanzar -- si rechaza, ver "Lección del
-   Cap. 6"; si acepta, revisar igual `character_voice`/`continuity` --
-   ver "Lección del Cap. 7"; si hay una cita textual de un capítulo
-   anterior, verificarla palabra por palabra -- ver "Lección del Cap.
-   8"; si `actualizar_canon.py` marca un `CONFLICTO`, no asumir que el
-   texto está mal sin leer el `contradice` completo -- ver "Lección del
-   Cap. 9 y el Cap. 11"; anclar la fecha explícitamente al abrir el
-   capítulo -- ver "Lección de esta sesión (Cap. 14-19, calendario del
-   atraco)"; si `draft_chapter.py` rechaza con categoría "cyber", ver
-   "Lección del Cap. 14 y el Cap. 15"; si se edita el capítulo
-   **después** de evaluarlo y aceptarlo, reevaluar antes de correr
-   `actualizar_canon.py` de nuevo -- ver la lección de Cap. 21; y seguir
-   completa la sección "Disciplina de revisión antes de evaluar" (más
-   arriba en este documento): chequeo aritmético antes de evaluar,
-   relectura completa del capítulo antes de reevaluar después de
-   cualquier arreglo, y repaso de los "puntos ciegos conocidos" antes
-   de escribir.
-7. No tocar el formato de `chapter_to_pdf.py` -- ya está cerrado y
+5. Leer "Próximo paso" (más arriba) para las cuatro opciones de qué
+   sigue (confirmar placeholders del manuscrito y regenerar el PDF,
+   revisión editorial de conjunto, Libro 2, o merge de tareas al
+   framework) -- ninguna está empezada, preguntar al usuario cuál
+   antes de asumir.
+6. Si se retoma para **revisión editorial**: los 46 capítulos están en
+   `chapters/ch_01.md` a `ch_46.md`. `typeset/novel.pdf` (293 páginas)
+   es el manuscrito completo compilado; `chapters/pdf/ch_NN.pdf` (no
+   versionado, regenerar con `chapter_to_pdf.py N "Título"` si hace
+   falta) sirve para releer un capítulo suelto rápido. `canon_emergente.md`
+   tiene, capítulo por capítulo, cada hecho nuevo que estableció la
+   redacción y cada `CONFLICTO` que se resolvió a mano, con su porqué
+   -- es la referencia más rápida para verificar continuidad sin
+   releer los 46 capítulos enteros.
+7. Si se retoma para **Libro 2**: la fundación (`voice.md`, `world.md`,
+   `characters.md`, `outline.md`, `canon.md`) es específica de este
+   libro. Antes de generar una nueva, revisar `docs/AUDITORIA_Y_PLAN.md`
+   Clase B (la capa de serie, hoy inexistente en el repo) para decidir
+   qué persiste entre libros (la voz, según la regla de serie ya
+   documentada, no se rediscute) y qué se regenera.
+8. Si se retoma para el **export del manuscrito**: ver "Export del
+   manuscrito completo" más arriba. Los dos placeholders pendientes
+   (`typeset/novel.tex`) son el nombre del autor y el epígrafe -- son
+   decisión editorial, no algo para completar sin confirmar primero.
+9. No tocar el formato de `chapter_to_pdf.py` -- ya está cerrado y
    calibrado, ver "PDF de lectura por capítulo" más arriba.
-8. No tocar el diseño del cacheo de prompt salvo que deje de andar --
-   ver "Cacheo de prompt" más arriba. Si `evaluate.py` vuelve a
-   quedarse sin `max_tokens` (thinking agotado sin texto), subir el
-   valor de `call_judge(prompt, max_tokens=...)` en la línea de
-   `evaluate_chapter()` -- ya se subió una vez esta sesión (8000 →
-   16000).
+10. No tocar el diseño del cacheo de prompt salvo que deje de andar --
+    ver "Cacheo de prompt" más arriba.
+
+Las "lecciones del Cap. N" que siguen más arriba (después de "Próximo
+paso") quedan como referencia general del pipeline para cualquiera de
+las cuatro continuaciones -- no son un checklist de este cierre.
