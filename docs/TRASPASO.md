@@ -1,10 +1,121 @@
 # TRASPASO — rama `novela2` (worktree de `framework/es-multilibro`)
 
-Estado real al cierre de esta sesión (2026-08-06). Este documento
+Estado real al cierre de esta sesión (2026-08-07). Este documento
 reemplaza la necesidad de releer `ESTADO.md` completo o el historial de
 commits para retomar el trabajo -- es la foto actual, no la bitácora
 (para eso está `ESTADO.md`, que sí es narrativo y tiene una sección
 nueva para esta rama).
+
+**Actualización 2026-08-07 (sesión nueva -- Cap. 22 a 32, cierra el
+Midpoint y el "All Is Lost"):** once capítulos más. **Acto II completo
+hasta el 69,6% del libro -- 32 de 46 capítulos.** El Cap. 23 cerró el
+Midpoint (Acto II parte 1, Cap. 12-23) y el Cap. 32 es el "All Is
+Lost" del libro (payoff del hilo #14: el hermano de Ferrero, 1988, el
+reloj). `overall_score` final de cada capítulo: 22=6.93, 23=7.54 (tras
+**5 rechazos reales** contra el umbral pico, ver abajo), 24=7.47,
+25=7.31, 26=7.39, 27=7.31, 28=7.54 (pico, 4 rondas), 29=7.23, 30=7.31,
+31=7.31, 32=7.70 (pico). `state.json::debts` vacío, 266 tests en verde
++ 38 xfail (sin cambios de infraestructura). Working tree con esto
+pendiente de commit.
+
+**Patrón nuevo de esta sesión, importante para lo que sigue:** a
+partir del Cap. 22 casi todos los capítulos necesitaron más de una
+evaluación -- pero la mayoría **no fueron rechazos reales**: el juez
+los aceptó en la primera pasada y las rondas siguientes fueron
+reevaluaciones voluntarias después de encontrar (o de introducir al
+corregir) un bug de continuidad real. Solo tres capítulos tuvieron un
+rechazo de verdad contra el umbral (`aceptado: False`): Cap. 23 (cinco
+veces), Cap. 28 (tres veces) y Cap. 32 (una vez) -- los tres de
+ambición **pico** (7.5), el umbral más alto del libro. El resto
+(22, 24, 25, 26, 27, 29, 30, 31) se aceptó siempre a la primera; las
+rondas extra fueron mías, para no dejar canon_emergente.md con hechos
+que ya no estaban en el texto.
+
+**Causa de fondo (le pedí al usuario un análisis a mitad de sesión y
+quedó documentado en la conversación, no en un archivo -- resumen
+aquí):** `canon_emergente.md` acumula ya ~230 hechos duros entre
+Cap. 12 y 32, y esta parte del libro (atraco + análisis forense) es la
+más densa en números de todo el manuscrito -- horarios al minuto,
+conteos de personas, miligramos, sumas de horas de cómputo. Ese es
+exactamente el tipo de detalle donde un modelo de lenguaje falla más
+seguido (arma cada número localmente coherente con la frase, pero no
+siempre lo cruza contra un número que escribió antes), y es lo que el
+juez y `actualizar_canon.py` cazan sistemáticamente. El Cap. 23 fue un
+caso aparte: la causa no fue canon sino una tensión real dentro del
+propio `outline.md` (Beats vs. Character movement), resuelta recién
+cuando el usuario eligió "reescritura estructural" en vez de seguir
+puliendo frases sueltas.
+
+**Práctica nueva adoptada a mitad de sesión, la más valiosa: chequeo
+aritmético manual antes de correr `evaluate.py`.** Para cada capítulo
+nuevo, antes de gastar la primera evaluación, releer el borrador
+verificando a mano: (a) que los números enumerados sumen lo que el
+texto dice que suman: (b) que los horarios de una escena no se pisen
+con el cierre del capítulo anterior; (c) para cualquier personaje
+nombrado cuya edad, fecha de nacimiento o cronología personal se toque,
+cruzar contra `characters.md`/`personajes.md`, no solo contra
+`canon_emergente.md` -- las fichas de personaje tienen hechos duros
+(edades, años) que `actualizar_canon.py` no vigila porque no pasan por
+`new_canon_entries`. Esto evitó gastar rondas de juez en varios
+capítulos (Cap. 27, Cap. 30) pero **no es infalible**: en el Cap. 31 y
+el Cap. 32 el propio chequeo, hecho apurado, produjo una "corrección"
+que en realidad introducía un conflicto nuevo (ver detalle de cada
+capítulo en "Redacción"). Lección definitiva: cuando se toca la edad o
+cronología personal de un personaje ya establecido, buscar el nombre
+en `characters.md` completo, no confiar en la memoria de la
+conversación.
+
+**Detalle de bugs reales encontrados y corregidos esta sesión**
+(listado corto, ver "Redacción" para el contexto completo de cada
+capítulo):
+- Cap. 21 (retocado): la línea de cierre afirmaba de forma durable que
+  Vidal era "el único que no cruza el umbral" durante las treinta horas
+  enteras, pero el propio Cap. 22 lo hace cruzar esa misma noche --
+  acotado a "hasta esa hora".
+- Cap. 22: hora de apertura de la caja citada mal por Chiara (contra
+  el Cap. 21).
+- Cap. 24: tabla de emisividad de Ferrero duplicaba una ya entregada en
+  el Cap. 18; volcado de acelerómetro atribuido a Ledda cuando el canon
+  fija que es tarea exclusiva de Vidal.
+- Cap. 25: una franja de barrido fino (71) no podía existir todavía el
+  día en que estaba ambientada la escena -- se ancló al día seis.
+- Cap. 26: enumeración de once hipótesis que en realidad sumaba doce;
+  Vidal "leyendo" el ejemplar anotado del STURP en una fecha anterior a
+  cuando lo recibió (Cap. 11); tres pasadas de cómputo cuya suma de
+  horas no cerraba con los horarios de la vigilia.
+- Cap. 27: la cuarta pasada se relanzaba la misma noche en que el
+  Cap. 26 la había dejado explícitamente "en cola sin ejecutar" --
+  se movió a la noche siguiente ("dos noches después" tampoco cerraba
+  con "día doce": se corrigió a "la noche siguiente").
+- Cap. 28: escribir el 0,97 en una pizarra de uso común contradecía
+  todo el ocultamiento armado en el Cap. 27 -- se agregó que Vidal
+  también borra las cuatro líneas antes de irse. Vidal tocaba el
+  lienzo original en persona cuando el protocolo fija a Chiara como
+  responsable de manipulación.
+- Cap. 29: error de género en Ledda (varón fijo por canon, se había
+  escrito "ella"); salto geográfico sin registrar entre el piso franco
+  de Turín y la nave de Collegno.
+- Cap. 30: la maestra de Chiara aparecía muerta, pero `characters.md`
+  la describe en presente ("jura que falta") y solo habla de "morir
+  profesionalmente" (fin de carrera, no literal) -- corregido a viva y
+  marginada. Aritmética de "diecinueve años de silencio" de Ferrero que
+  debían ser veintinueve (2004 a 2033).
+- Cap. 31, el más serio de canon: el capítulo afirmaba que el
+  "remanente disponible" eran 1,622 mg ya sellados y después mostraba a
+  Chiara extrayendo fibra **nueva** del borde del lienzo sin
+  reconciliar los dos totales -- reestructurado en dos partidas
+  explícitas (1,622 mg ya en custodia + una extracción nueva del
+  orillo, autorizada en escena, con su propio plan y su propio déficit
+  de 142 µg).
+- Cap. 32, el más delicado: el payoff del hilo #14 (hermano de
+  Ferrero) requería su edad en 1988, y mi primer y segundo intento
+  (23, después 28 años) chocaban con [C17-02] (Ferrero tenía 18 años en
+  1988) y con que el hermano es **menor** que él, no mayor -- se
+  resolvió sacando la edad exacta del texto y sin atar el "guardó el
+  reloj en 2010" a un año de muerte explícito, evitando forzar una
+  cronología que el propio canon no puede sostener sin tensión. También
+  se corrigió el total de fibra consumida (heredado del Cap. 31: 3,102
+  mg, no "miligramo y medio").
 
 **Actualización 2026-08-06 (sesión nueva -- Cap. 20 y 21):** dos
 capítulos más. `overall_score`: Cap. 20 = 7.78 (rechazó una vez, 7.47
@@ -220,7 +331,7 @@ persona de Sandoz -- ver "Próximo paso".
 | Directorio | `/root/novela2` (worktree; confirmado con `git worktree list`) |
 | Rama | `novela2`, diverge de `framework/es-multilibro` en `7b81700` (Tarea 7) |
 | `.env` / `ANTHROPIC_API_KEY` | Presente en este entorno. `AUTONOVEL_WRITER_MODEL=claude-fable-5`, `AUTONOVEL_JUDGE_MODEL=claude-opus-5`, `AUTONOVEL_REVIEW_MODEL=claude-opus-5`, `AUTONOVEL_API_BASE_URL=https://api.anthropic.com` |
-| Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: el de cierre de esta sesión (Cap. 20-21 + `docs/`) -- confirmar con `git log -1 --oneline`. |
+| Push | Al día con `origin/novela2` (`git log origin/novela2..HEAD --oneline` vacío). Último commit: el de cierre de esta sesión (Cap. 22-32 + `docs/`) -- confirmar con `git log -1 --oneline`. |
 | Working tree | Limpio -- confirmar con `git status`. |
 | Tests | `uv run python -m pytest tests/ -v` -- **266 tests, todos en verde, + 38 xfail esperados** (sin cambios de infraestructura desde la sesión del cacheo de prompt). No hace falta `.env` (todo mockeado); drafting/evaluar capítulos sí lo necesita. |
 | Token de GitHub | Fine-grained, creado 2026-07-27, alcance `suazoca/autonovel`, permiso `Contents: read/write`, **vence ~2026-08-26**. Al vencer, limpiar la credencial guardada con `git credential reject` (protocol=https, host=github.com) antes de autenticar con uno nuevo. Usado sin problemas esta sesión (push directo, sin reingresar credencial). |
@@ -675,6 +786,170 @@ ya eliminada -- ver la lección nueva al principio de este documento.
 1766 palabras (tras el recorte).
 
 Los dos capítulos (20-21) generaron su PDF de lectura con
+`chapter_to_pdf.py` -- ya commiteados y pusheados (commit `d145991`).
+
+**Retoque a `ch_21.md` en la sesión del Cap. 22-32:** la línea de
+cierre ("de los nueve nombres de la lista... el único que no había
+cruzado el umbral") se acotó a "hasta esa hora" -- ver la entrada del
+Cap. 22 más abajo para el porqué.
+
+`chapters/ch_22.md` ("La sacristía", Midpoint -- preparación inmediata)
+-- Vidal cruza el acceso de servicio a las 22:18 como técnico de
+"Ambienti Controllati S.R.L.", ve el lienzo por primera vez (a 40cm no
+hay nada que integrar; a dos metros y medio se forma un rostro) y se
+queda ocho minutos inmóvil sin producir ninguna hipótesis. Fable 5
+rechazó por categoría "cyber" (identidad falsa para entrar al
+sitio) -- Opus 5 para esa llamada. Aceptado en primera pasada, 6.93. El
+juez encontró dos problemas de continuidad reales: la hora de apertura
+de la caja que cita Chiara (contra el Cap. 21) y el cierre del Cap. 21
+afirmando de forma durable que Vidal nunca cruza el umbral -- las dos
+corregidas (ver arriba). Sin `CONFLICTO` final.
+
+`chapters/ch_23.md` ("Sustitución", **Midpoint propiamente dicho**,
+ambición **pico**) -- las treinta horas del traslado: doce minutos con
+las dos telas comprometidas a la vez, un yes-but de doce segundos de
+desviación de peso que casi dispara la alarma, y el pico de la
+telemetría auditada queda escrito para siempre (hilo #18). **Rechazado
+cinco veces seguidas** contra el umbral pico (6.48, 6.56, 6.48, 6.93,
+7.01) antes de aceptar a 7.54 en la sexta. Causa de fondo: el outline
+tenía "Beats" (Vidal solo sostiene una planilla falsa) en tensión con
+"Character movement" ("sus manos tocaron el intercambio"), y mi primer
+borrador siguió los Beats al pie de la letra, vaciando de energía el
+momento de mayor ambición del libro. Le pregunté al usuario cómo
+seguir y eligió "reescritura estructural": le di a Vidal una tarea
+física real (sella el tubo de transporte con sus propias manos, el
+tercer seguro le cuesta dos segundos más de lo calculado), dramaticé
+el intercambio en tiempo real, reordené una cronología confusa y cerré
+varios huecos logísticos (conteo de personas, tránsito del tubo).
+2237 palabras.
+
+`chapters/ch_24.md` ("Diecisiete días", Fun and Games) -- primer día
+completo de análisis: el lienzo se despliega, el inventario tarda el
+doble de lo previsto, Vidal acepta sin discutir una demora de Chiara y
+descubre que la aprobación le salió antes que el cálculo. Se planta el
+hilo #21 (el corpus de referencia de Collegno es mejor que cualquiera
+que Vidal conozca, y no se pregunta por qué). Aceptado en primera
+pasada, 7.31 → 7.47 tras corregir dos conflictos reales: una tabla de
+emisividad de Ferrero que duplicaba la ya entregada en el Cap. 18, y
+el volcado del acelerómetro atribuido a Ledda cuando el canon fija que
+es tarea exclusiva de Vidal.
+
+`chapters/ch_25.md` ("La esquina del ochenta y ocho", primera victoria
+real con trampa) -- Tamiz encuentra un zurcido medieval invisible
+exactamente donde cayó la muestra de datación de 1988: los tres
+laboratorios midieron bien, pero midieron un remiendo. Vidal mismo
+dice la otra mitad: demoler 1988 no data nada, la tela vuelve a no
+tener edad. Cierra con el contragolpe: Ceruti pidió los logs del
+sistema de clima -- por ahora solo clima, no telemetría completa, pero
+a cuatro milímetros del pico de doce segundos del Cap. 23. Aceptado,
+6.70 → 7.31 tras anclar el capítulo al "Día seis, diecisiete de abril"
+(una franja de barrido fino que no podía existir todavía el día en
+que estaba ambientada la escena).
+
+`chapters/ch_26.md` ("Mecanismo desconocido", Fun and Games) -- con la
+mejor resolución de la historia del problema, Tamiz confirma y refina
+todo lo que el STURP midió en 1978 y devuelve la misma sentencia que
+ofendió a Vidal hace meses: *fuera de corpus, mecanismo no
+representado*. Mientras más lo presiona, más sube el índice de
+confianza de la capa no auditable (hilo #16: 0,84/0,89/0,93) sin que
+ningún canal lo justifique. Cierra con la pregunta de Chiara que Vidal
+no contesta. Aceptado, 6.78 → 6.86 → 7.39 en tres rondas: once
+hipótesis enumeradas que en realidad sumaban doce, la lectura del
+ejemplar anotado del STURP fechada antes de cuando Ansermet se lo dio
+(Cap. 11), y una suma de horas de cómputo que no cerraba con "hacia la
+medianoche".
+
+`chapters/ch_27.md` ("Cero coma noventa y siete", Bad Guys Close In)
+-- la capa menos auditable de Tamiz devuelve 0,97 de compatibilidad
+con lino del siglo I mediterráneo; ningún canal individual pasa de
+0,7. Vidal no puede auditar el número sin destruir la certificación
+del propio Tamiz -- la trampa del reglamento de 2029 que él mismo
+ayudó a redactar en 2028. La simetría con Basilea 2027 se le aparece
+sola; la clasifica "no pertinente" y el círculo le sale "menos
+redondo que de costumbre". No borra el 0,97: lo mueve a un archivo
+local sin respaldo. Aceptado, 6.78 → 7.31: la cuarta pasada se
+relanzaba la misma noche en que el Cap. 26 la había dejado
+explícitamente en cola sin ejecutar -- se ancló a la noche siguiente
+("Día doce. La noche siguiente...").
+
+`chapters/ch_28.md` ("La traza", Bad Guys Close In, ambición **pico**)
+-- el memorial de d'Arcis (1389, degradado a indicio en el Cap. 6)
+entra "por la otra puerta, la de los datos": bermellón y laca
+medieval en una zona del lienzo. Ferrero pide suspender el análisis;
+Chiara desarma a los dos con oficio -- las copias se consagraban
+apoyándolas sobre el original, así que la traza es compatible con un
+pintor que la tocó o que la hizo, y la zona quedó agotada. Vidal
+escribe los cuatro resultados de la operación en una pizarra y, sin
+querer, dibuja una fila de catorce personas antes de borrar todo.
+**Rechazado tres veces** contra el umbral pico (7.01, 7.23, 7.31) antes
+de aceptar a 7.54 en la cuarta. El primer rechazo fue por un bug de
+lógica real: escribir el 0,97 en la pizarra pública contradecía el
+ocultamiento armado en el Cap. 27 -- resuelto haciendo que Vidal
+también borre las cuatro líneas antes de irse. También se corrigió que
+Vidal tocara el lienzo en persona cuando el protocolo fija a Chiara
+como responsable de manipulación.
+
+`chapters/ch_29.md` ("Espejo", Bad Guys Close In) -- Vidal descubre que
+el laboratorio espeja todos los datos crudos hacia Ginebra en tiempo
+real desde el día uno, incluido el 0,97 que creía haber ocultado: salió
+hacia la custodia de Cassiodore 28 minutos antes de que él borrara lo
+que pensaba era la única copia. Ansermet le recita la cláusula octava
+palabra por palabra: no hay incumplimiento, hay cumplimiento
+perfecto. Chiara invierte la escena del Cap. 16. Cierra con Ledda:
+Ceruti amplió su pedido al historial completo de sensores, incluidas
+las células de carga. Aceptado, 7.23 → 6.86 → 7.23 en tres rondas: un
+error de género en Ledda (varón fijo por canon, se escribió "ella" al
+corregir otra cosa) y un salto geográfico sin registrar entre el piso
+franco de Turín y la nave de Collegno.
+
+`chapters/ch_30.md` ("Inventario", ambición **valle**) -- la
+confrontación aplazada desde el Cap. 16 estalla sin que Vidal la
+provoque: Chiara le pregunta a Ferrero por los tres contenedores del
+cierre de 2002. Él confiesa: existieron, un año después faltaban tres,
+calló 29 años para proteger a la maestra de Chiara -- que igual cargó
+la sospecha toda su carrera. Vidal arma una justificación técnica para
+investigar y la descarta él mismo. Aceptado, 7.39 → 7.31: la maestra
+de Chiara aparecía muerta, pero `characters.md` la describe en
+presente y solo habla de "morir profesionalmente" (fin de carrera, no
+literal) -- corregida a viva y marginada. También un error aritmético
+("diecinueve años" de silencio de Ferrero que debían ser veintinueve,
+2004 a 2033).
+
+`chapters/ch_31.md` ("Presupuesto de fibra", Bad Guys Close In,
+última apuesta) -- Vidal diseña una batería de cuatro métodos sobre el
+remanente completo de fibra: si converge, el intervalo se cierra para
+siempre; si no, no habrá otra oportunidad en este siglo. Ferrero se
+opone con la memoria del Cap. 15; Chiara vota que sí con una
+condición -- la toma la hace ella, fibra por fibra, veto sin parámetro.
+Aceptado, 6.70 → 7.31: el capítulo afirmaba que el "remanente
+disponible" eran 1,622 mg ya sellados y después mostraba a Chiara
+extrayendo fibra **nueva** del borde del lienzo sin reconciliar los
+dos totales -- reestructurado en dos partidas explícitas (1,622 mg ya
+en custodia + una extracción nueva del orillo, autorizada en escena,
+con su propio plan de 1,622 mg y su déficit real de 142 µg tras
+rechazar dos fibras).
+
+`chapters/ch_32.md` ("Inescrutable", **All Is Lost**, ambición
+**pico**) -- los resultados llegan perfectos e inútiles: tres
+dataciones de radiocarbono impecables y mutuamente imposibles, una
+cinética que dispersa las fibras del despliegue por siglos distintos.
+Tamiz lo nombra en su idioma: *muestra inescrutable -- no existe
+población de referencia*. No faltan datos: sobra biografía. Ferrero
+llora sin ruido, con los guantes puestos, y por fin explica sus frenos
+de todo el libro -- su hermano seminarista, el resultado de 1988
+escuchado solo por radio, el reloj que guardó en 2010 (hilo #14
+pagado). Cierra con el giro: el espejo de Cassiodore ya está llevando
+la no-respuesta a Ginebra, y Vidal piensa por primera vez que esa
+no-respuesta certificada podría ser exactamente lo que el mandante
+buscaba. **Rechazado una vez** contra el umbral pico (6.56) antes de
+aceptar a 7.70. El bug más delicado de la sesión: el payoff del hilo
+#14 necesitaba la edad del hermano en 1988, y mis dos primeros
+intentos (23, después 28 años) chocaban con [C17-02] (Ferrero tenía 18
+años en 1988) y con que el hermano es **menor** que él, no mayor --
+resuelto sacando la edad exacta del texto y sin atar el "guardó el
+reloj en 2010" a un año de muerte explícito.
+
+Los once capítulos (22-32) generaron su PDF de lectura con
 `chapter_to_pdf.py` y quedan pendientes de commit -- ver "Estado del
 repositorio".
 
@@ -821,45 +1096,37 @@ siendo la fuente de verdad. Sin cambios esta sesión.
 
 ## Tarea 10 -- acumulación de canon durante la redacción (en producción real)
 
-El mecanismo (`canon_emergente.md` + `actualizar_canon.py`) suma
-dieciséis capítulos más entre las tres sesiones de 2026-08-04/05/06 (6
-a 21). Total acumulado: 21 capítulos, **catorce `CONFLICTO` detectados
-en total** a lo largo de toda la producción y resueltos a mano,
-ninguno sin resolver. De la sesión de Cap. 20-21: dos `CONFLICTO` más
---
+El mecanismo (`canon_emergente.md` + `actualizar_canon.py`) suma once
+capítulos más en la sesión de 2026-08-07 (22 a 32). Total acumulado: 32
+capítulos, **más de treinta bugs de continuidad reales encontrados y
+corregidos en total** a lo largo de toda la producción (la cifra exacta
+dejó de ser útil de rastrear a partir de esta sesión: casi todos los
+capítulos del 22 al 32 tuvieron al menos uno -- ver el listado
+completo en la "Actualización 2026-08-07" al principio de este
+documento y el detalle por capítulo en "Redacción"). Ninguno quedó sin
+resolver; `state.json::debts` está en `[]`.
 
-- **Cap. 13**: real -- "Sandoz" nombrado antes de que Vidal lo conozca.
-- **Cap. 14**: real -- error de AM/PM en el horario del traslado.
-- **Cap. 16**: real -- numeración de días del cronograma off-by-one.
-- **Cap. 17**: real -- la cena fechada el mismo día del traslado.
-- **Cap. 18**: real -- 7:10 vs. 7:00 para el mismo evento.
-- **Cap. 19**: real -- la gemela en dos lugares a la vez (encontrado
-  después de aceptado, no vía `actualizar_canon.py` sino por lectura
-  del `eval_log` completo).
-- **Cap. 20**: no fue un `CONFLICTO` de `actualizar_canon.py` -- fue el
-  motivo del rechazo en primera pasada del juez (año del secreto
-  eclesiástico, 1978 vs. 1988 de `world.md`). Real, corregido antes de
-  reevaluar.
-- **Cap. 21**: real -- Vidal entrando como décimo participante físico
-  al traslado, contra el canon fijo de nueve personas, y además un
-  beat que le pertenecía al Cap. 22. Encontrado después de aceptado,
-  releyendo el `eval_log` completo (mismo patrón que el Cap. 19). Al
-  recortar la escena y reevaluar, quedó además un `CONFLICTO`
-  **fantasma** (una entrada nueva de canon referenciando la entrada
-  vieja ya eliminada) -- falso positivo, resuelto a mano.
+**Cambio de patrón a partir de esta sesión:** hasta el Cap. 21 casi
+todos los bugs llegaban como `CONFLICTO` marcado por
+`actualizar_canon.py` (con su campo `contradice` completo). Del Cap.
+22 en adelante, la mayoría de los bugs los encontró el juez de
+`evaluate.py` **dentro de la evaluación misma** (en `continuity`,
+`canon_compliance`, o directamente como motivo de rechazo), no
+`actualizar_canon.py` -- que solo entra a jugar después, y solo marca
+`CONFLICTO` cuando el hecho nuevo choca con uno ya escrito. Los dos
+casos más serios de la sesión (Cap. 31: presupuesto de fibra
+duplicado; Cap. 32: edad del hermano de Ferrero) fueron encontrados
+por el juez en `canon_compliance`, no por `actualizar_canon.py`.
 
-El patrón sigue siendo el mismo que el de la sesión anterior: la
-mayoría de los `CONFLICTO` de esta etapa del libro son choques de
-calendario/aritmética genuinos, no ruido del detector, salvo cuando el
-`CONFLICTO` es un artefacto de reevaluar un capítulo ya aceptado (Cap.
-21). Con el cronograma del atraco fijado con precisión de minutos
-(protocolo de 18 puntos, ventanas de 40/11/6 minutos, 30 horas exactas
-de traslado), cada capítulo nuevo tiene mucha más superficie donde un
-número puede no cerrar. Seguir el mismo hábito: ante un `CONFLICTO`,
-leer el `contradice` completo antes de tocar el texto -- y si el
-capítulo ya fue evaluado y aceptado antes de la edición, reevaluar
-antes de correr `actualizar_canon.py` de nuevo (ver la lección nueva
-al principio de este documento).
+Seguir el mismo hábito de siempre: ante un `CONFLICTO`, leer el
+`contradice` completo antes de tocar el texto -- y si el capítulo ya
+fue evaluado y aceptado antes de la edición, reevaluar antes de correr
+`actualizar_canon.py` de nuevo (ver la lección del Cap. 21, más abajo
+en este documento). Sumar el hábito nuevo de esta sesión: antes de
+evaluar, chequeo aritmético manual de los números del capítulo, y
+cruzar contra `characters.md` cualquier edad o cronología personal de
+un personaje ya establecido (ver el detalle de esa lección en la
+"Actualización 2026-08-07" al principio del documento).
 
 El hallazgo del Cap. 7 (tic de lápiz reservado a Sandoz, dado por error
 a Ferrero) no fue un `CONFLICTO` de `actualizar_canon.py` -- lo marcó
@@ -928,54 +1195,54 @@ por palabra.
 
 ## Próximo paso
 
-**Escribir el Cap. 22** ("La sacristía", Midpoint -- preparación
-inmediata, ambición **sosten**, ~1900 palabras, Yes-but). Turín,
-sacristía (Vidal entra en la segunda noche) y Collegno. **Este es el
-capítulo que el Cap. 21 casi se robó** -- ver la entrada del Cap. 21
-en "Redacción": el borrador original de ese capítulo adelantaba la
-entrada de Vidal como técnico de la teca, y se recortó exactamente
-porque ese beat es del Cap. 22. Al escribir el Cap. 22, la entrada de
-Vidal (overol, credencial, orden de trabajo real de revisión de
-clima) es material nuevo de este capítulo, no una repetición -- pero
-sí conviene revisar el Cap. 21 recortado antes de escribir, para que
-el tono de la transición (de "impotente en el puesto remoto" a
-"adentro por fin") tenga el quiebre que le corresponde.
+**Escribir el Cap. 33** ("Ruido, otra vez", Dark Night of the Soul,
+ambición **valle**, ~1950 palabras, No-but). Collegno, su cuarto en el
+piso franco; el archivo cifrado. Primer capítulo después del "All Is
+Lost" del Cap. 32 -- Vidal no baja al laboratorio.
 
-**Beats:** (1) Noche del 11 al 12: la manipulación entra en fase de
-personal mínimo. Vidal accede como técnico de la empresa de la teca --
-historia limpia real, comprada dos años atrás por una donación que él
-no hizo. (2) Ve el lienzo por primera vez: la voz lo describe con
-sustantivos de inventario (quemaduras de 1532, parches, manchas de
-agua) y se detiene de más en el rostro en negativo -- la detención es
-el dato. (3) Repaso final de la secuencia de sustitución con Chiara,
-en susurros de taller: ella tomará "el objeto" -- Vidal usa la
-palabra; ella dice "la tela" -- con las dos manos. (4) Cierre en
-suspenso operativo: la ventana se abre en cuatro horas.
+**Beats:** (1) Por primera vez desde Jerusalén (Cap. 1), tiene un día
+sin asignar en la agenda y no lo asigna. (2) Abre el archivo de
+Amberes -- cifrado en un directorio `2029-03` (eco deliberado del
+`2033-04` del Cap. 27) -- y lo lee entero por primera vez desde que lo
+cifró: la discordancia que clasificó "ruido de sensor, excluir de
+consolidación" el 14 de marzo de 2029 a las 2:31 (líneas 3.407-3.418
+del log, firma espectral en la imprimatura del panel izquierdo, peso
+agregado 0,04 -- ver [C03-04]) era, con los ojos de esta semana, un
+0,97 ajeno. Le hizo a esa señal lo mismo que el mundo le hizo a la
+tela en 1988. (3) Intenta contar algo -- baldosas, vigas, autos -- y
+pierde la cuenta tres veces (hilo #2 en fractura; ya lo perdió una vez
+en el Cap. 31, ver esa entrada). (4) And: la devolución no es
+opcional. La regla que dictó Ferrero en el Cap. 15 es esta noche lo
+único que Vidal tiene en lugar de un propósito.
 
-**Plants:** la fricción de vocabulario objeto/tela/lienzo en boca de
-ambos (refuerzo del hilo #17).
-**Payoffs:** -- (ninguno marcado en el outline para este capítulo).
-**Character movement:** el objeto de estudio adquiere presencia
-física. Su prosa interior empieza a fallarle: primera vez que un dato
-lo detiene sin producirle una hipótesis.
-**The lie:** desestabilizada por percepción pura -- mirar no es medir,
-y sin embargo algo quedó registrado.
+**Plants:** -- **Payoffs:** hilo #8 pagado en su capa íntima (Amberes
+releído entero); hilo #2 en fractura.
+**Character movement:** toca fondo con exactitud -- no perdió la fe en
+la ciencia, perdió la coartada de que la ciencia lo eximía de elegir.
+**The lie:** velatorio -- nació en Amberes como anestesia y funcionó
+veinte años; la pregunta de la directora del Cap. 2 vuelve sola: *en
+algún punto todos eligen*.
 
-**Antes de escribir:** revisar `outline.md` (Foreshadowing Ledger,
-línea ~718) para el hilo #17 (fricción objeto/tela/lienzo). Confirmar
-la hora de entrada de Vidal (1:10, según lo que decía la escena
-recortada del Cap. 21 -- reusable como dato, no como prosa) contra
-`personal reducido de nueve personas` de [C14-10]: con Vidal adentro
-"en fase de personal mínimo", el outline implica que el número de
-gente físicamente presente cambia respecto del pico de nueve del
-traslado -- conviene aclarar en el propio capítulo cuántos quedan dentro
-en ese momento para no generar un nuevo `CONFLICTO` de headcount.
+**Antes de escribir:** el panel de Amberes fue confirmado falso por
+seis vías independientes DESPUÉS de la publicación de 2029 ([C03-06]) --
+la discordancia que Vidal descartó en su momento no era la señal que
+lo habría salvado del error público (el resultado final fue correcto);
+es la señal de que él la excluyó sin mirar dos veces, el mismo gesto
+que ahora reconoce en sí mismo. No convertirlo en "Vidal se equivocó
+en Amberes" -- el punto es metodológico, no de resultado. Revisar
+también [C09-08]/[C12-08] (once años, no otro número) si se menciona
+su trayectoria, y aplicar el chequeo aritmético manual antes de
+evaluar (ver la práctica nueva documentada en la "Actualización
+2026-08-07" al principio de este documento) -- en particular, si se
+menciona la edad o cronología de cualquier personaje ya establecido,
+buscarlo primero en `characters.md` completo, no solo en
+`canon_emergente.md`.
 
 ```bash
-uv run python draft_chapter.py 22
-uv run python evaluate.py --chapter=22
-uv run python actualizar_canon.py 22
-uv run python chapter_to_pdf.py 22 "La sacristía"
+uv run python draft_chapter.py 33
+uv run python evaluate.py --chapter=33
+uv run python actualizar_canon.py 33
+uv run python chapter_to_pdf.py 33 "Ruido, otra vez"
 ```
 
 **Ojo:** el número de capítulo va posicional
@@ -984,10 +1251,8 @@ uv run python chapter_to_pdf.py 22 "La sacristía"
 capítulo antes de avanzar al siguiente. Revisar `canon_emergente.md`/
 `state.json::debts` por si el juez o `actualizar_canon.py` marcaron
 algo -- y ante un `CONFLICTO`, leerlo con calma antes de tocar el
-texto: dos de los tres detectados esta sesión eran reales, uno fue
-falso positivo (ver "Tarea 10" arriba). El PDF de lectura
-(`chapter_to_pdf.py`) se corre al final, después de aceptar y de correr
-`actualizar_canon.py` -- no antes.
+texto. El PDF de lectura (`chapter_to_pdf.py`) se corre al final,
+después de aceptar y de correr `actualizar_canon.py` -- no antes.
 
 **Lección del Cap. 6, para no repetir el ciclo de rechazo-arreglo:**
 antes de dar por bueno o malo un capítulo por su `overall_score`, mirar
@@ -1062,13 +1327,13 @@ sobre una estructura incompleta no mueve el puntaje.
 3. `uv run python -m pytest tests/ -v` -- confirmar 266 en verde y 38
    xfail esperados (ninguno inesperado) antes de tocar nada.
 4. `cat state.json` -- `debts` debería estar `[]`.
-5. Leer la entrada de Cap. 22 en `outline.md` ("Ch 22: La sacristía")
-   antes de redactar, y de paso el Foreshadowing Ledger (línea ~718,
-   hilo #17) y la entrada del Cap. 21 en "Redacción" (qué se recortó y
-   por qué).
-6. Redactar Cap. 22 a mano con el standalone:
-   `uv run python draft_chapter.py 22` → `evaluate.py --chapter=22` →
-   `actualizar_canon.py 22` → `chapter_to_pdf.py 22 "La sacristía"`.
+5. Leer la entrada de Cap. 33 en `outline.md` ("Ch 33: Ruido, otra
+   vez") antes de redactar, y de paso [C03-04]/[C03-06] (el archivo de
+   Amberes) y la entrada del Cap. 31 en "Redacción" (la cuenta perdida
+   de ciclos, que este capítulo retoma como hilo #2 en fractura).
+6. Redactar Cap. 33 a mano con el standalone:
+   `uv run python draft_chapter.py 33` → `evaluate.py --chapter=33` →
+   `actualizar_canon.py 33` → `chapter_to_pdf.py 33 "Ruido, otra vez"`.
    Leer el capítulo completo y el `eval_log` entero (no solo el
    `overall_score`) antes de avanzar -- si rechaza, ver "Lección del
    Cap. 6"; si acepta, revisar igual `character_voice`/`continuity` --
@@ -1079,10 +1344,16 @@ sobre una estructura incompleta no mueve el puntaje.
    Cap. 9 y el Cap. 11"; anclar la fecha explícitamente al abrir el
    capítulo -- ver "Lección de esta sesión (Cap. 14-19, calendario del
    atraco)"; si `draft_chapter.py` rechaza con categoría "cyber", ver
-   "Lección del Cap. 14 y el Cap. 15"; y si se edita el capítulo
+   "Lección del Cap. 14 y el Cap. 15"; si se edita el capítulo
    **después** de evaluarlo y aceptarlo, reevaluar antes de correr
-   `actualizar_canon.py` de nuevo -- ver la lección nueva de Cap. 21 al
-   principio de este documento.
+   `actualizar_canon.py` de nuevo -- ver la lección de Cap. 21; y antes
+   de evaluar, hacer el chequeo aritmético manual (números, horarios,
+   y **edades/cronología de personajes contra `characters.md`
+   completo**, no solo `canon_emergente.md`) -- ver la práctica nueva
+   documentada en la "Actualización 2026-08-07" al principio de este
+   documento, y en particular las lecciones del Cap. 31 (presupuesto de
+   fibra duplicado) y el Cap. 32 (edad del hermano de Ferrero) para ver
+   qué tipo de error se les escapó incluso haciendo el chequeo.
 7. No tocar el formato de `chapter_to_pdf.py` -- ya está cerrado y
    calibrado, ver "PDF de lectura por capítulo" más arriba.
 8. No tocar el diseño del cacheo de prompt salvo que deje de andar --
