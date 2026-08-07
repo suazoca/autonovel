@@ -1438,63 +1438,60 @@ no acá):
 
 ## Próximo paso
 
-**Escribir el Cap. 35** ("Seis minutos", **Break Into Three**, ambición
-**sosten**, ~2000 palabras, No-but). Collegno; Turín, perímetro. Cierra
-el Acto II (32-77% del libro) y arranca la recta final.
+**Escribir el Cap. 37** ("Veintinueve de abril", **Finale (asalto a la
+torre)**, ambición **sosten**, ~1950 palabras, Yes-but). Turín, catedral
+y entorno; POV Vidal. Abre el Acto III (80.4%).
 
-**Beats:** (1) Ledda presenta el estado de las dos ventanas del 29 de
-abril: la de once minutos (cambio de guardia) está muerta -- Ceruti
-reprogramó las inspecciones preostensión y superpuso personal sobre
-ese hueco. Queda la de seis minutos (revisión del sistema de clima),
-sin margen de error, sin segunda pasada, con Ceruti rondando el
-edificio. (2) La discusión que Vidal esperaba no ocurre: nadie propone
-abortar. El equipo entiende, sin votarlo, que la devolución es ahora
-el único acto que significa algo. Vidal lo anota: *vinimos por una
-respuesta; nos vamos con una restitución*. (3) Vidal aprueba la
-ventana de seis minutos y toma una segunda decisión: el 0,97 va al
-informe final, rotulado como lo que es -- señal no auditable, no
-clasificada como ruido. Lo contrario exacto de Amberes. Ferrero invoca
-el veto del Cap. 16 ("Esto no se anuncia"); Vidal: "No es un anuncio.
-Es un registro." (4) But: para la ventana hace falta alguien más
-adentro. Vidal se asigna a sí mismo. Ledda lo mira el tiempo de un
-plazo y acepta.
+**Beats:** (1) Ingreso escalonado: Ferrero por derecho propio -- la
+Comisión lo espera para la revisión preostensión --; Chiara y Vidal
+como técnicos del sistema de clima, historias limpias verdaderas,
+motivos ocultos verdaderos. La frase de Ledda del Cap. 12 viaja con
+ellos como salvoconducto irónico. (2) El contenedor con la tela entra
+en el carro de mantenimiento del clima: el vector de acceso comprado
+con la teca funciona por segunda y última vez. (3) El calor anómalo
+cumple: el sistema trabaja al límite, la revisión programada se
+confirma -- la ventana existirá. Vidal cuenta los minutos y nota que
+contar, esta noche, vuelve a funcionar: no como oración, como oficio.
+(4) But: al aproximarse a la sacristía, luz encendida donde no debía
+haber nadie. Ledda por el auricular, sin adjetivos: "Hay una persona
+adentro. Es Ceruti." Corte.
 
-**Plants:** la distinción registro/anuncio (se paga en Caps. 42-43).
-**Payoffs:** hilo #4 pagado en decisión (de dos ventanas queda una, la
-peor); refuerzo del hilo #18 (Ceruti como antagonista de calendario).
-**Character movement:** deja de ser el hombre que dijo "adelante"
-desde un puesto remoto -- se pone en el lugar del riesgo.
-**The lie:** sustituida operativamente -- aprueba un plan cuyo margen
-no es auditable sino confiable.
+**Plants:** ninguno nuevo.
+**Payoffs:** hilo #19 pagado en ejecución (identidades verdaderas con
+motivos ocultos, dicho y hecho); hilo #20 (el vector de la teca,
+segunda vuelta); paga el calor anómalo plantado en el Cap. 36.
+**Character movement:** opera con calma real bajo riesgo real -- la
+transformación del Acto II convertida en conducta.
+**The lie:** sin espacio -- la noche entera corre sobre confianza pura
+en tres personas; Vidal ya no lo registra como anomalía.
 
-**Antes de escribir (aplicando la disciplina nueva, ver la sección
+**Antes de escribir (aplicando la disciplina completa, ver la sección
 "Disciplina de revisión antes de evaluar" más arriba):**
-1. **Payoffs a verificar en canon antes de redactar:** hilo #4 (las
-   dos ventanas de la devolución, [C14-11] fija la ventana A a las
-   19:00 -- este capítulo la mata, tiene que decir por qué sin
-   contradecir esa hora); hilo #18 (el pedido de Ceruti, última
-   actualización en [C29-05]: historial completo de sensores,
-   incluidas células de carga, todavía en trámite -- este capítulo
-   puede avanzarlo, no reiniciarlo). También revisar el veto del punto
-   diecinueve ([C16-04]) antes de escribir la escena "esto no se
-   anuncia / es un registro", para que Ferrero lo invoque con precisión.
-2. **Cadena de calendario, la parte que quedó floja del Cap. 33-34:**
-   el Cap. 34 cerró con el plegado fijado a medianoche del 29 de abril
-   y la reflexión de que "en unas horas" el lienzo vuelve a la caja de
-   cristal -- pero nunca se ancló la hora exacta de la ventana de seis
-   minutos ni se confirmó si ya pasó o todavía no. Este capítulo es el
-   lugar natural para fijarla de una vez (Ledda la presenta en el beat
-   1) y cerrar esa ambigüedad antes de que el Cap. 36 (ensayos previos
-   al 29) la necesite. Mirar la entrada del Cap. 36 en `outline.md`
-   antes de cerrar la fecha/hora de este capítulo, para no dejarlo sin
-   margen.
-3. **Ambición sostén, no pico** -- no hace falta el chequeo de tensión
-   Beats/Character movement que sí es obligatorio en capítulos pico,
-   pero igual conviene, dado que este es un Break Into Three: leer una
-   vez más "Character movement" y "The lie" antes de escribir para que
-   el giro (deja de ser espectador remoto) quede en la acción, no
-   declarado.
-4. **Puntos ciegos conocidos a repasar:** si aparece la hoja diaria del
+1. **Payoffs a verificar en canon antes de redactar:** hilo #19
+   (identidades/historias falsas de Chiara y Vidal como técnicos de
+   clima -- confirmar contra `canon_emergente.md` qué cobertura exacta
+   quedó fijada, para no reinventarla); hilo #20 (el vector de acceso
+   comprado con la teca, primer uso ya narrado -- verificar cómo se
+   describió la primera vez antes de repetirlo). Confirmar el reparto
+   final de la ventana fijado en el Cap. 36 ([nuevo canon entry]:
+   Fabbri tela, Vidal gemela+contenedor+hoja de servicio, Ferrero
+   afuera en el crucero, Ledda coordina desde afuera del edificio) y
+   citarlo tal cual, no parafrasearlo -- es la lección directa del bug
+   de referencia hacia adelante entre Cap. 35 y 36.
+2. **Calor anómalo:** el Cap. 36 lo dejó como variable de ingeniería
+   (compresores al límite, ciclos más largos, deriva de sondas, técnico
+   apurando la revisión) con pronóstico de 31°/32° para el 29 -- este
+   capítulo debe pagarlo con esos mismos términos mecánicos, no solo
+   atmosféricos.
+3. **Fecha/hora:** el capítulo ya trae la fecha en el título
+   ("Veintinueve de abril" = día dieciocho, ver tabla día↔fecha más
+   abajo). No hace falta anclar de nuevo salvo la hora de la ventana de
+   las 16:05 ya fijada en canon -- no improvisar una hora distinta.
+4. **Ambición sostén:** igual conviene, por ser el Finale, leer una vez
+   más "Character movement" y "The lie" antes de escribir para que la
+   calma de Vidal quede en la acción (conteo, respiración, procedimiento),
+   no declarada.
+5. **Puntos ciegos conocidos a repasar:** si aparece la hoja diaria del
    piso franco, formato fijo (sin columna de función, Ferrero primero).
    Si se menciona la edad/trayectoria de algún personaje, cruzar contra
    `characters.md` completo, no solo `canon_emergente.md`.
@@ -1504,10 +1501,10 @@ capítulo completo de punta a punta una vez antes de volver a correr
 `evaluate.py` -- no alcanza con corregir la línea que el juez marcó.
 
 ```bash
-uv run python draft_chapter.py 35
-uv run python evaluate.py --chapter=35
-uv run python actualizar_canon.py 35
-uv run python chapter_to_pdf.py 35 "Seis minutos"
+uv run python draft_chapter.py 37
+uv run python evaluate.py --chapter=37
+uv run python actualizar_canon.py 37
+uv run python chapter_to_pdf.py 37 "Veintinueve de abril"
 ```
 
 **Ojo:** el número de capítulo va posicional
@@ -1589,17 +1586,18 @@ sobre una estructura incompleta no mueve el puntaje.
 1. `git status` -- confirmar que el working tree sigue limpio.
 2. `git log origin/novela2..HEAD --oneline` -- confirmar que no quedó
    nada sin pushear.
-3. `uv run python -m pytest tests/ -v` -- confirmar 266 en verde y 38
+3. `uv run python -m pytest tests/ -v` -- confirmar todo en verde y los
    xfail esperados (ninguno inesperado) antes de tocar nada.
 4. `cat state.json` -- `debts` debería estar `[]`.
-5. Leer la entrada de Cap. 35 en `outline.md` ("Ch 35: Seis minutos")
-   antes de redactar, y aplicar el punto 1 y 2 de "Antes de escribir"
-   en "Próximo paso" (verificar hilos #4/#18 en canon, y mirar la
-   entrada del Cap. 36 antes de cerrar la hora exacta de la ventana de
-   seis minutos -- ese es el cabo suelto que dejó el Cap. 34).
-6. Redactar Cap. 35 a mano con el standalone:
-   `uv run python draft_chapter.py 35` → `evaluate.py --chapter=35` →
-   `actualizar_canon.py 35` → `chapter_to_pdf.py 35 "Seis minutos"`.
+5. Leer la entrada de Cap. 37 en `outline.md` ("Ch 37: Veintinueve de
+   abril") antes de redactar, y aplicar los puntos 1-5 de "Antes de
+   escribir" en "Próximo paso" (verificar hilos #19/#20 en canon, citar
+   el reparto de la ventana fijado en el Cap. 36 literalmente en vez de
+   parafrasearlo, y pagar el calor anómalo en términos mecánicos).
+6. Redactar Cap. 37 a mano con el standalone:
+   `uv run python draft_chapter.py 37` → `evaluate.py --chapter=37` →
+   `actualizar_canon.py 37` → `chapter_to_pdf.py 37 "Veintinueve de
+   abril"`.
    Leer el capítulo completo y el `eval_log` entero (no solo el
    `overall_score`) antes de avanzar -- si rechaza, ver "Lección del
    Cap. 6"; si acepta, revisar igual `character_voice`/`continuity` --
