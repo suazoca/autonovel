@@ -6,7 +6,56 @@ commits para retomar el trabajo -- es la foto actual, no la bitácora
 (para eso está `ESTADO.md`, que sí es narrativo y tiene una sección
 nueva para esta rama).
 
-**Actualización 2026-08-07 (sesión nueva -- Cap. 22 a 32, cierra el
+**Actualización 2026-08-07 (continuación -- Cap. 35 y 36, cierra el
+Acto II; disciplina de revisión ampliada por costo real de API):** dos
+capítulos más. **Acto II completo -- 36 de 46 capítulos, arranca el
+Acto III.** `overall_score`: 35=7.23 (dos rondas), 36=7.01 (dos
+rondas). El promedio de rondas bajó de 6.5 (Cap. 33-34) a 2 y se
+sostuvo en el 36 -- mejora real, medida, no impresión -- pero el
+usuario marcó explícitamente que el *tipo* de problema seguía siendo
+el mismo aunque el número de rondas bajara, y tenía razón: encontré
+una categoría de bug nueva y distinta de la de fechas -- **bugs de
+referencia hacia adelante**: un capítulo hace que un personaje
+describa en diálogo un plan (reparto de personas, roles) que el
+outline de un capítulo *posterior* ya define con otras palabras, y la
+paráfrasis no coincide. Pasó exactamente así entre el Cap. 35 (Ledda
+decía "tres pares de manos, uno para sostén de borde") y el Cap. 36
+(el outline fija dos personas adentro) -- corregido en los dos. El
+mismo patrón apareció *dentro* del propio Cap. 36 en la primera
+corrección (el reparto decía dos personas en una escena y "tres pares"
+en otra, ambas mías) -- lo cazó la relectura completa antes de
+reevaluar, no el juez, ahorrando una ronda. Regla nueva agregada a la
+disciplina: si un capítulo anticipa en diálogo un plan que un outline
+posterior ya detalla, citar el texto del outline literalmente, no
+parafrasearlo. También se discutió el costo real de API de las rondas
+extra con el usuario (ver la sección "Disciplina de revisión", que
+ahora incluye una tabla fija día-cronograma → fecha calendario para no
+volver a calcular calendario a mano) y se decidió **no** cambiar
+`AUTONOVEL_WRITER_MODEL` de Fable 5 a Opus 5 pese a que costaría menos
+-- mantener la voz consistente para los últimos 10 capítulos importa
+más que el ahorro marginal a esta altura. `state.json::debts` vacío,
+266 tests en verde + 38 xfail. Working tree con Cap. 33-36 pendiente
+de commit.
+
+**Actualización 2026-08-07 (continuación -- Cap. 33 y 34, más una
+disciplina de revisión nueva):** dos capítulos más, ambición valle,
+Dark Night of the Soul (1) y (2). `overall_score`: 33=7.16 (cuatro
+rondas), 34=7.39 (**ocho rondas, el capítulo más trabajoso de canon de
+toda la sesión**). El promedio de evaluaciones por capítulo, que había
+bajado de 3.4 a 2.5 al adoptar el chequeo aritmético previo (Cap.
+27-32), se disparó a 6.5 en estos dos -- por dos categorías de bug que
+ese chequeo no cubría: continuidad narrativa profunda (hechos de
+capítulos muy anteriores) y encadenamiento de calendario entre
+capítulos consecutivos, más un problema de proceso (corregir de a un
+bug por vez sin releer el capítulo completo). El usuario pidió un
+análisis a fondo y una revisión crítica del plan de solución antes de
+aceptarlo; el resultado quedó documentado en la sección **"Disciplina
+de revisión antes de evaluar"**, más abajo en este documento --
+léanla antes de escribir el Cap. 35. `state.json::debts` vacío, 266
+tests en verde + 38 xfail. Working tree con Cap. 33-34 pendiente de
+commit.
+
+**Actualización 2026-08-07 (Cap. 22 a 32, cierra el
 Midpoint y el "All Is Lost"):** once capítulos más. **Acto II completo
 hasta el 69,6% del libro -- 32 de 46 capítulos.** El Cap. 23 cerró el
 Midpoint (Acto II parte 1, Cap. 12-23) y el Cap. 32 es el "All Is
@@ -950,6 +999,87 @@ resuelto sacando la edad exacta del texto y sin atar el "guardó el
 reloj en 2010" a un año de muerte explícito.
 
 Los once capítulos (22-32) generaron su PDF de lectura con
+`chapter_to_pdf.py` -- ya commiteados y pusheados (commit `f856e81`).
+
+`chapters/ch_33.md` ("Ruido, otra vez", Dark Night of the Soul,
+ambición valle) -- Vidal no baja al laboratorio; la hoja diaria, por
+primera vez desde el 9 de abril, no tiene su nombre. Abre el archivo
+de Amberes y lo lee completo por primera vez en cuatro años: entre la
+señal discordante y la palabra que la descartó ("ruido de sensor")
+pasaron dos minutos sin verificación alguna -- un 0,97 ajeno que él
+mismo enterró. Pierde la cuenta tres veces contando baldosas,
+tablillas, autos. Lo único que lo sostiene: una regla de Ferrero, la
+devolución no tiene versión corregida. Aceptado en cuatro rondas
+(6.78 → 7.16 → 7.23 → 7.16): un desfasaje de calendario real (si el
+capítulo es el día siguiente al Cap. 32, hoy es el día de la
+devolución, no "mañana" -- corregido) y el formato de la hoja diaria,
+que no tiene columna de función ni el orden que le puse al principio
+(dos intentos hasta que cerró contra [C12-10]).
+
+`chapters/ch_34.md` ("La tela no sabe", Dark Night of the Soul 2,
+ambición valle) -- última noche antes de la devolución: Chiara hace la
+revisión final del lienzo, un inventario al revés, y trabajar en
+silencio al lado de alguien que sabe lo que hace es la única forma de
+consuelo que Vidal tolera. A la tercera vez que ella le pregunta "¿Y
+ahora qué hacés vos?", la muletilla de él se rompe a la mitad y
+contesta, por primera vez en el libro, algo inverificable y
+verdadero: "No sé." Ella le cuenta la definición de fe de su maestra
+("creer es conservar algo que no es tuyo"); Vidal la reconoce como lo
+que él hace con Amberes, el 0,97 y la planilla de tiempo perdido.
+Cuando Chiara está por confesar algo más y se frena, Vidal identifica
+la anomalía y por primera vez decide no auditar a una persona. **El
+capítulo más trabajoso de canon de la sesión** (ocho evaluaciones):
+además del chequeo aritmético habitual, encadenó un problema de
+calendario con el propio Cap. 33 (si la devolución es "hoy" en el 33,
+el plegado del 34 no puede ser "mañana a las nueve" -- terminó en "a
+medianoche", con la hora exacta de la ventana todavía sin fijar,
+pendiente para el Cap. 35), repitió el mismo bug de formato de la hoja
+diaria que ya había fallado en el Cap. 33, y tenía un error real de
+cronología (la pregunta de Chiara fechada "en noviembre", cuando en
+noviembre de 2032 todavía no se conocían). Este capítulo motivó la
+sección "Disciplina de revisión antes de evaluar" más abajo.
+
+Los trece capítulos (22-34) generaron su PDF de lectura con
+`chapter_to_pdf.py`.
+
+`chapters/ch_35.md` ("Seis minutos", **Break Into Three** -- cierra el
+Acto II) -- Ledda presenta el estado de las ventanas del 29: la de
+once minutos está muerta (Ceruti reprogramó inspecciones sobre el
+hueco), queda la de seis, revisión del sistema de clima. Nadie propone
+abortar -- la frase de Vidal se muere sin que nadie la sostenga.
+Aprueba que el 0,97 vaya al informe final rotulado como "señal no
+auditable", lo contrario exacto de Amberes; Ferrero, en contra, firma
+igual como testigo. Vidal se asigna a sí mismo como la tercera mano
+adentro de la sacristía. Aceptado en dos rondas (6.24 → 7.23): el
+primer rechazo fue por fechas exactas que no cerraban ("el veintisiete
+de abril" caía antes del día diecisiete del cronograma, ya ocurrido en
+el Cap. 32; "cuarenta y seis horas restantes" no computaba) -- se
+sacaron los compromisos de fecha exacta en vez de forzarlos, apoyado
+en que el outline del Cap. 37 ("Veintinueve de abril") confirma que el
+día en sí llega recién ahí. Retocado más tarde, sin nueva evaluación,
+para corregir el reparto de manos (ver Cap. 36).
+
+`chapters/ch_36.md` ("Ensayo en seis", arranca el Acto III) -- ensayos
+de la ventana de seis minutos sobre la maqueta: primera pasada 7:40,
+muy por encima; el cuello de botella es Vidal, que verifica dos veces
+lo que Chiara verifica una ("tu segunda mirada no ve más, solo tarda
+más"). Reparto final: Fabbri manipula la tela, Vidal la gemela y el
+contenedor, Ferrero es la pared humana afuera, Ledda coordina por
+auricular sin entrar. Ferrero, ensayando la contención, vuelve por
+instinto al guion de la operación real de abril y se corrige en
+escena -- cita textual de [C19-08]. Cuarta pasada sin aviso: 5:44.
+Cierra con el pronóstico de calor récord para el 29 y el borde de la
+última hoja del plan, sin renglón para un aborto. Aceptado en dos
+rondas (6.48 → 7.01): el bug real fue una contradicción de reparto
+entre este capítulo y el Cap. 35 -- "tres pares de manos" (Cap. 35,
+con una tercera función de sostén de borde) contra el reparto de dos
+personas que el propio outline del Cap. 36 fija -- corregido en ambos
+capítulos. La relectura completa antes de la segunda evaluación
+encontró que el mismo error de conteo seguía repetido *dentro* del
+propio Cap. 36 (dos personas en una escena, "tres pares" en otra),
+evitando una tercera ronda.
+
+Los quince capítulos (22-36) generaron su PDF de lectura con
 `chapter_to_pdf.py` y quedan pendientes de commit -- ver "Estado del
 repositorio".
 
@@ -1138,6 +1268,119 @@ contradecía al otro, era una discrepancia de redacción dentro de una
 cita marcada como literal, que el script de canon no compara palabra
 por palabra.
 
+## Disciplina de revisión antes de evaluar (adoptada tras Cap. 33-34,
+ampliada tras Cap. 35 -- costo real de API, no solo calidad narrativa)
+
+**Cada ronda de `evaluate.py` es una llamada real y paga al juez
+(Opus 5, contexto grande por `canon_emergente.md`).** A partir del
+Cap. 35, minimizar rondas dejó de ser solo "mejor calidad" y pasó a
+ser explícitamente un objetivo de costo. El Cap. 35 se rechazó una vez
+por un error de fecha que yo mismo introduje haciendo la cuenta a
+mano y mal ("el veintisiete de abril" cuando el día diecisiete, 28 de
+abril, ya había pasado en el Cap. 32) -- exactamente el tipo de error
+mecánico que una tabla fija elimina sin gastar nada.
+
+**Tabla fija día-del-cronograma → fecha calendario** (calculada con
+`date`, no de memoria -- día uno = 12 de abril de 2033, 13:40):
+
+| Día | Fecha | | Día | Fecha |
+|---|---|---|---|---|
+| 1 | 12 abril | | 10 | 21 abril |
+| 2 | 13 abril | | 11 | 22 abril |
+| 3 | 14 abril | | 12 | 23 abril |
+| 4 | 15 abril | | 13 | 24 abril |
+| 5 | 16 abril | | 14 | 25 abril |
+| 6 | 17 abril | | 15 | 26 abril |
+| 7 | 18 abril | | 16 | 27 abril |
+| 8 | 19 abril | | 17 | 28 abril |
+| 9 | 20 abril | | 18 | 29 abril (ventana de restitución, fija) |
+
+Antes de escribir o corregir cualquier fecha explícita, buscarla acá
+-- no recalcularla mentalmente. Si hace falta un día fuera de esta
+tabla (mayo en adelante), correr
+`date -d "2033-04-12 +N days" +%d-%m-%Y` en Bash, nunca a mano.
+
+**Regla nueva, para no volver a necesitar esta tabla más de lo
+imprescindible:** salvo que el outline exija una fecha/hora exacta o
+el capítulo esté reusando un dato ya establecido, preferir referencias
+de tiempo relativas ("esa mañana", "unos días después", "la noche
+siguiente") en vez de fechas y horas precisas. La mayoría de los bugs
+de calendario de esta sesión (Cap. 27, 29, 33, 34, 35) fueron
+capítulos que se comprometían con una fecha/hora exacta que no hacía
+falta para la escena. Precisión que no aporta nada narrativamente y
+que hay que gastar una evaluación en verificar es la peor relación
+costo/beneficio del proceso.
+
+**Diagnóstico con datos, no impresión.** Promedio de evaluaciones por
+capítulo:
+
+| Tramo | Rondas por capítulo | Promedio |
+|---|---|---|
+| Cap. 22-26 (antes del chequeo aritmético previo) | 1, 8, 2, 2, 4 | 3.4 |
+| Cap. 27-32 (con el chequeo ya rutinario) | 2, 4, 3, 2, 2, 2 | 2.5 |
+| Cap. 33-34 (los últimos dos de esa sesión) | 5, 8 | **6.5** |
+| Cap. 35 (con tabla de fechas + regla de tiempo relativo) | 2 | -- primer capítulo con la disciplina ampliada, ver si baja |
+
+El chequeo aritmético previo (números, edades contra `characters.md`,
+día del cronograma) bajó el promedio de 3.4 a 2.5 y sigue vigente, sin
+cambios. Pero no cubre dos categorías de bug que dispararon el
+promedio en el Cap. 33-34: continuidad narrativa profunda (hechos de
+capítulos muy anteriores, ej. cuándo se conocieron dos personajes) y
+**encadenamiento de calendario entre capítulos consecutivos** (fijar
+un horario en un capítulo sin proyectar qué le deja disponible al
+siguiente). A eso se suma un problema de proceso, no de contenido: en
+el Cap. 34 se corrigió un bug, apareció uno nuevo, se corrigió,
+apareció otro -- seis rondas seguidas arreglando de a un problema por
+vez, cada una una llamada real y paga al juez, cuando una relectura
+completa del capítulo habría cazado varias juntas.
+
+**Distinción importante, para no sobrecorregir:** no todas las rondas
+extra son un fracaso a evitar. Que el juez encuentre un bug real la
+*primera* vez que evalúa es el proceso funcionando -- ningún chequeo
+previo lo va a llevar a cero, y no hay que apurar la revisión ni dejar
+de mandarle capítulos al juez para bajar ese número artificialmente.
+Lo que sí es prevenible, y es donde se enfoca esta disciplina, es
+repetir el mismo bug dos veces o generar bugs nuevos al corregir uno
+viejo.
+
+**Antes de redactar un capítulo nuevo:**
+1. Leer el campo "Payoffs" del outline y buscar cada hecho puntual que
+   paga en `canon_emergente.md`/`characters.md` -- no confiar en la
+   memoria de la conversación para hilos plantados hace 15-20
+   capítulos.
+2. Si el capítulo abre "esa misma noche" o "al día siguiente" de otro
+   ya escrito, calcular a mano la cadena de horarios de los dos
+   capítulos -- y de paso, un vistazo rápido al beat del **próximo**
+   capítulo en `outline.md` (`sed -n` sobre la sección correspondiente)
+   antes de cerrar una hora o fecha específica, para no dejarlo sin
+   margen.
+3. Para capítulos de ambición **pico**: chequear explícitamente si
+   "Beats" y "Character movement"/"The lie" están en tensión antes de
+   escribir (la causa real del Cap. 23, cinco rechazos). Si hay
+   tensión, decidir cómo resolverla antes del primer borrador, no
+   después de varios rechazos.
+4. Repasar la lista de puntos ciegos conocidos, abajo.
+
+**Antes de reevaluar después de cualquier arreglo:** releer el
+capítulo completo de punta a punta una vez, no solo la línea tocada.
+Esto no reemplaza el chequeo de canon -- sirve para cazar
+inconsistencias que la propia corrección haya introducido (ej. fijar
+"las cuatro" en una línea y dejar "de la mañana" sin actualizar en
+otra), que ninguna relectura de canon detecta porque son internas al
+capítulo.
+
+**Puntos ciegos conocidos** (se agregan acá solo reglas que ya
+fallaron dos veces, para que la lista no crezca sin límite; puntuales
+de un solo capítulo quedan documentados en su entrada de "Redacción",
+no acá):
+- **Hoja diaria del piso franco** ([C12-10]): sin columna de función,
+  solo apellidos en el orden ya usado (Ferrero primero). Falló en el
+  Cap. 33 y otra vez en el Cap. 34, misma sesión.
+- **Edad/cronología de personajes**: cruzar contra `characters.md`
+  completo, no solo `canon_emergente.md` -- las fichas tienen edades y
+  fechas duras que el script de canon no vigila porque no siempre
+  pasan por `new_canon_entries` (el hermano de Ferrero, Cap. 32).
+
 ## Pendiente (no bloqueante)
 
 - **Decidir qué hacer con `ch_01.md`.** Sin cambios -- se redactó con el
@@ -1195,54 +1438,76 @@ por palabra.
 
 ## Próximo paso
 
-**Escribir el Cap. 33** ("Ruido, otra vez", Dark Night of the Soul,
-ambición **valle**, ~1950 palabras, No-but). Collegno, su cuarto en el
-piso franco; el archivo cifrado. Primer capítulo después del "All Is
-Lost" del Cap. 32 -- Vidal no baja al laboratorio.
+**Escribir el Cap. 35** ("Seis minutos", **Break Into Three**, ambición
+**sosten**, ~2000 palabras, No-but). Collegno; Turín, perímetro. Cierra
+el Acto II (32-77% del libro) y arranca la recta final.
 
-**Beats:** (1) Por primera vez desde Jerusalén (Cap. 1), tiene un día
-sin asignar en la agenda y no lo asigna. (2) Abre el archivo de
-Amberes -- cifrado en un directorio `2029-03` (eco deliberado del
-`2033-04` del Cap. 27) -- y lo lee entero por primera vez desde que lo
-cifró: la discordancia que clasificó "ruido de sensor, excluir de
-consolidación" el 14 de marzo de 2029 a las 2:31 (líneas 3.407-3.418
-del log, firma espectral en la imprimatura del panel izquierdo, peso
-agregado 0,04 -- ver [C03-04]) era, con los ojos de esta semana, un
-0,97 ajeno. Le hizo a esa señal lo mismo que el mundo le hizo a la
-tela en 1988. (3) Intenta contar algo -- baldosas, vigas, autos -- y
-pierde la cuenta tres veces (hilo #2 en fractura; ya lo perdió una vez
-en el Cap. 31, ver esa entrada). (4) And: la devolución no es
-opcional. La regla que dictó Ferrero en el Cap. 15 es esta noche lo
-único que Vidal tiene en lugar de un propósito.
+**Beats:** (1) Ledda presenta el estado de las dos ventanas del 29 de
+abril: la de once minutos (cambio de guardia) está muerta -- Ceruti
+reprogramó las inspecciones preostensión y superpuso personal sobre
+ese hueco. Queda la de seis minutos (revisión del sistema de clima),
+sin margen de error, sin segunda pasada, con Ceruti rondando el
+edificio. (2) La discusión que Vidal esperaba no ocurre: nadie propone
+abortar. El equipo entiende, sin votarlo, que la devolución es ahora
+el único acto que significa algo. Vidal lo anota: *vinimos por una
+respuesta; nos vamos con una restitución*. (3) Vidal aprueba la
+ventana de seis minutos y toma una segunda decisión: el 0,97 va al
+informe final, rotulado como lo que es -- señal no auditable, no
+clasificada como ruido. Lo contrario exacto de Amberes. Ferrero invoca
+el veto del Cap. 16 ("Esto no se anuncia"); Vidal: "No es un anuncio.
+Es un registro." (4) But: para la ventana hace falta alguien más
+adentro. Vidal se asigna a sí mismo. Ledda lo mira el tiempo de un
+plazo y acepta.
 
-**Plants:** -- **Payoffs:** hilo #8 pagado en su capa íntima (Amberes
-releído entero); hilo #2 en fractura.
-**Character movement:** toca fondo con exactitud -- no perdió la fe en
-la ciencia, perdió la coartada de que la ciencia lo eximía de elegir.
-**The lie:** velatorio -- nació en Amberes como anestesia y funcionó
-veinte años; la pregunta de la directora del Cap. 2 vuelve sola: *en
-algún punto todos eligen*.
+**Plants:** la distinción registro/anuncio (se paga en Caps. 42-43).
+**Payoffs:** hilo #4 pagado en decisión (de dos ventanas queda una, la
+peor); refuerzo del hilo #18 (Ceruti como antagonista de calendario).
+**Character movement:** deja de ser el hombre que dijo "adelante"
+desde un puesto remoto -- se pone en el lugar del riesgo.
+**The lie:** sustituida operativamente -- aprueba un plan cuyo margen
+no es auditable sino confiable.
 
-**Antes de escribir:** el panel de Amberes fue confirmado falso por
-seis vías independientes DESPUÉS de la publicación de 2029 ([C03-06]) --
-la discordancia que Vidal descartó en su momento no era la señal que
-lo habría salvado del error público (el resultado final fue correcto);
-es la señal de que él la excluyó sin mirar dos veces, el mismo gesto
-que ahora reconoce en sí mismo. No convertirlo en "Vidal se equivocó
-en Amberes" -- el punto es metodológico, no de resultado. Revisar
-también [C09-08]/[C12-08] (once años, no otro número) si se menciona
-su trayectoria, y aplicar el chequeo aritmético manual antes de
-evaluar (ver la práctica nueva documentada en la "Actualización
-2026-08-07" al principio de este documento) -- en particular, si se
-menciona la edad o cronología de cualquier personaje ya establecido,
-buscarlo primero en `characters.md` completo, no solo en
-`canon_emergente.md`.
+**Antes de escribir (aplicando la disciplina nueva, ver la sección
+"Disciplina de revisión antes de evaluar" más arriba):**
+1. **Payoffs a verificar en canon antes de redactar:** hilo #4 (las
+   dos ventanas de la devolución, [C14-11] fija la ventana A a las
+   19:00 -- este capítulo la mata, tiene que decir por qué sin
+   contradecir esa hora); hilo #18 (el pedido de Ceruti, última
+   actualización en [C29-05]: historial completo de sensores,
+   incluidas células de carga, todavía en trámite -- este capítulo
+   puede avanzarlo, no reiniciarlo). También revisar el veto del punto
+   diecinueve ([C16-04]) antes de escribir la escena "esto no se
+   anuncia / es un registro", para que Ferrero lo invoque con precisión.
+2. **Cadena de calendario, la parte que quedó floja del Cap. 33-34:**
+   el Cap. 34 cerró con el plegado fijado a medianoche del 29 de abril
+   y la reflexión de que "en unas horas" el lienzo vuelve a la caja de
+   cristal -- pero nunca se ancló la hora exacta de la ventana de seis
+   minutos ni se confirmó si ya pasó o todavía no. Este capítulo es el
+   lugar natural para fijarla de una vez (Ledda la presenta en el beat
+   1) y cerrar esa ambigüedad antes de que el Cap. 36 (ensayos previos
+   al 29) la necesite. Mirar la entrada del Cap. 36 en `outline.md`
+   antes de cerrar la fecha/hora de este capítulo, para no dejarlo sin
+   margen.
+3. **Ambición sostén, no pico** -- no hace falta el chequeo de tensión
+   Beats/Character movement que sí es obligatorio en capítulos pico,
+   pero igual conviene, dado que este es un Break Into Three: leer una
+   vez más "Character movement" y "The lie" antes de escribir para que
+   el giro (deja de ser espectador remoto) quede en la acción, no
+   declarado.
+4. **Puntos ciegos conocidos a repasar:** si aparece la hoja diaria del
+   piso franco, formato fijo (sin columna de función, Ferrero primero).
+   Si se menciona la edad/trayectoria de algún personaje, cruzar contra
+   `characters.md` completo, no solo `canon_emergente.md`.
+
+**Antes de reevaluar después de cualquier arreglo:** releer el
+capítulo completo de punta a punta una vez antes de volver a correr
+`evaluate.py` -- no alcanza con corregir la línea que el juez marcó.
 
 ```bash
-uv run python draft_chapter.py 33
-uv run python evaluate.py --chapter=33
-uv run python actualizar_canon.py 33
-uv run python chapter_to_pdf.py 33 "Ruido, otra vez"
+uv run python draft_chapter.py 35
+uv run python evaluate.py --chapter=35
+uv run python actualizar_canon.py 35
+uv run python chapter_to_pdf.py 35 "Seis minutos"
 ```
 
 **Ojo:** el número de capítulo va posicional
@@ -1327,13 +1592,14 @@ sobre una estructura incompleta no mueve el puntaje.
 3. `uv run python -m pytest tests/ -v` -- confirmar 266 en verde y 38
    xfail esperados (ninguno inesperado) antes de tocar nada.
 4. `cat state.json` -- `debts` debería estar `[]`.
-5. Leer la entrada de Cap. 33 en `outline.md` ("Ch 33: Ruido, otra
-   vez") antes de redactar, y de paso [C03-04]/[C03-06] (el archivo de
-   Amberes) y la entrada del Cap. 31 en "Redacción" (la cuenta perdida
-   de ciclos, que este capítulo retoma como hilo #2 en fractura).
-6. Redactar Cap. 33 a mano con el standalone:
-   `uv run python draft_chapter.py 33` → `evaluate.py --chapter=33` →
-   `actualizar_canon.py 33` → `chapter_to_pdf.py 33 "Ruido, otra vez"`.
+5. Leer la entrada de Cap. 35 en `outline.md` ("Ch 35: Seis minutos")
+   antes de redactar, y aplicar el punto 1 y 2 de "Antes de escribir"
+   en "Próximo paso" (verificar hilos #4/#18 en canon, y mirar la
+   entrada del Cap. 36 antes de cerrar la hora exacta de la ventana de
+   seis minutos -- ese es el cabo suelto que dejó el Cap. 34).
+6. Redactar Cap. 35 a mano con el standalone:
+   `uv run python draft_chapter.py 35` → `evaluate.py --chapter=35` →
+   `actualizar_canon.py 35` → `chapter_to_pdf.py 35 "Seis minutos"`.
    Leer el capítulo completo y el `eval_log` entero (no solo el
    `overall_score`) antes de avanzar -- si rechaza, ver "Lección del
    Cap. 6"; si acepta, revisar igual `character_voice`/`continuity` --
@@ -1346,14 +1612,12 @@ sobre una estructura incompleta no mueve el puntaje.
    atraco)"; si `draft_chapter.py` rechaza con categoría "cyber", ver
    "Lección del Cap. 14 y el Cap. 15"; si se edita el capítulo
    **después** de evaluarlo y aceptarlo, reevaluar antes de correr
-   `actualizar_canon.py` de nuevo -- ver la lección de Cap. 21; y antes
-   de evaluar, hacer el chequeo aritmético manual (números, horarios,
-   y **edades/cronología de personajes contra `characters.md`
-   completo**, no solo `canon_emergente.md`) -- ver la práctica nueva
-   documentada en la "Actualización 2026-08-07" al principio de este
-   documento, y en particular las lecciones del Cap. 31 (presupuesto de
-   fibra duplicado) y el Cap. 32 (edad del hermano de Ferrero) para ver
-   qué tipo de error se les escapó incluso haciendo el chequeo.
+   `actualizar_canon.py` de nuevo -- ver la lección de Cap. 21; y seguir
+   completa la sección "Disciplina de revisión antes de evaluar" (más
+   arriba en este documento): chequeo aritmético antes de evaluar,
+   relectura completa del capítulo antes de reevaluar después de
+   cualquier arreglo, y repaso de los "puntos ciegos conocidos" antes
+   de escribir.
 7. No tocar el formato de `chapter_to_pdf.py` -- ya está cerrado y
    calibrado, ver "PDF de lectura por capítulo" más arriba.
 8. No tocar el diseño del cacheo de prompt salvo que deje de andar --
