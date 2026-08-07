@@ -1094,3 +1094,7 @@ Son of the House of Bells"), y `reader_panel.py` depende de
 `arc_summary.md`, que no existe. Detalle completo, tabla por script y
 orden de traducción recomendado en `docs/TRASPASO.md`, sección "Fase 3
 (revisión de conjunto): estado de adaptación (idioma + contenido)".
+
+A partir de ahora hay un documento de seguimiento de tareas del
+proyecto con checklist y % de avance por fase en `docs/SEGUIMIENTO.md`
+-- consultarlo para el estado general antes de decidir qué sigue.
