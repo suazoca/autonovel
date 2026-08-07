@@ -468,3 +468,14 @@
 - [C37-07] (Hechos de personajes) Durante la espera del 29 de abril Vidal cuenta sin interrupción (doscientos cuarenta y un clics del relé, ochenta y siete pasos, tres ciclos de compresor) entre la una y las 16:05; la serie no se corta, a diferencia de la del edículo en octubre de 2032.
 - [C37-08] (Político / faccional) Una revisión de vigilancia sobre los registros de la catedral empieza el lunes posterior al 29 de abril de 2033.
 - [C37-09] (Geografía) Del depósito de servicio a la puerta de la sacristía hay ochenta y tres pasos hasta la curva del pasillo y treinta y uno más desde la curva; Vidal frena el carro en el paso veintidós de esos treinta y uno al ver luz bajo la puerta.
+
+## Cap. 38
+
+- [C38-01] (Cronología) El 29 de abril de 2033 monseñor Ceruti entra a la catedral a las 21:04 por la puerta de la Comisión, firma el libro y el sacristán le abre la sacristía; se queda solo con la tableta del volcado de telemetría que había pedido.
+- [C38-02] (Establecido en la historia) El volcado de telemetría llega a Ceruti la tarde del 29 de abril con el pico del 12 de abril marcado en amarillo: 3:21 de la madrugada, cuatro células de carga, dos gramos y una décima, once segundos fuera de banda, estabilizado al doce.
+- [C38-03] (Hechos de personajes) Ferrero se quita los dos guantes de algodón antes de hablar con Ceruti y le confiesa en voz alta que firmó el acta de cierre de 2003 en tercer lugar de cinco, que al año siguiente faltaban tres contenedores, que reclasificó la diferencia y calló veintinueve años; pide expresamente que Ceruti lo anote con su nombre.
+- [C38-04] (Establecido en la historia) Ferrero declara ante Ceruti que lleva semanas ejecutando verificaciones discretas del instrumental de la teca bajo su propia autoridad y sin acta, porque la donación que pagó la teca nunca fue auditada por la Comisión; ninguna de sus cinco afirmaciones es falsa y ninguna es completa.
+- [C38-05] (Cronología) La restitución del lienzo se ejecuta el 29 de abril de 2033 a partir de las 21:41, con Bosio poniendo las células en modo de servicio y liberando los pasadores; el intercambio inverso cierra en cinco minutos cuarenta.
+- [C38-06] (Establecido en la historia) En la verificación de posición del lienzo restituido, tres cotas quedan limpias dentro de banda y la cuarta —borde inferior derecho— pegada al límite sin cruzarlo; Vidal no la corrige por aplicación de su propia cláusula de verificación única por punto de control.
+- [C38-07] (Hechos de personajes) Al preguntarle Ceruti qué pasará si la Comisión le reprocha haberse enterado por él y en abril, Ferrero responde: «Entonces habrá consecuencias, y las firmo yo. Cuarenta años firmando actas de otros. Ya era hora de que una fuera mía.»
+- [C38-08] (Político / faccional) Ceruti queda pendiente de una segunda conversación con Ferrero sobre si los tres contenedores faltantes de 2002 existen todavía; Ferrero la pospone sin negarla.
