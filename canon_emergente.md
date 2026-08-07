@@ -491,3 +491,14 @@
 - [C39-07] (Hechos de personajes) Vidal anota la cita de Cologny en el cuaderno de tapas de cartón naranja y en el campo de entregable escribe «los motivos».
 - [C39-08] (Hechos de personajes) En la madrugada posterior a la devolución, la segunda de las dos frases que Chiara reza en voz baja ya no termina en el nombre en que terminaba antes.
 - [C39-09] (Reglas excepcionales del mundo) El desmontaje de Collegno se ejecuta en el orden inverso al del montaje: cinta azul de la réplica retirada en tiras enteras a bolsa negra, las once hojas del plan bajadas de once a uno despegando las cuatro esquinas de a una, racks sin cables, y etiqueta con hora y apellido de la empresa de transporte anotados por Ledda con renglón subrayado a regla.
+
+## Cap. 40
+
+- [C40-01] (Hechos de personajes) La maestra de Chiara se llama Bruna Ottino; su letra en los cuadernos de 2002 no lleva firma y Vidal pregunta el nombre antes de discutir el método.
+- [C40-02] (Establecido en la historia) Chiara compara cinco de las nueve muestras de Judea del corpus de Collegno contra los esquemas con cotas de los cuadernos de 2002: cuatro coinciden cota por cota, incluido un defecto de hilatura dibujado a lápiz en 2002; también coteja tres perfiles de carbonización contra las fichas de los tubos del contenedor 42.
+- [C40-03] (Establecido en la historia) Chiara entrega a Vidal una copia manuscrita de su comparación: seis hojas, cada renglón con doble referencia (cuaderno, folio, cota / muestra, portaobjetos, medición). Los cuadernos originales se los queda ella.
+- [C40-04] (Establecido en la historia) El día del cierre Vidal completa en el cuaderno de tapas naranjas la línea que dejó inconclusa el día dos: «Procedencia del corpus: material removido del lienzo en 2002. Contenedores 41, 42, 43. Integrado a mi calibración sin pregunta previa. El peritaje midió la reliquia contra sí misma en cuatro de nueve referencias de Judea. Constancia: Fabbri, comparación adjunta.» Sin un solo adjetivo.
+- [C40-05] (Hechos de personajes) Ledda recibió en noviembre de 2032 el perfil de Fabbri con la constancia 'historia verificable completa, ninguna observación' y le agregó a lápiz 'motivo de participación no establecido'; en el cierre le dice a Chiara que sus motivos ocultos fueron los mejores del proyecto.
+- [C40-06] (Reglas excepcionales del mundo) Regla de cierre de Ledda: 'historia verdadera, motivos ocultos' es la única combinación que resiste la vigilancia de 2033; y a las setenta y dos horas del desmonte la dirección de Collegno 'no existió'.
+- [C40-07] (Cronología) La mañana del 30 de abril de 2033 Vidal sale de Collegno hacia Turín a las 6:25 para tomar el tren de las 7:12 a Ginebra; el transporte del material del laboratorio pasa a las ocho.
+- [C40-08] (Geografía) En 2033 existe una línea de alta velocidad Turín–Ginebra, inaugurada el año anterior por un túnel nuevo.
