@@ -63,8 +63,8 @@ def chapter_title(text: str) -> str:
                 r"^Chapter\s+(?:\d+|[A-Z][a-z]+(?:-[A-Z][a-z]+)*)\s*[:—–-]*\s*",
                 "", title, flags=re.I
             )
-            return title.strip() if title.strip() else "Untitled"
-    return "Untitled"
+            return title.strip() if title.strip() else "Sin título"
+    return "Sin título"
 
 
 def word_count(text: str) -> int:
@@ -228,7 +228,7 @@ def panel_mentions_for_chapter(panel: dict, ch: int) -> dict:
 def build_panel_brief(ch: int) -> str:
     panel = load_panel()
     if panel is None:
-        sys.exit("ERROR: edit_logs/reader_panel.json not found")
+        sys.exit("ERROR: no se encontró edit_logs/reader_panel.json")
 
     text = chapter_text(ch)
     title = chapter_title(text)
@@ -242,23 +242,28 @@ def build_panel_brief(ch: int) -> str:
     negative_keys = ["momentum_loss", "worst_scene", "cut_candidate"]
     neg_count = sum(len(mentions[k]) for k in negative_keys)
     if len(mentions["cut_candidate"]) > 0:
-        brief_type = "COMPRESS"
+        brief_type = "COMPRIMIR"
     elif len(mentions["worst_scene"]) > 0:
-        brief_type = "DRAMATIZE"
+        brief_type = "DRAMATIZAR"
     elif len(mentions["momentum_loss"]) > 0:
-        brief_type = "TIGHTEN"
+        brief_type = "AJUSTAR"
     else:
-        brief_type = "REVISE"
+        brief_type = "REVISAR"
 
     # Build PROBLEM section
     problem_parts: list[str] = []
     if flagged:
         problem_parts.append(
-            "Panel disagreement flags for this chapter:\n"
+            "Alertas de desacuerdo del panel para este capítulo:\n"
             + "\n".join(f"- {f}" for f in flagged)
         )
     for key in negative_keys:
         if mentions[key]:
+            # El subtítulo sale de la clave del JSON de reader_panel.py
+            # (momentum_loss, worst_scene, cut_candidate), que sigue en
+            # inglés hasta que se traduzca ese script (paso 3 del orden
+            # de docs/TRASPASO.md) -- igual que el texto citado de cada
+            # lector debajo. No se traduce acá.
             problem_parts.append(f"### {key.replace('_', ' ').title()}")
             for m in mentions[key]:
                 # Truncate very long quotes to ~400 chars for readability
@@ -268,8 +273,8 @@ def build_panel_brief(ch: int) -> str:
 
     if not problem_parts:
         problem_parts.append(
-            f"No specific negative feedback for Chapter {ch} from the reader panel. "
-            "Consider cross-referencing with --eval or --cuts for targeted feedback."
+            f"No hay feedback negativo específico para el Capítulo {ch} del panel de "
+            "lectores. Considerá cruzarlo con --eval o --cuts para feedback más puntual."
         )
 
     # Build WHAT TO KEEP section
@@ -283,7 +288,7 @@ def build_panel_brief(ch: int) -> str:
     cuts_data = load_cuts(ch)
     if cuts_data and cuts_data.get("tightest_passage"):
         keep_parts.append(
-            f'Tightest passage (from adversarial edit): "{cuts_data["tightest_passage"]}"'
+            f'Pasaje más ajustado (de la edición adversarial): "{cuts_data["tightest_passage"]}"'
         )
     # Check per-chapter eval for strongest sentences
     ch_eval_path = latest_chapter_eval(ch)
@@ -291,14 +296,14 @@ def build_panel_brief(ch: int) -> str:
         ch_eval = load_json(ch_eval_path)
         strongest = ch_eval.get("three_strongest_sentences", [])
         if strongest:
-            keep_parts.append("Strongest sentences (from eval):")
+            keep_parts.append("Oraciones más fuertes (de la evaluación):")
             for s in strongest:
                 keep_parts.append(f'- "{s}"')
 
     if not keep_parts:
         keep_parts.append(
-            f"(No specific 'best' mentions for Chapter {ch}. "
-            "Review the chapter for its strongest passages before revising.)"
+            f"(Sin menciones específicas de 'lo mejor' para el Capítulo {ch}. "
+            "Revisá el capítulo en busca de sus pasajes más fuertes antes de reescribir.)"
         )
 
     # Build WHAT TO CHANGE section
@@ -309,8 +314,8 @@ def build_panel_brief(ch: int) -> str:
     for m in mentions["momentum_loss"]:
         # Extract actionable suggestion if present
         change_parts.append(
-            f"{change_num}. **Pacing**: Address momentum loss identified by panel — "
-            "tighten or restructure the scenes that drag."
+            f"{change_num}. **Ritmo**: Atacá la pérdida de momentum que identificó el "
+            "panel — ajustá o reestructurá las escenas que se estancan."
         )
         change_num += 1
         break  # one entry is enough
@@ -331,15 +336,16 @@ def build_panel_brief(ch: int) -> str:
             # Fall back to the full worst_scene comment, truncated
             raw = m.split("]", 1)[-1].strip() if "]" in m else m
             fix_text = (raw[:300] + "...") if len(raw) > 300 else raw
-        change_parts.append(f"{change_num}. **Dramatize**: {fix_text}")
+        change_parts.append(f"{change_num}. **Dramatizar**: {fix_text}")
         change_num += 1
         break
 
     # From cut_candidate
     for m in mentions["cut_candidate"]:
         change_parts.append(
-            f"{change_num}. **Compress**: Panel identifies this chapter as a cut candidate. "
-            "Fold essential beats into fewer words; eliminate repeated exposition."
+            f"{change_num}. **Comprimir**: El panel identifica este capítulo como "
+            "candidato a recorte. Condensá los beats esenciales en menos palabras; "
+            "eliminá la exposición repetida."
         )
         change_num += 1
         break
@@ -347,15 +353,17 @@ def build_panel_brief(ch: int) -> str:
     # From thinnest_character
     if mentions["thinnest_character"]:
         change_parts.append(
-            f"{change_num}. **Deepen character**: Panel flags thin characterization in this chapter. "
-            "Add interiority, physical specificity, or a complicating moment."
+            f"{change_num}. **Profundizar personaje**: El panel marca caracterización "
+            "débil en este capítulo. Sumá interioridad, especificidad física, o un "
+            "momento que complique."
         )
         change_num += 1
 
     # From missing_scene
     if mentions["missing_scene"]:
         change_parts.append(
-            f"{change_num}. **Add missing beat**: Panel identifies a scene gap near this chapter."
+            f"{change_num}. **Agregar beat faltante**: El panel identifica un vacío de "
+            "escena cerca de este capítulo."
         )
         for m in mentions["missing_scene"]:
             snippet = m[:300] + "..." if len(m) > 300 else m
@@ -364,34 +372,34 @@ def build_panel_brief(ch: int) -> str:
 
     if not change_parts:
         change_parts.append(
-            "No specific changes derived from panel. "
-            "Consider combining with --eval or --cuts for concrete revision items."
+            "No se derivaron cambios específicos del panel. "
+            "Considerá combinar con --eval o --cuts para ítems de revisión concretos."
         )
 
     # Determine word count target
-    if brief_type == "COMPRESS":
+    if brief_type == "COMPRIMIR":
         target_wc = int(wc * 0.55)
-        target_note = f"~{target_wc} words (compress from current {wc})"
-    elif brief_type == "DRAMATIZE":
+        target_note = f"~{target_wc} palabras (comprimir desde las {wc} actuales)"
+    elif brief_type == "DRAMATIZAR":
         target_wc = wc  # restructure, not expand
-        target_note = f"~{target_wc} words (restructure, roughly same length)"
-    elif brief_type == "TIGHTEN":
+        target_note = f"~{target_wc} palabras (reestructurar, longitud similar)"
+    elif brief_type == "AJUSTAR":
         target_wc = int(wc * 0.85)
-        target_note = f"~{target_wc} words (tighten from current {wc})"
+        target_note = f"~{target_wc} palabras (ajustar desde las {wc} actuales)"
     else:
-        target_note = f"~{wc} words (current length, unless changes dictate otherwise)"
+        target_note = f"~{wc} palabras (longitud actual, salvo que los cambios indiquen lo contrario)"
 
     # Assemble
-    brief = f"# Revision Brief: Chapter {ch} — {title} ({brief_type})\n\n"
-    brief += "## PROBLEM\n"
+    brief = f"# Brief de revisión: Capítulo {ch} — {title} ({brief_type})\n\n"
+    brief += "## PROBLEMA\n"
     brief += "\n\n".join(problem_parts) + "\n\n"
-    brief += "## WHAT TO KEEP\n"
+    brief += "## QUÉ CONSERVAR\n"
     brief += "\n".join(keep_parts) + "\n\n"
-    brief += "## WHAT TO CHANGE\n"
+    brief += "## QUÉ CAMBIAR\n"
     brief += "\n".join(change_parts) + "\n\n"
-    brief += "## VOICE RULES\n"
+    brief += "## REGLAS DE VOZ\n"
     brief += "\n".join(f"- {r}" for r in voice_rules) + "\n\n"
-    brief += "## TARGET\n"
+    brief += "## OBJETIVO\n"
     brief += target_note + "\n"
 
     return brief
@@ -423,11 +431,13 @@ def build_eval_brief(ch: int) -> str:
         overall = ch_eval.get("overall_score", "?")
         weakest_dim = ch_eval.get("weakest_dimension", "unknown")
         problem_parts.append(
-            f"Per-chapter eval score: **{overall}/10**. "
-            f"Weakest dimension: **{weakest_dim}**."
+            f"Puntaje de evaluación por capítulo: **{overall}/10**. "
+            f"Dimensión más débil: **{weakest_dim}**."
         )
 
-        # Collect weakest moments from each dimension
+        # Collect weakest moments from each dimension. Los nombres de
+        # dimensión (dk) y el contenido de weakest/fix vienen del JSON
+        # de evaluate.py, que sigue en inglés -- no se traduce acá.
         dim_keys = [
             "voice_adherence", "beat_coverage", "character_voice",
             "plants_seeded", "prose_quality", "continuity",
@@ -457,21 +467,21 @@ def build_eval_brief(ch: int) -> str:
         # AI patterns detected
         ai_patterns = ch_eval.get("ai_patterns_detected", [])
         if ai_patterns:
-            problem_parts.append("**AI patterns detected:**")
+            problem_parts.append("**Patrones de IA detectados:**")
             for pat in ai_patterns:
                 problem_parts.append(f"- {pat}")
 
         # Strongest sentences
         strongest = ch_eval.get("three_strongest_sentences", [])
         if strongest:
-            keep_parts.append("Strongest sentences (eval):")
+            keep_parts.append("Oraciones más fuertes (de la evaluación):")
             for s in strongest:
                 keep_parts.append(f'- "{s}"')
 
         # Three weakest sentences for reference
         weakest_sents = ch_eval.get("three_weakest_sentences", [])
         if weakest_sents:
-            problem_parts.append("**Weakest sentences:**")
+            problem_parts.append("**Oraciones más débiles:**")
             for s in weakest_sents:
                 problem_parts.append(f'- "{s}"')
 
@@ -484,60 +494,61 @@ def build_eval_brief(ch: int) -> str:
 
         if weakest_ch == ch:
             problem_parts.insert(0,
-                f"**This is the novel's weakest chapter** per full eval "
-                f"(novel score: {novel_score}/10)."
+                f"**Este es el capítulo más débil de la novela** según la evaluación "
+                f"completa (puntaje de la novela: {novel_score}/10)."
             )
         if top_sug and (weakest_ch == ch or ch_eval_path is None):
             change_parts.append(
-                f"{change_num}. [full eval top suggestion] {top_sug}"
+                f"{change_num}. [sugerencia principal de la evaluación completa] {top_sug}"
             )
             change_num += 1
 
-        # Pacing curve note if it mentions this chapter
+        # Pacing curve note if it mentions this chapter. pacing_note viene
+        # del juez de evaluate.py (inglés) -- no se traduce acá.
         pacing = full_eval.get("pacing_curve", {})
         pacing_note = pacing.get("note", "")
         ch_re = re.compile(rf"\b(?:Chapter|Ch\.?)\s*{ch}\b", re.I)
         if ch_re.search(pacing_note):
-            problem_parts.append(f"**Pacing note (full eval):** {pacing_note}")
+            problem_parts.append(f"**Nota de ritmo (evaluación completa):** {pacing_note}")
 
     # Tightest passage from cuts
     cuts_data = load_cuts(ch)
     if cuts_data and cuts_data.get("tightest_passage"):
         keep_parts.append(
-            f'Tightest passage (adversarial edit): "{cuts_data["tightest_passage"]}"'
+            f'Pasaje más ajustado (edición adversarial): "{cuts_data["tightest_passage"]}"'
         )
 
     if not keep_parts:
-        keep_parts.append("(Review chapter for strongest passages before revising.)")
+        keep_parts.append("(Revisá el capítulo en busca de sus pasajes más fuertes antes de reescribir.)")
 
     if not change_parts:
-        change_parts.append("(No specific revision items from eval. Check --panel or --cuts.)")
+        change_parts.append("(Sin ítems de revisión específicos de la evaluación. Revisá --panel o --cuts.)")
 
     # Determine type from eval
     if ch_eval_path:
         ch_eval = load_json(ch_eval_path)
         overall = ch_eval.get("overall_score", 10)
         if overall <= 5:
-            brief_type = "REWRITE"
+            brief_type = "REESCRIBIR"
         elif overall <= 7:
-            brief_type = "FIX"
+            brief_type = "CORREGIR"
         else:
-            brief_type = "POLISH"
+            brief_type = "PULIR"
     else:
-        brief_type = "FIX"
+        brief_type = "CORREGIR"
 
-    target_note = f"~{wc} words (current length: {wc}; adjust based on revision scope)"
+    target_note = f"~{wc} palabras (longitud actual: {wc}; ajustar según el alcance de la revisión)"
 
-    brief = f"# Revision Brief: Chapter {ch} — {title} ({brief_type})\n\n"
-    brief += "## PROBLEM\n"
+    brief = f"# Brief de revisión: Capítulo {ch} — {title} ({brief_type})\n\n"
+    brief += "## PROBLEMA\n"
     brief += "\n\n".join(problem_parts) + "\n\n"
-    brief += "## WHAT TO KEEP\n"
+    brief += "## QUÉ CONSERVAR\n"
     brief += "\n".join(keep_parts) + "\n\n"
-    brief += "## WHAT TO CHANGE\n"
+    brief += "## QUÉ CAMBIAR\n"
     brief += "\n".join(change_parts) + "\n\n"
-    brief += "## VOICE RULES\n"
+    brief += "## REGLAS DE VOZ\n"
     brief += "\n".join(f"- {r}" for r in voice_rules) + "\n\n"
-    brief += "## TARGET\n"
+    brief += "## OBJETIVO\n"
     brief += target_note + "\n"
 
     return brief
@@ -546,7 +557,7 @@ def build_eval_brief(ch: int) -> str:
 def build_cuts_brief(ch: int) -> str:
     cuts_data = load_cuts(ch)
     if cuts_data is None:
-        sys.exit(f"ERROR: edit_logs/ch{ch:02d}_cuts.json not found")
+        sys.exit(f"ERROR: no se encontró edit_logs/ch{ch:02d}_cuts.json")
 
     text = chapter_text(ch)
     title = chapter_title(text)
@@ -570,29 +581,32 @@ def build_cuts_brief(ch: int) -> str:
     type_counts = {t: len(cs) for t, cs in cut_types.items()}
     dominant = max(type_counts, key=type_counts.get) if type_counts else "MIXED"
 
-    brief_type = "TIGHTEN"
+    brief_type = "AJUSTAR"
 
     # PROBLEM
     problem_parts: list[str] = []
     problem_parts.append(
-        f"Adversarial edit found **{total_cuttable} cuttable words** "
-        f"({fat_pct}% fat) across {len(cuts)} passages."
+        f"La edición adversarial encontró **{total_cuttable} palabras recortables** "
+        f"({fat_pct}% de grasa) en {len(cuts)} pasajes."
     )
     if verdict:
-        problem_parts.append(f"Verdict: {verdict}")
+        problem_parts.append(f"Veredicto: {verdict}")
 
-    problem_parts.append(f"\nDominant cut pattern: **{dominant}** ({type_counts.get(dominant, 0)} instances)")
+    # dominant y t son tipos de recorte (FAT, REDUNDANT, OVER-EXPLAIN...)
+    # definidos por adversarial_edit.py, que sigue en inglés -- no se
+    # traducen acá.
+    problem_parts.append(f"\nPatrón de recorte dominante: **{dominant}** ({type_counts.get(dominant, 0)} instancias)")
     for t, count in sorted(type_counts.items(), key=lambda x: -x[1]):
         if t != dominant:
-            problem_parts.append(f"- {t}: {count} instances")
+            problem_parts.append(f"- {t}: {count} instancias")
 
     if loosest:
-        problem_parts.append(f'\n**Loosest passage:**\n> {loosest}')
+        problem_parts.append(f'\n**Pasaje más flojo:**\n> {loosest}')
 
     # WHAT TO KEEP
     keep_parts: list[str] = []
     if tightest:
-        keep_parts.append(f'**Tightest passage** (do not touch):\n> {tightest}')
+        keep_parts.append(f'**Pasaje más ajustado** (no tocar):\n> {tightest}')
 
     # Also pull strongest sentences from eval if available
     ch_eval_path = latest_chapter_eval(ch)
@@ -600,12 +614,12 @@ def build_cuts_brief(ch: int) -> str:
         ch_eval = load_json(ch_eval_path)
         strongest = ch_eval.get("three_strongest_sentences", [])
         if strongest:
-            keep_parts.append("\nStrongest sentences (from eval):")
+            keep_parts.append("\nOraciones más fuertes (de la evaluación):")
             for s in strongest:
                 keep_parts.append(f'- "{s}"')
 
     if not keep_parts:
-        keep_parts.append("(Review chapter for strongest passages before revising.)")
+        keep_parts.append("(Revisá el capítulo en busca de sus pasajes más fuertes antes de reescribir.)")
 
     # WHAT TO CHANGE — specific numbered items from each cut
     change_parts: list[str] = []
@@ -616,7 +630,7 @@ def build_cuts_brief(ch: int) -> str:
         type_cuts = cut_types.get(cut_type, [])
         if not type_cuts:
             continue
-        change_parts.append(f"\n### {cut_type} ({len(type_cuts)} cuts)")
+        change_parts.append(f"\n### {cut_type} ({len(type_cuts)} recortes)")
         for c in type_cuts:
             quote = c.get("quote", "")
             reason = c.get("reason", "")
@@ -628,31 +642,31 @@ def build_cuts_brief(ch: int) -> str:
                 quote = quote[:200] + "..."
 
             entry = f'{change_num}. `"{quote}"`\n'
-            entry += f"   Reason: {reason}\n"
+            entry += f"   Razón: {reason}\n"
             if action == "REWRITE" and rewrite:
-                entry += f'   → Rewrite as: "{rewrite}"'
+                entry += f'   → Reescribir como: "{rewrite}"'
             elif action == "CUT":
-                entry += "   → Cut entirely"
+                entry += "   → Cortar por completo"
             change_parts.append(entry)
             change_num += 1
 
     # Word count target
     target_wc = wc - total_cuttable
     target_note = (
-        f"~{target_wc} words (cut ~{total_cuttable} from current {wc}). "
-        f"Tighten {fat_pct}% fat without losing the chapter's strongest beats."
+        f"~{target_wc} palabras (recortar ~{total_cuttable} de las {wc} actuales). "
+        f"Ajustá el {fat_pct}% de grasa sin perder los beats más fuertes del capítulo."
     )
 
-    brief = f"# Revision Brief: Chapter {ch} — {title} ({brief_type})\n\n"
-    brief += "## PROBLEM\n"
+    brief = f"# Brief de revisión: Capítulo {ch} — {title} ({brief_type})\n\n"
+    brief += "## PROBLEMA\n"
     brief += "\n".join(problem_parts) + "\n\n"
-    brief += "## WHAT TO KEEP\n"
+    brief += "## QUÉ CONSERVAR\n"
     brief += "\n".join(keep_parts) + "\n\n"
-    brief += "## WHAT TO CHANGE\n"
+    brief += "## QUÉ CAMBIAR\n"
     brief += "\n".join(change_parts) + "\n\n"
-    brief += "## VOICE RULES\n"
+    brief += "## REGLAS DE VOZ\n"
     brief += "\n".join(f"- {r}" for r in voice_rules) + "\n\n"
-    brief += "## TARGET\n"
+    brief += "## OBJETIVO\n"
     brief += target_note + "\n"
 
     return brief
@@ -688,11 +702,11 @@ def build_auto_brief() -> tuple[int, str]:
 
     # Full eval context
     problem_parts.append(
-        f"**Weakest chapter in the novel** (novel score: {novel_score}/10, "
-        f"weakest dimension: {weakest_dim})."
+        f"**Capítulo más débil de la novela** (puntaje de la novela: {novel_score}/10, "
+        f"dimensión más débil: {weakest_dim})."
     )
     if top_sug:
-        problem_parts.append(f"**Top suggestion from full eval:** {top_sug}")
+        problem_parts.append(f"**Sugerencia principal de la evaluación completa:** {top_sug}")
 
     # Per-dimension notes from full eval that mention this chapter
     dim_keys = [
@@ -713,7 +727,7 @@ def build_auto_brief() -> tuple[int, str]:
     if ch_eval_path:
         ch_eval = load_json(ch_eval_path)
         overall = ch_eval.get("overall_score", "?")
-        problem_parts.append(f"\nPer-chapter eval score: **{overall}/10**")
+        problem_parts.append(f"\nPuntaje de evaluación por capítulo: **{overall}/10**")
 
         # Weakest moments
         for dk in ["voice_adherence", "beat_coverage", "character_voice",
@@ -735,21 +749,21 @@ def build_auto_brief() -> tuple[int, str]:
         # AI patterns
         ai_patterns = ch_eval.get("ai_patterns_detected", [])
         if ai_patterns:
-            problem_parts.append("\n**AI patterns detected:**")
+            problem_parts.append("\n**Patrones de IA detectados:**")
             for pat in ai_patterns:
                 problem_parts.append(f"- {pat}")
 
         # Strongest sentences
         strongest = ch_eval.get("three_strongest_sentences", [])
         if strongest:
-            keep_parts.append("Strongest sentences (eval):")
+            keep_parts.append("Oraciones más fuertes (de la evaluación):")
             for s in strongest:
                 keep_parts.append(f'- "{s}"')
 
         # Weakest sentences
         weakest_sents = ch_eval.get("three_weakest_sentences", [])
         if weakest_sents:
-            problem_parts.append("\n**Weakest sentences:**")
+            problem_parts.append("\n**Oraciones más débiles:**")
             for s in weakest_sents:
                 problem_parts.append(f'- "{s}"')
 
@@ -760,7 +774,7 @@ def build_auto_brief() -> tuple[int, str]:
         mentions = info["mentions"]
         flagged = info["flagged_issues"]
         if flagged:
-            problem_parts.append("\n**Panel flags:**")
+            problem_parts.append("\n**Alertas del panel:**")
             for f in flagged:
                 problem_parts.append(f"- {f}")
 
@@ -774,7 +788,7 @@ def build_auto_brief() -> tuple[int, str]:
         if mentions["best_scene"]:
             for m in mentions["best_scene"]:
                 snippet = m[:400] + "..." if len(m) > 400 else m
-                keep_parts.append(f"Panel best scene mention: {snippet}")
+                keep_parts.append(f"Mención del panel de la mejor escena: {snippet}")
 
     # Cuts data
     cuts_data = load_cuts(ch)
@@ -786,11 +800,11 @@ def build_auto_brief() -> tuple[int, str]:
 
         if total_cuttable:
             problem_parts.append(
-                f"\n**Adversarial edit:** {total_cuttable} cuttable words ({fat_pct}% fat). "
-                f"{verdict}"
+                f"\n**Edición adversarial:** {total_cuttable} palabras recortables "
+                f"({fat_pct}% de grasa). {verdict}"
             )
         if tightest:
-            keep_parts.append(f'\nTightest passage (adversarial edit):\n> {tightest}')
+            keep_parts.append(f'\nPasaje más ajustado (edición adversarial):\n> {tightest}')
 
         # Add top cuts as change items
         cuts_list = cuts_data.get("cuts", [])
@@ -803,37 +817,37 @@ def build_auto_brief() -> tuple[int, str]:
             rewrite = c.get("rewrite")
             entry = f'{change_num}. `"{quote}..."` — {reason}'
             if action == "REWRITE" and rewrite:
-                entry += f'\n   → Rewrite as: "{rewrite}"'
+                entry += f'\n   → Reescribir como: "{rewrite}"'
             elif action == "CUT":
-                entry += "\n   → Cut entirely"
+                entry += "\n   → Cortar por completo"
             change_parts.append(entry)
             change_num += 1
 
     # Top suggestion from full eval as final change item
     if top_sug:
-        change_parts.append(f"{change_num}. [PRIORITY — full eval] {top_sug}")
+        change_parts.append(f"{change_num}. [PRIORIDAD — evaluación completa] {top_sug}")
         change_num += 1
 
     if not keep_parts:
-        keep_parts.append("(Review chapter for strongest passages before revising.)")
+        keep_parts.append("(Revisá el capítulo en busca de sus pasajes más fuertes antes de reescribir.)")
     if not change_parts:
-        change_parts.append("(No specific changes auto-detected. Manual review recommended.)")
+        change_parts.append("(No se detectaron cambios específicos automáticamente. Se recomienda revisión manual.)")
 
     # Determine brief type
-    brief_type = "AUTO-FIX"
+    brief_type = "AUTO-CORRECCIÓN"
 
-    target_note = f"~{wc} words (current: {wc}; adjust based on revision scope)"
+    target_note = f"~{wc} palabras (actual: {wc}; ajustar según el alcance de la revisión)"
 
-    brief = f"# Revision Brief: Chapter {ch} — {title} ({brief_type})\n\n"
-    brief += "## PROBLEM\n"
+    brief = f"# Brief de revisión: Capítulo {ch} — {title} ({brief_type})\n\n"
+    brief += "## PROBLEMA\n"
     brief += "\n".join(problem_parts) + "\n\n"
-    brief += "## WHAT TO KEEP\n"
+    brief += "## QUÉ CONSERVAR\n"
     brief += "\n".join(keep_parts) + "\n\n"
-    brief += "## WHAT TO CHANGE\n"
+    brief += "## QUÉ CAMBIAR\n"
     brief += "\n".join(change_parts) + "\n\n"
-    brief += "## VOICE RULES\n"
+    brief += "## REGLAS DE VOZ\n"
     brief += "\n".join(f"- {r}" for r in voice_rules) + "\n\n"
-    brief += "## TARGET\n"
+    brief += "## OBJETIVO\n"
     brief += target_note + "\n"
 
     return ch, brief

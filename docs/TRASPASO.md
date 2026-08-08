@@ -1827,6 +1827,42 @@ seis que produce prosa que termina en `chapters/`.
 
 No se ejecutó ningún script durante esta verificación.
 
+**Actualización (2026-08-08): pasos 1 y 2 del orden de arriba, hechos.**
+`gen_revision.py` se tradujo al español completo (system prompt, prompt
+principal, las 10 reglas de PATRONES A EVITAR con la misma redacción
+que `draft_chapter.py` donde se solapan), se corrigió el título
+hardcodeado (`obtener_titulo()`, mismo patrón que `review.py::get_title()`)
+y se enganchó `calcos_detectados()`/`CLICHES_FICCION` de `deteccion_es.py`
+como reporte no bloqueante después de guardar. `gen_brief.py` se tradujo
+(headers `## PROBLEMA`/`## QUÉ CONSERVAR`/`## QUÉ CAMBIAR`/`## REGLAS DE
+VOZ`/`## OBJETIVO`, las etiquetas de `brief_type`, y todas las frases
+armadas de las 4 funciones builder) sin tocar la lógica de extracción;
+el contenido citado textual del panel/evals/cuts (que viene de
+`reader_panel.py`, `evaluate.py` y `adversarial_edit.py`, todavía sin
+traducir) queda en inglés a propósito, marcado con comentarios en el
+código en los puntos donde eso pasa. Quedan pendientes los pasos 3
+(`reader_panel.py` + `arc_summary.md`), 4 (`adversarial_edit.py` +
+`compare_chapters.py`) y 5 (`review.py`).
+
+**Debt encontrado durante la traducción de `gen_brief.py` -- bug de
+extracción real, no cosmético, sin corregir:** `chapter_title()`
+(`gen_brief.py`, la función que arma el título de cada brief) busca la
+primera línea que empieza con `#` en el archivo del capítulo. Solo
+`chapters/ch_01.md` tiene ese encabezado markdown (`# Capítulo 1 —
+Intervalo`); el resto de los 46 capítulos arranca directo en prosa,
+sin ningún `#`. Confirmado con `head -1` sobre `ch_01.md`, `ch_12.md` y
+`ch_46.md`: los dos últimos no tienen encabezado. Consecuencia: para
+prácticamente cualquier capítulo salvo el primero, `chapter_title()`
+devuelve el fallback (`"Sin título"` después de esta sesión, `"Untitled"`
+antes) en vez del título real del capítulo -- cualquier brief generado
+hasta ahora tendría el título vacío, no el nombre real. No se corrige
+en esta sesión (es aparte de la tarea de traducción); posibles
+soluciones a evaluar más adelante: sacar el título de `outline.md`
+(que sí tiene el título de cada capítulo en su entrada `### Ch N:`,
+ver `extract_chapter_outline()` en `draft_chapter.py`) en vez de leerlo
+del archivo del capítulo, o agregar el encabezado `# Capítulo N —
+Título` a los 45 capítulos que no lo tienen.
+
 ## Próximo paso
 
 **No hay próximo capítulo: el libro está completo (46/46).** No queda
