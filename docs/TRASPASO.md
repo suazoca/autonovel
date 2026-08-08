@@ -1194,7 +1194,7 @@ borrador original no dramatizaba. `overall_score` final 7.54.
 
 `api_comun.py` ya documentaba (Tarea 9b) que `stop_reason=refusal`
 existe y hay que manejarlo explícitamente. Al cierre del libro, el
-patrón se repitió **cuatro veces en total, siempre la misma categoría
+patrón se repitió **cinco veces en total, siempre la misma categoría
 "cyber"**, siempre sobre contenido procedimental de
 vigilancia/intrusión/evasión de seguridad o fabricación de una
 réplica, nunca sobre contenido sexual, violento ni de ningún otro tipo:
@@ -1206,8 +1206,21 @@ réplica, nunca sobre contenido sexual, violento ni de ningún otro tipo:
   vector de acceso de la operación.
 - **Cap. 39** -- procedimiento de desmontaje/destrucción de evidencia
   de la operación.
+- **Cap. 2** (2026-08-09, no en `draft_chapter.py` sino en
+  `build_arc_summary.py`, generando `arc_summary.md`) -- el capítulo
+  no tiene ningún contenido de seguridad/vigilancia obvio (es la
+  exposición del método ante las dos comisiones en Jerusalén); mismo
+  patrón de falso positivo aparente que Cap. 14/15.
+  `stop_details={'type': 'refusal', 'category': 'cyber', ...}`,
+  `usage={'input_tokens': 4569, 'output_tokens': 3}`. Resuelto
+  corriendo el script entero con
+  `AUTONOVEL_WRITER_MODEL=claude-opus-5` en vez de reintentar
+  capítulo por capítulo -- para un script que hace 46 llamadas de
+  resumen fáctico corto (no prosa que dependa de la voz de Fable),
+  usar Opus de entrada evita el riesgo en cualquiera de los 46, no
+  solo en el que ya rechazó.
 
-**Conclusión con cuatro puntos de datos, no una sospecha con dos:**
+**Conclusión con cinco puntos de datos, no una sospecha con dos:**
 esto no es un falso positivo del pipeline ni un problema de prompt --
 es una restricción de seguridad cibernética real del propio modelo
 Fable 5 ante contenido de intrusión/vigilancia descrito de forma
@@ -1245,6 +1258,27 @@ solo abarata el costo de mandarlo, no el thinking sobre él. El mismo
 error de `max_tokens` sin texto (esta vez en `draft_chapter.py`, no en
 el juez) volvió a aparecer una vez en el Cap. 39, resuelto reintentando
 la llamada (no hizo falta subir el límite ahí, ya estaba en 16000).
+
+**Tercera aparición del mismo bug (2026-08-09), esta vez en
+`build_arc_summary.py`:** al pasar ese script de Fable 5 a Opus (para
+esquivar el rechazo "cyber" del Cap. 2 documentado arriba), la llamada
+de resumen por capítulo traía `max_tokens=200` -- valor pensado para
+Fable 5, que no gastó nada de ese presupuesto en *thinking*
+(`thinking_tokens: 0` en el log de refusal más arriba). Con Opus, el
+*thinking* se comió los 200 enteros cinco veces seguidas sin devolver
+texto (`usage={'output_tokens': 200, 'thinking_tokens': 200}`), y el
+script abortó por diseño en vez de seguir gastando. Subido a
+`max_tokens=4000` -- mismo valor que ya usan `reader_panel.py` y
+`compare_chapters.py` para sus llamadas a Opus -- y corrió limpio,
+46/46 capítulos, sin errores. **Lección general para cualquier script
+de Fase 3 que todavía no se corrió con Opus:** un `max_tokens` bajo
+(200, como acá; o incluso los 8000 que tenía `evaluate.py`) que
+funciona con Fable 5 no es garantía de que alcance con Opus -- el
+*thinking* extendido consume del mismo presupuesto que el texto de
+salida, y hay que revisarlo antes de la primera corrida con ese
+modelo, no después de que aborte. `adversarial_edit.py` (`max_tokens=8000`)
+y `review.py` (`max_tokens=8000`) ya usan un valor generoso; el que
+quedaba corto era este.
 
 ## PDF de lectura por capítulo -- formato ya cerrado, no tocar más
 

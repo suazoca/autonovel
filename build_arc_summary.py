@@ -104,11 +104,15 @@ def main():
         wc = len(text.split())
         opening, closing, dialogue = extract_key_passages(text)
 
-        # Get a 100-word summary from the model
+        # Get a 100-word summary from the model. max_tokens=4000 (no 200):
+        # con modelos de razonamiento extendido (Opus) el presupuesto de
+        # "thinking" se come los 200 enteros antes de producir texto --
+        # mismo valor que ya usan reader_panel.py/compare_chapters.py
+        # para Opus por la misma razón.
         summary = call_writer(
             f"Resumí este capítulo en exactamente 3 oraciones. Qué pasa, "
             f"qué cambia, qué pregunta queda abierta.\n\nCAPÍTULO {ch}:\n{text}",
-            max_tokens=200
+            max_tokens=4000
         )
 
         entry = f"""### Chapter {ch} ({wc} words)
