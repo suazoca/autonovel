@@ -93,16 +93,26 @@ Los resúmenes incluyen los eventos capítulo por capítulo, los pasajes de
 apertura y cierre de cada capítulo, y diálogo clave. La novela completa
 tiene {palabras_totales} palabras en {capitulos_totales} capítulos.
 
+El texto está en español. Antes de juzgar, tené en cuenta:
+- El diálogo se marca con raya (—), no con comillas. Es correcto.
+- La subordinación larga y la coordinación con «y» son recursos legítimos
+  del castellano, no verbosidad.
+- El sujeto pronominal se omite por defecto. Su ausencia es correcta;
+  su presencia repetida es un calco del inglés y sí es un defecto.
+- El español corre entre 15% y 20% más largo que el inglés para el mismo
+  contenido. No penalices por extensión comparándolo con prosa inglesa.
+
 {arc_summary}
 
 Ahora respondé estas preguntas sobre la NOVELA COMO UN TODO. Sé
 específico. Citá pasajes cuando puedas. Nombrá números de capítulo.
+Citá siempre los capítulos como "Cap. N" (ej. "Cap. 12").
 
 Respondé con JSON:
 {{
   "momentum_loss": "¿Dónde pierde impulso la historia? Nombrá el/los capítulo(s) específico(s) y qué causa el estancamiento. Si nunca pierde impulso, decilo y explicá por qué.",
 
-  "earned_ending": "Does the ending feel earned by everything before it? Does Cass's choice in Ch 22 land? Does the final image in Ch 24 mirror Ch 1 in a way that satisfies? What, if anything, feels unearned?",
+  "earned_ending": "¿El final se siente ganado por todo lo que vino antes? ¿La elección de Vidal en el Cap. 42 -- negarse a la oferta de Sandoz y pedir dos cosas puntuales en su lugar -- cierra? ¿La imagen final del Cap. 46 (la segunda lasca, la camisa gris, las baldosas contadas, la taza boca abajo, la columna sin nombre) resuena con la apertura del Cap. 1 de un modo que satisface? ¿Qué, si acaso algo, se siente no ganado?",
 
   "cut_candidate": "Si la novela tuviera que ser 10% más corta (~8.500 palabras), ¿qué capítulo o sección cortarías primero? ¿Por qué? ¿Qué se perdería?",
 
@@ -131,13 +141,13 @@ def extraer_totales(arc_summary):
     """Palabras y capítulos totales, parseados del propio arc_summary
     recibido (que build_arc_summary.py ya calculó dinámicamente) -- no
     hardcodeados acá. "?" si no se encuentran -- no debe romper."""
-    m_palabras = re.search(r'Total novel:\s*([\d,]+)\s*words', arc_summary)
-    m_capitulos = re.search(r'for all (\d+) chapters', arc_summary)
+    m_palabras = re.search(r'Total de\s+la novela:\s*([\d.]+)\s*palabras', arc_summary)
+    m_capitulos = re.search(r'de los (\d+) capítulos', arc_summary)
     palabras = m_palabras.group(1) if m_palabras else "?"
     capitulos = m_capitulos.group(1) if m_capitulos else "?"
     return palabras, capitulos
 
-def call_reader(reader_key, arc_summary, max_tokens=4000):
+def call_reader(reader_key, arc_summary, max_tokens=20000):
     reader = READERS[reader_key]
     palabras_totales, capitulos_totales = extraer_totales(arc_summary)
     raw = llamar_api(
@@ -152,6 +162,12 @@ def call_reader(reader_key, arc_summary, max_tokens=4000):
         api_key=API_KEY,
         api_base=API_BASE,
     )
+
+    # Guardar el texto crudo antes de parsear -- si el parseo falla, el
+    # texto queda disponible para diagnóstico sin tener que repetir la
+    # llamada a la API.
+    raw_path = BASE_DIR / "edit_logs" / f"raw_{reader_key}.txt"
+    raw_path.write_text(raw)
 
     # Parse JSON
     raw = raw.strip()
@@ -177,15 +193,35 @@ def call_reader(reader_key, arc_summary, max_tokens=4000):
     return json.loads(raw, strict=False)
 
 def find_disagreements(results):
-    """Find where readers disagree -- that's where the editorial decisions live."""
+    """Find where readers disagree -- that's where the editorial decisions live.
+
+    Limitaciones conocidas de la extracción de capítulos, no cubiertas:
+    - Lista con comas bajo un solo prefijo (ej. "Caps. 12, 24 y 35") -- solo
+      captura el primer número, 24 y 35 quedan invisibles.
+    - Rango con "a" y un solo prefijo (ej. "Caps. 22 a 34") -- solo captura
+      22, pierde 23-33 (distinto del rango que sí se cubre, que exige "Cap."
+      repetido en ambos extremos: "del Cap. 15 al Cap. 19").
+    """
     disagreements = []
     
     for question in ["momentum_loss", "cut_candidate", "thinnest_character", "worst_scene"]:
         answers = {k: v.get(question, "") for k, v in results.items()}
-        # Extract chapter numbers mentioned
+        # Extract chapter numbers mentioned (números sueltos, plural "Caps.",
+        # y rangos -- con guion "Cap. N-M" o en prosa "del Cap. N al Cap. M")
         chapters_mentioned = {}
         for reader, answer in answers.items():
-            chs = set(re.findall(r'Ch(?:apter)?\s*(\d+)', answer, re.IGNORECASE))
+            chs = set()
+            rangos = list(re.finditer(r'Caps?\.?\s*(\d+)\s*[-–—]\s*(\d+)', answer, re.IGNORECASE))
+            rangos += list(re.finditer(r'Caps?\.?\s*(\d+)\s+(?:al|a)\s+Caps?\.?\s*(\d+)', answer, re.IGNORECASE))
+            for m in rangos:
+                inicio, fin = int(m.group(1)), int(m.group(2))
+                if inicio > fin:
+                    inicio, fin = fin, inicio
+                chs.update(range(inicio, fin + 1))
+            for m in re.finditer(r'Caps?\.?\s*(\d+)', answer, re.IGNORECASE):
+                if any(r.start() <= m.start() < r.end() for r in rangos):
+                    continue
+                chs.add(int(m.group(1)))
             chapters_mentioned[reader] = chs
         
         # Find chapters where only some readers flagged an issue

@@ -274,6 +274,8 @@ def llamar_api(prompt, *, model, max_tokens, api_key, api_base, system=None,
             f"stop_reason={stop_reason} usage={usage}"
         )
 
+    print(f"OK: stop_reason={stop_reason} usage={usage}", file=sys.stderr)
+
     return texto_acumulado
 
 

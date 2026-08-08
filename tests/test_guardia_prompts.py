@@ -136,11 +136,9 @@ DEUDA_CONOCIDA = {
                    "de call_judge -- este último recién cruzó el umbral "
                    "de 200 caracteres al agregarle la instrucción de "
                    "escapado de JSON en la Tarea 10, ver HALLAZGOS.md)",
-    "reader_panel.py": "Tarea 1b",
     "adversarial_edit.py": "Tarea 1b",
     "compare_chapters.py": "Tarea 1b",
     "review.py": "Tarea 1b, solo traducir (no tiene género)",
-    "gen_revision.py": "Tarea 13 -- URGENTE, antes de la primera revisión de capítulo: género + no corrió nunca",
     "seed.py": "Tarea 13 -- antes de la semilla del libro 2",
     "gen_outline.py": "Tarea 13 -- solo idioma, producto ya validado (outline.md: 0 calcos en 15.911 palabras)",
     "gen_outline_part2.py": "Tarea 13 -- solo idioma, ídem",
@@ -165,12 +163,8 @@ DEUDA_CONOCIDA = {
 _DEUDA_GENERO_HASHES = {
     ("evaluate.py", "b4d3cbf7"),  # línea 455 FOUNDATION_PROMPT
     ("evaluate.py", "9396bbad"),  # línea 834 FULL_NOVEL_PROMPT
-    ("reader_panel.py", "74923ed3"),  # línea 43, persona genre_reader
-    ("reader_panel.py", "6f428bd7"),  # línea 56, persona writer
-    ("reader_panel.py", "07b8c41c"),  # línea 81, READER_PROMPT
     ("adversarial_edit.py", "59f8cbbf"),  # línea 84, EDIT_PROMPT
     ("compare_chapters.py", "4e5f75aa"),  # línea 71, COMPARE_PROMPT
-    ("gen_revision.py", "344c55cf"),  # línea 26, system de call_judge
     ("seed.py", "b04f9b6c"),  # línea 35, system
     ("seed.py", "3f08e081"),  # línea 48, GENERATE_PROMPT
     ("seed.py", "194be2e6"),  # línea 86, RIFF_PROMPT
@@ -179,11 +173,6 @@ _DEUDA_GENERO_HASHES = {
 _DEUDA_IDIOMA_HASHES = {
     ("evaluate.py", "b4d3cbf7"),  # línea 455
     ("evaluate.py", "9396bbad"),  # línea 834
-    ("reader_panel.py", "032b3561"),  # línea 30, persona editor
-    ("reader_panel.py", "74923ed3"),  # línea 43
-    ("reader_panel.py", "6f428bd7"),  # línea 56
-    ("reader_panel.py", "687f3a90"),  # línea 69, persona first_reader
-    ("reader_panel.py", "07b8c41c"),  # línea 81
     ("adversarial_edit.py", "79229fa5"),  # línea 34, system de call_judge
     ("adversarial_edit.py", "59f8cbbf"),  # línea 84
     ("compare_chapters.py", "7df306b1"),  # línea 35, system de call_judge
@@ -212,20 +201,17 @@ _DEUDA_IDIOMA_HASHES = {
 # una o dos frases (reader_panel.py:30/43/56/69, adversarial_edit.py:34,
 # compare_chapters.py:35). El ancla se exige en el prompt que contiene la
 # rúbrica, no en cualquier literal largo del archivo. Motivo de excluir
-# a los demás: cuando la Tarea 1b traduzca reader_panel.py, el hash de
-# cada persona cambia -- si esas 4 entradas estuvieran acá, quedarían
-# huérfanas, el test de huérfanas mandaría borrarlas, y a partir de ahí
-# esas personas (una frase, sin rúbrica) pasarían a exigir el bloque de
-# normas del castellano igual. El único arreglo posible sería pegar
-# "más largo que el inglés" dentro de la definición de una persona: eso
-# no traduce nada, contamina el prompt para hacer pasar al guardia. Los
-# 6 literales que quedan afuera de este set siguen cubiertos por
-# _DEUDA_GENERO_HASHES/_DEUDA_IDIOMA_HASHES -- no quedan sin chequear,
-# solo no se les exige la rúbrica.
+# a los demás: la Tarea 1b ya tradujo las 4 personas de reader_panel.py
+# (sus 4 entradas se borraron de _DEUDA_GENERO_HASHES/_DEUDA_IDIOMA_HASHES
+# una vez confirmado que sus hashes viejos ya no correspondían a ningún
+# literal del repo -- ver git log de reader_panel.py, commit f1a2602).
+# El único arreglo posible para exigirles el ancla sería pegar "más
+# largo que el inglés" dentro de la definición de una persona: eso no
+# traduce nada, contamina el prompt para hacer pasar al guardia. Por
+# eso quedan afuera de este set a propósito, no por descuido.
 _DEUDA_ANCLA_HASHES = {
     ("evaluate.py", "b4d3cbf7"),  # línea 455, FOUNDATION_PROMPT
     ("evaluate.py", "9396bbad"),  # línea 834, FULL_NOVEL_PROMPT
-    ("reader_panel.py", "07b8c41c"),  # línea 81, READER_PROMPT
     ("adversarial_edit.py", "59f8cbbf"),  # línea 84, EDIT_PROMPT
     ("compare_chapters.py", "4e5f75aa"),  # línea 71, COMPARE_PROMPT
     ("review.py", "13c7a1a3"),  # línea 36, REVIEW_PROMPT

@@ -115,14 +115,14 @@ def main():
             max_tokens=4000
         )
 
-        entry = f"""### Chapter {ch} ({wc} words)
-**Summary:** {summary}
+        entry = f"""### Cap. {ch} ({wc} palabras)
+**Resumen:** {summary}
 
-**Opening:** {opening}...
+**Apertura:** {opening}...
 
-**Closing:** ...{closing}
+**Cierre:** ...{closing}
 
-**Key dialogue:**
+**Diálogo clave:**
 """
         for d in dialogue:
             entry += f'> "{d}"\n\n'
@@ -136,19 +136,17 @@ def main():
     titulo = obtener_titulo() or "(sin título)"
     premisa = obtener_premisa()
 
-    # Assemble. El armazón (encabezados, "PREMISE:", "Total novel: ...
-    # words") queda en inglés por ahora a propósito -- fuera del alcance
-    # de esta corrección (que era título/rango/premisa hardcodeados, no
-    # traducción); se traduce junto con reader_panel.py, que es quien
-    # consume este archivo.
+    # Assemble.
+    total_wc_fmt = f"{total_wc:,}".replace(",", ".")
     full = f"""# {titulo}
-## Full-Arc Summary for Reader Panel
+## Resumen de arco completo para el panel de personas lectoras
 
-This document contains chapter summaries, opening/closing passages,
-and key dialogue for all {len(chapters)} chapters. Total novel: {total_wc:,} words.
+Este documento contiene resúmenes capítulo por capítulo, pasajes de
+apertura y cierre, y diálogo clave de los {len(chapters)} capítulos. Total de
+la novela: {total_wc_fmt} palabras.
 """
     if premisa:
-        full += f"\nPREMISE: {premisa}\n"
+        full += f"\nPREMISA: {premisa}\n"
 
     full += "\n---\n\n"
     full += '\n---\n\n'.join(summaries)
