@@ -1863,6 +1863,57 @@ ver `extract_chapter_outline()` en `draft_chapter.py`) en vez de leerlo
 del archivo del capítulo, o agregar el encabezado `# Capítulo N —
 Título` a los 45 capítulos que no lo tienen.
 
+**Séptimo script con el mismo patrón de contaminación: `build_arc_summary.py`
+(2026-08-09), corregido como prerrequisito del paso 3.** No estaba entre
+los 6 scripts revisados originalmente porque no es parte de Fase 3a/3b
+propiamente dicha -- es el generador de `arc_summary.md`, el archivo del
+que depende `reader_panel.py` y que no existe en el repo (ver más
+arriba). Al revisarlo antes de correrlo apareció el mismo patrón de
+contaminación que los otros 6, de hecho peor en dos aspectos:
+
+- `range(1, 20)` -- dos apariciones (bucle principal y cálculo de
+  palabras totales) -- ni siquiera coincide con las 24 capítulos de la
+  propia novela de referencia, mucho menos con los 46 reales. Se
+  hubiera quedado corto en 27 capítulos completos si se corría tal
+  cual.
+- Título hardcodeado (`# THE SECOND SON OF THE HOUSE OF BELLS`) y
+  conteo de capítulos hardcodeado en el texto (`"all 23 chapters"`) --
+  este último ni siquiera consistente con su propio `range(1, 20)`
+  (19 capítulos), bug ya presente en el template original antes de
+  tocarlo.
+- **PREMISE completa hardcodeada**, un párrafo entero de Cantamura,
+  Cass Bellwright, su hermano Perin, la Casa de Corda y las campanas
+  que ligan por sonido -- el bloque de contaminación de contenido más
+  largo encontrado en los 7 scripts hasta ahora.
+- Bug de lógica independiente del contenido, en `extract_key_passages()`:
+  buscaba diálogo con comillas tipográficas (`["""]...["""]`), pero los
+  46 capítulos usan raya (—) para diálogo, nunca comillas -- la sección
+  "Key dialogue" habría salido vacía en los 46 capítulos, en silencio,
+  sin error.
+
+Corrección aplicada (sin ejecutar el script todavía): `range(1, 47)`
+en las dos apariciones, vía una única variable `chapters` reusada en
+el bucle y en el cálculo de palabras totales; título vía
+`obtener_titulo()` (mismo patrón que `gen_revision.py`/`review.py`,
+lee `outline.md`); conteo de capítulos derivado de `len(chapters)` en
+vez de un número fijo; PREMISE reemplazado por la sección `## Premisa`
+de `semilla.txt` (o `seed.txt`), vía una función `_seccion()` -- mismo
+patrón que ya usan `gen_brief.py`/`draft_chapter.py` -- en vez de
+`outline.md`/`world.md` (no tienen un campo de premisa tan limpio);
+`extract_key_passages()` corregido para detectar diálogo por raya,
+reusando la heurística exacta de
+`deteccion_es.py::densidad_raya_parentetica()` ("línea que empieza con
+raya = diálogo"). Se tradujeron el system prompt y el prompt de
+resumen por capítulo al español (registro "vos"), pero **el armazón
+del documento de salida** (encabezados "## Full-Arc Summary for Reader
+Panel", "PREMISE:", "Total novel: ... words", y la plantilla por
+capítulo "### Chapter N", "**Summary:**", "**Opening:**", "**Closing:**",
+"**Key dialogue:**") **queda en inglés a propósito** -- fuera del
+alcance de esta corrección puntual, se traduce junto con
+`reader_panel.py` (que es quien consume `arc_summary.md`), no antes.
+
+No se ejecutó el script.
+
 ## Próximo paso
 
 **No hay próximo capítulo: el libro está completo (46/46).** No queda
