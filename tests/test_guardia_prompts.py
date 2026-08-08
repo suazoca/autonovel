@@ -136,8 +136,6 @@ DEUDA_CONOCIDA = {
                    "de call_judge -- este último recién cruzó el umbral "
                    "de 200 caracteres al agregarle la instrucción de "
                    "escapado de JSON en la Tarea 10, ver HALLAZGOS.md)",
-    "adversarial_edit.py": "Tarea 1b",
-    "compare_chapters.py": "Tarea 1b",
     "review.py": "Tarea 1b, solo traducir (no tiene género)",
     "seed.py": "Tarea 13 -- antes de la semilla del libro 2",
     "gen_outline.py": "Tarea 13 -- solo idioma, producto ya validado (outline.md: 0 calcos en 15.911 palabras)",
@@ -163,8 +161,6 @@ DEUDA_CONOCIDA = {
 _DEUDA_GENERO_HASHES = {
     ("evaluate.py", "b4d3cbf7"),  # línea 455 FOUNDATION_PROMPT
     ("evaluate.py", "9396bbad"),  # línea 834 FULL_NOVEL_PROMPT
-    ("adversarial_edit.py", "59f8cbbf"),  # línea 84, EDIT_PROMPT
-    ("compare_chapters.py", "4e5f75aa"),  # línea 71, COMPARE_PROMPT
     ("seed.py", "b04f9b6c"),  # línea 35, system
     ("seed.py", "3f08e081"),  # línea 48, GENERATE_PROMPT
     ("seed.py", "194be2e6"),  # línea 86, RIFF_PROMPT
@@ -173,10 +169,6 @@ _DEUDA_GENERO_HASHES = {
 _DEUDA_IDIOMA_HASHES = {
     ("evaluate.py", "b4d3cbf7"),  # línea 455
     ("evaluate.py", "9396bbad"),  # línea 834
-    ("adversarial_edit.py", "79229fa5"),  # línea 34, system de call_judge
-    ("adversarial_edit.py", "59f8cbbf"),  # línea 84
-    ("compare_chapters.py", "7df306b1"),  # línea 35, system de call_judge
-    ("compare_chapters.py", "4e5f75aa"),  # línea 71
     ("seed.py", "b04f9b6c"),  # línea 35
     ("seed.py", "3f08e081"),  # línea 48
     ("gen_outline.py", "a5aa81d5"),  # línea 25, system
@@ -212,8 +204,6 @@ _DEUDA_IDIOMA_HASHES = {
 _DEUDA_ANCLA_HASHES = {
     ("evaluate.py", "b4d3cbf7"),  # línea 455, FOUNDATION_PROMPT
     ("evaluate.py", "9396bbad"),  # línea 834, FULL_NOVEL_PROMPT
-    ("adversarial_edit.py", "59f8cbbf"),  # línea 84, EDIT_PROMPT
-    ("compare_chapters.py", "4e5f75aa"),  # línea 71, COMPARE_PROMPT
     ("review.py", "13c7a1a3"),  # línea 36, REVIEW_PROMPT
 }
 

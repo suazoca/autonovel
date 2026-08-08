@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Comparative ranking: pair chapters head-to-head.
-The judge picks a winner and quotes the deciding moments.
-Produces a true rank order from round-robin tournament.
+Ranking comparativo: enfrenta capítulos de a pares.
+El juez elige un ganador y cita los momentos decisivos.
+Produce un orden real a partir de un torneo round-robin.
 
-Usage: python compare_chapters.py          # full tournament
-       python compare_chapters.py 1 10     # single matchup
+Uso: python compare_chapters.py          # torneo completo
+     python compare_chapters.py 1 10     # un solo enfrentamiento
 """
 import os
 import sys
@@ -32,10 +32,10 @@ def call_judge(prompt, max_tokens=4000):
         model=JUDGE_MODEL,
         max_tokens=max_tokens,
         system=(
-            "You are a literary editor comparing two chapters of the same novel. "
-            "You pick the better one. You are not allowed to call it a tie. "
-            "You quote specific passages to justify your choice. "
-            "Respond with valid JSON only."
+            "Sos un editor literario comparando dos capítulos de la misma "
+            "novela. Elegís el mejor. No tenés permitido declarar un empate. "
+            "Citás pasajes específicos para justificar tu elección. "
+            "Respondés solo con JSON válido."
         ),
         api_key=API_KEY,
         api_base=API_BASE,
@@ -68,35 +68,45 @@ def parse_json(text):
                     return json.loads(text[start:i+1], strict=False)
         return json.loads(text[start:], strict=False)
 
-COMPARE_PROMPT = """Compare these two chapters from the same fantasy novel.
-Both are first drafts. Pick the BETTER one. You MUST pick a winner -- no ties.
+COMPARE_PROMPT = """Comparás estos dos capítulos de la misma novela.
+Los dos son primeros borradores. Elegí el MEJOR. Tenés que elegir un
+ganador -- no hay empates.
 
-CHAPTER A (Ch {ch_a}):
+El texto está en español. Antes de juzgar, tené en cuenta:
+- El diálogo se marca con raya (—), no con comillas. Es correcto.
+- La subordinación larga y la coordinación con «y» son recursos legítimos
+  del castellano, no verbosidad.
+- El sujeto pronominal se omite por defecto. Su ausencia es correcta;
+  su presencia repetida es un calco del inglés y sí es un defecto.
+- El español corre entre 15% y 20% más largo que el inglés para el mismo
+  contenido. No penalices por extensión comparándolo con prosa inglesa.
+
+CAPÍTULO A (Cap. {ch_a}):
 {text_a}
 
-CHAPTER B (Ch {ch_b}):
+CAPÍTULO B (Cap. {ch_b}):
 {text_b}
 
-Compare on these axes:
-- Which has sharper prose (more specific, less generic)?
-- Which has better dialogue (sounds like speech, not written prose)?
-- Which creates more genuine tension or surprise?
-- Which trusts the reader more (less over-explaining)?
-- Which has fewer AI writing patterns?
+Comparalos en estos ejes:
+- ¿Cuál tiene prosa más filosa (más específica, menos genérica)?
+- ¿Cuál tiene mejor diálogo (suena a habla, no a prosa escrita)?
+- ¿Cuál genera más tensión o sorpresa genuina?
+- ¿Cuál confía más en el lector (menos sobre-explicación)?
+- ¿Cuál tiene menos patrones de escritura de IA?
 
-You MUST pick one. If they're close, pick the one with the single
-best moment -- the sentence you wish you'd written.
+Tenés que elegir uno. Si están parejos, elegí el que tiene el mejor
+momento único -- la oración que te hubiera gustado escribir vos.
 
-Respond with JSON:
+Respondé con JSON:
 {{
   "winner": "A" or "B",
   "winner_chapter": N,
-  "margin": "clear" or "slight" or "razor-thin",
-  "decisive_moment": "quote the passage that tipped it -- from the WINNER",
-  "winner_strength": "what the winner does that the loser doesn't",
-  "loser_weakness": "what specifically drags the loser down",
-  "best_sentence_a": "quote the single best sentence from A",
-  "best_sentence_b": "quote the single best sentence from B"
+  "margin": "claro" o "ajustado" o "por un pelo",
+  "decisive_moment": "citá el pasaje que lo definió -- del GANADOR",
+  "winner_strength": "qué hace el ganador que el perdedor no",
+  "loser_weakness": "qué específicamente atrasa al perdedor",
+  "best_sentence_a": "citá la mejor oración de A",
+  "best_sentence_b": "citá la mejor oración de B"
 }}
 """
 
@@ -117,6 +127,12 @@ def compare(ch_a, ch_b):
         text_a=text_a, text_b=text_b
     )
     raw = call_judge(prompt)
+
+    # Guardar el texto crudo antes de parsear -- si el parseo falla, el
+    # texto queda disponible para diagnóstico sin repetir la llamada.
+    raw_path = BASE_DIR / "edit_logs" / f"raw_compare_{ch_a}_{ch_b}.txt"
+    raw_path.write_text(raw)
+
     result = parse_json(raw)
     result["ch_a"] = ch_a
     result["ch_b"] = ch_b
@@ -186,7 +202,7 @@ def main():
         print(json.dumps(result, indent=2))
     else:
         # Full tournament
-        chapters = list(range(1, 25))
+        chapters = list(range(1, 47))
         ranking, elo, matchups = run_tournament(chapters)
         
         print(f"\n{'='*50}")

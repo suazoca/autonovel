@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-Adversarial editing pass: ask the judge to CUT 500 words from each chapter.
-What gets cut reveals what's weakest. The cut list IS the revision plan.
+Pasada de edición adversarial: le pide al juez que CORTE 500 palabras de
+cada capítulo. Lo que se corta revela lo más débil. La lista de cortes
+ES el plan de revisión.
 
-Usage: python adversarial_edit.py 1        # single chapter
-       python adversarial_edit.py all      # all chapters
+Uso: python adversarial_edit.py 1        # un solo capítulo
+     python adversarial_edit.py all      # todos los capítulos
 """
 import os
 import sys
@@ -25,16 +26,17 @@ CHAPTERS_DIR = BASE_DIR / "chapters"
 EDIT_LOG_DIR = BASE_DIR / "edit_logs"
 EDIT_LOG_DIR.mkdir(exist_ok=True)
 
-def call_judge(prompt, max_tokens=8000):
+def call_judge(prompt, max_tokens=20000):
     return llamar_api(
         prompt,
         model=JUDGE_MODEL,
         max_tokens=max_tokens,
         system=(
-            "You are a ruthless literary editor. You cut fat from prose. "
-            "You have no sentiment about good-enough sentences -- if a sentence "
-            "isn't earning its place, it goes. You quote exactly from the text. "
-            "You never invent or paraphrase. Always respond with valid JSON."
+            "Sos un editor literario implacable. Cortás la grasa de la prosa. "
+            "No tenés sentimentalismo con oraciones que están 'bastante bien' "
+            "-- si una oración no se gana su lugar, se va. Citás exactamente "
+            "del texto. Nunca inventás ni parafraseás. Respondés siempre con "
+            "JSON válido."
         ),
         api_key=API_KEY,
         api_base=API_BASE,
@@ -81,46 +83,58 @@ def parse_json(text):
                     return json.loads(text[start:i+1], strict=False)
         return json.loads(text[start:], strict=False)
 
-EDIT_PROMPT = """You are editing a fantasy novel chapter. Your job: identify exactly
-what to cut or rewrite to make this chapter tighter, sharper, more alive.
+EDIT_PROMPT = """Estás editando un capítulo de novela. Tu trabajo: identificar
+exactamente qué cortar o reescribir para que este capítulo quede más
+ajustado, más filoso, más vivo.
 
-THE CHAPTER ({word_count} words):
+El texto está en español. Antes de juzgar, tené en cuenta:
+- El diálogo se marca con raya (—), no con comillas. Es correcto.
+- La subordinación larga y la coordinación con «y» son recursos legítimos
+  del castellano, no verbosidad.
+- El sujeto pronominal se omite por defecto. Su ausencia es correcta;
+  su presencia repetida es un calco del inglés y sí es un defecto.
+- El español corre entre 15% y 20% más largo que el inglés para el mismo
+  contenido. No penalices por extensión comparándolo con prosa inglesa.
+
+EL CAPÍTULO ({word_count} palabras):
 {chapter_text}
 
-YOUR TASK:
-1. Find 10-20 specific passages that should be CUT or REWRITTEN.
-   For each, quote the EXACT text (minimum 10 words of the quote so
-   it's unambiguous), explain why it's weak, and classify it.
+TU TAREA:
+1. Encontrá entre 10 y 20 pasajes específicos que deberían CORTARSE o
+   REESCRIBIRSE. Para cada uno, citá el texto EXACTO (mínimo 10 palabras
+   de la cita para que sea inequívoca), explicá por qué es débil, y
+   clasificalo.
 
-2. Classify each cut as one of:
-   - FAT: adds nothing, could be removed with no loss
-   - REDUNDANT: restates what a previous sentence/scene already showed
-   - OVER-EXPLAIN: narrator explaining what the scene already demonstrated
-   - GENERIC: could appear in any novel, not specific to this world/character
-   - TELL: names an emotion or state instead of showing it
-   - STRUCTURAL: paragraph/section that disrupts pacing or rhythm
+2. Clasificá cada corte como uno de:
+   - FAT: no aporta nada, se podría sacar sin ninguna pérdida
+   - REDUNDANT: repite lo que una oración/escena anterior ya mostró
+   - OVER-EXPLAIN: el narrador explica lo que la escena ya demostró
+   - GENERIC: podría aparecer en cualquier novela, no es específico de
+     este mundo/personaje
+   - TELL: nombra una emoción o estado en vez de mostrarlo
+   - STRUCTURAL: párrafo/sección que interrumpe el ritmo o el pulso
 
-3. For REWRITE candidates (not cuts), provide a specific revision.
+3. Para candidatos a REWRITE (no cortes), dá una revisión específica.
 
-4. Estimate how many words could be cut total without losing anything
-   the chapter needs.
+4. Estimá cuántas palabras en total se podrían cortar sin perder nada
+   que el capítulo necesite.
 
-Respond with JSON:
+Respondé con JSON:
 {{
   "cuts": [
     {{
-      "quote": "exact text from the chapter (10+ words)",
+      "quote": "texto exacto del capítulo (10+ palabras)",
       "type": "FAT|REDUNDANT|OVER-EXPLAIN|GENERIC|TELL|STRUCTURAL",
-      "reason": "why this should go",
-      "action": "CUT or REWRITE",
-      "rewrite": "replacement text if action is REWRITE, null if CUT"
+      "reason": "por qué debería irse",
+      "action": "CUT o REWRITE",
+      "rewrite": "texto de reemplazo si action es REWRITE, null si es CUT"
     }}
   ],
   "total_cuttable_words": N,
-  "tightest_passage": "quote the best 2-3 sentences in the chapter -- the ones you'd never touch",
-  "loosest_passage": "quote the worst 2-3 sentences -- the ones that most need work",
+  "tightest_passage": "citá las mejores 2-3 oraciones del capítulo -- las que nunca tocarías",
+  "loosest_passage": "citá las peores 2-3 oraciones -- las que más necesitan trabajo",
   "overall_fat_percentage": N,
-  "one_sentence_verdict": "what this chapter does well and what drags it down, in one sentence"
+  "one_sentence_verdict": "qué hace bien este capítulo y qué lo atrasa, en una oración"
 }}
 """
 
@@ -131,6 +145,12 @@ def edit_chapter(ch_num):
     
     prompt = EDIT_PROMPT.format(chapter_text=text, word_count=word_count)
     raw = call_judge(prompt)
+
+    # Guardar el texto crudo antes de parsear -- si el parseo falla, el
+    # texto queda disponible para diagnóstico sin repetir la llamada.
+    raw_path = EDIT_LOG_DIR / f"raw_adversarial_ch{ch_num}.txt"
+    raw_path.write_text(raw)
+
     result = parse_json(raw)
     
     # Save log
@@ -146,7 +166,7 @@ def main():
         sys.exit(1)
     
     if sys.argv[1] == "all":
-        chapters = list(range(1, 25))
+        chapters = list(range(1, 47))
     else:
         chapters = [int(sys.argv[1])]
     
