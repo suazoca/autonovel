@@ -2062,6 +2062,108 @@ particular capítulos lejanos, como pasó con el Cap. 46 respecto del
 Cap. 5) exige un beat que el capítulo actual no tiene. Pulir prosa
 sobre una estructura incompleta no mueve el puntaje.
 
+**Lección de esta sesión (Fase 3, revisión de conjunto): caché sin
+reuso.** El 29% del gasto documentado del 8 de agosto ($41.91 de
+$145.03) fue escritura de caché de prompt de 5 minutos con muy bajo
+reuso (solo $2.00 leído de vuelta). Tiene sentido: las pruebas
+puntuales de esta sesión (`call_reader("editor", ...)`,
+`call_reader("genre_reader", ...)`, `adversarial_edit.py 42`,
+`compare_chapters.py 1 46`, la corrida real de `review.py`) son
+llamadas de una sola vez contra un contexto grande (`arc_summary.md`
+completo o el manuscrito entero) que no se repiten dentro de la
+ventana de caché -- cachear tiene sentido en un loop que llama
+repetidas veces con el mismo prefijo (como `draft_chapter.py` revisando
+un capítulo varias rondas), no en una batería de pruebas puntuales
+donde cada llamada es la única vez que se usa ese prompt. Antes de
+asumir que el caching por defecto de `llamar_api()` ahorra plata en
+este tipo de corrida, confirmar que el mismo prefijo se va a reusar al
+menos una vez.
+
+**Lección de esta sesión (Fase 3, revisión de conjunto): `max_tokens`
+bajo heredado.** Se repitió tres veces en una sola sesión: `reader_panel.py`
+(4000→20000, falló contra el `arc_summary.md` completo en la primera
+persona), `adversarial_edit.py` (8000→20000, falló contra un solo
+capítulo de ~2000 palabras), y recién en `review.py` se subió
+preventivamente (8000→32000) sin esperar a que fallara, con el
+manuscrito completo (85k palabras) como input. El patrón de falla es
+siempre el mismo: Opus gasta el presupuesto entero de `max_tokens` en
+*thinking* antes de producir texto, y `api_comun.py::llamar_api()`
+aborta con `sys.exit()` -- que **no** atrapa el `try/except Exception`
+de los `main()` de estos scripts (`SystemExit` no hereda de
+`Exception`), así que el proceso entero muere en vez de saltear
+solo ese ítem. Los valores de `max_tokens` bajos (200, 4000, 8000) se
+heredaron de una época en que los prompts eran mucho más chicos
+(capítulo por capítulo, no arc_summary/manuscrito completo); al migrar
+un script de alcance por-capítulo a alcance de novela-completa, subir
+`max_tokens` de entrada es un paso obligatorio, no algo para descubrir
+por el error.
+
+**Lección de esta sesión (Fase 3, revisión de conjunto): auditoría de
+hardcodeo, no asumir.** Cada vez que se tradujo un script (`reader_panel.py`,
+`adversarial_edit.py`, `compare_chapters.py`, `review.py`), el
+contenido hardcodeado de la novela de referencia (`"fantasy novel"`,
+`"Cass"`, `Ch 22/24`, conteos fijos de palabras/capítulos,
+`range(1,25)`) no era obvio de una lectura rápida -- hizo falta `grep`
+explícito por script antes de tocar nada, y en más de un caso (el
+`earned_ending` de `reader_panel.py`, los hashes huérfanos del guardia
+de prompts) la verificación contra el commit anterior (`git show
+HEAD:archivo.py`, comparar hash8 contra el registro) reveló que el
+supuesto inicial era incompleto. Regla operativa: antes de dar por
+traducido o corregido un script de Fase 3, `grep` por el nombre del
+protagonista/personajes de la novela de referencia y por rangos de
+capítulos hardcodeados, no confiar en que "ya se vio" en una pasada
+anterior.
+
+**Lección de esta sesión (Fase 3, revisión de conjunto): claves JSON
+acopladas sin documentar.** `gen_brief.py` depende de comparaciones de
+string literales en inglés contra las claves y valores-enum que
+producen `reader_panel.py` (los 10 nombres del schema JSON) y
+`adversarial_edit.py` (`type`: `FAT|REDUNDANT|OVER-EXPLAIN|GENERIC|TELL|STRUCTURAL`,
+`action`: `CUT|REWRITE`) -- nada de esto estaba documentado antes de
+esta sesión; se descubrió por `grep` puntual contra `gen_brief.py`
+antes de traducir cada script. La regla que quedó fija en el código
+(comentarios en `reader_panel.py`/`adversarial_edit.py`) es: las
+claves del schema y los valores-enum que el modelo debe devolver
+literalmente quedan en inglés a propósito cuando algo más los lee por
+comparación de string; solo se traduce la prosa alrededor (preguntas,
+instrucciones, razones). Antes de traducir cualquier prompt que
+produce JSON, `grep` primero contra el resto del repo buscando quién
+lee ese archivo de salida -- no asumir que un JSON es de consumo
+exclusivo del propio script que lo genera.
+
+**Lección de esta sesión (Fase 3, revisión de conjunto): `review.py`
+como caso de prosa libre vs. JSON.** A diferencia de `reader_panel.py`/
+`adversarial_edit.py`/`compare_chapters.py` (que piden JSON directo,
+parseable sin ambigüedad), `review.py` pide una reseña en prosa libre
+más una lista numerada, y depende de un parser por regex
+(`parse_review()`) para convertirla en datos estructurados. Esto es
+estructuralmente más frágil: en la corrida real del 8 de agosto, Opus
+no siguió el formato literal del prompt (`"N. **Título**"`) y en cambio
+produjo `"**N. Título**"` (negrita envolviendo también el número), lo
+que dejó `total_items=0` en el primer parseo. Se pudo diagnosticar y
+arreglar sin gastar una segunda llamada porque el texto crudo ya se
+guardaba en `edit_logs/raw_review.txt` antes de intentar el parseo
+(mismo patrón que los otros tres scripts) -- ese guardado preventivo
+es lo que hizo la diferencia entre "arreglar gratis" y "repetir una
+llamada de 205k tokens de input". Regla operativa: cuando un prompt le
+pide al modelo un formato de salida en prosa (no JSON), diseñar el
+parser para tolerar variantes razonables de markdown/puntuación desde
+el principio, y guardar siempre el texto crudo antes de parsear.
+
+**Lección de esta sesión (Fase 3, revisión de conjunto): visibilidad
+de costo.** Antes de esta sesión, `api_comun.py::llamar_api()` no
+logueaba `usage` en el camino exitoso -- solo aparecía en los mensajes
+de error. Se agregó un `print(..., file=sys.stderr)` con el `usage`
+completo (`input_tokens`, `output_tokens`, `thinking_tokens`) también
+en el camino exitoso, lo que permitió confirmar en tiempo real si un
+`max_tokens` nuevo daba margen real o quedaba al borde (ver la lección
+de `max_tokens` arriba). Sigue faltando la conversión a costo en
+dólares dentro del repo: el `$145.03` documentado en
+`docs/SEGUIMIENTO.md` salió de bajar el CSV del dashboard de Anthropic
+Console a mano, no de ningún cálculo local -- no hay manera de saber,
+sin ese CSV, cuánto costó una corrida específica en el momento en que
+termina.
+
 ## Cómo retomar
 
 **No hay un capítulo esperando redacción -- el libro está completo
