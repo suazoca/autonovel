@@ -2164,6 +2164,24 @@ Console a mano, no de ningún cálculo local -- no hay manera de saber,
 sin ese CSV, cuánto costó una corrida específica en el momento en que
 termina.
 
+**Lección de esta sesión (Fase 3, revisión de conjunto): auditoría de
+continuidad más amplia necesaria.** 5 bugs de canon encontrados en el
+Cap. 16 durante la revisión de prosa, sin buscarlos activamente, más
+el del cuaderno naranja del Cap. 42 (ver más abajo -- son 6 en total
+contando ese). Ninguno lo causó la poda de `adversarial_edit.py`; los
+6 ya estaban en el manuscrito aceptado. Sugiere que el problema no es
+local a un capítulo -- corregir Cap. 16/42 no descarta que haya más en
+capítulos todavía no revisados por este proceso. Bugs pendientes, sin
+corregir: la risa de Ferrero (Cap. 16, "la primera del día" 10 de
+abril, contra `[C25-07]`, que la declara "la primera... en cuatro
+semanas de operación"); el cronograma de costura de la gemela (Cap.
+16, Chiara con "once metros ochenta... por delante" el 10 de abril,
+contra `[C19-04]`/`[C15-05]`, que dan esa costura por terminada el 6).
+Además: `evaluate.py` tiene una discrepancia entre `overall_score` y
+`raw_judge_score` en el JSON de salida (5.94 vs. 6.24 en la corrida
+del Cap. 16 del 2026-08-08) sin explicación en el código -- revisar el
+cálculo antes de confiar en cualquiera de los dos números a ciegas.
+
 ## Cómo retomar
 
 **No hay un capítulo esperando redacción -- el libro está completo

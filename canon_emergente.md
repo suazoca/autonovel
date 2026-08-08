@@ -210,7 +210,7 @@
 
 ## Cap. 16
 
-- [C16-01] (Establecido en la historia) El 10 de abril de 2033, de 9:20 a 10:05, en la nave de Collegno, los cuatro firman el protocolo interno consolidado en dieciocho puntos, en una sola copia en papel, con aprobación de Vidal al margen de cada punto y firma adicional de Ferrero en los que tocan muestras.
+- [C16-01] (Establecido en la historia) El 10 de abril de 2033, de 9:20 a 10:05, en la nave de Collegno, los cuatro firman el protocolo interno consolidado en dieciocho puntos, en copias numeradas en papel, una para cada uno, con aprobación de Vidal al margen de cada punto y firma adicional de Ferrero en los que tocan muestras.
 - [C16-02] (Establecido en la historia) El cronograma adjunto al protocolo cubre las cuatrocientas ocho horas entre recepción y restitución, hora por hora: ingreso del tubo a las 13:40 del día uno y aclimatación de doce horas con registro de humedad cada quince minutos; despliegue el día dos; barrido hiperespectral de doce micrones por píxel en ochenta y dos franjas con solapamiento del quince por ciento, días tres a seis; toma de 2,4 mg en dos alícuotas el día siete; procesamiento y controles ciegos días ocho a catorce; reembalaje y ensayos de restitución con marco real, días quince y dieciséis; ventana de seis minutos el veintinueve de abril, día dieciocho.
   <!-- RESUELTO a mano (2026-08-04): falso positivo tras corregir el texto. El original decía "Día diecisiete" para el 29 de abril, lo que no cerraba con "día uno" = 12 de abril (17 días de diferencia calendario = día dieciocho, no diecisiete). Corregido en chapters/ch_16.md a "Día dieciocho". Con eso, día uno a día dieciocho = 17 transiciones = diecisiete días de duración, consistente con world.md ("12–29 de abril, diecisiete días"). No era una contradicción real, era una etiqueta de día off-by-one. -->
 - [C16-03] (Establecido en la historia) Entre el día catorce y el quince del cronograma hay un bloque de dieciocho horas rotulado «margen», sin asignación, pedido por Ledda sin explicación y aprobado por Vidal.
@@ -223,7 +223,7 @@
 
 ## Cap. 17
 
-- [C17-01] (Hechos de personajes) Ledda es varón; a la mesa toma tres vasos de agua, contesta toda pregunta personal con un plazo ('Mayo. Después del cuatro', 'Tema archivado en 2019', 'Hay plazos de reserva'), lava su propio vaso y se retira a las 23:15.
+- [C17-01] (Hechos de personajes) A la mesa Ledda toma tres vasos de agua, contesta toda pregunta personal con un plazo ('Mayo. Después del cuatro', 'Tema archivado en 2019', 'Hay plazos de reserva'), lava su propio vaso y se retira a las 23:15.
 - [C17-02] (Hechos de personajes) Ferrero tenía veintisiete años en abril de 1997; lo despertó su madre desde el balcón al ver el resplandor sobre el Duomo y llegó a la plaza a las tres de la mañana durante el incendio de la capilla de Guarini.
 - [C17-03] (Cultural) El cristal blindado del relicario de 1997 tenía ensayos certificados (julios, impactos, cero penetración); Ferrero cuenta el episodio como comedia piamontesa cuyo muerto es la certificación.
 - [C17-04] (Establecido en la historia) En la cena del piso franco Vidal hace su primer chiste del libro —'Está previsto para mayo', con sintaxis prestada de Ledda— y lo audita después como un resultado replicable.
