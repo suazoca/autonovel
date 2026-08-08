@@ -2165,17 +2165,18 @@ sin ese CSV, cuánto costó una corrida específica en el momento en que
 termina.
 
 **Lección de esta sesión (Fase 3, revisión de conjunto): auditoría de
-continuidad más amplia necesaria.** 5 bugs de canon encontrados en el
-Cap. 16 durante la revisión de prosa, sin buscarlos activamente, más
-el del cuaderno naranja del Cap. 42 y 2 más en el Cap. 17 (ver más
-abajo -- son 8 en total). Ninguno lo causó la poda de
-`adversarial_edit.py`; los 8 ya estaban en el manuscrito aceptado.
+continuidad más amplia necesaria.** 10 bugs de canon preexistentes
+encontrados en 4 capítulos (16, 17, 19, 42) durante la revisión de
+prosa, sin buscarlos activamente. Ninguno lo causó la poda de
+`adversarial_edit.py`; los 10 ya estaban en el manuscrito aceptado.
 Sugiere que el problema no es local a un capítulo -- corregir
-Cap. 16/17/42 no descarta que haya más en capítulos todavía no
-revisados por este proceso. De los 8, se corrigieron 5 (cuaderno del
+Cap. 16/17/19/42 no descarta que haya más en capítulos todavía no
+revisados por este proceso. De los 10, se corrigieron 6 (cuaderno del
 Cap. 42; copias del protocolo y tratamiento Ferrero/Chiara en el
 Cap. 16; género de Ledda en el Cap. 16/17 y en `[C17-01]`/`[C36-09]`
-vía `canon_emergente.md` y Cap. 43). Bugs pendientes, sin corregir:
+vía `canon_emergente.md` y Cap. 43; Ledda hablando sin adjetivos en
+el Cap. 19 -- "escenario malo"/"el peor" a referencia factual, para
+preservar el pago de `[C21-02]`). Bugs pendientes, sin corregir (4):
 la risa de Ferrero (Cap. 16, "la primera del día" 10 de abril, contra
 `[C25-07]`, que la declara "la primera... en cuatro semanas de
 operación"); el cronograma de costura de la gemela (Cap. 16, Chiara
@@ -2184,11 +2185,15 @@ con "once metros ochenta... por delante" el 10 de abril, contra
 motivo "¿qué hacés vos?" de Chiara (Cap. 17, esta aparición no está
 contemplada en el conteo de instancias que fija `[C34-04]` -- hace
 falta rastrear las 3-4 apariciones del motivo en todo el libro antes
-de tocar cualquiera). Además: `evaluate.py` tiene una discrepancia
-entre `overall_score` y `raw_judge_score` en el JSON de salida (5.94
-vs. 6.24 en la corrida del Cap. 16 del 2026-08-08) sin explicación en
-el código -- revisar el cálculo antes de confiar en cualquiera de los
-dos números a ciegas.
+de tocar cualquiera); la edad de la gemela (Cap. 19, "dos años de
+existencia" podría contradecir `[C15-01]`, "dos meses de tejido" --
+ambiguo, posible lectura no contradictoria si se interpreta como edad
+del proyecto y no del tejido, necesita rastrear cuándo se encargó la
+tela antes de decidir si hay algo que arreglar). Además: `evaluate.py`
+tiene una discrepancia entre `overall_score` y `raw_judge_score` en el
+JSON de salida (5.94 vs. 6.24 en la corrida del Cap. 16 del
+2026-08-08) sin explicación en el código -- revisar el cálculo antes
+de confiar en cualquiera de los dos números a ciegas.
 
 ## Cómo retomar
 
