@@ -523,7 +523,13 @@
 - [C42-04] (Establecido en la historia) El 30 de abril de 2033, en Cologny, Sandoz ofrece a Vidal la sucesión del archivo (custodia a su muerte, acceso vitalicio, corpus completo, los tres contenedores con su expediente y la salida del 0,97 con sus cincuenta y ocho gigabytes de contexto), con instrumento redactado por Ansermet desde marzo. Vidal rechaza.
 - [C42-05] (Establecido en la historia) Sandoz concede las dos únicas peticiones de Vidal: entregar a Chiara Fabbri, por vía que ella pueda mostrar, el expediente completo de adquisición de 2003 con fechas y firmas —ejecutado por Ansermet esa misma semana—, y conservar el 0,97 en el archivo a perpetuidad con su rótulo exacto ('señal no auditable, no clasificada como ruido'), sin reclasificación posible por él ni por su sucesor.
 - [C42-06] (Hechos de personajes) Sandoz marcó la doble raya de la página 487 de las actas del STURP en 1988, antes del anuncio del radiocarbono.
-- [C42-07] (Hechos de personajes) En el tren de vuelta del 30 de abril de 2033, bajo la línea de abril 'No dijo nada verificablemente falso', Vidal escribe en el cuaderno de tapas naranjas 'Elegí igual.' y no la relee.
+- [C42-07] (Hechos de personajes) En el tren de vuelta del 30 de abril de 2033, sobre la hoja suelta del 8 de abril que guarda sin pasar en limpio dentro del cuaderno de tapas naranjas -- con las afirmaciones de Sandoz de la primera visita (Cap. 20) listadas y sus casilleros de verificación todavía vacíos --, Vidal escribe, bajo la línea "No dijo nada verificablemente falso", "Elegí igual." y no la relee.
+<!-- Resuelto a mano: fraseo ajustado junto con la revisión del Cap. 42
+(18 cortes de adversarial_edit.py + fix de continuidad vs. [C35-07])
+para que la entrada describa la hoja suelta, no el cuaderno
+encuadernado -- resuelve el hueco que dejaba [C35-07] sin contradecir
+nada. No se agrega [C42-09] aparte, sería redundante con esta misma
+entrada ya corregida. -->
 - [C42-08] (Geografía) En la mesa de plantines del jardín de invierno de Cologny hay, el 30 de abril de 2033, una pila de dos libros con el lápiz cruzado encima; en abril eran tres.
 
 ## Cap. 43
