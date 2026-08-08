@@ -136,7 +136,6 @@ DEUDA_CONOCIDA = {
                    "de call_judge -- este último recién cruzó el umbral "
                    "de 200 caracteres al agregarle la instrucción de "
                    "escapado de JSON en la Tarea 10, ver HALLAZGOS.md)",
-    "review.py": "Tarea 1b, solo traducir (no tiene género)",
     "seed.py": "Tarea 13 -- antes de la semilla del libro 2",
     "gen_outline.py": "Tarea 13 -- solo idioma, producto ya validado (outline.md: 0 calcos en 15.911 palabras)",
     "gen_outline_part2.py": "Tarea 13 -- solo idioma, ídem",
@@ -204,7 +203,6 @@ _DEUDA_IDIOMA_HASHES = {
 _DEUDA_ANCLA_HASHES = {
     ("evaluate.py", "b4d3cbf7"),  # línea 455, FOUNDATION_PROMPT
     ("evaluate.py", "9396bbad"),  # línea 834, FULL_NOVEL_PROMPT
-    ("review.py", "13c7a1a3"),  # línea 36, REVIEW_PROMPT
 }
 
 
