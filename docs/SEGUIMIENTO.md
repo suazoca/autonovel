@@ -161,18 +161,21 @@ los pesos.*
 
 | Fase | Costo |
 |---|---|
-| 1-2. Fundamentos + redacción + cierre del libro (incluye parte de Fase 3 temprana, no separable con precisión por día -- ver nota) | ~$130 (1-7 ago, estimado por solapamiento de fechas) |
-| 3. Revisión de conjunto (reader_panel.py, adversarial_edit.py, compare_chapters.py -- pruebas del 8 ago) | ~$9 (8 ago) + review.py corrido real esta sesión, después del corte del CSV: ~$1.31 (205.364 input + 11.474 output/thinking, Opus) -- no incluido en el $145.03 de arriba, que es el corte del CSV al momento de bajarlo, no el total acumulado a hoy. |
+| 1-2. Fundamentos + redacción + cierre del libro + arranque de Fase 3 (1-7 ago, no separable con precisión por día -- ver nota) | ~$136.07 |
+| 3. Revisión de conjunto completa: Cap. 42, bloque Caps. 15-19, línea de interioridad de Ledda (8 ago, sesión completa) | $27.89 |
 | 4a-5 | sin datos de API todavía |
-| **TOTAL documentado (1-8 ago)** | **$145.03** (fuente: CSV del dashboard de Anthropic Console, 2026-08-01 a 2026-08-08) |
+| **TOTAL documentado (1-8 ago)** | **$163.96** (fuente: CSV del dashboard de Anthropic Console, corte final 2026-08-08) |
 
 *Nota: el 6 y 7 de agosto mezclan el cierre de los últimos capítulos
 (Fase 1-2) con el arranque de Fase 3 (build_arc_summary.py corrido
 real, primeros rechazos "cyber") -- no se puede separar con precisión
 por fecha sin revisar timestamps de commit contra timestamps de uso de
-API, que el CSV no cruza. El 29% del gasto ($41.91) fue escritura de
-caché de 5 minutos con muy bajo reuso ($2.00 leído) -- ver lección
-nueva en TRASPASO.md.*
+API, que el CSV no cruza. El 8 de agosto sí queda aislado con
+precisión: es la sesión completa del ítem 6c (Cap. 42, bloque 15-19,
+Ledda), $27.89 en total. El 29,6% del gasto acumulado ($48.59 de
+$163.96) fue escritura de caché de 5 minutos con muy bajo reuso ($2.34
+leído, ~5%) -- patrón que se sostiene desde el primer corte, ver
+lección en TRASPASO.md.*
 
 *Completá los montos que tengas — por fase, o el total nomás si no lo
 tenés desglosado. Si me pasás cifras parciales (ej. "hasta el Cap. 15
