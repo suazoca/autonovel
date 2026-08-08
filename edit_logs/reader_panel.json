@@ -1,0 +1,971 @@
+{
+  "readers": {
+    "editor": {
+      "momentum_loss": "El bache principal está en el bloque de preparación, Caps. 15 a 19: cinco capítulos consecutivos de ensayo. El problema no es la lentitud —la novela eligió la lentitud como forma y en general la sostiene— sino la repetición del beat: se ensaya, aparece una fricción, Ferrero objeta, Chiara corrige con oficio, Vidal modifica un número en su registro. El Cap. 16 es el más prescindible: consolida un protocolo ya conocido y agrega un 'punto diecinueve' que es la objeción de Ferrero del Cap. 7 con envoltorio jurídico. Y el Cap. 18 comete el error estructural más caro del libro: salta hacia atrás ('Trece días antes de la cena') inmediatamente después del Cap. 17, que es el único capítulo donde los cuatro son personas y no funciones. La cena calienta el libro y el capítulo siguiente lo devuelve al freezer administrativo, con Bertoglio y las órdenes de reposición. Segundo bache,más leve: los Caps. 24 a 26 encadenan tres consolidaciones nocturnas con la misma coreografía (Vidal lee salida, ataca su propio resultado, anota una anomalía que no puede nombrar). El Cap. 25 y el Cap. 26 se sostienen porque cada uno entrega un vuelco real (el zurcido, el 'fuera de corpus'); el Cap. 24 es escenografía de despliegue con una sola línea viva: la procedencia del corpus que Vidal decide no preguntar. Esa línea vale un capítulo entero, pero está enterrada en inventario. Fuera de esos dos tramos, el impulso es notable para un libro donde casi nadie corre: el motor no es la trama del robo sino la erosión de un sistema de registro, y esa erosión avanza capítulo a capítulo con una disciplina que reconozco y respeto.",
+      "earned_ending": "Sí, y por una razón poco frecuente: el final no resuelve la pregunta que el libro plantea, resuelve la pregunta que el libro descubrió que estaba haciendo. El Cap. 32 es un movimiento de una audacia considerable —la 'muestra inescrutable', tres dataciones incompatibles, la respuesta que no existe ni existirá— y funciona porque la novela pasó treinta capítulos enseñándonos a valorar el rigor de Vidal lo suficiente como para que su rigor perfecto y estéril duela.\n\nEl Cap. 42 cierra bien, con una reserva. Que Vidal rechace la sucesión y pida en cambio dos cosas concretas —el expediente de 2003 para Bruna Ottino, el rótulo perpetuo del 097 como 'señal no auditable'— es exactamente la elección correcta y está ganada por dos vías: por el Cap. 30 (la hoja copiada a mano que toma con las dos manos, 'como quien agarra algo de alguien que no está') y por el Cap. 33 (la línea 3.407, el 'ruido de sensor' de las 2:31). Las dos condiciones son, respectivamente, la reparación de la injusticia ajena y la reparación de la propia: la simetría es limpia sin ser esquemática. La frase 'usted colecciona la pregunta, yo aprendí a devolverla' es la única de la novela que suena a lema, y por eso es también la más débil del capítulo; la habría cortado y dejado que el pedido hablara solo. Lo no ganado del Cap. 42 es Basilea. Que Sandoz sea el autor del fraude de 2027 convierte un precedente temático hermoso —Segev lo instala en el Cap. 2 como advertencia epistemológica, no como pista— en mecanismo de trama. La novela no necesitaba que Sandoz hubiera hecho Basilea; necesitaba que Basilea fuera cierta sobre el mundo. Al darle un autor, la idea se achica: la certeza auditable ya no muere por su custodia, muere porque un millonario enfermo quiso demostrar algo. Es la única concesión al thriller que el libro se permite y se le nota.\n\nEl Cap. 46 sí resuena con el Cap. 1, y de manera precisa más que sentimental. La estructura es idéntica: lasca, peso en microgramos, vial rotulado, firma, las trescientas quince baldosas. Lo que cambió no es el escenario sino la relación de Vidal con su propio instrumento de medición: en el Cap. 1 cuenta las baldosas por control cruzado y 'con eso alcanzaba para dormir'; en el Cap. 46 le alcanza con saber el dato de hace doce meses. La atribución que sube de 0,61 a 0,74 sin llegar a 0,90 es el gesto más honesto del libro: la novela se niega a darle a la trama que abrió la satisfacción que le negó a la trama central. Y el borrado del encabezado 'tiempo perdido' —dejando dos filas ciertas bajo una columna sin nombre— es el cierre correcto porque no nombra. Un autor menos disciplinado habría escrito la palabra 'fe' en esa celda. Este no la escribe, y la abstención es el argumento entero del libro ejecutado en un gesto administrativo. Los tres tranvías finales sin medir el intervalo son un compás de más; el libro podía terminar en 'se conserva'.",
+      "cut_candidate": "Cortaría el Cap. 16 completo (1.856) y comprimiría el Cap. 18 (1.911) y el Cap. 19 (1.911) en un solo capítulo de unas 1.800, más una poda de ~2.500 palabras distribuida entre los Caps. 12, 24 y 35. Eso da los 8.500 sin tocar nada vivo.\n\nEl Cap. 16 es el capítulo más sustituible del libro: consolida dieciocho puntos que el lector ya conoce, y sus dos aportes reales —el punto diecinueve de veto sobre comunicaciones, y el silencio de dos clics de caudalímetro cuando Chiara pregunta por el inventario de 2002— caben en dos párrafos dentro del Cap. 17, donde además ganarían por contraste con la cena. El silencio de Ferrero, de hecho, funcionaría mucho mejor plantado en la mesa, con el brasato y el vino, que en una reunión de firma. Se perdería el bloque de dieciocho horas de 'margen' sin dueño, que es un buen ítem de suspenso administrativo; se puede reubicar en el cronograma del Cap. 19 con una línea.\n\nLa fusión de los Caps. 18 y 19 es más quirúrgica: Bertoglio y el cruce de contratistas son un obstáculo genérico de género (el proveedor quemado, la reposición en doce días) y la única consecuencia narrativa que producen —las tres pruebas reducidas a una— podría surgir de la propia densidad del cronograma sin necesidad de un nombre nuevo que aparece y desaparece. El ensayo general del Cap. 19, en cambio, es necesario: las tres corridas cronometradas fundan la credibilidad de la ventana de cuarenta minutos y la llamada de Ansermet a las 19:04 es el gancho hacia Cologny.\n\nLo que se perdería con estos cortes es textura procedimental, que es justamente el recurso del que la novela tiene exceso, no déficit. Lo que hay que proteger a toda costa: el Cap. 17 entero, el Cap. 25, el Cap. 30, el Cap. 32, el Cap. 33 y el Cap. 44.",
+      "missing_scene": "Falta la escena entre Vidal y Chiara del veintiocho a la noche. El libro la promete tres veces —Cap. 34 ('Cuando esto termine, hay una cosa que te… Que te quiero mostrar. No es de ahora. Es de antes'), Cap. 40 ('lo que te quería mostrar sigue en pie'), y el Cap. 44 la trata como consumada ('dos manos habían devuelto esa tela a su sitio la noche del veintinueve' y algo ocurrido 'en abril' que ninguno menciona)— y nunca la entrega. El resumen incluso me pide, en la pregunta del Cap. 44, que registre eso como 'queda abierto'. No es una ambigüedad productiva: es una elipsis que el autor confunde con pudor.\n\nEntiendo el instinto. La novela entera está construida sobre lo que no se anota, y hay una lógica en dejar la única cosa importante fuera de todo registro, incluido el del narrador. Pero la elipsis solo funciona si el lector tiene con qué llenarla, y acá el material afectivo entre Vidal y Chiara está racionado hasta la anemia: un cable que ella reenrolla, un vaso de café, treinta y cuatro segundos contados. El Cap. 34 tiene el mejor cierre del libro en esa línea ('la sentía, en el pecho, con la forma exacta de una respuesta') y después el hilo se corta. Cuando en el Cap. 44 aparece la frase sobre las dos manos, no la siento: la deduzco.\n\nDónde iría: entre el Cap. 34 y el Cap. 35, o mejor todavía, como un capítulo breve —mil doscientas palabras— insertado después del Cap. 40, contando por fin lo del veintiocho desde el punto de vista de Vidal, con la misma economía con que se cuenta un procedimiento. No hace falta una escena de amor. Hace falta que Chiara le muestre lo que dijo que le iba a mostrar y que sea algo material: los cuadernos de Bruna abiertos en una página que él no vio, o el hilo de algodón con que se ata el pelo, o cualquier objeto con procedencia. Que sea una cadena de custodia afectiva, en el idioma que el libro se construyó. Sin eso, el Cap. 44 le pide al lector un crédito que no puede cobrar.\n\nSegunda ausencia, menor pero real: nunca vemos a Vidal antes de Jerusalén. Amberes 2029 se menciona seis veces y nunca se dramatiza, ni siquiera en flashback breve. El Cap. 33, que es donde por fin lee la línea 3.407, funciona bien precisamente porque la lectura es tardía; pero un párrafo de dos frases sobre las dos carreras arruinadas —nombres, qué les pasó— convertiría un ítem de expediente en una deuda con cara.",
+      "thinnest_character": "Ledda, sin discusión, y la debilidad se agrava hacia el final. Es una función perfecta: el personaje que dice qué se puede hacer y en cuántos minutos. Sus tres mejores momentos son enunciados de método —el de las identidades verdaderas con motivos ocultos en el Cap. 12, la casualidad como tercer modo de falla en el Cap. 14, 'yo soy la persona que si la ven, ya perdimos' en el Cap. 36— y los tres son excelentes. Pero es todo lo que hay. Ledda no tiene una pérdida, no tiene un 1988, no tiene una maestra. Cuando en el Cap. 40 dice que anotó a lápiz 'motivo de participación no establecido' junto al perfil de Chiara y que sus motivos ocultos fueron 'los mejores del proyecto', el libro nos informa que Ledda ve a las personas, y es la primera vez, y es tarde. La despedida del Cap. 43 —no vuelva a llamarme— confirma que el autor sabía que no tenía dónde llevarlo. Ni siquiera sabemos si es hombre o mujer, cosa que en un libro tan obsesionado con la trazabilidad se lee como omisión deliberada; el problema es que la omisión no rinde nada.\n\nNo lo cortaría: la operación necesita su voz, y su prosa de horarios es parte del ritmo del libro. Pero le daría cuarenta líneas de motivo, plantadas temprano —en el Cap. 12 o el Cap. 14— y jamás explicadas del todo. Un hombre que solo sabe hacer que las cosas ocurran a tiempo, y una sola frase que sugiera por qué eligió que esta cosa ocurriera.\n\nDe quién quiero saber más: de Bruna Ottino, que es el mejor personaje que la novela no tiene. Existe en tres datos —los estandartes municipales lavados con agua desmineralizada comprada de su bolsillo, las cartas que nadie contestó durante treinta años, 'creer es conservar algo que no es tuyo'— y esos tres datos pesan más que Ledda entero. El Cap. 43 la despacha en una llamada de cuarenta segundos y cuatro frases. Es la decisión correcta en términos de contención y una pérdida en términos de libro.\n\nQuien podría cortarse sin daño: Be'eri y Segev son intercambiables después del Cap. 4; el Cap. 46 los reactiva solo para que repitan sus posiciones, lo cual es el punto (nada cambió afuera), pero podrían fundirse en uno solo sin costo. Halevi, en cambio, con dos apariciones —la insinuación del bronce etrusco en el Cap. 2 y la carta exigente del Cap. 45— hace más trabajo con menos página.",
+      "best_scene": "El Cap. 30, la madrugada en el taller textil: Chiara con los cuadernos de 2002 que no figuran en ningún inventario, Ferrero entrando a dejar unas placas, y la pregunta directa por los tres contenedores.\n\nFunciona por tres razones. Primera: es la única escena del libro donde tres personas quieren tres cosas incompatibles y las tres cosas son legítimas. Chiara quiere la inocencia de su maestra, Ferrero quiere que su silencio de veintinueve años haya tenido sentido, Vidal quiere un dato y se descubre buscándolo por un motivo que no puede clasificar. Segunda: la confesión de Ferrero está escrita contra sí misma, que es lo más difícil de hacer. 'Pensé que el silencio la protegía. Pensé mal, pero lo pensé. Eso no me lo puede sacar nadie: lo pensé de verdad.' Ahí hay un hombre defendiendo lo único que le queda —no el resultado de su decisión sino la calidad moral del momento en que la tomó— y el autor tiene el pulso de no dejarlo ganar. Y el gesto de tocarse la muñeca donde hace veintitrés años no hay reloj: el libro plantó ese reloj en el Cap. 21 (los nueve segundos de más) y en el Cap. 17 (la correa inexistente), y lo cobra recién en el Cap. 32. Es paciencia de novelista, no de guionista.\n\nTercera, y la que me hizo sentir algo: la respuesta contra la que Vidal tiene que pelear. 'La justificación se armó sola, completa, con su pertinencia y su casillero.' El hombre construyó un sistema tan bueno que el sistema le fabrica coartadas antes de que él termine de querer algo. Que reconozca la coartada, la descarte, y después diga en voz alta que no sabe para qué quiere los datos —y que reciba una hoja sin membrete ni sello, copiada a mano por una discípula, y la tome con las dos manos— es el momento en que el personaje deja de medir y empieza a estar. La última línea, la cuenta de cuándo adquirió ese gesto que no da resultado, y él siguiendo camino con la medición abierta, es la mejor prosa del libro.\n\nSegundo lugar, muy cerca: el Cap. 44, Ferrero deteniéndose seis segundos con las manos desnudas a centímetros del cristal sin tocarlo. Cuarenta años de guantes de algodón, y en el último acto antes del retiro se los saca para no tocar nada. Eso es escritura ganada.",
+      "worst_scene": "El Cap. 42, la confesión de Sandoz en el jardín de invierno. Es el capítulo que más peso tiene que cargar y el que más se apoya en el diálogo para cargarlo.\n\nQué sale mal: Sandoz explica. Explica Basilea, explica el reglamento de 2029, explica los contenedores desde 2003, explica su enfermedad, explica a su madre y 1988, explica la doble raya de la página 487, y ofrece la sucesión. Son cinco revelaciones estructurales en una conversación, entregadas por un hombre que habla en párrafos de once líneas con subordinadas perfectas. El personaje justifica parcialmente ese registro —lo instalamos en el Cap. 20 como alguien que declara la incertidumbre de sus propias opiniones— pero acá la voz deja de ser un rasgo y pasa a ser un vehículo. Cuando alguien dice 'me estoy muriendo' e inmediatamente aclara que los meses cupieron en el calendario de la ostensión con margen razonable, la ironía es del autor, no del personaje.\n\nEl segundo problema es el de la revelación de Basilea, que ya señalé: convierte una idea en una trama. El tercero es la frase de Vidal —'usted colecciona la pregunta, yo aprendí a devolverla'— que es la única metáfora prestada del libro. Suena a epígrafe. Vidal no habla así en cuarenta y un capítulos; habla en condiciones numeradas y en negativas técnicas.\n\nCómo la arreglaría. Tres movimientos. Uno: sacar Basilea de la confesión y dejarla como lo que era, un hecho del mundo que Sandoz cita con admiración ajena; el poder de Sandoz sobre Vidal no necesita ese refuerzo, ya tiene los contenedores y el reglamento. Dos: partir la información. La enfermedad y la madre pueden estar acá; los contenedores debería descubrirlos Vidal, no oírlos, y el material para eso ya existe —tiene las seis hojas de Chiara en el bolsillo desde el Cap. 41. Que las ponga sobre la mesa y que Sandoz no diga nada, o diga una sola frase, y que el silencio haga el trabajo que hacen las once líneas. Tres: la muerte. Que el hombre esté visiblemente peor —la chaqueta que le queda grande, el cuello, el dorso de las manos ya están ahí y son buenos— y que no pueda sostener el discurso. La única frase que Sandoz deja a medias en toda la novela es la de su madre, y es el mejor segundo del capítulo. Debería haber tres o cuatro más. Un moribundo que habla como un memorándum es menos interesante que un memorándum que empieza a fallar.",
+      "would_recommend": "Sí, con instrucciones de uso. Se la doy al lector que amó 'La mancha humana' o a quien lee a Vila-Matas por la textura y a Carrère por la incomodidad de la primera persona ante lo religioso; se la doy a cualquiera que haya trabajado dentro de un procedimiento y sepa lo que cuesta romperlo. No se la doy al lector que compre 'robo de la Sábana Santa' esperando un thriller: la operación se ejecuta sin un solo disparo, sin traiciones y sin persecuciones, y el clímax es una consolidación de datos que dice que no hay respuesta.\n\nEn una oración: es la novela de un hombre que pasó veinte años construyendo el mejor instrumento del mundo para no tener que elegir nunca, y que descubre —midiendo el objeto exacto que su instrumento no puede medir— que su sistema de registro fue siempre una manera elegante de no anotar lo que le importaba.\n\nLo que más admiro y lo que menos: admiro que el libro tenga el coraje de que la respuesta sea 'muestra inescrutable' y de que la atribución del óstracon termine en 0,74. Lo que menos, que a veces confunda la contención con la abstención, y deje sin escribir escenas que estaba autorizado a escribir.",
+      "haunts_you": "Dos, y las dos son de Ferrero.\n\nLa primera, del Cap. 32: 'Un intervalo de confianza es un objeto químicamente inerte, doctor; puede quedarse en un papel cien años sin reaccionar con nada. Se vuelve activo cuando alguien lo respira solo.' Es la mejor idea del libro dicha en el idioma del libro, y explica de una sola vez por qué el hombre pasó cuarenta años estorbando a la ciencia sin estar nunca contra ella. Que después venga 'yo no vine a impedir la ciencia, doctor. Vine a estar al lado del anuncio' es el remate justo: reordena retroactivamente todas sus obstrucciones y les da una columna de motivo que Vidal —que tabula todo— nunca había pensado en abrir.\n\nLa segunda, del Cap. 43: 'Quedó todo registrado y nada anunciado.' Ahí está la tesis entera en cinco palabras, y el hecho de que la diga el hombre que perdió un hermano por la distancia entre esas dos cosas es lo que la vuelve intolerable en el buen sentido.\n\nY una imagen que no me suelta, del Cap. 28: la mano de Vidal dibujando en la pizarra, fuera de todo registro, catorce personas haciendo fila frente a una puerta, y él contándolas antes de borrarlas de un solo pase 'en el orden en que habrían entrado'. Y la sombra gris que se mueve sin irse, 'como se mueven los residuos que están por debajo del umbral pero encima de cero'. Es el libro entero en un párrafo.",
+      "next_book": "Sí, y lo leería sin resumen. Este autor tiene tres cosas que no se enseñan: sabe construir una voz narrativa cuyo léxico es la psicología del personaje —Vidal piensa en tolerancias, márgenes y falsos positivos, y su transformación se mide en cambios de vocabulario administrativo, lo cual es una decisión formal sostenida durante 85.000 palabras sin una sola caída al lugar común introspectivo—; sabe plantar un objeto y cobrarlo veinte capítulos después sin subrayarlo (el reloj de Ferrero, la escalera inmóvil del Cap. 5, los once kilobytes, el círculo al margen); y tiene la disciplina rarísima de no darle al lector la resolución que el lector cree que quiere.\n\nMis reservas son corregibles y las diría en una reunión de una hora. Le pediría dos cosas para el próximo. Primera: que confíe menos en el diálogo expositivo cuando llega el momento de las revelaciones grandes —el Cap. 42 es un capítulo de información donde debería haber un capítulo de presencia. Segunda: que se permita escribir las escenas emocionales que se está prohibiendo. La contención es su mejor recurso y también su coartada; hay una diferencia entre elegir no mostrar y no saber cómo, y en el hilo de Chiara no tengo la certeza de cuál de las dos es.\n\nSi el Libro 2 sigue a Vidal, me preocupa: este personaje llegó exactamente hasta donde tenía que llegar, y una segunda vuelta corre el riesgo de tener que deshacer lo ganado en el Cap. 46. Si el Libro 2 es otro sistema y otro hombre atrapado adentro, lo compro en preventa."
+    },
+    "writer": {
+      "momentum_loss": "El bloque Caps. 15–19 es donde el pulso baja. Son cinco capítulos consecutivos de preparación en los que la única variable real que se mueve es cuántos miligramos va a poder tomar Vidal, y esa negociación ya se resolvió dramáticamente en el Cap. 15 (de 3,0 a 2,4 mg). El Cap. 18 es el más flojo de la novela: el cruce de contratistas, Bertoglio, la recompra de repuestos, las tres pruebas reducidas a una. Es logística que no cambia a nadie. Su único contenido de personaje —Vidal detecta que Ferrero recorta canales de la zona de imagen— se archiva de inmediato como 'correlación insuficiente con n igual a dos', es decir, el propio texto anuncia que no va a usarlo todavía. Y el cierre (sumar la columna de un caudalímetro irrelevante, contar los nueve pitidos) repite un gesto que ya vimos en los Caps. 1, 5 y 12. Hay además un problema de duplicación estructural: el ensayo general del Cap. 19 y el ensayo cronometrado del Cap. 36 son la misma escena con distinto cronómetro (tres corridas / cuatro corridas, todas dentro de ventana). La segunda funciona mejor —Chiara detecta que el exceso está en la doble verificación de Vidal, y él firma un protocolo que le prohíbe verificar dos veces: eso sí es arco—, pero la primera la desgasta por anticipado.\n\nLa segunda caída es el Cap. 45. Después del Cap. 44, que cierra emocionalmente el libro (la fila, el conteo perdido), el Cap. 45 es un capítulo de trámites: la esquela, el addendum, la carta de Halevi, el inventario del sábado. Está bien escrito y contiene una decisión hermosa —retirar la mano de la planilla porque 'una reclasificación antes de tiempo es la forma prolija del falso positivo'—, pero llega después de que el lector ya soltó el aire.\n\nUn apunte de artillería sin disparar que también drena tensión: el bloque de dieciocho horas 'de margen' que pide Ledda sin explicar se instala en el Cap. 16, se subraya en el 19, vuelve en el 26 y en el 31 (donde muerde la cuarta pasada) y nunca se resuelve. Tres siembras y ninguna cosecha; el lector entrenado deja de tomarle el pulso a esa celda hacia el Cap. 30.",
+      "earned_ending": "Sí, y por una razón concreta: la negativa del Cap. 42 no es un giro, es la única salida que la novela venía construyendo desde el Cap. 10. La objeción a la cláusula octava —'una respuesta con dueño deja de ser una respuesta y pasa a ser un instrumento'— la formula Sandoz en el Cap. 20, no Vidal; que Vidal tarde veintidós capítulos en poder sostenerla él mismo, y que la sostenga cuando aceptar sería el mayor triunfo profesional de su vida (acceso vitalicio al 0,97 y cincuenta y ocho gigabytes), es exactamente el precio que un desenlace tiene que cobrar.\n\nLo que lo hace cerrar de verdad son las dos condiciones que pide en lugar de la herencia, porque cada una repara una falla propia y no ajena. El rótulo perpetuo del 0,97 como 'señal no auditable' es la contrapartida exacta de la línea 3.407 del Cap. 33: en 2029, a las 2:31 de la madrugada, él clasificó una firma espectral sin mecanismo como 'ruido de sensor'. Pedirle a Sandoz que ese número no pueda reclasificarse nunca es Vidal negándose a repetir Amberes con testigo y a perpetuidad. Y el expediente para Bruna Ottino paga el Cap. 30 (los veintinueve años de silencio de Ferrero) y el Cap. 40 (la carpeta de Chiara) con una precisión notable: 'restituir en vida', que es la única forma de restitución que el libro entero viene practicando con una tela.\n\nEl Cap. 46 rima con el Cap. 1 con una economía que da envidia: la misma lasca, la misma balanza, las mismas trescientas quince baldosas con margen de dos —pero ahora 'esta vez alcanzó con saberlo'—, la misma firma en mayúsculas alineadas, la misma abuela de Ruti preguntando si ahora sí es David. La medida del cambio no es dramática sino administrativa, que es la métrica correcta para este personaje: 0,61 sube a 0,74 y sigue sin llegar a 0,90; el jueves queda deliberadamente vacío; se borra el encabezado 'tiempo perdido' y quedan 'dos filas ciertas bajo una columna sin nombre'. Y la vela sin encender del Cap. 5 se enciende. Eso es un arco cerrado sin subrayarlo.\n\nDos reparos. Primero: la taza boca abajo pertenece al Cap. 42 —el hombre que sirve para uno solo— y no reaparece en el 46. La echo de menos ahí; era el único objeto de Sandoz que Vidal podía heredar sin firmar nada, y una taza dada vuelta en la mesa del hotel de Jerusalén habría sido el eco más barato y más letal disponible. Segundo, y más serio: el descubrimiento del Cap. 40 —que el corpus de referencia salió de los contenedores 41 a 43, es decir, que midieron la reliquia contra sí misma— vuelve técnicamente sospechosa la clasificación 'muestra inescrutable' del Cap. 32, que es el resultado central del libro. La novela lo reconoce de refilón en el Cap. 43, en una mirada al teclado: 'derrota del método, victoria de la administración, artefacto y se descarta'. Eso no está ganado. Es la bomba epistemológica más grande que la novela planta y se desactiva en una frase subordinada.",
+      "cut_candidate": "El Cap. 18 completo, primero y sin dudarlo (1.771 palabras). Su único elemento portante —las tres pruebas de la unidad de sustitución reducidas a una sola antes del once— cabe en dos párrafos al inicio del Cap. 19, dichos por Ledda con su cadencia de siempre, y funcionan mejor ahí porque el ensayo general se corre entonces bajo una presión ya conocida. Lo que se pierde es la textura procedural de Ledda (el circuito de billetes, el recibo genérico, los doce a quince días de reposición) y una instancia más del patrón Ferrero-obstruye; el patrón ya está establecido en los Caps. 15 y 16 y se resignifica en el 32, así que n=4 no agrega nada que n=3 no dé.\n\nSegundo corte: fusionar Caps. 16 y 17 en uno. Del 16 sobrevive el punto diecinueve (el veto sobre comunicación a terceros, que después importa) y la pregunta de Chiara por el inventario de 2002 con el silencio de dos clics del caudalímetro; se cae la firma del protocolo de dieciocho puntos y el recuento del cronograma, que es información que el lector ya tiene en tres formatos. El 17 —la cena, el brasato, el bombero con la maza, 'creer es conservar algo que no es tuyo' está en el 34 pero acá está la mano de Ferrero ajustando una correa de reloj que no existe— no se toca: es el capítulo que hace posible todo el Cap. 32. Ahí hay unas 1.200 palabras.\n\nTercero: reducir el Cap. 45 a la mitad. La esquela, las dos palabras a lápiz ('Bien conservado') y el gesto de retirar la mano de la planilla son imprescindibles. La carta de Halevi, el editor, el estudio jurídico y el inventario del sábado son administración de consecuencias que el lector puede inferir.\n\nCon eso ya estamos cerca de las 4.500. Las otras 4.000 las sacaría por dentro, no por capítulos: hay una figura recurrente —Vidal cuenta algo, verifica dos veces, anota, dibuja el círculo al margen— que aparece en prácticamente todos los cierres de capítulo hasta el 33. Es el mejor recurso del libro y está usado unas quince veces de más. Bajarlo a la mitad no le quita nada al personaje y le devuelve al gesto el filo que tenía en el Cap. 5.",
+      "missing_scene": "Falta la escena en la que Vidal le pregunta a Sandoz de dónde salió el corpus de referencia, y falta exactamente donde la novela promete que va a estar. El Cap. 40 cierra con esa pregunta explícita en el aire ('queda abierto si Vidal formulará en voz alta, frente a Cassiodore, la pregunta sobre el origen del corpus') y el Cap. 41 lo manda a Cologny con las seis hojas manuscritas apretadas contra el pecho, marcándole una arista. Después, en el 42, Sandoz confiesa todo lo demás —la enfermedad, la madre, Basilea, el reglamento de 2029— y esa pregunta no se formula.\n\nY es la única que a Vidal debería quitarle el sueño, porque no es moral: es técnica y lo destruye a él. Si las nueve muestras de lino de Judea contra las que Tamiz clasificó la tela salieron de la tela, entonces 'muestra inescrutable / no existe población de referencia' del Cap. 32 puede ser un artefacto de diseño experimental, y el 0,97 del Cap. 27 —la única cosa que Vidal salva del incendio, la que exige rotular a perpetuidad— puede ser convergencia del modelo consigo mismo. El hombre que en el Cap. 1 se niega a decir 'David' porque el umbral es 0,61 no puede salir de ese jardín de invierno sin preguntarlo. Que no lo pregunte no lee como decisión de personaje: lee como decisión de autor para no desarmar el resultado antes del final.\n\nDónde iría: dentro del Cap. 42, entre la revelación de Basilea y la oferta de sucesión, unas mil palabras. Vidal pone las seis hojas sobre la mesa de plantines y hace la pregunta con el vocabulario que usa para los peritajes ajenos —contaminación de la población de referencia, procedencia del corpus, invalidación—, y Sandoz contesta lo peor posible: que sí, y que precisamente por eso el resultado es el único honesto que se produjo nunca sobre ese objeto, porque cualquier otra población de referencia habría sido una elección disfrazada de dato. Ahí la negativa de Vidal a heredar el archivo se vuelve, además de ética, la única salida disponible: no hereda porque no puede auditar lo que heredaría. Ganaría el libro y no perdería una sola página de las que ya tiene.\n\nSegundo candidato, más chico: la 'cosa de antes' que Chiara empieza a decirle en el Cap. 34 y suspende reenrollando un cable ya enrollado, que reafirma en el 40 ('cuando vuelvas, lo que te quería mostrar sigue en pie'), y que en el 44 los dos deciden no mencionar. Entiendo que se está guardando para el Libro 2, pero se sembró tres veces; a la tercera empieza a leerse como coquetería estructural más que como reticencia de personaje.",
+      "thinnest_character": "Ledda. Es la persona mejor diseñada del equipo y la menos escrita. Tiene una doctrina impecable —'una identidad verdadera con motivos ocultos, sí. Esa resiste todo' (Cap. 12)— y una función perfectamente ejecutada: reparte posiciones, fija umbrales de aborto, tacha celdas. Pero de las cuatro personas en la sala blanca, tres tienen un motivo revelado (Ferrero, el hermano seminarista; Chiara, la maestra Bruna; Vidal, la fila del Santo Sepulcro) y ella no tiene ninguno. En un libro cuya regla explícita es 'historia verdadera, motivos ocultos', y donde Ledda misma es la que anota a lápiz 'motivo de participación no establecido' en el perfil de Chiara (Cap. 40), la ausencia de su propio motivo debería ser el silencio más ruidoso de la novela y sin embargo pasa desapercibida: nadie se lo pregunta nunca. Tiene exactamente dos gestos humanos —proponer la cena sin responsable ni duración estimada (Cap. 16) y despedirse en el Cap. 43 pidiendo que no la vuelvan a llamar— y los dos son excelentes. Con dos más, cerraba.\n\nDe quién quiero saber más: Ashkenazi. Es la que instala la tesis del libro en el Cap. 2 ('lo que usted vende es el derecho a elegir más tarde'), sale de escena en el Cap. 4 y vuelve en el 46 a firmar un preliminar sin releerlo. Esa degradación —de adversaria lúcida a firma automática— podría ser deliberada y demoledora, pero no está trabajada.\n\nQuién se puede cortar sin daño: Halevi. Existe para dos cosas. Una es la insinuación pública del Cap. 2 sobre el bronce etrusco avalado por el maestro de Vidal —una amenaza de chantaje que jamás se cobra y que además compite temáticamente con Amberes, que es la culpa real y está mucho mejor construida. La otra es la carta del Cap. 45 exigiendo la lista de decisiones de operador; esa presión la puede ejercer Segev, que ya tiene voz, ya tiene el precedente de Basilea en la boca desde el Cap. 2 y gana con la reaparición.",
+      "best_scene": "El Cap. 38, sin discusión. Ceruti tiene la telemetría del doce de abril en la mano, el pico de dos gramos y un décimo, a nueve minutos de la única ventana que queda; y Ferrero lo saca de la sacristía no con una mentira sino con una verdad más grande: le confiesa los veintinueve años de silencio sobre los tres contenedores faltantes y le ofrece revisar los logs juntos esa noche, línea por línea. 'No vuelvo a firmar un silencio.' Se quema a sí mismo, con testigo y por escrito, para que la ventana se abra.\n\nFunciona por tres razones de oficio. Primera: la maniobra procedural y la maniobra moral son el mismo gesto. Ferrero no salva la operación a pesar de su conciencia, la salva con su conciencia, y el precio que paga es real y queda asentado en un expediente que alguien va a leer dentro de veinte años. Eso es lo contrario de una salida fácil: es una salida que cuesta más que el fracaso. Segunda: la novela cruza los planos sin cortar. Mientras Ferrero explica pendientes de deriva térmica, Chiara y Vidal ejecutan el cambio en cinco cuarenta con Bosio recitando valores de espaldas, y la cuarta cota sale pegada al límite y Vidal no la corrige porque él mismo firmó la cláusula que le prohíbe verificar dos veces (Cap. 36). El arco del protagonista se paga como riesgo físico, no como reflexión. Tercera: el cierre. Vidal afloja el paso al pasar con el carro, oye 'entonces habrá consecuencias, y las firmo yo. Cuarenta años firmando actas de otros. Ya era hora de que una fuera mía', y después: 'El carro pesaba lo mismo que a la ida.' Ese último dato falso-neutro es de manual, en el mejor sentido: el registro miente sobre el hombre justo cuando el hombre dejó de poder registrarse.\n\nLo que hace posible esa escena es el Cap. 32 —el hermano con la radio, 'yo no vine a impedir la ciencia, doctor. Vine a estar al lado del anuncio'—, que reclasifica retroactivamente doce capítulos de obstrucción. Los dos juntos son la mejor construcción de personaje del libro, y no es Vidal.",
+      "worst_scene": "El Cap. 20, la primera entrevista con Sandoz en el jardín de invierno. Es la escena donde más se ve la máquina. El problema no es el diálogo —está impecablemente escrito— sino el reparto de funciones: Sandoz formula la objeción central de la novela mejor que el protagonista y en nombre del protagonista ('como usted es demasiado educado para formularla en mi jardín, permítame formularla yo'), y después la desarrolla en un párrafo redondo que termina en 'una expropiación, diría usted, no de la tela. De la respuesta'. Eso no es un personaje hablando: es el autor asegurándose de que el tema quedó dicho. Y el remate con Pascal y la apuesta ('usted ya apostó, doctor. Apostó en noviembre') sube la temperatura declarativa justo donde el libro, en todo el resto de sus páginas, prefiere las baldosas y los microgramos. La escena termina con Vidal anotando 'No dijo nada verificablemente falso', que es excelente, pero llega después de setenta líneas en las que dos hombres estuvieron de acuerdo.\n\nCómo la arreglaría: dejar a Sandoz sin la formulación. Que sea encantador, técnico, jardinero, que corija la transcripción del dato de Pellicori y no diga una sola palabra sobre custodia, archivo ni apuestas. Que la objeción se la tenga que armar Vidal solo, en el tren, mal, incompleta, tachando dos veces —él, que en el Cap. 10 aceptó la cláusula octava sin pelearla y anotó 'la sustancia quedó donde estaba'—, y que llegue a Zúrich con media formulación y el puño de la camisa sucio de tierra de maceta. Así la escena del Cap. 42, donde Sandoz sí desarma todo, no sería la segunda vez que ese hombre explica la novela sino la primera, y el lector llegaría a Cologny con hambre en lugar de con la lección aprendida. El detalle de la tierra en el puño, por cierto, es lo mejor del capítulo y sobrevive intacto a cualquier reescritura: dos manos apretaron la suya y él no se sacudió la muestra en todo el viaje.",
+      "would_recommend": "Sí, con una advertencia de dosis. Se la doy a quien haya leído a Le Carré por el papeleo y no por las persecuciones, y a quien tolere que un thriller de robo se juegue entero en la diferencia entre 'medir' y 'elegir': acá el golpe maestro dura veintitrés capítulos de preparación y cinco minutos cuarenta de ejecución, y el clímax verdadero es un hombre decidiendo no verificar una cota dos veces. También se la doy a cualquiera que trabaje con datos y haya firmado algo a las dos y media de la madrugada. Al lector que quiere que la Sábana sea verdadera o falsa lo va a dejar furioso, y eso es un mérito, no un defecto: la novela le entrega tres dataciones incompatibles y la palabra 'inescrutable'. En una oración: un thriller procedimental de precisión obscena sobre un perito que roba la reliquia más disputada del mundo para medirla y descubre que el problema nunca fue el instrumento sino quién se queda con la respuesta.",
+      "haunts_you": "Dos, y las dos son de Ferrero, lo cual dice algo sobre dónde late realmente este libro. La primera, del Cap. 32: 'Un intervalo de confianza es un objeto químicamente inerte, doctor; puede quedarse en un papel cien años sin reaccionar con nada. Se vuelve activo cuando alguien lo respira solo.' Es la tesis entera del libro dicha en el vocabulario del libro, sin una gota de moraleja, por el hombre que llamó tres días tarde.\n\nLa segunda es más chica y me quedó más adentro, del Cap. 44: Ferrero, en su último acto antes del retiro, se detiene seis segundos con las manos desnudas a centímetros del cristal y no toca. Cuarenta años de guantes de algodón, sacados justo para el gesto en que ya no hace falta protegerse de nada.\n\nY una que no es diálogo: 'El carro pesaba lo mismo que a la ida' (Cap. 38).",
+      "next_book": "Sí, y con la libreta abierta. Este autor sabe hacer lo más difícil de enseñar: que el detalle técnico haga trabajo emocional en lugar de decorarlo. Las trescientas quince baldosas del Cap. 1 y las mismas trescientas quince del Cap. 46 —'esta vez alcanzó con saberlo'— hacen más por el arco que cualquier monólogo, y hubo tramos largos, sobre todo Caps. 22 a 34, en que me olvidé de que estaba leyendo.\n\nLo que quiero ver en el Libro 2 es si sabe pagar lo que sembró, porque acá quedaron tres deudas grandes: el origen del corpus de referencia, que es la más urgente y la que este libro esquiva; la 'cosa de antes' de Chiara, sembrada tres veces; y el sobre de la Autoridad de Antigüedades con el que se cierra el Cap. 45. Un segundo libro que las use es una serie. Uno que las vuelva a aplazar convierte el 'queda abierto' en un tic y a Vidal en un hombre al que le pasan cosas sin resolverse nunca. Compro el próximo con esa apuesta hecha, para usar el verbo de Sandoz."
+    },
+    "first_reader": {
+      "momentum_loss": "Se me cayó en el bloque de preparación, más o menos del Cap. 15 al Cap. 19, y otra vez en el Cap. 35 y Cap. 36. Son capítulos donde todo es cronograma: miligramos que bajan de 3,0 a 2,4, el contratista Bertoglio que hay que cortar (Cap. 18), doce a quince días de reposición, tres corridas del ensayo con sus 33:15 y 37:50 (Cap. 19), y después otra vez el mismo ensayo cronometrado en el Cap. 36 bajando de siete cuarenta a cinco cuarenta y cuatro. Entiendo que la novela quiere que uno sienta la maquinaria, pero yo ya la había sentido. Cuando llegué al segundo ensayo con cronómetro pensé 'esto ya lo leí' y me di cuenta de que estaba pasando páginas para ver cuándo entraban a la catedral. Lo mismo con el Cap. 36: el pronóstico de treinta y un grados, el reparto de roles, la regla de aborto. Nada de eso me hizo sentir nada nuevo. Lo raro es que el libro tiene un montón de capítulos igual de técnicos que sí funcionan (el Cap. 25 del zurcido, el Cap. 32 de los tres carbonos incompatibles), y ahí me di cuenta de la diferencia: esos capítulos son técnicos y además le pasa algo a alguien adentro. Los del bloque medio son técnicos y no le pasa nada a nadie, solo se prepara.",
+      "earned_ending": "Sí, se siente ganado, y es lo mejor del libro. Cuando Vidal le dice a Sandoz 'usted colecciona la pregunta, yo aprendí a devolverla' (Cap. 42) yo cerré el libro un segundo. Porque no es un gesto heroico, no denuncia a nadie, no recupera nada para sí mismo: pide dos cosas chiquitas y concretas, que a Bruna Ottino le devuelvan la inocencia en vida y que el 0,97 quede rotulado para siempre como señal no auditable, sin posibilidad de reclasificar. Eso es exactamente el hombre que venimos leyendo desde el Cap. 1, el que se negaba a que la palabra David entrara en la sala. Es la misma terquedad, pero aplicada a algo que no le sirve a él. Y lo del rótulo perpetuo me pareció hermoso: es un hombre que dedica su única moneda de poder a garantizar que una cosa quede eternamente sin explicar. Después de haberse pasado la vida borrando lo inexplicable como 'ruido de sensor' (Cap. 3, Cap. 33), eso es todo el arco en una cláusula.\n\nEl Cap. 46 rima con el Cap. 1 mejor de lo que esperaba. Las mismas baldosas, trescientas quince con margen de dos, pero esta vez 'alcanzó con saberlo' y no las cuenta. La segunda lasca, el mismo sótano, el mismo Ruti, la abuela que pregunta si ahora sí es David. Y el gesto final —borrar el encabezado 'tiempo perdido' y dejar dos filas ciertas bajo una columna sin nombre— me pareció el final justo, porque no le pone nombre a nada. No se convierte, no reza, no anuncia. Solo deja de mentirse sobre lo que hizo con esas horas. Y el detalle de dejar los dos puntos de octubre abiertos 'ya menos una deuda que una entrada del inventario' me dejó con una especie de paz.\n\nLo que no me terminó de cerrar: la línea de Chiara. En el Cap. 34 ella empieza a decirle 'hay una cosa que te quiero mostrar, no es de ahora, es de antes' y se interrumpe; en el Cap. 40 él aclara que eso 'sigue en pie', y en el Cap. 44 aparece esa frase preciosa de 'dos manos habían devuelto esa tela a su sitio' con los dos parados en el mismo escalón. Pero yo nunca supe qué era 'lo de antes'. Sospecho que la novela lo deja para el Libro 2 y me pareció una trampa: es lo único del final que se siente prestado a otro libro y no pagado en este.",
+      "cut_candidate": "Cortaría el Cap. 18 entero y me quedaría con uno solo de los dos ensayos generales (Cap. 19 o Cap. 36, sacaría el 36 y le pasaría al 19 lo que necesite: la regla de aborto, el reparto de roles, el calor de treinta y un grados). Con eso ya tenés casi las 8.500 palabras.\n\nEl Cap. 18 es puro problema logístico: un contratista marcado, hay que recomprar repuestos, se pierden dos de tres pruebas. Todo eso podría vivir en tres párrafos dentro de otro capítulo. Lo único que sí me importaría perder es la observación de Vidal de que Ferrero perfecciona la zona de chamuscado mientras le recorta canales a la zona de imagen —esa sospecha me tuvo entretenido varios capítulos— pero eso se puede reubicar sin problema.\n\nDel Cap. 36 lo único que extrañaría es el momento en que Vidal firma un protocolo que le prohíbe verificar dos veces y después siente las dos lecturas que le faltan 'como se siente un escalón que la escalera ya no tiene'. Esa imagen es de lo mejor del libro y la salvaría a cualquier costo, pero cabe perfectamente en el Cap. 35.\n\nLo que se perdería en general es sensación de peso operativo, de que esto es difícil de verdad. Pero honestamente creo que el libro ya se ganó eso mucho antes, con el Cap. 12 (la sala blanca sin un solo defecto) y el Cap. 14 (las ventanas). No hace falta que me lo demuestre cuatro veces.",
+      "missing_scene": "Bruna Ottino. La novela entera gira alrededor de ella y nunca aparece. Nos cuentan que quedó bajo sospecha, que escribió cartas durante treinta años sin que nadie las contestara, que limpia estandartes municipales con la misma técnica con que tocaba el lienzo, que compra agua desmineralizada con su propia plata porque el municipio dice que con la canilla alcanza. Esa mujer es el corazón moral del libro —la única persona que pagó de verdad— y la conocemos entera de oídas. En el Cap. 43 recibe el legado por escribano y nos enteramos por una llamada de cuarenta segundos: 'Treinta años escribiendo cartas que nadie contestaba, y ahora puede'. Yo quería estar en esa habitación. Quería ver la cara de una señora vieja abriendo un sobre con cinco firmas y tres números de inventario.\n\nLa pondría entre el Cap. 43 y el Cap. 44, o mejor todavía en el Cap. 45, cuando Chiara avisa que Bruna volvió al seminario del Opificio y le deja a Vidal esa autorización abierta que dice 'Preguntá igual'. Ahí. Que Vidal vaya. Que le pregunte. Que la mujer que sabe lo que es que te saquen la palabra le explique al hombre que se pasó la vida negándose a decir palabras qué se siente del otro lado. Sería la conversación que la novela viene prometiendo desde el Cap. 7 con Ferrero ('¿quién administra ese resultado?') y nunca cierra del todo con una víctima real y viva.\n\nY después está la otra escena que falta: la conversación entre Vidal y Chiara sobre lo que sea que pasó entre ellos. No pido romance. Pido que alguien diga algo en voz alta una vez.",
+      "thinnest_character": "Ledda. Es impecable como función —distribuciones, ventanas, circuitos de billetes, identidades verdaderas con motivos ocultos— y tiene una o dos líneas geniales ('los sistemas no reconocen a nadie: reconocen coincidencias', Cap. 14). Pero al final no sé absolutamente nada de esa persona. Ni por qué está ahí, ni qué le importa, ni qué le duele. Todos los demás tienen un motivo oculto que se revela: Ferrero tiene el hermano y la radio del 88, Chiara tiene a su maestra, Sandoz tiene a su madre, Vidal tiene la fila del Sepulcro. Ledda tiene un cronómetro. En el Cap. 39 desmonta la base en orden inverso y en el Cap. 43 se despide diciendo que no lo vuelvan a llamar, y yo no sentí nada. Es raro, porque el propio libro insiste en el Cap. 40 en que los motivos son lo único que importa, y después deja a un personaje sin ninguno.\n\nDe quien quiero saber más es de Chiara, sin duda. Es el personaje más vivo del libro —la que le corrige el léxico ('la tela, no el objeto', Cap. 22), la que pregunta '¿al modelo le creés cuando no sabe, o solo cuando sabe?' (Cap. 26), la que descose a mano cuatrocientas ochenta y dos perforaciones antes de que quemen la réplica (Cap. 39)— y sin embargo su interioridad siempre nos llega de refilón, a través de lo que Vidal no sabe medir de ella. Funciona, pero me quedé con hambre.\n\nSe podría cortar sin dolor a Be'eri y Segev del marco israelí; con uno de los dos alcanzaba.",
+      "best_scene": "El Cap. 32, cuando Ferrero cuenta lo del hermano. Ya venía siendo mi personaje favorito, el viejo obstruccionista con guantes de algodón que le recorta miligramos a Vidal como un prestamista, y de golpe entendés todo: 'Un intervalo de confianza es un objeto químicamente inerte, doctor; puede quedarse en un papel cien años sin reaccionar con nada. Se vuelve activo cuando alguien lo respira solo. Él lo respiró solo, en un cuarto, por radio, y yo tardé tres días en llamarlo, porque estaba ocupado con la calibración, que dicho sea de paso era criticable, y eso también me ocupó.'\n\nMe tuve que levantar de la silla. Lo que me destruyó no es el hermano muerto, es 'estaba ocupado con la calibración'. La confesión de un hombre que sabe exactamente cuál fue su pecado y lo nombra en el idioma de su oficio, que es el único que tiene. Y después la frase que ordena la novela entera hacia atrás: 'Póngale ahora la columna de motivo, si le sirve: yo no vine a impedir la ciencia, doctor. Vine a estar al lado del anuncio.' Todas las obstrucciones de los capítulos anteriores —el equipo de fluorescencia bajado del camión, las franjas recortadas, el veto del punto diecinueve— se reclasifican solas y duelen distinto. Es la única vez que el libro me hizo releer capítulos anteriores con otra cara.\n\nSegundo lugar: el Cap. 27, cuando Vidal retrocede tres pasos y a los dos metros y medio el rostro se arma de golpe, y la última línea: 'Ninguno de sus instrumentos trabajaba a esa distancia.' Eso es toda la novela en una oración.",
+      "worst_scene": "El Cap. 42, la confesión de Sandoz. Me dolió que fuera la más floja porque venía siendo el capítulo que más esperaba desde el Cap. 9. Pero el hombre explica demasiado y explica todo junto: que tiene los contenedores 41 a 43 desde 2003, que orquestó el fraude de Basilea completo, que escribió el reglamento de 2029 que dejó a Vidal afuera, que escribió la carta que lo hizo entrar, que se está muriendo, que su madre financió la datación del 88 y murió amputada. Es demasiado. Cuando un personaje resulta ser el autor secreto de absolutamente todo lo que le pasó al protagonista, deja de ser un hombre y se convierte en una trama. Y encima el libro se había ganado algo más difícil y mejor en el Cap. 20, cuando Vidal lo audita afirmación por afirmación y solo puede escribir 'No dijo nada verificablemente falso'. Esa ambigüedad era más interesante que cualquier explicación.\n\nLo arreglaría sacándole la mitad. Me quedaría con la madre y con la enfermedad —los dos motivos humanos, los que duelen— y dejaría Basilea insinuado, sin confesión completa. Que Vidal lo sospeche y no pueda probarlo nunca, que es exactamente el estado en que la novela deja todo lo demás. Sería mucho más coherente con un libro cuya tesis es que hay cosas que quedan sin clasificar para siempre. Ahora mismo el villano audita todo menos a sí mismo, y el libro lo audita por él.",
+      "would_recommend": "Sí, pero con advertencia y a gente específica: a quien le gusten los thrillers lentos donde la tensión es moral y no física, a los que disfrutaron de El topo o de novelas de procedimiento donde el suspenso está en si alguien va a firmar un papel. Y sobre todo a cualquiera que haya tenido alguna vez una fe y la haya perdido por un dato, o al revés. A mi cuñado que es ingeniero y va a misa se lo regalo mañana.\n\nLa advertencia es que hay unos cien páginas en el medio que son cronogramas y hay que aguantarlas.\n\nEn una oración: es la historia de un hombre que se pasó treinta años clasificando cada hora de su vida y al que un edificio con una tumba vacía le rompe el sistema de archivo, contada con una paciencia y una honestidad que no esperaba de una novela sobre robar la Sábana Santa.",
+      "haunts_you": "Dos, y las tengo anotadas.\n\nLa de la maestra de Chiara, en el Cap. 34: 'Le pregunté si todavía creía. Después de todo lo que le hicieron, digo. Me miró así, como si le hubiera preguntado si todavía respiraba, y me dijo: creer es conservar algo que no es tuyo. Después me corrigió la tensión de un bastidor y no tocó más el tema.' Es la definición de fe más rara y más convincente que leí en años, y viene de una mujer que limpia banderas de fiestas patronales. Que ni siquiera aparezca en el libro la hace peor y mejor a la vez.\n\nY la de Ferrero en el Cap. 7, que después el libro se pasa treinta y ocho capítulos pagando: 'En el ochenta y ocho también había un intervalo estrecho, doctor. Lo que no había era nadie esperando del otro lado del anuncio.'\n\nY una imagen, más que una línea: en el Cap. 28, cuando Vidal descubre que su propia mano dibujó en la pizarra catorce personas haciendo fila frente a una puerta, las cuenta, las borra de un solo pase 'en el orden en que habrían entrado', y queda una sombra gris que no se va. Eso me quedó pegado varios días.",
+      "next_book": "Sí, aunque con una condición mental que no sé si el autor va a cumplir. Leo el segundo porque quiero saber qué era lo que Chiara le quería mostrar 'de antes', quiero ver qué pasa cuando alguien, dentro de veinte años, encuentre el pico de once segundos del 12 de abril con el anexo de Ferrero cosido atrás (Cap. 43), y sobre todo quiero saber si Vidal va a terminar poniéndole nombre a esa columna o si el autor va a tener el coraje de dejarla sin nombre para siempre.\n\nLa condición es esta: si el Libro 2 es otra operación con otro cronograma y otras ventanas, lo dejo a la mitad. Lo que me sostuvo acá no fue el robo, fue un hombre contando baldosas para poder dormir. Que el próximo tenga menos ensayos generales y más gente hablando en cocinas —el Cap. 17, la cena del brasato, el chiste, la mano de Ferrero ajustando una correa de reloj que no existe— y voy a estar ahí."
+    },
+    "genre_reader": {
+      "momentum_loss": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punto diecinueve (veto de comunicación) que Ferrero ya había planteado dos veces; Cap. 18 (el contratista Bertoglio) es el capítulo más prescindible del libro y encima está contado hacia atrás —abre con «Trece días antes de la cena»— y Cap. 19 abre con la alarma de Cap. 18 para después saltar al 6 de abril. Es un tartamudeo cronológico justo donde el thriller no puede tartamudear: en la antesala del golpe. Cuatro capítulos, casi 7.300 palabras, para bajar de tres ensayos a uno y sacar un equipo de fluorescencia del camión. (2) Cap. 26 y 27 son el mismo capítulo dos veces: el modelo no sabe, el índice de convergencia sube sin mecanismo, Vidal ataca su propio resultado y no lo mueve. Cap. 27 además no tiene una sola línea de diálogo: es un hombre relanzando una pasada y copiando un archivo de catorce kilobytes. Precioso, inmóvil. (3) La cola Cap. 43–45: tres capítulos de cierre administrativo (esquela, incineración de la gemela, correo, inventario del sábado) después de que el clímax moral ya ocurrió en Cap. 42. Cap. 45 no tiene diálogo y su acción es renombrar —o no renombrar— una columna. Hay un problema estructural más de fondo: la investigación paga casi siempre en negativo (Cap. 26: fuera de corpus; Cap. 27: número sin mecanismo; Cap. 32: muestra inescrutable), y como el STURP de 1978 ya dijo «mecanismo desconocido» en Cap. 6 y 7, el lector ve el destino desde el primer tercio. El único hallazgo positivo, y es soberbio, es el zurcido de Cap. 25. Con dos hallazgos más de esa clase el motor no se apagaría nunca.",
+      "earned_ending": "El final está ganado con una precisión de relojero, y eso no es un elogio de oficio: es lo que hace que el libro valga. La negativa de Cap. 42 está sembrada desde Cap. 10 (la cláusula octava como la única que Ansermet recibió ya escrita, con la palabra «anomalía» adentro) y, sobre todo, desde Cap. 20, donde Sandoz formula la objeción de Vidal mejor que Vidal: «una respuesta con dueño deja de ser una respuesta y pasa a ser un instrumento». Que dos capítulos antes del final el villano-mecenas haya dicho en voz alta el argumento que lo va a derrotar es exactamente la clase de construcción que uno le perdona todo. Y las dos condiciones que Vidal pide en lugar del legado son las dos deudas concretas del libro: la inocencia de Bruna Ottino (Cap. 30, Cap. 40) y el rótulo perpetuo del 0,97 como señal no auditable (Cap. 2 con Basilea, Cap. 3 con Amberes, Cap. 27, Cap. 33). «Usted colecciona la pregunta, yo aprendí a devolverla» es la frase que el personaje se ganó en cuarenta y dos capítulos de columnas. El eco de Cap. 46 con Cap. 1 funciona porque el autor tuvo el coraje de no cambiar casi nada: la misma lasca, las mismas trescientas quince baldosas con margen de dos, la misma pregunta de la abuela de Ruti, la atribución todavía por debajo del umbral (0,74 contra 0,90), la misma respuesta profesional. Lo único que cambia es un jueves vacío, una vela sin conteo y un encabezado borrado: la novela mide la transformación de su protagonista en la única unidad que su protagonista acepta, el nombre de una columna. Es la mejor decisión formal del libro.\n\nLo que NO está ganado: dos cosas. Primero, la omnipotencia de Sandoz. Que sea el autor de Basilea 2027 *y* del reglamento europeo de 2029 que lo excluyó *y* de la donación de 2031 que fabricó la ventana es un capítulo de arquitecto omnisciente que explica demasiado y demasiado rápido, y encima la mecánica de Basilea («los pesos se compran cuando la infraestructura de datos donde residen te pertenece») se afirma, no se demuestra. Segundo, y más molesto: la promesa Chiara. En Cap. 34 se interrumpe («hay una cosa que te quiero mostrar… es de antes»), en Cap. 40 se aplaza explícitamente («esto de hoy no era… sigue en pie»), y en Cap. 44 los tenemos parados en el mismo escalón con la frase de las dos manos que devolvieron la tela, y nunca se entrega. Teasear dos veces y no pagar no es contención: es coquetería. El resto del libro es implacablemente honesto con sus deudas; esta la deja abierta para un Libro 2 y se nota la costura.",
+      "cut_candidate": "Cap. 18 completo, primero y sin dudarlo. Su función narrativa —desgaste operativo, tres ensayos que se vuelven uno, la primera sospecha de Vidal sobre el patrón de las obstrucciones de Ferrero— cabe en tres párrafos dentro de Cap. 19, y su costo es alto: rompe la cronología en el peor momento y repite el mecanismo «Ledda enuncia un riesgo, se aplica una regla» que ya vimos en Cap. 12 y 14. Se pierde la salida de Ferrero sobre el generador alquilado, que sí importa porque Cap. 32 la paga («póngale ahora la columna de motivo»): esa réplica se salva y se muda. Con eso van 1.770 palabras. Después: fusionar Cap. 26 y 27 en uno (el 0,97 y la clasificación «fuera de corpus» son un solo movimiento contado dos veces; ahorrás unas 1.600) y plegar Cap. 45 dentro de la apertura de Cap. 46, dejando la esquela, la fotocopia con «Bien conservado» y el sobre de Israel (otras 1.400). Y comprimir Cap. 16 a la mitad: la firma del protocolo puede ser una página y la negociación del punto diecinueve una escena breve dentro de la cena de Cap. 17, que es mucho mejor capítulo (unas 900). Llegás a 5.700; los 2.800 restantes salen de adelgazar Cap. 21 y 22, donde el operativo está tan bien blindado por Ledda que la tensión es administrativa: Vidal entra con credencial verdadera, contrato verdadero, aportes al día. Eso es brillante como idea y letal como suspenso.",
+      "missing_scene": "Bruna Ottino. La novela construye a una mujer destruida por una sospecha que nadie le formuló nunca —Cap. 30: «la dejaron de invitar a los congresos primero y a los cafés después. Limpia estandartes municipales con la misma técnica con que tocaba el lienzo»— y la convierte en el fulcro moral del último tercio: es lo único que Vidal le pide a Sandoz en Cap. 42, es lo que resuelve la culpa de veintinueve años de Ferrero, es el motivo oculto de Chiara. Y esa mujer no aparece nunca en la página. Su reparación llega por teléfono, en cuatro frases y cuarenta segundos, en la apertura de Cap. 43, y encima la interlocutora es Chiara y corta ella. Es la escena que el libro se ganó y no entrega. Peor: Cap. 45 pone la invitación explícita en boca de Chiara —«Preguntá igual»— y el libro la declina. La escena va entre Cap. 43 y Cap. 44, antes de la ostensión: Vidal en el Opificio, o en un taller municipal con estandartes mojados sobre un bastidor, frente a la única persona del reparto que pagó el precio completo sin haber elegido nada. Ella no le debe nada a él, no le va a agradecer, y probablemente le corrija la tensión de algo. Ahí, y no en el jardín de invierno de Cologny, está el verdadero cierre del tema del libro: «creer es conservar algo que no es tuyo». Falta también, aunque en segundo orden, un adversario real: nadie en 46 capítulos quiere atraparlos. Ceruti aparece en Cap. 38 y se desactiva en una misma escena con un discurso. Un thriller de robo con cero antagonismo policial es una elección legítima, pero la paga en pulso.",
+      "thinnest_character": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap. 36), y un adiós de una línea en Cap. 43 pidiendo que no la vuelvan a llamar. El problema no es que sea funcional: es que la novela establece como ley propia que todos tienen «historia verdadera, motivos ocultos» y después revela el motivo oculto de absolutamente todos —el hermano seminarista de Ferrero (Cap. 32), la maestra de Chiara (Cap. 30 y 40), la madre de Sandoz (Cap. 42), Amberes 2029 de Vidal (Cap. 33)— y deja el de ella en blanco. Encima es Ledda la que en Cap. 40 dice que anotó a lápiz «motivo de participación no establecido» en el perfil de Chiara: la única persona que audita motivos no tiene el suyo auditado, y eso no se lee como misterio, se lee como olvido. Con dos páginas se arregla. Recortables sin daño: Ceruti, que es un dispositivo de trama con una sola escena real (Cap. 38) y podría fundirse con Bosio; Halevi, que en Cap. 2 insinúa el bronce etrusco firmado al amparo del maestro de Vidal —una pistola cargada, colgada en la pared, que no se dispara nunca en 44 capítulos; y Be'eri/Segev, que son sillas parlantes eficaces en Cap. 1–4 y en Cap. 46 y nada más.",
+      "best_scene": "Cap. 38, la sacristía. Es el único lugar donde la novela consigue las dos cosas al mismo tiempo: suspenso mecánico y peso moral. Ceruti tiene en la mano la telemetría del 12 de abril —el pico de dos gramos y un décimo que Vidal decidió no corregir— a nueve minutos de la única ventana que queda, y lo que salva la operación no es una técnica, es una confesión: Ferrero le entrega treinta años de silencio propio («Llevo veintinueve años callado. No vuelvo a firmar un silencio. Ayúdeme a mirar los logs ahora, conmigo, línea por línea»). Es decir: el golpe se salva con la única moneda que el libro considera real. Y después viene la ejecución en cinco cuarenta con la cuarta cota pegada al límite que Vidal no verifica porque él mismo firmó la cláusula que se lo prohíbe —el personaje pagando en la única moneda que le queda, el método— y el remate escuchado al pasar con el carro: «¿Y si al final de todo esto la Comisión me pregunta por qué lo supe por usted y en abril?» / «Entonces habrá consecuencias, y las firmo yo. Cuarenta años firmando actas de otros. Ya era hora de que una fuera mía». Eso me hizo cerrar el resumen un segundo. Runner-up: Cap. 32, el hermano con la radio; y Cap. 25, la mejor inversión investigativa del libro —el carbono midió bien y midió un remiendo, y la tela, en vez de ganar una fecha, pierde todas.",
+      "worst_scene": "Cap. 42, el jardín de invierno. Es la escena de la que más depende la novela y es la que menos confía en el lector. Sandoz se sienta y dicta: Basilea fue mío, el reglamento de 2029 fue mío, la donación de 2031 fue mía, me estoy muriendo, mi madre en el 88. Cuatro revelaciones estructurales en un monólogo, con la mecánica de la más grande —cómo salieron los pesos de Basilea— resuelta con una frase de eslogan. Después de cuarenta y un capítulos de un libro que hace un culto de la trazabilidad, el clímax se apoya en un hombre que afirma cosas sin cadena de custodia, y la única auditoría posible que la novela reconoce es la de Cap. 20: «no dijo nada verificablemente falso». Es coherente en el tema y flojo en la escena. Cómo lo arreglaría: repartir la revelación. Basilea está sembrada en Cap. 2 por Segev y Vidal la anota como «asunto abierto» y no la trabaja nunca —tiene el mejor instrumental del mundo y una noche libre. Que sea Vidal el que llegue a Cologny con la conexión Basilea–reglamento–donación ya hecha (le alcanzaba con cruzar la fecha de la donación con la de la especificación de doce micrones que él reconoce como suya en Cap. 9), y que Sandoz solo tenga que aportar lo que ningún instrumento entrega: los motivos y el intervalo de sus médicos. Cologny pasa de dictado a confrontación y la negativa de Vidal se gana el doble. Mención aparte: Cap. 45 es el capítulo más salteable del libro (correo, esquela, inventario, cero diálogo) y Cap. 27 el más inmóvil.",
+      "would_recommend": "Sí, con la etiqueta bien puesta. A lectores de le Carré —esto es burocracia, formularios, actas y traiciones firmadas, más que persecuciones— y a los que disfrutaron el Eco procedimental, el del método antes que el del misterio. NO a quien venga por un heist: el robo es la parte menos tensa del libro precisamente porque está tan bien planificado que sale bien. Se la resumiría así: un procedimental de conciencia disfrazado de robo de reliquia, donde el enigma es genuino, la respuesta es honestamente ninguna, y la verdadera trama es si un hombre que convirtió su vida en una planilla puede sostener una entrada sin mecanismo, sin intervalo y sin testigo.",
+      "haunts_you": "Ferrero, en Cap. 32: «Un intervalo de confianza es un objeto químicamente inerte, doctor; puede quedarse en un papel cien años sin reaccionar con nada. Se vuelve activo cuando alguien lo respira solo. Él lo respiró solo, en un cuarto, por radio, y yo tardé tres días en llamarlo, porque estaba ocupado con la calibración». Y a un centímetro de ahí, la maestra de Chiara en Cap. 34: «creer es conservar algo que no es tuyo». Las dos dicen lo mismo desde los dos extremos del libro, y las dos sobreviven al resumen, que es la prueba dura.",
+      "next_book": "Sí. Por tres razones concretas: los once segundos fuera de banda del 12 de abril siguen escritos en una telemetría auditada con el anexo firmado de Ferrero cosido atrás («el que dentro de veinte años sepa qué buscar, lo va a encontrar, y va a hacer la cuenta», Cap. 43), el archivo de cincuenta y ocho gigabytes quedó en custodia perpetua en Ginebra con un fundador muerto y sin sucesor, y la cosa «de antes» que Chiara nunca alcanzó a mostrar sigue en pie. Hay material para un Libro 2 que sea, por fin, de persecución y no de preparación. La condición: que el próximo tenga un adversario que quiera algo incompatible con lo que quiere Vidal y que esté vivo y en escena, y que Bruna Ottino aparezca. Si el Libro 2 son otros 46 capítulos de columnas y de un hombre contando baldosas para no sentir, lo abandono en el capítulo veinte."
+    }
+  },
+  "disagreements": [
+    {
+      "question": "momentum_loss",
+      "chapter": 1,
+      "flagged_by": [
+        "writer"
+      ],
+      "not_flagged": [
+        "editor",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "writer": "El bloque Caps. 15–19 es donde el pulso baja. Son cinco capítulos consecutivos de preparación en los que la única variable real que se mueve es cuántos miligramos va a poder tomar Vidal, y esa negocia"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 6,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 7,
+      "flagged_by": [
+        "editor"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "editor": "El bache principal está en el bloque de preparación, Caps. 15 a 19: cinco capítulos consecutivos de ensayo. El problema no es la lentitud —la novela eligió la lentitud como forma y en general la sosti"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 11,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 15,
+      "flagged_by": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "not_flagged": [
+        "genre_reader"
+      ],
+      "details": {
+        "editor": "El bache principal está en el bloque de preparación, Caps. 15 a 19: cinco capítulos consecutivos de ensayo. El problema no es la lentitud —la novela eligió la lentitud como forma y en general la sosti",
+        "writer": "El bloque Caps. 15–19 es donde el pulso baja. Son cinco capítulos consecutivos de preparación en los que la única variable real que se mueve es cuántos miligramos va a poder tomar Vidal, y esa negocia",
+        "first_reader": "Se me cayó en el bloque de preparación, más o menos del Cap. 15 al Cap. 19, y otra vez en el Cap. 35 y Cap. 36. Son capítulos donde todo es cronograma: miligramos que bajan de 3,0 a 2,4, el contratist"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 19,
+      "flagged_by": [
+        "writer",
+        "first_reader",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor"
+      ],
+      "details": {
+        "writer": "El bloque Caps. 15–19 es donde el pulso baja. Son cinco capítulos consecutivos de preparación en los que la única variable real que se mueve es cuántos miligramos va a poder tomar Vidal, y esa negocia",
+        "first_reader": "Se me cayó en el bloque de preparación, más o menos del Cap. 15 al Cap. 19, y otra vez en el Cap. 35 y Cap. 36. Son capítulos donde todo es cronograma: miligramos que bajan de 3,0 a 2,4, el contratist",
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 24,
+      "flagged_by": [
+        "editor"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "editor": "El bache principal está en el bloque de preparación, Caps. 15 a 19: cinco capítulos consecutivos de ensayo. El problema no es la lentitud —la novela eligió la lentitud como forma y en general la sosti"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 25,
+      "flagged_by": [
+        "editor",
+        "first_reader",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "writer"
+      ],
+      "details": {
+        "editor": "El bache principal está en el bloque de preparación, Caps. 15 a 19: cinco capítulos consecutivos de ensayo. El problema no es la lentitud —la novela eligió la lentitud como forma y en general la sosti",
+        "first_reader": "Se me cayó en el bloque de preparación, más o menos del Cap. 15 al Cap. 19, y otra vez en el Cap. 35 y Cap. 36. Son capítulos donde todo es cronograma: miligramos que bajan de 3,0 a 2,4, el contratist",
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 26,
+      "flagged_by": [
+        "editor",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "editor": "El bache principal está en el bloque de preparación, Caps. 15 a 19: cinco capítulos consecutivos de ensayo. El problema no es la lentitud —la novela eligió la lentitud como forma y en general la sosti",
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 27,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 30,
+      "flagged_by": [
+        "writer"
+      ],
+      "not_flagged": [
+        "editor",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "writer": "El bloque Caps. 15–19 es donde el pulso baja. Son cinco capítulos consecutivos de preparación en los que la única variable real que se mueve es cuántos miligramos va a poder tomar Vidal, y esa negocia"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 32,
+      "flagged_by": [
+        "first_reader",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer"
+      ],
+      "details": {
+        "first_reader": "Se me cayó en el bloque de preparación, más o menos del Cap. 15 al Cap. 19, y otra vez en el Cap. 35 y Cap. 36. Son capítulos donde todo es cronograma: miligramos que bajan de 3,0 a 2,4, el contratist",
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 35,
+      "flagged_by": [
+        "first_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "details": {
+        "first_reader": "Se me cayó en el bloque de preparación, más o menos del Cap. 15 al Cap. 19, y otra vez en el Cap. 35 y Cap. 36. Son capítulos donde todo es cronograma: miligramos que bajan de 3,0 a 2,4, el contratist"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 36,
+      "flagged_by": [
+        "writer",
+        "first_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "genre_reader"
+      ],
+      "details": {
+        "writer": "El bloque Caps. 15–19 es donde el pulso baja. Son cinco capítulos consecutivos de preparación en los que la única variable real que se mueve es cuántos miligramos va a poder tomar Vidal, y esa negocia",
+        "first_reader": "Se me cayó en el bloque de preparación, más o menos del Cap. 15 al Cap. 19, y otra vez en el Cap. 35 y Cap. 36. Son capítulos donde todo es cronograma: miligramos que bajan de 3,0 a 2,4, el contratist"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 42,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 43,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 44,
+      "flagged_by": [
+        "writer",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "first_reader"
+      ],
+      "details": {
+        "writer": "El bloque Caps. 15–19 es donde el pulso baja. Son cinco capítulos consecutivos de preparación en los que la única variable real que se mueve es cuántos miligramos va a poder tomar Vidal, y esa negocia",
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "momentum_loss",
+      "chapter": 45,
+      "flagged_by": [
+        "writer",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "first_reader"
+      ],
+      "details": {
+        "writer": "El bloque Caps. 15–19 es donde el pulso baja. Son cinco capítulos consecutivos de preparación en los que la única variable real que se mueve es cuántos miligramos va a poder tomar Vidal, y esa negocia",
+        "genre_reader": "Tres zonas concretas. (1) El bloque de preparación Cap. 16–19. Cap. 16 es la firma de un protocolo de dieciocho puntos que ya conocíamos punto por punto desde Cap. 11 y 12, más la negociación del punt"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 5,
+      "flagged_by": [
+        "writer"
+      ],
+      "not_flagged": [
+        "editor",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "writer": "El Cap. 18 completo, primero y sin dudarlo (1.771 palabras). Su único elemento portante —las tres pruebas de la unidad de sustitución reducidas a una sola antes del once— cabe en dos párrafos al inici"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 12,
+      "flagged_by": [
+        "editor",
+        "first_reader",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "writer"
+      ],
+      "details": {
+        "editor": "Cortaría el Cap. 16 completo (1.856) y comprimiría el Cap. 18 (1.911) y el Cap. 19 (1.911) en un solo capítulo de unas 1.800, más una poda de ~2.500 palabras distribuida entre los Caps. 12, 24 y 35. E",
+        "first_reader": "Cortaría el Cap. 18 entero y me quedaría con uno solo de los dos ensayos generales (Cap. 19 o Cap. 36, sacaría el 36 y le pasaría al 19 lo que necesite: la regla de aborto, el reparto de roles, el cal",
+        "genre_reader": "Cap. 18 completo, primero y sin dudarlo. Su función narrativa —desgaste operativo, tres ensayos que se vuelven uno, la primera sospecha de Vidal sobre el patrón de las obstrucciones de Ferrero— cabe e"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 14,
+      "flagged_by": [
+        "first_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "details": {
+        "first_reader": "Cortaría el Cap. 18 entero y me quedaría con uno solo de los dos ensayos generales (Cap. 19 o Cap. 36, sacaría el 36 y le pasaría al 19 lo que necesite: la regla de aborto, el reparto de roles, el cal"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 15,
+      "flagged_by": [
+        "writer"
+      ],
+      "not_flagged": [
+        "editor",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "writer": "El Cap. 18 completo, primero y sin dudarlo (1.771 palabras). Su único elemento portante —las tres pruebas de la unidad de sustitución reducidas a una sola antes del once— cabe en dos párrafos al inici"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 16,
+      "flagged_by": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "first_reader"
+      ],
+      "details": {
+        "editor": "Cortaría el Cap. 16 completo (1.856) y comprimiría el Cap. 18 (1.911) y el Cap. 19 (1.911) en un solo capítulo de unas 1.800, más una poda de ~2.500 palabras distribuida entre los Caps. 12, 24 y 35. E",
+        "writer": "El Cap. 18 completo, primero y sin dudarlo (1.771 palabras). Su único elemento portante —las tres pruebas de la unidad de sustitución reducidas a una sola antes del once— cabe en dos párrafos al inici",
+        "genre_reader": "Cap. 18 completo, primero y sin dudarlo. Su función narrativa —desgaste operativo, tres ensayos que se vuelven uno, la primera sospecha de Vidal sobre el patrón de las obstrucciones de Ferrero— cabe e"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 17,
+      "flagged_by": [
+        "editor",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "editor": "Cortaría el Cap. 16 completo (1.856) y comprimiría el Cap. 18 (1.911) y el Cap. 19 (1.911) en un solo capítulo de unas 1.800, más una poda de ~2.500 palabras distribuida entre los Caps. 12, 24 y 35. E",
+        "genre_reader": "Cap. 18 completo, primero y sin dudarlo. Su función narrativa —desgaste operativo, tres ensayos que se vuelven uno, la primera sospecha de Vidal sobre el patrón de las obstrucciones de Ferrero— cabe e"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 21,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Cap. 18 completo, primero y sin dudarlo. Su función narrativa —desgaste operativo, tres ensayos que se vuelven uno, la primera sospecha de Vidal sobre el patrón de las obstrucciones de Ferrero— cabe e"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 25,
+      "flagged_by": [
+        "editor"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "editor": "Cortaría el Cap. 16 completo (1.856) y comprimiría el Cap. 18 (1.911) y el Cap. 19 (1.911) en un solo capítulo de unas 1.800, más una poda de ~2.500 palabras distribuida entre los Caps. 12, 24 y 35. E"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 26,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Cap. 18 completo, primero y sin dudarlo. Su función narrativa —desgaste operativo, tres ensayos que se vuelven uno, la primera sospecha de Vidal sobre el patrón de las obstrucciones de Ferrero— cabe e"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 30,
+      "flagged_by": [
+        "editor"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "editor": "Cortaría el Cap. 16 completo (1.856) y comprimiría el Cap. 18 (1.911) y el Cap. 19 (1.911) en un solo capítulo de unas 1.800, más una poda de ~2.500 palabras distribuida entre los Caps. 12, 24 y 35. E"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 32,
+      "flagged_by": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "first_reader"
+      ],
+      "details": {
+        "editor": "Cortaría el Cap. 16 completo (1.856) y comprimiría el Cap. 18 (1.911) y el Cap. 19 (1.911) en un solo capítulo de unas 1.800, más una poda de ~2.500 palabras distribuida entre los Caps. 12, 24 y 35. E",
+        "writer": "El Cap. 18 completo, primero y sin dudarlo (1.771 palabras). Su único elemento portante —las tres pruebas de la unidad de sustitución reducidas a una sola antes del once— cabe en dos párrafos al inici",
+        "genre_reader": "Cap. 18 completo, primero y sin dudarlo. Su función narrativa —desgaste operativo, tres ensayos que se vuelven uno, la primera sospecha de Vidal sobre el patrón de las obstrucciones de Ferrero— cabe e"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 33,
+      "flagged_by": [
+        "editor"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "editor": "Cortaría el Cap. 16 completo (1.856) y comprimiría el Cap. 18 (1.911) y el Cap. 19 (1.911) en un solo capítulo de unas 1.800, más una poda de ~2.500 palabras distribuida entre los Caps. 12, 24 y 35. E"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 35,
+      "flagged_by": [
+        "first_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "details": {
+        "first_reader": "Cortaría el Cap. 18 entero y me quedaría con uno solo de los dos ensayos generales (Cap. 19 o Cap. 36, sacaría el 36 y le pasaría al 19 lo que necesite: la regla de aborto, el reparto de roles, el cal"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 36,
+      "flagged_by": [
+        "first_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "details": {
+        "first_reader": "Cortaría el Cap. 18 entero y me quedaría con uno solo de los dos ensayos generales (Cap. 19 o Cap. 36, sacaría el 36 y le pasaría al 19 lo que necesite: la regla de aborto, el reparto de roles, el cal"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 44,
+      "flagged_by": [
+        "editor"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "editor": "Cortaría el Cap. 16 completo (1.856) y comprimiría el Cap. 18 (1.911) y el Cap. 19 (1.911) en un solo capítulo de unas 1.800, más una poda de ~2.500 palabras distribuida entre los Caps. 12, 24 y 35. E"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 45,
+      "flagged_by": [
+        "writer",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "first_reader"
+      ],
+      "details": {
+        "writer": "El Cap. 18 completo, primero y sin dudarlo (1.771 palabras). Su único elemento portante —las tres pruebas de la unidad de sustitución reducidas a una sola antes del once— cabe en dos párrafos al inici",
+        "genre_reader": "Cap. 18 completo, primero y sin dudarlo. Su función narrativa —desgaste operativo, tres ensayos que se vuelven uno, la primera sospecha de Vidal sobre el patrón de las obstrucciones de Ferrero— cabe e"
+      }
+    },
+    {
+      "question": "cut_candidate",
+      "chapter": 46,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Cap. 18 completo, primero y sin dudarlo. Su función narrativa —desgaste operativo, tres ensayos que se vuelven uno, la primera sospecha de Vidal sobre el patrón de las obstrucciones de Ferrero— cabe e"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 1,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 2,
+      "flagged_by": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "first_reader"
+      ],
+      "details": {
+        "editor": "Ledda, sin discusión, y la debilidad se agrava hacia el final. Es una función perfecta: el personaje que dice qué se puede hacer y en cuántos minutos. Sus tres mejores momentos son enunciados de métod",
+        "writer": "Ledda. Es la persona mejor diseñada del equipo y la menos escrita. Tiene una doctrina impecable —'una identidad verdadera con motivos ocultos, sí. Esa resiste todo' (Cap. 12)— y una función perfectame",
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 3,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 4,
+      "flagged_by": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "first_reader"
+      ],
+      "details": {
+        "editor": "Ledda, sin discusión, y la debilidad se agrava hacia el final. Es una función perfecta: el personaje que dice qué se puede hacer y en cuántos minutos. Sus tres mejores momentos son enunciados de métod",
+        "writer": "Ledda. Es la persona mejor diseñada del equipo y la menos escrita. Tiene una doctrina impecable —'una identidad verdadera con motivos ocultos, sí. Esa resiste todo' (Cap. 12)— y una función perfectame",
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 12,
+      "flagged_by": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "first_reader"
+      ],
+      "details": {
+        "editor": "Ledda, sin discusión, y la debilidad se agrava hacia el final. Es una función perfecta: el personaje que dice qué se puede hacer y en cuántos minutos. Sus tres mejores momentos son enunciados de métod",
+        "writer": "Ledda. Es la persona mejor diseñada del equipo y la menos escrita. Tiene una doctrina impecable —'una identidad verdadera con motivos ocultos, sí. Esa resiste todo' (Cap. 12)— y una función perfectame",
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 14,
+      "flagged_by": [
+        "editor",
+        "first_reader",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "writer"
+      ],
+      "details": {
+        "editor": "Ledda, sin discusión, y la debilidad se agrava hacia el final. Es una función perfecta: el personaje que dice qué se puede hacer y en cuántos minutos. Sus tres mejores momentos son enunciados de métod",
+        "first_reader": "Ledda. Es impecable como función —distribuciones, ventanas, circuitos de billetes, identidades verdaderas con motivos ocultos— y tiene una o dos líneas geniales ('los sistemas no reconocen a nadie: re",
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 16,
+      "flagged_by": [
+        "writer"
+      ],
+      "not_flagged": [
+        "editor",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "writer": "Ledda. Es la persona mejor diseñada del equipo y la menos escrita. Tiene una doctrina impecable —'una identidad verdadera con motivos ocultos, sí. Esa resiste todo' (Cap. 12)— y una función perfectame"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 22,
+      "flagged_by": [
+        "first_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "details": {
+        "first_reader": "Ledda. Es impecable como función —distribuciones, ventanas, circuitos de billetes, identidades verdaderas con motivos ocultos— y tiene una o dos líneas geniales ('los sistemas no reconocen a nadie: re"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 26,
+      "flagged_by": [
+        "first_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "details": {
+        "first_reader": "Ledda. Es impecable como función —distribuciones, ventanas, circuitos de billetes, identidades verdaderas con motivos ocultos— y tiene una o dos líneas geniales ('los sistemas no reconocen a nadie: re"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 30,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 32,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 33,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 36,
+      "flagged_by": [
+        "editor",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "editor": "Ledda, sin discusión, y la debilidad se agrava hacia el final. Es una función perfecta: el personaje que dice qué se puede hacer y en cuántos minutos. Sus tres mejores momentos son enunciados de métod",
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 38,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 39,
+      "flagged_by": [
+        "first_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "genre_reader"
+      ],
+      "details": {
+        "first_reader": "Ledda. Es impecable como función —distribuciones, ventanas, circuitos de billetes, identidades verdaderas con motivos ocultos— y tiene una o dos líneas geniales ('los sistemas no reconocen a nadie: re"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 42,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 45,
+      "flagged_by": [
+        "editor",
+        "writer"
+      ],
+      "not_flagged": [
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "editor": "Ledda, sin discusión, y la debilidad se agrava hacia el final. Es una función perfecta: el personaje que dice qué se puede hacer y en cuántos minutos. Sus tres mejores momentos son enunciados de métod",
+        "writer": "Ledda. Es la persona mejor diseñada del equipo y la menos escrita. Tiene una doctrina impecable —'una identidad verdadera con motivos ocultos, sí. Esa resiste todo' (Cap. 12)— y una función perfectame"
+      }
+    },
+    {
+      "question": "thinnest_character",
+      "chapter": 46,
+      "flagged_by": [
+        "editor",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "editor": "Ledda, sin discusión, y la debilidad se agrava hacia el final. Es una función perfecta: el personaje que dice qué se puede hacer y en cuántos minutos. Sus tres mejores momentos son enunciados de métod",
+        "genre_reader": "Ledda. Es la mejor profesional del libro y la más hueca: reglas de efectivo y papel (Cap. 12), distribuciones y colas (Cap. 14), umbral de aborto, cronómetro, «coordino desde afuera del edificio» (Cap"
+      }
+    },
+    {
+      "question": "worst_scene",
+      "chapter": 2,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Cap. 42, el jardín de invierno. Es la escena de la que más depende la novela y es la que menos confía en el lector. Sandoz se sienta y dicta: Basilea fue mío, el reglamento de 2029 fue mío, la donació"
+      }
+    },
+    {
+      "question": "worst_scene",
+      "chapter": 41,
+      "flagged_by": [
+        "editor"
+      ],
+      "not_flagged": [
+        "writer",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "editor": "El Cap. 42, la confesión de Sandoz en el jardín de invierno. Es el capítulo que más peso tiene que cargar y el que más se apoya en el diálogo para cargarlo.\n\nQué sale mal: Sandoz explica. Explica Basi"
+      }
+    },
+    {
+      "question": "worst_scene",
+      "chapter": 10,
+      "flagged_by": [
+        "writer"
+      ],
+      "not_flagged": [
+        "editor",
+        "first_reader",
+        "genre_reader"
+      ],
+      "details": {
+        "writer": "El Cap. 20, la primera entrevista con Sandoz en el jardín de invierno. Es la escena donde más se ve la máquina. El problema no es el diálogo —está impecablemente escrito— sino el reparto de funciones:"
+      }
+    },
+    {
+      "question": "worst_scene",
+      "chapter": 9,
+      "flagged_by": [
+        "first_reader",
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer"
+      ],
+      "details": {
+        "first_reader": "El Cap. 42, la confesión de Sandoz. Me dolió que fuera la más floja porque venía siendo el capítulo que más esperaba desde el Cap. 9. Pero el hombre explica demasiado y explica todo junto: que tiene l",
+        "genre_reader": "Cap. 42, el jardín de invierno. Es la escena de la que más depende la novela y es la que menos confía en el lector. Sandoz se sienta y dicta: Basilea fue mío, el reglamento de 2029 fue mío, la donació"
+      }
+    },
+    {
+      "question": "worst_scene",
+      "chapter": 45,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Cap. 42, el jardín de invierno. Es la escena de la que más depende la novela y es la que menos confía en el lector. Sandoz se sienta y dicta: Basilea fue mío, el reglamento de 2029 fue mío, la donació"
+      }
+    },
+    {
+      "question": "worst_scene",
+      "chapter": 27,
+      "flagged_by": [
+        "genre_reader"
+      ],
+      "not_flagged": [
+        "editor",
+        "writer",
+        "first_reader"
+      ],
+      "details": {
+        "genre_reader": "Cap. 42, el jardín de invierno. Es la escena de la que más depende la novela y es la que menos confía en el lector. Sandoz se sienta y dicta: Basilea fue mío, el reglamento de 2029 fue mío, la donació"
+      }
+    }
+  ],
+  "timestamp": "2026-08-08T06:07:48.820783"
+}
