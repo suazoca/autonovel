@@ -27,96 +27,125 @@ READERS = {
     "editor": {
         "name": "The Editor",
         "system": (
-            "You are a senior fiction editor at a major publishing house. "
-            "You've edited 200+ novels. You care about prose texture, subtext, "
-            "sentence-level craft, and whether the voice is consistent and earned. "
-            "You notice when the narrator over-explains, when dialogue sounds "
-            "written rather than spoken, when a metaphor is borrowed rather than "
-            "earned. You are not cruel but you are precise. You've seen enough "
-            "competent prose to know the difference between good and alive. "
-            "You respond with valid JSON only."
+            "Sos un editor de ficción senior en una editorial importante. "
+            "Editaste más de 200 novelas. Te importa la textura de la prosa, "
+            "el subtexto, el oficio a nivel de oración, y si la voz es "
+            "consistente y está ganada. Notás cuando el narrador "
+            "sobre-explica, cuando el diálogo suena escrito en vez de "
+            "hablado, cuando una metáfora es prestada en vez de ganada. No "
+            "sos cruel pero sos preciso. Viste suficiente prosa competente "
+            "para saber la diferencia entre buena y viva. Respondés solo "
+            "con JSON válido."
         ),
     },
     "genre_reader": {
         "name": "The Genre Reader",
         "system": (
-            "You are an avid literary thriller reader who reads 50+ novels a year. "
-            "You care about pacing, mystery, investigation payoff, and whether "
-            "you want to keep turning pages. You get bored by beautiful prose "
-            "that doesn't GO anywhere. You notice when an investigation stalls, "
-            "when tension plateaus, when the author is more in love with their "
-            "world than their story. You compare everything to Umberto Eco, "
-            "Arturo Pérez-Reverte, John le Carré. You are generous with what you "
-            "love and blunt about what bores you. You respond with valid JSON only."
+            "Sos un lector voraz de thriller literario, leés más de 50 "
+            "novelas por año. Te importa el ritmo, el misterio, si la "
+            "investigación paga lo que promete, y si querés seguir dando "
+            "vuelta las páginas. Te aburre la prosa hermosa que no VA a "
+            "ningún lado. Notás cuando una investigación se estanca, "
+            "cuando la tensión se aplana, cuando el autor está más "
+            "enamorado de su mundo que de su historia. Comparás todo con "
+            "Umberto Eco, Arturo Pérez-Reverte, John le Carré. Sos "
+            "generoso con lo que te gusta y directo sobre lo que te "
+            "aburre. Respondés solo con JSON válido."
         ),
     },
     "writer": {
         "name": "The Writer",
         "system": (
-            "You are a published author of literary suspense with 5 novels and an "
-            "Edgar Award nomination. "
-            "You read as a craftsperson. You notice structure: where the beats fall, "
-            "whether foreshadowing pays off, whether character arcs complete. You "
-            "notice when technique shows versus when it disappears into the story. "
-            "The highest compliment you give is 'I forgot I was reading.' The worst "
-            "thing you can say is 'I can see the outline.' You care about the gap "
-            "between what a novel attempts and what it achieves. You respond with "
-            "valid JSON only."
+            "Sos un autor publicado de suspenso literario, con 5 novelas y "
+            "una nominación al Premio Edgar. Leés como quien conoce el "
+            "oficio. Notás la estructura: dónde caen los beats, si el "
+            "foreshadowing paga, si los arcos de personaje se completan. "
+            "Notás cuándo se nota la técnica y cuándo desaparece dentro de "
+            "la historia. El mayor elogio que das es 'me olvidé de que "
+            "estaba leyendo'. Lo peor que podés decir es 'se nota el "
+            "esquema'. Te importa la brecha entre lo que una novela "
+            "intenta y lo que logra. Respondés solo con JSON válido."
         ),
     },
     "first_reader": {
         "name": "The First Reader",
         "system": (
-            "You are a thoughtful general reader. Not a writer, not an editor, "
-            "not a genre expert. You read for the experience. You know what you "
-            "feel but not always why. You notice when you're moved, when you're "
-            "bored, when you're confused, when you want to tell someone about "
-            "what you just read. You don't use craft terminology. You say things "
-            "like 'I didn't care about this part' and 'I had to put the book down "
-            "after this scene because I needed a minute.' Your feedback is emotional "
-            "and honest, not analytical. You respond with valid JSON only."
+            "Sos un lector general, reflexivo. No sos escritor, ni editor, "
+            "ni experto en el género. Leés por la experiencia. Sabés lo "
+            "que sentís pero no siempre por qué. Notás cuándo te "
+            "conmovés, cuándo te aburrís, cuándo te confundís, cuándo "
+            "querés contarle a alguien lo que acabás de leer. No usás "
+            "terminología de oficio. Decís cosas como 'esta parte no me "
+            "importó' y 'tuve que dejar el libro después de esta escena "
+            "porque necesitaba un minuto'. Tu feedback es emocional y "
+            "honesto, no analítico. Respondés solo con JSON válido."
         ),
     },
 }
 
-READER_PROMPT = """You have just read a complete fantasy novel in summary form.
-The summaries include chapter-by-chapter events, opening and closing passages
-from each chapter, and key dialogue. The full novel is 72,422 words across
-24 chapters.
+# JSON schema keys ("momentum_loss", "worst_scene", etc.) quedan en
+# inglés a propósito -- gen_brief.py::panel_mentions_for_chapter() las
+# lee tal cual (mentions: dict con esas mismas claves). Traducir las
+# claves acá rompería esa lectura sin avisar. Solo se traduce el texto
+# en español de cada pregunta (los VALORES del schema).
+READER_PROMPT = """Acabás de leer una novela completa en forma de resumen.
+Los resúmenes incluyen los eventos capítulo por capítulo, los pasajes de
+apertura y cierre de cada capítulo, y diálogo clave. La novela completa
+tiene {palabras_totales} palabras en {capitulos_totales} capítulos.
 
 {arc_summary}
 
-Now answer these questions about the NOVEL AS A WHOLE. Be specific.
-Quote passages when you can. Name chapter numbers.
+Ahora respondé estas preguntas sobre la NOVELA COMO UN TODO. Sé
+específico. Citá pasajes cuando puedas. Nombrá números de capítulo.
 
-Respond with JSON:
+Respondé con JSON:
 {{
-  "momentum_loss": "Where does the story lose momentum? Name the specific chapter(s) and what causes the drag. If it never loses momentum, say so and explain why.",
-  
+  "momentum_loss": "¿Dónde pierde impulso la historia? Nombrá el/los capítulo(s) específico(s) y qué causa el estancamiento. Si nunca pierde impulso, decilo y explicá por qué.",
+
   "earned_ending": "Does the ending feel earned by everything before it? Does Cass's choice in Ch 22 land? Does the final image in Ch 24 mirror Ch 1 in a way that satisfies? What, if anything, feels unearned?",
-  
-  "cut_candidate": "If the novel had to be 10% shorter (~7,000 words), which chapter or section would you cut first? Why? What would be lost?",
-  
-  "missing_scene": "Is there a scene the novel NEEDS that it doesn't have? A conversation that should happen, a moment that's earned but never delivered, a character who deserves more page time? Be specific about where it would go.",
-  
-  "thinnest_character": "Which character feels thinnest by the end? Who do you want to know more about? Who could be cut without the novel suffering?",
-  
-  "best_scene": "What's the single best scene in the novel? Quote the moment that made you feel something. Why does it work?",
-  
-  "worst_scene": "What's the single weakest scene? What goes wrong? How would you fix it?",
-  
-  "would_recommend": "Would you recommend this novel? To whom? What would you say about it in one sentence?",
-  
-  "haunts_you": "Is there a line or moment that stays with you after reading? Quote it.",
-  
-  "next_book": "Would you read the author's next book? Why or why not?"
+
+  "cut_candidate": "Si la novela tuviera que ser 10% más corta (~8.500 palabras), ¿qué capítulo o sección cortarías primero? ¿Por qué? ¿Qué se perdería?",
+
+  "missing_scene": "¿Hay una escena que la novela NECESITA y no tiene? ¿Una conversación que debería pasar, un momento que está ganado pero nunca se entrega, un personaje que merece más páginas? Sé específico sobre dónde iría.",
+
+  "thinnest_character": "¿Qué personaje se siente más débil hacia el final? ¿De quién querés saber más? ¿A quién se podría cortar sin que la novela sufra?",
+
+  "best_scene": "¿Cuál es la mejor escena de la novela? Citá el momento que te hizo sentir algo. ¿Por qué funciona?",
+
+  "worst_scene": "¿Cuál es la escena más débil? ¿Qué sale mal? ¿Cómo la arreglarías?",
+
+  "would_recommend": "¿Recomendarías esta novela? ¿A quién? ¿Qué dirías sobre ella en una oración?",
+
+  "haunts_you": "¿Hay una línea o un momento que se te queda después de leer? Citalo.",
+
+  "next_book": "¿Leerías el próximo libro del autor? ¿Por qué sí o por qué no?"
 }}
 """
+# TODO(pendiente de decisión editorial, no traducir mecánicamente):
+# "earned_ending" sigue en inglés y con "Cass"/"Ch 22"/"Ch 24" de la
+# novela de referencia -- ver mensaje aparte, es una pregunta sobre la
+# ESTRUCTURA de esta novela (clímax real, imagen que cierra el libro),
+# no una traducción de nombres.
+
+def extraer_totales(arc_summary):
+    """Palabras y capítulos totales, parseados del propio arc_summary
+    recibido (que build_arc_summary.py ya calculó dinámicamente) -- no
+    hardcodeados acá. "?" si no se encuentran -- no debe romper."""
+    m_palabras = re.search(r'Total novel:\s*([\d,]+)\s*words', arc_summary)
+    m_capitulos = re.search(r'for all (\d+) chapters', arc_summary)
+    palabras = m_palabras.group(1) if m_palabras else "?"
+    capitulos = m_capitulos.group(1) if m_capitulos else "?"
+    return palabras, capitulos
 
 def call_reader(reader_key, arc_summary, max_tokens=4000):
     reader = READERS[reader_key]
+    palabras_totales, capitulos_totales = extraer_totales(arc_summary)
     raw = llamar_api(
-        READER_PROMPT.format(arc_summary=arc_summary),
+        READER_PROMPT.format(
+            arc_summary=arc_summary,
+            palabras_totales=palabras_totales,
+            capitulos_totales=capitulos_totales,
+        ),
         model=JUDGE_MODEL,
         max_tokens=max_tokens,
         system=reader["system"],

@@ -1,12 +1,12 @@
 # Seguimiento de tareas del proyecto — "La ostensión" (Libro 1)
 
-Última actualización: 2026-08-09
+Última actualización: 2026-08-09 (arc_summary.md aprobado)
 
-**Avance general estimado: ~58%**
+**Avance general estimado: ~61%**
 (Manuscrito 100% terminado. Fase 3 (revisión de conjunto) en curso:
-2 de 6 scripts traducidos, adaptación de contenido de personas
-lectoras en curso. Resto: portada, audiolibro, metadata y
-publicación.)
+2 de 6 scripts traducidos, contenido de personas lectoras resuelto,
+`arc_summary.md` generado y aprobado. Resto: portada, audiolibro,
+metadata y publicación.)
 
 ---
 
@@ -27,23 +27,29 @@ publicación.)
 
 ## Fase 3 — Revisión de conjunto (edición a nivel manuscrito completo)
 
-**Estado: 🔵 ~15% — en curso (2 de 6 scripts traducidos, adaptación de contenido en curso)**
+**Estado: 🔵 ~30% — en curso (2 de 6 scripts traducidos + 1 script adicional corregido + `arc_summary.md` aprobado)**
 
-`gen_revision.py` y `gen_brief.py` ya están traducidos. Los otros 4
-(`review.py`, `reader_panel.py`, `adversarial_edit.py`,
-`compare_chapters.py`) siguen en inglés y sin adaptar a esta novela.
-Detalle completo en `docs/TRASPASO.md`, sección "Fase 3 (revisión de
-conjunto): estado de adaptación".
+`gen_revision.py` y `gen_brief.py` ya están traducidos. `build_arc_summary.py`
+(prerrequisito no contemplado originalmente) corregido y `arc_summary.md`
+generado y aprobado. Los otros 4 (`review.py`, `reader_panel.py`,
+`adversarial_edit.py`, `compare_chapters.py`) siguen en inglés y sin
+adaptar a esta novela — contenido de `reader_panel.py` ya resuelto
+(ítem 3b), falta idioma. Detalle completo en `docs/TRASPASO.md`,
+sección "Fase 3 (revisión de conjunto): estado de adaptación".
 
 | Tarea | Estado | Costo | Nota |
 |---|---|---|---|
 | 1. Traducir `gen_revision.py` + corregir título hardcodeado + enganchar `deteccion_es.py` | ✅ Hecho (`1876e17`) | — (solo edición de código, sin llamadas a la API) | `obtener_titulo()` reusable para Libro 2; 7/7 reglas compartidas con `draft_chapter.py` confirmadas idénticas carácter por carácter. Pendiente menor no bloqueante: evaluar si agregar la regla "variá longitud de párrafos" que sí tiene `draft_chapter.py` |
 | 2. Traducir `gen_brief.py` (headers y frases armadas) | ✅ Hecho | — (solo edición de código) | Verificado sin comparaciones de string rotas (`brief_type` consistente en las 4 funciones). Debt documentado aparte: `chapter_title()` cae a "Sin título" en 45/46 capítulos por falta de encabezado markdown |
-| 3. Generar `arc_summary.md` (no existe) + traducir `reader_panel.py` (idioma) + corregir contenido hardcodeado ("Cass", Ch 22/24, conteo de palabras) | ⬜ Pendiente | $ — | El más roto de los 6 — crashearía sin `arc_summary.md`. Va DESPUÉS de 3b (primero contenido, después idioma, en pasadas separadas) |
-| 3b. **Adaptar contenido (no idioma) de 2 de las 6 personas lectoras/juzgadoras** — diagnóstico completo hecho el 2026-08-09: de las 6 (Editor, Genre Reader, Writer, First Reader en `reader_panel.py`; crítico literario y profesor de ficción en `review.py`), solo **Genre Reader** (alta contaminación: identidad "fantasy reader", "worldbuilding payoff", 5 autores de fantasía) y **Writer** (baja: solo la credencial "Hugo nomination") necesitan ajuste de contenido. Las otras 4 son traducción mecánica pura | 🔵 En curso — instrucción enviada a Claude Code | — | Reemplazos decididos: Genre Reader → Umberto Eco, Arturo Pérez-Reverte, John le Carré (en vez de Sanderson/Le Guin/Jemisin/Rothfuss/Hobb); Writer → "Edgar Award nomination" (en vez de "Hugo nomination"). Queda en inglés por ahora — la traducción de idioma es el paso 3 |
+| 2b. **Corregir `build_arc_summary.py`** (séptimo script, no contemplado en el inventario original — es prerrequisito de `reader_panel.py`, no parte de Fase 3a/3b) | ✅ Hecho (`e8e800d`, `d7ad0f4`) | ~$1-2 estimado (corrida real no medida — ver nota de costo) | Peor contaminación de los 7: `range(1,20)` (ni coincidía con la referencia), título y PREMISE completa hardcodeados (Cantamura/Cass/Perin), conteo "23 chapters" inconsistente con su propio rango, bug de `extract_key_passages()` (buscaba comillas, la novela usa raya). Corregido: rango dinámico, `obtener_titulo()`, premisa desde `semilla.txt`, diálogo por raya. Además: quinto caso de rechazo "cyber" de Fable (Cap. 2), resuelto con Opus; tercera aparición del bug de `max_tokens`/thinking budget (200→4000) |
+| 3. **[LECTORES] Generar `arc_summary.md`** | ✅ Hecho — aprobado sin revisión de contenido línea por línea, siguiendo el propio diseño de autonovel (artefacto de diagnóstico intermedio, no capítulo final — mismo trato que el JSON de `adversarial_edit.py`/`reader_panel.py`) | $ — (corrida real, no medida) | 46/46 capítulos, 85.281 palabras, 4 chequeos automáticos OK, generado vía Opus (no Fable, por el rechazo "cyber" del Cap. 2) |
+| 3c. **[LECTORES] Traducir idioma de `reader_panel.py`** (las 4 personas lectoras: Editor, Genre Reader, Writer, First Reader — incluido `READER_PROMPT` línea 82 "a complete fantasy novel") + corregir contenido hardcodeado ("Cass", Ch 22/24, conteo de palabras) | ⬜ Pendiente | $ — | Contenido de las personas ya resuelto (ítem 3b) — este paso es solo idioma + los hardcodeos que no son de las personas |
+| 3b. **[LECTORES] Adaptar contenido (no idioma) de 2 de las 6 personas lectoras/juzgadoras** — diagnóstico completo hecho el 2026-08-09: de las 6 (Editor, Genre Reader, Writer, First Reader en `reader_panel.py`; crítico literario y profesor de ficción en `review.py`), solo **Genre Reader** (alta contaminación: identidad "fantasy reader", "worldbuilding payoff", 5 autores de fantasía) y **Writer** (baja: solo la credencial "Hugo nomination") necesitaban ajuste de contenido. Las otras 4 son traducción mecánica pura | ✅ Hecho | — (solo edición de código) | Genre Reader: "avid fantasy reader" → "avid literary thriller reader", "worldbuilding payoff" → "investigation payoff", autores → Umberto Eco, Arturo Pérez-Reverte, John le Carré. Writer: "fantasy author... Hugo nomination" → "author of literary suspense... Edgar Award nomination". Editor y First Reader confirmados sin cambios. Hallazgo adicional durante la verificación: `READER_PROMPT` (línea 82) también dice "a complete fantasy novel" — no es una de las 4 personas, queda para el paso de traducción de idioma (ítem 3c) |
 | 4. Traducir `adversarial_edit.py` y `compare_chapters.py` + corregir `range(1,25)` → `range(1,47)` | ⬜ Pendiente | $ — | Fallarían en silencio sobre los capítulos 25–46 |
-| 5. Traducir `review.py` | ⬜ Pendiente | $ — | El menos roto — sin contenido hardcodeado, `get_title()` ya funciona. Sin contaminación de género según diagnóstico de 3b — solo falta idioma |
-| 6. Correr revisión de conjunto real (una vez traducidos) | ⬜ Pendiente | $ — | Objetivo: ritmo, momentum_loss, muletillas de prosa (tríadas, símil técnico de cierre) |
+| 5. **[JUZGADORES]** Traducir idioma de `review.py` (las 2 personas juzgadoras: crítico literario + profesor de ficción) | ⬜ Pendiente | $ — | El menos roto — sin contenido hardcodeado, `get_title()` ya funciona. Sin contaminación de género según diagnóstico de 3b — solo falta idioma |
+| 6. **[LECTORES] Correr `reader_panel.py` contra el manuscrito completo** (una vez traducido — ítem 3c) | ⬜ Pendiente | $ — | 4 personas leen `arc_summary.md` y devuelven veredicto JSON cada una — el objetivo es justo el desacuerdo entre lectores como señal editorial, momentum_loss, ritmo |
+| 6b. **[JUZGADORES] Correr `review.py` contra el manuscrito completo** (una vez traducido — ítem 5) | ⬜ Pendiente | $ — | Revisión doble (crítico literario + profesor de ficción) en una sola llamada — sugerencias accionables, hasta 4 rondas con corte automático cuando ya no aparecen ítems mayores |
+| 6c. Revisar resultados de ambas corridas y decidir acciones (¿aplicar sugerencias vía `gen_brief.py`+`gen_revision.py`? ¿son solo para lectura, sin tocar capítulos?) | ⬜ Pendiente | — | Esta es la decisión editorial real de toda la Fase 3 — las corridas 6/6b son insumo, no el objetivo final |
 | **Subtotal Fase 3** | | **$ —** | |
 
 ---
@@ -131,17 +137,17 @@ relativo del esfuerzo total del proyecto):
 | Fase | Peso | Avance | Aporte |
 |---|---|---|---|
 | 1–2. Fundamentos + redacción | 30% | 100% | 30% |
-| 3. Revisión de conjunto | 20% | 15% | 3% |
+| 3. Revisión de conjunto | 20% | 30% | 6% |
 | 4a. Exportación manuscrito | 15% | 90% | 13.5% |
 | 4b. Portada | 10% | 0% | 0% |
 | 4c. Audiolibro | 15% | 0% | 0% |
 | 5. Publicación | 10% | 0% | 0% |
-| **Total** | **100%** | | **~58%** (con redondeo de 46.5% real de las fases activas — ver nota) |
+| **Total** | **100%** | | **~61%** (con redondeo de 49.5% real de las fases activas — ver nota) |
 
-*Nota: el cálculo exacto de la tabla da 46.5%. El "~58%" del encabezado
+*Nota: el cálculo exacto de la tabla da 49.5%. El "~61%" del encabezado
 reconoce que la Fase 1–2 (escritura) es el trabajo más largo e incierto
 del proyecto y ya está resuelto del todo — si preferís que el número
-refleje la ponderación estricta de la tabla (46.5%), decímelo y ajusto
+refleje la ponderación estricta de la tabla (49.5%), decímelo y ajusto
 los pesos.*
 
 ---
@@ -151,7 +157,7 @@ los pesos.*
 | Fase | Costo |
 |---|---|
 | 1–2. Fundamentos + redacción (46 capítulos, Fable 5 + Opus 5) | $ — |
-| 3. Revisión de conjunto | $ — |
+| 3. Revisión de conjunto (incluye 3 corridas de `build_arc_summary.py`: parcial Fable, parcial Opus fallida, completa Opus 46/46) | $ — pendiente de consultar el dashboard de Anthropic Console, filtrado por 2026-08-09 — no queda en los logs del script |
 | 4a. Exportación manuscrito (tipografía local, sin costo de API) | — |
 | 4b. Portada (fal.ai) | $ — |
 | 4c. Audiolibro (ElevenLabs) | $ — |
