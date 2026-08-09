@@ -90,8 +90,6 @@
 \renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 
 % === TITLE PAGE DESIGN ===
-% NOTA: "[Nombre del autor]" es un placeholder -- reemplazar antes de
-% distribuir el PDF. No se inventó un nombre de autor real.
 \newcommand{\makenoveltitle}{%
   \thispagestyle{empty}
   \begin{center}
@@ -105,16 +103,13 @@
 
   {\large\textit{Novela}}\\[1in]
 
-  {\Large\textsc{[Nombre del autor]}}\\[1.5in]
+  {\Large\textsc{Chris Suazo}}\\[1.5in]
 
   \end{center}
   \clearpage
 }
 
 % === EPIGRAPH ===
-% NOTA: cita literal de ch_02.md (Ashkenazi a Vidal), elegida por ser
-% temática y no revelar nada de la trama posterior -- confirmar que
-% este es el epígrafe que se quiere antes de distribuir.
 \newcommand{\makeepigraph}{%
   \thispagestyle{empty}
   \vspace*{2.5in}
@@ -122,9 +117,7 @@
   \begin{minipage}{3.2in}
   \begin{center}
   \itshape
-  ``La gente que espera afuera no vive en un intervalo.\\
-  Vive en una fecha, en un nombre, en un sí o un no.\\
-  En algún punto todos eligen, doctor;\\
+  ``En algún punto todos eligen, doctor;\\
   lo que usted vende es el derecho a elegir más tarde.''\\[12pt]
   \end{center}
   \end{minipage}
@@ -146,7 +139,7 @@
 \usepackage{hyperref}
 \hypersetup{
   pdftitle={La ostensión},
-  pdfauthor={[Nombre del autor]},
+  pdfauthor={Chris Suazo},
   pdfsubject={Novela},
   hidelinks
 }
