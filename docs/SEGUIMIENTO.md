@@ -1,14 +1,16 @@
 # Seguimiento de tareas del proyecto — "La ostensión" (Libro 1)
 
-Última actualización: 2026-08-08 (Fase 3: `reader_panel.py` traducido,
-validado y corrido completo -- ítems 3c y 6; `build_arc_summary.py`
-armazón traducido -- ítem 2c)
+Última actualización: 2026-08-09 (Fase 3 cerrada: los 6 scripts
+traducidos y validados, ítem 6c completo -- Cap. 42 + bloque 15-19 +
+línea de Ledda revisados; diagnóstico de grasa narrativa en los 46
+capítulos disponible para retomar si se desea, no bloqueante)
 
-**Avance general estimado: ~61%**
-(Manuscrito 100% terminado. Fase 3 (revisión de conjunto) en curso:
-2 de 6 scripts traducidos, contenido de personas lectoras resuelto,
-`arc_summary.md` generado y aprobado. Resto: portada, audiolibro,
-metadata y publicación.)
+**Avance general estimado: ~68%**
+(Manuscrito 100% terminado y revisado -- Fase 3 completa: los 6
+scripts del pipeline de revisión traducidos y validados contra la
+novela real, ítem 6c (decisión editorial) resuelto sobre las 3
+prioridades identificadas. Resto: exportación final, portada,
+audiolibro, metadata y publicación.)
 
 ---
 
@@ -29,11 +31,11 @@ metadata y publicación.)
 
 ## Fase 3 — Revisión de conjunto (edición a nivel manuscrito completo)
 
-**Estado: 🔵 en curso — `reader_panel.py` y `build_arc_summary.py`
-completos (traducción + contenido + corrida real) — falta
-`adversarial_edit.py`, `compare_chapters.py`, `review.py` (script +
-corrida), y la decisión editorial final (ítem 6c). % pendiente de
-recalcular junto con el encabezado del documento.**
+**Estado: ✅ Completa -- los 6 scripts traducidos y validados, ítem
+6c resuelto (Cap. 42 + bloque Caps. 15-19 + línea de interioridad de
+Ledda). Diagnóstico extendido de los 46 capítulos disponible en
+edit_logs/ para una eventual segunda ronda de pulido, no es tarea
+abierta del proyecto.**
 
 `gen_revision.py`, `gen_brief.py`, `build_arc_summary.py` y
 `reader_panel.py` ya están traducidos y validados contra la novela
@@ -50,11 +52,12 @@ conjunto): estado de adaptación".
 | 3. **[LECTORES] Generar `arc_summary.md`** | ✅ Hecho — aprobado sin revisión de contenido línea por línea, siguiendo el propio diseño de autonovel (artefacto de diagnóstico intermedio, no capítulo final — mismo trato que el JSON de `adversarial_edit.py`/`reader_panel.py`) | $ — (corrida real, no medida) | 46/46 capítulos, 85.281 palabras, 4 chequeos automáticos OK, generado vía Opus (no Fable, por el rechazo "cyber" del Cap. 2) |
 | 3b. **[LECTORES] Adaptar contenido (no idioma) de 2 de las 6 personas lectoras/juzgadoras** — diagnóstico completo hecho el 2026-08-09: de las 6 (Editor, Genre Reader, Writer, First Reader en `reader_panel.py`; crítico literario y profesor de ficción en `review.py`), solo **Genre Reader** (alta contaminación: identidad "fantasy reader", "worldbuilding payoff", 5 autores de fantasía) y **Writer** (baja: solo la credencial "Hugo nomination") necesitaban ajuste de contenido. Las otras 4 son traducción mecánica pura | ✅ Hecho | — (solo edición de código) | Genre Reader: "avid fantasy reader" → "avid literary thriller reader", "worldbuilding payoff" → "investigation payoff", autores → Umberto Eco, Arturo Pérez-Reverte, John le Carré. Writer: "fantasy author... Hugo nomination" → "author of literary suspense... Edgar Award nomination". Editor y First Reader confirmados sin cambios. Hallazgo adicional durante la verificación: `READER_PROMPT` (línea 82) también dice "a complete fantasy novel" — no es una de las 4 personas, quedó para el paso de traducción de idioma (ítem 3c, ✅ resuelto) |
 | 3c. **[LECTORES] Traducir idioma de `reader_panel.py`** (las 4 personas lectoras: Editor, Genre Reader, Writer, First Reader — incluido `READER_PROMPT` línea 82 "a complete fantasy novel") + corregir contenido hardcodeado ("Cass", Ch 22/24, conteo de palabras) | ✅ Hecho | $ — (4 llamadas Opus, panel completo corrido contra los 46 capítulos reales) | Las 4 personas + `READER_PROMPT` traducidos, registro "vos", con el bloque de normas del castellano (mismo que `evaluate.py::CHAPTER_PROMPT`). `earned_ending` corregido con la elección real de Vidal (Cap. 42, rechazo del archivo de Sandoz) y el cierre-espejo Cap. 46/Cap. 1 -- ya no "Cass"/Ch 22/24 de la novela de referencia. `extraer_totales()` nuevo, parsea dinámicamente de `arc_summary.md` en vez de números fijos (72.422/24 → 85.281/46). De paso: `max_tokens` de `call_reader()` 4000→20000 (truncaba sin producir texto contra el prompt completo de 79k tokens de input), regex de citas de `find_disagreements()` ampliada a "Cap./Caps." y rangos (limitaciones conocidas documentadas en el código: listas con coma bajo un prefijo, rango "a" con un solo prefijo), y limpieza de 10 entradas de deuda muerta en `test_guardia_prompts.py`. Commits `53b7611` (código) / `c3f94b0` (resultado) |
-| 4. Traducir `adversarial_edit.py` y `compare_chapters.py` + corregir `range(1,25)` → `range(1,47)` | ⬜ Pendiente | $ — | Fallarían en silencio sobre los capítulos 25–46 |
-| 5. **[JUZGADORES]** Traducir idioma de `review.py` (las 2 personas juzgadoras: crítico literario + profesor de ficción) | ⬜ Pendiente | $ — | El menos roto — sin contenido hardcodeado, `get_title()` ya funciona. Sin contaminación de género según diagnóstico de 3b — solo falta idioma |
+| 4. Traducir `adversarial_edit.py` y `compare_chapters.py` + corregir `range(1,25)` → `range(1,47)` | ✅ Hecho | — | Commit `369423c`. Claves/valores-enum del JSON de `adversarial_edit.py` (FAT, REDUNDANT, OVER-EXPLAIN, GENERIC, TELL, STRUCTURAL, CUT, REWRITE) sin traducir -- `gen_brief.py` los lee por comparación literal. Bug encontrado en `gen_brief.py::build_cuts_brief()` (línea 629): descarta cortes tipo STRUCTURAL de la lista aunque los cuenta en el header -- parcheado a mano en cada brief afectado, sin corregir en el código todavía (debt) |
+| 5. Traducir idioma de `review.py` | ✅ Hecho | — | `REVIEW_PROMPT` traducido con formato fijo parseable (headers, calificación numérica, ítems numerados) -- `parse_review()` rediseñado para prosa libre en español, no JSON |
 | 6. **[LECTORES] Correr `reader_panel.py` contra el manuscrito completo** (una vez traducido — ítem 3c) | ✅ Hecho | $ — (4 llamadas Opus) | `edit_logs/reader_panel.json` -- editor/genre_reader/writer/first_reader, 10/10 claves cada uno. 59 desacuerdos detectados (`find_disagreements()`) entre personas lectoras. Sin curar todavía -- insumo para el ítem 6c, no una decisión editorial en sí |
-| 6b. **[JUZGADORES] Correr `review.py` contra el manuscrito completo** (una vez traducido — ítem 5) | ⬜ Pendiente | $ — | Revisión doble (crítico literario + profesor de ficción) en una sola llamada — sugerencias accionables, hasta 4 rondas con corte automático cuando ya no aparecen ítems mayores |
-| 6c. Revisar resultados de ambas corridas y decidir acciones (¿aplicar sugerencias vía `gen_brief.py`+`gen_revision.py`? ¿son solo para lectura, sin tocar capítulos?) | ⬜ Pendiente | — | Esta es la decisión editorial real de toda la Fase 3 — las corridas 6/6b son insumo, no el objetivo final |
+| 6b. Correr `review.py` contra el manuscrito completo | ✅ Hecho | $ — (1 llamada Opus, 205k tokens de entrada) | Calificación 4.2/5, 10 ítems del profesor. `severity`/`qualified` sin señal útil contra prosa real -- documentado como límite conocido de la heurística, no corregido |
+| 6c. Revisar resultados y decidir acciones -- **completo** | ✅ Hecho | ~$28 (sesión del 8 de agosto completa) | Las 3 prioridades identificadas por convergencia de `reader_panel.py`/`review.py`/`adversarial_edit.py`: **(1) Cap. 42** (Sandoz, triangulado por 3 fuentes) 7.70→7.78; **(2) bloque Caps. 15-19** (momentum_loss, 4/4 lectores) revisados los 5, 6.7-7.7 originales → 7.31-7.78 finales; **(3) Ledda** (thinnest_character, unánime) -- línea de interioridad plantada en Cap. 16, conecta con secreto ya establecido en `characters.md` (Basilea 2027). De paso: 10 bugs de continuidad preexistentes encontrados en capítulos ya aceptados (Cap. 16, 17, 19, 42), 6 corregidos, 4 documentados como debt en `TRASPASO.md` (risa de Ferrero, cronograma de la gemela, motivo "¿qué hacés vos?", edad de la gemela) |
+| 7. Diagnóstico extendido: `adversarial_edit.py` corrido sobre los 46 capítulos completos | ✅ Hecho (diagnóstico) -- sin curar | $11.44 (real, 40 capítulos nuevos + 6 ya medidos en el ítem 6c) | 11,32% de grasa promedio, OVER-EXPLAIN domina en 30/40 capítulos nuevos -- patrón sistemático del libro, no local del bloque 15-19. Top de grasa: Caps. 9 (15%), 2/6/21/32/33 (14% c/u), con veredictos específicos guardados en `edit_logs/ch{N}_cuts.json`. **No es tarea abierta** -- es información disponible si en algún momento se decide una segunda ronda de pulido. El torneo de `compare_chapters.py` (~$8-10, ranking relativo de los 46) queda con el mismo criterio: no corrido, disponible como paquete conjunto con esta revisión extendida si se retoma. |
 | **Subtotal Fase 3** | | **$ —** | |
 
 ---
